@@ -34,7 +34,7 @@ def selectRandomFile():
 
 # Sends out a file for download
 # Input: filename (must be in upload folder)
-@app.route('/uploads/<filename>')
+@app.route('/static/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
    
