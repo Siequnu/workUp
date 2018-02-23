@@ -4,7 +4,8 @@ from werkzeug import secure_filename
 import glob, os
 
 # Set app variables
-UPLOAD_FOLDER = 'uploads/'
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/uploads')
 ALLOWED_EXTENSIONS = set(['txt', 'zip', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 # Create class and load variables
@@ -21,7 +22,7 @@ def allowed_file(filename):
 
 
 def getNumberOfFiles():
-	return len (glob.glob("uploads/*"))
+	return len (glob.glob(app.config['UPLOAD_FOLDER'] + '/*'))
 #########################
 
 # Choose a random file from uploads folder and send it out for download
