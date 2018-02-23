@@ -19,6 +19,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 def getNumberOfFiles():
 	return len (glob.glob("uploads/*"))
 #########################
@@ -31,6 +32,10 @@ def selectRandomFile():
 
    randomFile = uploadedFiles[randomNumber]
    return send_file(randomFile, as_attachment=True)
+
+@app.route('/listdir')
+def printCDFiles():
+	return str(app.root_path)
 
 
 # Sends out a file for download
