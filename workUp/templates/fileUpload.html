@@ -1,10 +1,6 @@
+{% extends "header.html" %}
 
-<html>
-   <body>
-   
-<p><img style="display: block; margin-left: auto; margin-right: auto;"<img src="{{url_for('static', filename='thlogo.jpg')}}" width="333.6" height="149.6"/></p>
-<p style="text-align: center;"><strong>Writing 4 - Upload tool</strong></p>
-<p style="text-align: center;"><strong>Patrick Johansson</strong></p>
+{% block content %}
 <p><em>Fill in the form with your student number, email, and choose the file you want to upload. <br> Make sure you have removed your name and number from the work you uploaded.</em></p>
       <form action = "" method = "POST" 
          enctype = "multipart/form-data">
@@ -20,6 +16,4 @@
     </ul>
   {% endif %}
 {% endwith %}
-{% block body %}{% endblock %}   
-   </body>
-</html>
+ {% endblock %}
