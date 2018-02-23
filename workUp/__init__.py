@@ -34,11 +34,6 @@ def selectRandomFile():
    randomFile = uploadedFiles[randomNumber]
    return send_file(randomFile, as_attachment=True)
 
-@app.route('/listdir')
-def printCDFiles():
-	return str(app.root_path)
-
-
 # Sends out a file for download
 # Input: filename (must be in upload folder)
 @app.route('/uploads/<filename>')
