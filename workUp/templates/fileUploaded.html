@@ -1,0 +1,9 @@
+<p></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" img="" src="{{url_for('static', filename='thlogo.jpg')}}" width="333.6" height="149.6" /></p>
+<p style="text-align: center;"><strong>Writing 4 - Upload tool</strong><strong></strong></p>
+<p style="text-align: center;"><strong>Patrick Johansson</strong></p>
+<p style="text-align: center;"><strong></strong></p>
+<p><i>Your file has been&nbsp;successfully uploaded. Please click the download button to download your peer-review work.</i></p>
+<form action="{{ url_for('downloadRandomFile') }}" method="post">
+    <input type="submit" value="Download" />
+</form>
