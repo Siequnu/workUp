@@ -14,16 +14,14 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.secret_key = 'ignitors0gitanas*vapours3'
 
-### Helper functions ###
 # Check filename and extension permissibility
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
+# Return the number of files in the upload folder
 def getNumberOfFiles():
 	return len (glob.glob(app.config['UPLOAD_FOLDER'] + '/*'))
-#########################
 
 # Choose a random file from uploads folder and send it out for download
 def selectRandomFile():	
