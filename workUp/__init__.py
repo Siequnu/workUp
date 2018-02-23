@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, Response, make_response, send_file, redirect, url_for, send_from_directory, flash
+from flask_basicauth import BasicAuth 
 from random import randint
 from werkzeug import secure_filename
 import glob, os
@@ -12,7 +13,20 @@ ALLOWED_EXTENSIONS = set(['txt', 'zip', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-app.secret_key = 'ignitors0gitanas*vapours3'
+
+# App security for stageing server
+import config
+app.secret_key = config.app_secret_key
+app.config['BASIC_AUTH_FORCE'] = True
+app.config['BASIC_AUTH_USERNAME'] = config.BASIC_AUTH_USERNAME
+app.config['BASIC_AUTH_PASSWORD'] = config.BASIC_AUTH_PASSWORD
+basic_auth = BasicAuth(app)
+
+# A password protected page
+@app.route('/secret')
+@basic_auth.required
+def secret_view():
+    return 'worked'
 
 # Check filename and extension permissibility
 def allowed_file(filename):
