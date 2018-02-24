@@ -19,11 +19,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 import config
 app.secret_key = config.app_secret_key
 auth = HTTPBasicAuth()
-
-users = {
-    "john": "hello",
-    "susan": "bye"
-}
+users = config.users
 
 @auth.get_password
 def get_pw(username):
@@ -82,6 +78,7 @@ def upload_file():
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 			return redirect(url_for('uploaded_file',filename=filename))
 	else:
+		flash('Hello, ' + str(auth.username()) + '!')
 		return render_template('fileUpload.html')
 
 # Access file stats

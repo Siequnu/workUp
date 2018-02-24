@@ -4,3 +4,7 @@
 
 app_secret_key = 'ignitors0gitanas*vapours3'
 
+users= {
+    "john": "hello",
+    "susan": "bye"
+}
