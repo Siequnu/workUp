@@ -9,11 +9,7 @@ class Config(object):
 	UPLOAD_LOCATION = 'static/uploads'
 	UPLOAD_FOLDER = os.path.join(APP_ROOT, UPLOAD_LOCATION)
 	ALLOWED_EXTENSIONS = set(['txt', 'zip', 'pdf', 'doc', 'docx', 'pages'])
-	USERS= {
-		"john": "hello",
-		"susan": "bye"
-	}
-	ADMIN_USERS = {'john'}
+	ADMIN_USERS = {'siequnu'}
 	
 	# SQL
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
