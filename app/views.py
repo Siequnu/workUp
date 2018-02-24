@@ -19,13 +19,18 @@ def get_pw(username):
     return None
 
 
-@workUpApp.route('/login')
+# Log-in page
+@workUpApp.route('/login', methods=['GET', 'POST'])
 def login():
-	form = LoginForm()
-	return render_template('login.html', title='Sign In', form=form)
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me={}'.format(
+            form.username.data, form.remember_me.data))
+        return redirect(url_for('uploadFile'))
+    return render_template('login.html', form=form)
 
 # Choose a random file from uploads folder and send it out for download
-@workUpApp.route('/download-peer-file', methods = ['GET', 'POST'])
+@workUpApp.route('/downloadPeerFile', methods=['POST'])
 def downloadRandomFile():	
    uploadedFiles = (os.listdir(workUpApp.config['UPLOAD_FOLDER']))
    numberOfFiles = int (upDownTools.getNumberOfFiles())
@@ -33,16 +38,24 @@ def downloadRandomFile():
    randomFile = os.path.join (workUpApp.config['UPLOAD_LOCATION'], uploadedFiles[randomNumber])
    return send_file(randomFile, as_attachment=True)
 
+
 # Sends out a file for download
 # Input: filename (must be in upload folder)
 @workUpApp.route('/uploaded/<filename>')
-def uploaded_file(filename):
+def uploadedFile(filename):
 	return render_template ('fileUploaded.html')
+
 
 # Main entrance to the app
 @workUpApp.route('/', methods=['GET', 'POST'])
+def index():
+	return redirect(url_for('uploadFile'))
+
+
+# Upload form
+@workUpApp.route('/upload', methods=['GET', 'POST'])
 @auth.login_required
-def upload_file():
+def uploadFile():
 	# If the form has been filled out and posted:
 	if request.method == 'POST':
 		# Check if the post request has the file part
@@ -56,10 +69,11 @@ def upload_file():
 		if file and upDownTools.allowedFile(file.filename):
 			filename = secure_filename(file.filename)
 			file.save(os.path.join(workUpApp.config['UPLOAD_FOLDER'], filename))
-			return redirect(url_for('uploaded_file',filename=filename))
+			return redirect(url_for('uploadedFile',filename=filename))
 	else:
 		flash('Hello, ' + str(auth.username()) + '!')
 		return render_template('fileUpload.html')
+
 
 # Access file stats
 @workUpApp.route("/fileStats")
