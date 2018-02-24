@@ -14,9 +14,12 @@ workUp has the following dependencies:
 -pip:
 	Flask 
 	flask_httpauth		authentication handler
-	flask-wtf			for handling of web forms			
+	flask-wtf		for handling of web forms	
+	flask-login		log-in handler
+	flask-sqlalchemy	database backend
+	flask-migrate		database backend
 
 Deployment:
 	- If using wsgi_mod with apache ensure that WSGIPassAuthorization is set to On in the .htaccess file
-	- Change server secrets in config.py
+	- Setup server specific config in config.py
 	- Ensure static/uploads/ folder is readable by apache (ie. sudo chown www-data)
