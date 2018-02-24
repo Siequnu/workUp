@@ -12,5 +12,11 @@ Future plans are:
 workUp has the following dependencies:
 -python >= 2.7
 -pip:
-	Flask
-	Flask-BasicAuth
+	Flask 
+	flask_httpauth		authentication handler
+	flask-wtf			for handling of web forms			
+
+Deployment:
+	- If using wsgi_mod with apache ensure that WSGIPassAuthorization is set to On in the .htaccess file
+	- Change server secrets in config.py
+	- Ensure static/uploads/ folder is readable by apache (ie. sudo chown www-data)
