@@ -5,7 +5,7 @@ from flask_httpauth import HTTPBasicAuth
 from random import randint
 from werkzeug import secure_filename
 import glob, os
-
+#from app.forms import LoginForm
 
 # App security for stageing server
 auth = HTTPBasicAuth()
@@ -24,7 +24,13 @@ def allowed_file(filename):
 # Return the number of files in the upload folder
 def getNumberOfFiles():
 	return (len (os.listdir(app.config['UPLOAD_FOLDER'])) - 1 )
-
+'''
+@app.route('/login')
+def login():
+    pass
+	#form = LoginForm()
+    #return render_template('login.html', title='Sign In', form=form)
+'''
 # Choose a random file from uploads folder and send it out for download
 @app.route('/download-peer-file', methods = ['GET', 'POST'])
 def downloadRandomFile():	
@@ -70,8 +76,8 @@ def upload_file():
 @app.route("/fileStats")
 @auth.login_required
 def fileStats():
-   printOutput = 'There are ' + str(getNumberOfFiles()) +' files in the folder: <br/>'
-   uploadedFiles = (glob.glob(app.config['UPLOAD_FOLDER'] + '/*'))
-   for files in uploadedFiles:
-      printOutput = printOutput + str(files) + ", <br/>"
-   return str(printOutput)
+	printOutput = 'There are ' + str(getNumberOfFiles()) +" files in the folder: "
+	uploadedFiles = (glob.glob(app.config['UPLOAD_FOLDER'] + '/*'))
+	return render_template('fileStats.html', numberOfFiles = str(getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles)
+
+
