@@ -4,4 +4,4 @@ from config import Config
 workUpApp = Flask(__name__)
 workUpApp.config.from_object(Config)
 
-import views
+from app import views
