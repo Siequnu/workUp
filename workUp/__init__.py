@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, Response, make_response, send_file, redirect, url_for, send_from_directory, flash, abort
-from flask_basicauth import BasicAuth 
+from flask_basicauth import BasicAuth
+from flask_httpauth import HTTPBasicAuth
 from random import randint
 from werkzeug import secure_filename
 import glob, os
@@ -18,10 +19,22 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 # App security for stageing server
 import config
 app.secret_key = config.app_secret_key
-app.config['BASIC_AUTH_FORCE'] = True
+#app.config['BASIC_AUTH_FORCE'] = True
 app.config['BASIC_AUTH_USERNAME'] = config.BASIC_AUTH_USERNAME
 app.config['BASIC_AUTH_PASSWORD'] = config.BASIC_AUTH_PASSWORD
 basic_auth = BasicAuth(app)
+auth = HTTPBasicAuth()
+
+users = {
+    "john": "hello",
+    "susan": "bye"
+}
+
+@auth.get_password
+def get_pw(username):
+    if username in users:
+        return users.get(username)
+    return None
 
 
 # Check filename and extension permissibility
@@ -76,7 +89,8 @@ def upload_file():
 
 
 @app.route("/fileStats")
-@basic_auth.required
+#@basic_auth.required
+@auth.login_required
 def fileStats():
    printOutput = 'There are ' + str(getNumberOfFiles()) +' files in the folder: <br/>'
    uploadedFiles = (glob.glob(app.config['UPLOAD_FOLDER'] + '/*'))
