@@ -18,6 +18,7 @@ workUp has the following dependencies:
 	flask-login		log-in handler
 	flask-sqlalchemy	database backend
 	flask-migrate		database backend
+	flask-bootstrap		css theme
 
 Deployment:
 	- If using wsgi_mod with apache ensure that WSGIPassAuthorization is set to On in the .htaccess file
