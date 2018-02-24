@@ -9,8 +9,10 @@ Future plans are:
 	- Student log-in feature where they can access information on their uploads
 	- Log to track which files were delivered for peer review to which students
 
-workUp has the following dependencies:
+workUp has the following main dependencies:
 -python >= 2.7
+-libapache2-mod-wsgi 
+-python-dev
 -pip:
 	Flask 
 	flask_httpauth		authentication handler
@@ -19,6 +21,8 @@ workUp has the following dependencies:
 	flask-sqlalchemy	database backend
 	flask-migrate		database backend
 	flask-bootstrap		css theme
+
+Please see the complete list in requirements.txt
 
 Deployment:
 	- If using wsgi_mod with apache ensure that WSGIPassAuthorization is set to On in the .htaccess file
