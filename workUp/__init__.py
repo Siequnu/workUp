@@ -3,21 +3,14 @@ from flask_httpauth import HTTPBasicAuth
 from random import randint
 from werkzeug import secure_filename
 import glob, os
-
-# Set app variables
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_LOCATION = 'static/uploads'
-UPLOAD_FOLDER = os.path.join(APP_ROOT, UPLOAD_LOCATION)
-ALLOWED_EXTENSIONS = set(['txt', 'zip', 'pdf', 'doc', 'docx', 'pages'])
+from config import Config
 
 # Create class and load variables
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config.from_object(Config)
 
 # App security for stageing server
 import config
-app.secret_key = config.app_secret_key
 auth = HTTPBasicAuth()
 users = config.users
 
@@ -30,7 +23,7 @@ def get_pw(username):
 # Check filename and extension permissibility
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 # Return the number of files in the upload folder
 def getNumberOfFiles():
@@ -44,7 +37,7 @@ def downloadRandomFile():
    uploadedFiles = (os.listdir(app.config['UPLOAD_FOLDER']))
    numberOfFiles = int (getNumberOfFiles())
    randomNumber = (randint(0,numberOfFiles - 1))
-   randomFile = os.path.join (UPLOAD_LOCATION, uploadedFiles[randomNumber])
+   randomFile = os.path.join (app.config['UPLOAD_LOCATION'], uploadedFiles[randomNumber])
    return send_file(randomFile, as_attachment=True)
 
 # Send out specific file for download
@@ -55,7 +48,6 @@ def downloadFile(filename):
 # Input: filename (must be in upload folder)
 @app.route('/uploaded/<filename>')
 def uploaded_file(filename):
-    #return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 	return render_template ('fileUploaded.html')
    
 
