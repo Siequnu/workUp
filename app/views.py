@@ -1,7 +1,6 @@
 from app import workUpApp
 
 from flask import render_template, session, request, Response, make_response, send_file, redirect, url_for, send_from_directory, flash, abort
-from flask_httpauth import HTTPBasicAuth
 from random import randint
 from werkzeug import secure_filename
 import glob, os
@@ -19,15 +18,6 @@ from app.forms import RegistrationForm
 # Personal classes
 import upDownTools
 from app.forms import LoginForm
-
-# App security for stageing server
-auth = HTTPBasicAuth() # Trigger simple log-in if function decorated with @auth.login_required
-
-@auth.get_password
-def get_pw(username):
-    if username in workUpApp.config['USERS']:
-        return workUpApp.config['USERS'].get(username)
-    return None
 
 # Log-out page
 @workUpApp.route('/logout')
@@ -117,7 +107,7 @@ def uploadFile():
 @workUpApp.route("/fileStats")
 @login_required
 def fileStats():
-	if (str(auth.username()) in workUpApp.config['ADMIN_USERS'] and workUpApp.config['USERS']):
+	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		printOutput = 'There are ' + str(upDownTools.getNumberOfFiles()) +" files in the folder: "
 		uploadedFiles = (glob.glob(workUpApp.config['UPLOAD_FOLDER'] + '/*'))
 		return render_template('fileStats.html', numberOfFiles = str(upDownTools.getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles)
