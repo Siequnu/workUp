@@ -30,8 +30,8 @@ bootstrap = Bootstrap(workUpApp)
 
 # Log errors to local log
 if not workUpApp.debug:
-    if not os.path.exists('logs'):
-        os.mkdir('logs')
+    if not os.path.exists(os.path.join(workUpApp.config['APP_ROOT'], 'logs')):
+        os.mkdir(os.path.join(workUpApp.config['APP_ROOT'], 'logs'))
     file_handler = RotatingFileHandler('logs/workUpApp.log', maxBytes=10240,
                                        backupCount=10)
     file_handler.setFormatter(logging.Formatter(
