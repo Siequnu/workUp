@@ -7,12 +7,4 @@
 
   <form action="" method="post" enctype="multipart/form-data">
     <input type="file" name="file" /> <input type="submit" />
-  </form>{% with messages = get_flashed_messages() %} {% if messages %}
-
-  <ul class="flashes">
-    <li style="list-style: none">{% for message in messages %}</li>
-
-    <li>{{ message }}</li>
-
-    <li style="list-style: none">{% endfor %}</li>
-  </ul>{% endif %} {% endwith %} {% endblock %}
+  </form>{% endblock %}
