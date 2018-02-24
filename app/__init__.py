@@ -23,5 +23,5 @@ login.login_view = 'login'
 # Bootstrap
 bootstrap = Bootstrap(workUpApp)
 
-from app import views, models
+from app import views, models, errors
 
