@@ -5,8 +5,9 @@ from flask_httpauth import HTTPBasicAuth
 from random import randint
 from werkzeug import secure_filename
 import glob, os
+
 import upDownTools
-#from app.forms import LoginForm
+from app.login import LoginForm
 
 # App security for stageing server
 auth = HTTPBasicAuth()
@@ -17,13 +18,12 @@ def get_pw(username):
         return workUpApp.config['USERS'].get(username)
     return None
 
-'''
-@app.route('/login')
+
+@workUpApp.route('/login')
 def login():
-    pass
-	#form = LoginForm()
-    #return render_template('login.html', title='Sign In', form=form)
-'''
+	form = LoginForm()
+	return render_template('login.html', title='Sign In', form=form)
+
 # Choose a random file from uploads folder and send it out for download
 @workUpApp.route('/download-peer-file', methods = ['GET', 'POST'])
 def downloadRandomFile():	
