@@ -10,14 +10,12 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 # App security for stageing server
-import config
 auth = HTTPBasicAuth()
-users = config.users
 
 @auth.get_password
 def get_pw(username):
-    if username in users:
-        return users.get(username)
+    if username in app.config['USERS']:
+        return app.config['USERS'].get(username)
     return None
 
 # Check filename and extension permissibility
