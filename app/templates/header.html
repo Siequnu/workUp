@@ -13,10 +13,28 @@
   <p><img style="display: block; margin-left: auto; margin-right: auto;" img="" src=
   "{{url_for('static', filename='thlogo.jpg')}}"" width="333.6" height="149.6" /></p>
 
+<div>
+    Navigation:
+    <a href="{{url_for('upload_file')}}">Home</a>
+    <a href="{{url_for('fileStats')}}">File Stats</a>
+</div>
+
   <p style="text-align: center;"><strong>Writing 4 - Upload tool</strong></p>
 
   <p style="text-align: center;"><strong>Patrick Johansson</strong></p>
 
-  <p style="text-align: center;"></p>{% block content %}{% endblock %}
+  <p style="text-align: center;"></p>
+  
+  {% with messages = get_flashed_messages() %} {% if messages %}
+
+  <ul class="flashes">
+    <li style="list-style: none">{% for message in messages %}</li>
+
+    <li>{{ message }}</li>
+
+    <li style="list-style: none">{% endfor %}</li>
+  </ul>{% endif %} {% endwith %}
+  
+  {% block content %}{% endblock %}
 </body>
 </html>
