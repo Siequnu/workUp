@@ -7,9 +7,7 @@ class Config(object):
 	UPLOAD_LOCATION = 'static/uploads'
 	UPLOAD_FOLDER = os.path.join(APP_ROOT, UPLOAD_LOCATION)
 	ALLOWED_EXTENSIONS = set(['txt', 'zip', 'pdf', 'doc', 'docx', 'pages'])
-	
-
-users= {
-	"john": "hello",
-	"susan": "bye"
-}
+	USERS= {
+		"john": "hello",
+		"susan": "bye"
+	}
