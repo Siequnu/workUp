@@ -17,10 +17,14 @@
     Navigation:
     <a href="{{url_for('index')}}">Home</a>
     <a href="{{url_for('fileStats')}}">File Stats</a>
-    <a href="{{url_for('login')}}">Login</a>
     <a href="{{url_for('uploadFile')}}">Upload File</a>
+	{% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}">Login</a>
+        {% else %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% endif %}
 </div>
-
+<div>
   <p style="text-align: center;"><strong>Writing 4 - Upload tool</strong></p>
 
   <p style="text-align: center;"><strong>Patrick Johansson</strong></p>
@@ -38,5 +42,6 @@
   </ul>{% endif %} {% endwith %}
   
   {% block content %}{% endblock %}
+  </div>
 </body>
 </html>
