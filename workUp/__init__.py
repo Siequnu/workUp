@@ -18,8 +18,6 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 # App security for stageing server
 import config
 app.secret_key = config.app_secret_key
-app.config['BASIC_AUTH_USERNAME'] = config.BASIC_AUTH_USERNAME
-app.config['BASIC_AUTH_PASSWORD'] = config.BASIC_AUTH_PASSWORD
 auth = HTTPBasicAuth()
 
 users = {
