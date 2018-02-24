@@ -21,7 +21,7 @@ import upDownTools
 from app.forms import LoginForm
 
 # App security for stageing server
-auth = HTTPBasicAuth()
+auth = HTTPBasicAuth() # Trigger simple log-in if function decorated with @auth.login_required
 
 @auth.get_password
 def get_pw(username):
@@ -93,7 +93,6 @@ def index():
 
 # Upload form
 @workUpApp.route('/upload', methods=['GET', 'POST'])
-#@auth.login_required
 @login_required
 def uploadFile():
 	# If the form has been filled out and posted:
@@ -116,7 +115,6 @@ def uploadFile():
 
 # Access file stats
 @workUpApp.route("/fileStats")
-#@auth.login_required
 @login_required
 def fileStats():
 	if (str(auth.username()) in workUpApp.config['ADMIN_USERS'] and workUpApp.config['USERS']):
