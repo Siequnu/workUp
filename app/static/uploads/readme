@@ -1,0 +1,3 @@
+This folder will receive the uploaded files. Make sure it is writeable by the web service.
+
+For security reasons it is recommended to disable Indexes in .htaccess. Failure to do this could allow users to browse the contents of this folder.
