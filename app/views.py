@@ -4,10 +4,11 @@ from flask import render_template, session, request, Response, make_response, se
 from random import randint
 from werkzeug import secure_filename
 import glob, os
+import uuid, datetime # File saving operations, can be moved to upDownTools (rename fileUtils)
 
 ## SQL
 from flask_login import current_user, login_user
-from app.models import User
+from app.models import User, Post
 from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
@@ -96,9 +97,17 @@ def uploadFile():
 			flash('Please rename the file.')
 			return redirect(request.url)
 		if file and upDownTools.allowedFile(file.filename):
-			filename = secure_filename(file.filename)
-			file.save(os.path.join(workUpApp.config['UPLOAD_FOLDER'], filename))
-			return redirect(url_for('uploadedFile',filename=filename))
+			originalFilename = secure_filename(file.filename)
+			originalFileExtension = upDownTools.getFileExtension(str(originalFilename))
+			randomFilename = str(uuid.uuid4()) + '.' + originalFileExtension
+			file.save(os.path.join(workUpApp.config['UPLOAD_FOLDER'], randomFilename))
+			
+			# Update SQL after file has saved
+			post = Post(original_filename = originalFilename, filename = randomFilename, user_id = current_user.id,)
+			db.session.add(post)
+			db.session.commit()
+			
+			return redirect(url_for('uploadedFile',filename=originalFilename))
 	else:
 		return render_template('fileUpload.html')
 

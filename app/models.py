@@ -14,6 +14,7 @@ class User(UserMixin, db.Model):
 	password_hash = db.Column(db.String(128))
 	studentnumber = db.Column(db.Integer)
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
+	last_seen = db.Column(db.DateTime, default=datetime.now)
 
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
@@ -26,9 +27,9 @@ class User(UserMixin, db.Model):
 
 class Post(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	body = db.Column(db.String(140))
+	original_filename = db.Column(db.String(140))
 	filename = db.Column(db.String(140))
-	timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	
 	def __repr__(self):
