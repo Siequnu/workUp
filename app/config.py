@@ -11,3 +11,4 @@ class Config(object):
 		"john": "hello",
 		"susan": "bye"
 	}
+	ADMIN_USERS = {'john'}
