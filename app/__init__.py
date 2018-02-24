@@ -1,7 +1,7 @@
 from flask import Flask
 from config import Config
 
-app = Flask(__name__)
-app.config.from_object(Config)
+workUpApp = Flask(__name__)
+workUpApp.config.from_object(Config)
 
 import views
