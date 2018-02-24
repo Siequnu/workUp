@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, Response, make_response, send_file, redirect, url_for, send_from_directory, flash, abort
-from flask_basicauth import BasicAuth
 from flask_httpauth import HTTPBasicAuth
 from random import randint
 from werkzeug import secure_filename
@@ -19,10 +18,8 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 # App security for stageing server
 import config
 app.secret_key = config.app_secret_key
-#app.config['BASIC_AUTH_FORCE'] = True
 app.config['BASIC_AUTH_USERNAME'] = config.BASIC_AUTH_USERNAME
 app.config['BASIC_AUTH_PASSWORD'] = config.BASIC_AUTH_PASSWORD
-basic_auth = BasicAuth(app)
 auth = HTTPBasicAuth()
 
 users = {
@@ -36,16 +33,16 @@ def get_pw(username):
         return users.get(username)
     return None
 
-
 # Check filename and extension permissibility
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
 # Return the number of files in the upload folder
 def getNumberOfFiles():
 	return (len (os.listdir(app.config['UPLOAD_FOLDER'])) - 1 )
+
+
 
 # Choose a random file from uploads folder and send it out for download
 @app.route('/download-peer-file', methods = ['GET', 'POST'])
@@ -68,7 +65,9 @@ def uploaded_file(filename):
 	return render_template ('fileUploaded.html')
    
 
+# Main entrance to the app
 @app.route('/', methods=['GET', 'POST'])
+@auth.login_required
 def upload_file():
 	# If the form has been filled out and posted:
 	if request.method == 'POST':
@@ -87,9 +86,8 @@ def upload_file():
 	else:
 		return render_template('fileUpload.html')
 
-
+# Access file stats
 @app.route("/fileStats")
-#@basic_auth.required
 @auth.login_required
 def fileStats():
    printOutput = 'There are ' + str(getNumberOfFiles()) +' files in the folder: <br/>'
