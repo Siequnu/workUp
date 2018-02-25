@@ -41,13 +41,19 @@ class Post(db.Model):
 		return len(Post.query.filter_by(user_id=userId).all())
 	
 	@staticmethod
+	def getPossibleDownloadsNotFromUser (userId):
+		sql = text ('SELECT filename FROM post WHERE user_id!=' + str(userId))
+		result = db.engine.execute(sql)
+		filenames = []
+		for row in result: filenames.append(row[0])
+		return filenames
+	
+	@staticmethod
 	def getPostOriginalFilenamesFromUserId (userId):
-		#return Post.query.filter_by(user_id=userId).all()
 		sql = text ('SELECT original_filename FROM post WHERE user_id=' + str(userId))
 		result = db.engine.execute(sql)
 		names = []
-		for row in result:
-			names.append(row[0])
+		for row in result: names.append(row[0])
 		return names
 
 	
