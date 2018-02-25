@@ -4,7 +4,7 @@ from flask import render_template, session, request, Response, make_response, se
 from random import randint
 from werkzeug import secure_filename
 import glob, os
-import uuid, datetime # File saving operations, can be moved to upDownTools (rename fileUtils)
+import uuid, datetime
 
 ## SQL
 from flask_login import current_user, login_user
@@ -17,7 +17,7 @@ from app.forms import RegistrationForm
 
 
 # Personal classes
-import upDownTools
+import fileModel
 from app.forms import LoginForm
 
 # Log-out page
@@ -64,7 +64,7 @@ def login():
 @login_required
 def downloadRandomFile():	
    uploadedFiles = (os.listdir(workUpApp.config['UPLOAD_FOLDER']))
-   numberOfFiles = int (upDownTools.getNumberOfFiles())
+   numberOfFiles = int (fileModel.getNumberOfFiles())
    randomNumber = (randint(0,numberOfFiles - 1))
    filename = uploadedFiles[randomNumber]
    randomFile = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filename)
@@ -103,9 +103,9 @@ def uploadFile():
 		if file.filename == '':
 			flash('Please rename the file.')
 			return redirect(request.url)
-		if file and upDownTools.allowedFile(file.filename):
+		if file and fileModel.allowedFile(file.filename):
 			originalFilename = secure_filename(file.filename)
-			originalFileExtension = upDownTools.getFileExtension(str(originalFilename))
+			originalFileExtension = fileModel.getFileExtension(str(originalFilename))
 			randomFilename = str(uuid.uuid4()) + '.' + originalFileExtension
 			file.save(os.path.join(workUpApp.config['UPLOAD_FOLDER'], randomFilename))
 			
@@ -126,7 +126,7 @@ def fileStats():
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		uploadedFiles = (os.listdir(workUpApp.config['UPLOAD_FOLDER'] ))
 		uploadFolderPath = workUpApp.config['UPLOAD_FOLDER']
-		return render_template('fileStats.html', numberOfFiles = str(upDownTools.getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
+		return render_template('fileStats.html', numberOfFiles = str(fileModel.getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
 	abort(403)
 	return None
 
