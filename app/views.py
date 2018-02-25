@@ -110,9 +110,7 @@ def uploadFile():
 			file.save(os.path.join(workUpApp.config['UPLOAD_FOLDER'], randomFilename))
 			
 			# Update SQL after file has saved
-			post = Post(original_filename = originalFilename, filename = randomFilename, user_id = current_user.id,)
-			db.session.add(post)
-			db.session.commit()
+			fileModel.writeUploadEvent (originalFilename, randomFilename, userId = current_user.id)
 			
 			return redirect(url_for('uploadedFile',filename=originalFilename))
 	else:
