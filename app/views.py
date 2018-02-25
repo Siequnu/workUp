@@ -8,7 +8,7 @@ import uuid, datetime # File saving operations, can be moved to upDownTools (ren
 
 ## SQL
 from flask_login import current_user, login_user
-from app.models import User, Post
+from app.models import User, Post, Download
 from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
@@ -61,11 +61,18 @@ def login():
 
 # Choose a random file from uploads folder and send it out for download
 @workUpApp.route('/downloadPeerFile', methods=['POST'])
+@login_required
 def downloadRandomFile():	
    uploadedFiles = (os.listdir(workUpApp.config['UPLOAD_FOLDER']))
    numberOfFiles = int (upDownTools.getNumberOfFiles())
    randomNumber = (randint(0,numberOfFiles - 1))
-   randomFile = os.path.join (workUpApp.config['UPLOAD_LOCATION'], uploadedFiles[randomNumber])
+   filename = uploadedFiles[randomNumber]
+   randomFile = os.path.join (workUpApp.config['UPLOAD_LOCATION'], filename)
+   
+   # Send SQL data to database
+   download = Download(filename=filename, user_id = current_user.id)
+   db.session.add(download)
+   db.session.commit()
    return send_file(randomFile, as_attachment=True)
 
 
@@ -79,7 +86,7 @@ def uploadedFile(filename):
 # Main entrance to the app
 @workUpApp.route('/', methods=['GET', 'POST'])
 def index():
-	return redirect(url_for('uploadFile'))
+	return render_template('index.html')
 
 
 # Upload form
