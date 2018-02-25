@@ -124,9 +124,9 @@ def uploadFile():
 @login_required
 def fileStats():
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
-		printOutput = 'There are ' + str(upDownTools.getNumberOfFiles()) +" files in the folder: "
-		uploadedFiles = (glob.glob(workUpApp.config['UPLOAD_FOLDER'] + '/*'))
-		return render_template('fileStats.html', numberOfFiles = str(upDownTools.getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles)
+		uploadedFiles = (os.listdir(workUpApp.config['UPLOAD_FOLDER'] ))
+		uploadFolderPath = workUpApp.config['UPLOAD_FOLDER']
+		return render_template('fileStats.html', numberOfFiles = str(upDownTools.getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
 	abort(403)
 	return None
 
