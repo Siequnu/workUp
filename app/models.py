@@ -15,6 +15,7 @@ class User(UserMixin, db.Model):
 	studentnumber = db.Column(db.Integer)
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
 	last_seen = db.Column(db.DateTime, default=datetime.now)
+	registered = db.Column(db.DateTime, default=datetime.now)
 
 	def __repr__(self):
 		return '<User {}>'.format(self.username)

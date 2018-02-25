@@ -19,6 +19,12 @@ from app.forms import RegistrationForm
 import fileModel
 from app.forms import LoginForm
 
+@workUpApp.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.datetime.now()
+        db.session.commit()
+
 # Log-out page
 @workUpApp.route('/logout')
 def logout():
@@ -78,6 +84,7 @@ def downloadRandomFile():
 # Sends out a file for download
 # Input: filename (must be in upload folder)
 @workUpApp.route('/uploaded/<filename>')
+@login_required
 def uploadedFile(filename):
 	return render_template ('fileUploaded.html')
 
