@@ -75,9 +75,9 @@ def downloadRandomFile():
 	# Get an array of filenames not belonging to current user
 	filesNotFromUser = Post.getPossibleDownloadsNotFromUser(current_user.id)
 	numberOfFiles = len(filesNotFromUser)
-	if numberOfFiles < 1:
+	if numberOfFiles == 0:
 		flash('There are no files currently available for download. Please contact your tutor for advice.')
-		return url_for('index')
+		return redirect(url_for('index'))
 	randomNumber = (randint(0,(numberOfFiles-1)))
 	filename = filesNotFromUser[randomNumber]
 	randomFile = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filename)
