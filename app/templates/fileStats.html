@@ -2,7 +2,10 @@
   {% extends "header.html" %} {% block app_content %}
 
   <p>
-    There are {{numberOfFiles}} in the uploads folder:
+    The path to the upload folder is: {{uploadFolderPath}}
+  </p>
+  <p>
+    There are {{numberOfFiles}} files in the uploads folder:
   </p>
   {% for file in uploadedFileNamesArray %}
        {{ file }} <br/>

@@ -28,6 +28,11 @@ login.login_view = 'login'
 # Bootstrap
 bootstrap = Bootstrap(workUpApp)
 
+# Create a logs folder if non-existant
+uploadFolderPath = os.path.join(workUpApp.config['APP_ROOT'], 'uploads')
+if not os.path.exists(os.path.join(uploadFolderPath)):
+	os.mkdir(uploadFolderPath)
+
 # Log errors to local log
 if not workUpApp.debug:
 	logsPath = os.path.join(workUpApp.config['APP_ROOT'], 'logs')
