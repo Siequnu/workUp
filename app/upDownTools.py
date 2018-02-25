@@ -12,7 +12,7 @@ def getFileExtension(filename):
 
 # Return the number of files in the upload folder
 def getNumberOfFiles():
-	return (len (os.listdir(workUpApp.config['UPLOAD_FOLDER'])) - 1 )
+	return (len (os.listdir(workUpApp.config['UPLOAD_FOLDER'])))
 
 # Send out specific file for download
 def downloadFile(filename):
