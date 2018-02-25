@@ -35,6 +35,10 @@ class Post(db.Model):
 	def __repr__(self):
 		return '<Post {}>'.format(self.filename)
 	
+	@staticmethod
+	def getPostCountFromUserId (userId):
+		return len(Post.query.filter_by(user_id=userId).all())
+	
 class Download(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	filename = db.Column(db.String(140))

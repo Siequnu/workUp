@@ -96,6 +96,11 @@ def uploadedFile(filename):
 # Main entrance to the app
 @workUpApp.route('/', methods=['GET', 'POST'])
 def index():
+	if current_user.is_authenticated:
+		# Get number of uploads
+		numberOfUploads = str(Post.getPostCountFromUserId(current_user.id))
+		return render_template('index.html', numberOfUploads = numberOfUploads)
+	
 	return render_template('index.html')
 
 

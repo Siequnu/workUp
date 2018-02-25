@@ -1,12 +1,23 @@
 {% extends "header.html" %}
 
 {% block app_content %}
-    <h1>workUp - Peer Review Distribution Tool</h1>
-    <p>workUp is a app web application designed to help teachers distribute student work for peer review.</p>
 
-<p>The site works as a simple upload interface, whereby uploaded works are automatically redistributed amongst the uploadees.</p>
-
-<p>Uploaded files are tagged with a student number, so that the student never receives their own work back.</p>
-	
-	<p>workUp is currently in development.</p>
+{% if current_user.is_anonymous %}
+	<h1>workUp - Peer Review Distribution Tool</h1>
+	<p>workUp is a app web application designed to help teachers distribute student work for peer review.</p>
+	<p>The site works as a simple upload interface, whereby uploaded works are automatically redistributed amongst the uploadees.</p>
+	<p>Uploaded files are tagged with a student number, so that the student never receives their own work back.</p>	
+	<p>workUp is currently in development.</p>                
+{% else %}
+	<div class="row">
+        <div class="col-md-4">
+			<h1>Hi, {{ current_user.username }}!</h1>
+		</div>
+		<div class="col-md-4">
+			<p>You have uploaded {{numberOfUploads}} posts.</p>
+		</div>
+    </div>
+{% endif %}
+					
+   
 {% endblock %}
