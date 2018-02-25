@@ -2,7 +2,6 @@ from app import workUpApp
 
 from flask import render_template, session, request, Response, make_response, send_file, redirect, url_for, send_from_directory, flash, abort
 from random import randint
-from werkzeug import secure_filename
 import glob, os
 import uuid, datetime
 
@@ -104,14 +103,8 @@ def uploadFile():
 			flash('Please rename the file.')
 			return redirect(request.url)
 		if file and fileModel.allowedFile(file.filename):
-			originalFilename = secure_filename(file.filename)
-			originalFileExtension = fileModel.getFileExtension(str(originalFilename))
-			randomFilename = str(uuid.uuid4()) + '.' + originalFileExtension
-			file.save(os.path.join(workUpApp.config['UPLOAD_FOLDER'], randomFilename))
-			
-			# Update SQL after file has saved
-			fileModel.writeUploadEvent (originalFilename, randomFilename, userId = current_user.id)
-			
+			fileModel.saveFile(file)
+			originalFilename = fileModel.getSecureFilename(file.filename)
 			return redirect(url_for('uploadedFile',filename=originalFilename))
 	else:
 		return render_template('fileUpload.html')

@@ -1,8 +1,11 @@
 from app import workUpApp
 from flask import send_from_directory
+from werkzeug import secure_filename
 import os
+import uuid, datetime
 
 # SQL for DB operations
+from flask_login import current_user
 from app.models import User, Post, Download
 from app import db
 
@@ -21,6 +24,25 @@ def getNumberOfFiles():
 # Send out specific file for download
 def downloadFile(filename):
 	return send_from_directory(workUpApp.config['UPLOAD_FOLDER'], filename)
+
+# Save a file to uploads folder, and update DB
+def saveFile (file):
+	originalFilename = getSecureFilename(file.filename)
+	randomFilename = getRandomFilename (originalFilename)
+	file.save(os.path.join(workUpApp.config['UPLOAD_FOLDER'], randomFilename))
+	
+	# Update SQL after file has saved
+	writeUploadEvent (originalFilename, randomFilename, userId = current_user.id)
+
+# Verify a filename is secure with werkzeug library
+def getSecureFilename(filename):
+	return secure_filename(filename)
+
+# Return randomised filename, keeping the original extension
+def getRandomFilename(originalFilename):
+	originalFileExtension = getFileExtension(str(originalFilename))
+	randomFilename = str(uuid.uuid4()) + '.' + originalFileExtension
+	return randomFilename
 
 # Write a file upload event to db
 def writeUploadEvent(originalFilename, randomFilename, userId):
