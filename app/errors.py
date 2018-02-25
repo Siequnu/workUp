@@ -2,7 +2,7 @@ from flask import render_template
 from app import workUpApp, db
 
 @workUpApp.errorhandler(403)
-def not_found_error(error):
+def access_denied(error):
     return render_template('403.html'), 403
 
 @workUpApp.errorhandler(404)
