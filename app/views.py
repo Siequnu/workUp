@@ -133,7 +133,11 @@ def fileStats():
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		uploadedFiles = (os.listdir(workUpApp.config['UPLOAD_FOLDER'] ))
 		uploadFolderPath = workUpApp.config['UPLOAD_FOLDER']
-		return render_template('fileStats.html', numberOfFiles = str(fileModel.getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
+		return render_template('fileStats.html', admin = True, numberOfFiles = str(fileModel.getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
+	elif current_user.is_authenticated:
+		uploadedFilesArray = Post.getPostOriginalFilenamesFromUserId(current_user.id)
+		return render_template('fileStats.html', uploadedFilesArray = uploadedFilesArray)
+		
 	abort(403)
 	return None
 

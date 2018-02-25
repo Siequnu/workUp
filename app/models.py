@@ -3,6 +3,7 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
+from sqlalchemy import text
 
 @login.user_loader
 def load_user(id):
@@ -38,6 +39,17 @@ class Post(db.Model):
 	@staticmethod
 	def getPostCountFromUserId (userId):
 		return len(Post.query.filter_by(user_id=userId).all())
+	
+	@staticmethod
+	def getPostOriginalFilenamesFromUserId (userId):
+		#return Post.query.filter_by(user_id=userId).all()
+		sql = text ('SELECT original_filename FROM post WHERE user_id=' + str(userId))
+		result = db.engine.execute(sql)
+		names = []
+		for row in result:
+			names.append(row[0])
+		return names
+
 	
 class Download(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
