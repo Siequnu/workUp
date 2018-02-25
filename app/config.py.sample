@@ -4,6 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config(object):
 	SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(12)
 	MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+	APP_ROOT = basedir
 	UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
 	ALLOWED_EXTENSIONS = set(['txt', 'zip', 'pdf', 'doc', 'docx', 'pages'])
 	ADMIN_USERS = {''}
