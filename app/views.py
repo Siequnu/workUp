@@ -71,18 +71,22 @@ def login():
 # Choose a random file from uploads folder and send it out for download
 @workUpApp.route('/downloadPeerFile', methods=['POST'])
 @login_required
-def downloadRandomFile():	
-   uploadedFiles = (os.listdir(workUpApp.config['UPLOAD_FOLDER']))
-   numberOfFiles = int (fileModel.getNumberOfFiles())
-   randomNumber = (randint(0,numberOfFiles - 1))
-   filename = uploadedFiles[randomNumber]
-   randomFile = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filename)
-   
-   # Send SQL data to database
-   download = Download(filename=filename, user_id = current_user.id)
-   db.session.add(download)
-   db.session.commit()
-   return send_file(randomFile, as_attachment=True)
+def downloadRandomFile():
+	# Get an array of filenames not belonging to current user
+	filesNotFromUser = Post.getPossibleDownloadsNotFromUser(current_user.id)
+	numberOfFiles = len(filesNotFromUser)
+	if numberOfFiles < 1:
+		flash('There are no files currently available for download. Please contact your tutor for advice.')
+		return url_for('index')
+	randomNumber = (randint(0,(numberOfFiles-1)))
+	filename = filesNotFromUser[randomNumber]
+	randomFile = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filename)
+	
+	# Send SQL data to database
+	download = Download(filename=filename, user_id = current_user.id)
+	db.session.add(download)
+	db.session.commit()
+	return send_file(randomFile, as_attachment=True)
 
 
 # Sends out a file for download
