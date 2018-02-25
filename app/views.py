@@ -67,7 +67,7 @@ def downloadRandomFile():
    numberOfFiles = int (upDownTools.getNumberOfFiles())
    randomNumber = (randint(0,numberOfFiles - 1))
    filename = uploadedFiles[randomNumber]
-   randomFile = os.path.join (workUpApp.config['UPLOAD_LOCATION'], filename)
+   randomFile = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filename)
    
    # Send SQL data to database
    download = Download(filename=filename, user_id = current_user.id)
