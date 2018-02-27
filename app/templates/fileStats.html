@@ -17,8 +17,7 @@
 	<tbody>
 		{% for key, value in cleanFilenamesAndDates.items() %}
 		<tr>
-		  <td>{{ key }}</td>, uploaded at: 
-		  <td>{{ value }}</td>
+		  <td>{{ key }}</td> uploaded at {{value[0]}} and downloaded {{value[1]}} times
 		</tr>
 		{% endfor %}
 	</tbody>

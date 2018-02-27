@@ -57,8 +57,8 @@ class Post(db.Model):
 		return names
 	
 	@staticmethod
-	def getOriginalUploadFilenamesAndDateFromUserId (userId):
-		sql = text ('SELECT original_filename, timestamp FROM post WHERE user_id=' + str(userId))
+	def getOriginalUploadFilenamesAndDateAndOriginalFilenameFromUserId (userId):
+		sql = text ('SELECT original_filename, timestamp, filename FROM post WHERE user_id=' + str(userId))
 		result = db.engine.execute(sql)
 		names = []
 		for row in result: names.append(row)
@@ -73,3 +73,11 @@ class Download(db.Model):
 	
 	def __repr__(self):
 		return '<Post {}>'.format(self.filename)
+	
+	@staticmethod
+	def getDownloadCountFromFilename (filename):
+		sql = text ('SELECT COUNT(id) FROM download WHERE filename=' + '"' + str(filename) + '"')
+		result = db.engine.execute(sql)
+		count = []
+		for row in result: count.append(row[0])
+		return count
