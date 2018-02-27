@@ -8,6 +8,8 @@ from sqlalchemy import text
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
 class User(UserMixin, db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(64), index=True, unique=True)
@@ -25,6 +27,7 @@ class User(UserMixin, db.Model):
 
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
+
 
 class Post(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -90,6 +93,7 @@ class Post(db.Model):
 
 	
 class Download(db.Model):
+	
 	id = db.Column(db.Integer, primary_key=True)
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
@@ -105,3 +109,18 @@ class Download(db.Model):
 		count = []
 		for row in result: count.append(row[0])
 		return count
+	
+
+class Comment(db.Model):
+	
+	id = db.Column(db.Integer, primary_key=True)
+	comment = db.Column(db.String(140))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	fileid = db.Column(db.Integer, index=True)
+	pending = db.Column(db.Boolean, default=True, nullable=False)
+	
+	def __repr__(self):
+		return '<Comment {}>'.format(self.comment)
+
+
