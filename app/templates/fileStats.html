@@ -14,9 +14,17 @@
   {% endfor %}
   {% else %}
   <p>You have uploaded the following files:</p>
-	{% for postOriginalFilename in uploadedFilesArray %}
-    <li>{{ postOriginalFilename }}</li>
-	{% endfor %}
+	<tbody>
+		{% for key, value in cleanFilenamesAndDates.items() %}
+		<tr>
+		  <td>{{ key }}</td>, uploaded at: 
+		  <td>{{ value }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+	<table>
+</table>
+
   {% endif %}
   
     {% endblock %}
