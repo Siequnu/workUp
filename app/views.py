@@ -140,7 +140,6 @@ def fileStats():
 		return render_template('fileStats.html', admin = True, numberOfFiles = str(fileModel.getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
 	elif current_user.is_authenticated:
 		# Get dates
-		#dict = {'filename': ['date', 'downloaded']}
 		uploadFilenamesAndDates = Post.getOriginalUploadFilenamesAndDateAndOriginalFilenameFromUserId (current_user.id)
 		cleanDict = {}
 		for post in uploadFilenamesAndDates:
