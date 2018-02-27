@@ -148,25 +148,34 @@ def fileStats():
 		return render_template('fileStats.html', admin = True, numberOfFiles = str(uploadedPostCount), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
 	elif current_user.is_authenticated:
 		# Get dates
-		uploadFilenamesAndDates = Post.getOriginalUploadFilenamesAndDateAndOriginalFilenameFromUserId (current_user.id)
+		postInfo = Post.getPostInfoFromUserId (current_user.id)
 		cleanDict = {}
-		for post in uploadFilenamesAndDates:
+		for info in postInfo:
 			# Get upload time
-			datetime = post[1] #2018-02-25 21:50:13.750276
+			datetime = info[1] #2018-02-25 21:50:13.750276
 			splitDatetime = str.split(str(datetime)) #['2018-02-25', '21:50:13.750276']
 			date = splitDatetime[0]
 			timeSplit = str.split(splitDatetime[1], ':') #['21', '50', '13.750276']
 			uploadTime = str(timeSplit[0]) + ':' + str(timeSplit[1])
 			
 			# Get download count
-			downloadCount = Download.getDownloadCountFromFilename(str(post[2]))
+			downloadCount = Download.getDownloadCountFromFilename(str(info[2]))
 			
 			# Add arrayed information to a new dictionary entry
-			cleanDict[str(post[0])] = [uploadTime, str(downloadCount)]
-			#return str(cleanDict)
+			cleanDict[str(info[0])] = [uploadTime, str(downloadCount), str(info[3])]
 		
 		return render_template('fileStats.html', cleanFilenamesAndDates = cleanDict)
 		
 	abort(403)
 	return None
 
+# View peer review comments
+@workUpApp.route("/comments/<fileid>")
+def viewComments(fileid):
+	post = Post.getPostOriginalFilenameFromPostId(fileid)
+	postTitle = post[0]
+	posts = [
+        {'author': 'user', 'body': 'Test post #1'},
+        {'author': 'user', 'body': 'Test post #2'}
+    ]
+	return render_template('comments.html', posts= posts, postTitle = postTitle)
