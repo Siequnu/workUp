@@ -140,15 +140,23 @@ def fileStats():
 		return render_template('fileStats.html', admin = True, numberOfFiles = str(fileModel.getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
 	elif current_user.is_authenticated:
 		# Get dates
-		uploadFilenamesAndDates = Post.getOriginalUploadFilenamesAndDateFromUserId (current_user.id)
+		#dict = {'filename': ['date', 'downloaded']}
+		uploadFilenamesAndDates = Post.getOriginalUploadFilenamesAndDateAndOriginalFilenameFromUserId (current_user.id)
 		cleanDict = {}
 		for post in uploadFilenamesAndDates:
+			# Get upload time
 			datetime = post[1] #2018-02-25 21:50:13.750276
 			splitDatetime = str.split(str(datetime)) #['2018-02-25', '21:50:13.750276']
 			date = splitDatetime[0]
 			timeSplit = str.split(splitDatetime[1], ':') #['21', '50', '13.750276']
 			uploadTime = str(timeSplit[0]) + ':' + str(timeSplit[1])
-			cleanDict[str(post[0])] = uploadTime
+			
+			# Get download count
+			downloadCount = Download.getDownloadCountFromFilename(str(post[2]))
+			
+			# Add arrayed information to a new dictionary entry
+			cleanDict[str(post[0])] = [uploadTime, str(downloadCount)]
+			#return str(cleanDict)
 		
 		return render_template('fileStats.html', cleanFilenamesAndDates = cleanDict)
 		
