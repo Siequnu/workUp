@@ -116,7 +116,15 @@ def index():
 		targetUploads = 10
 		# Set value of progress bar
 		progressBarPercentage = 50
-		return render_template('index.html', numberOfUploads = numberOfUploads, progressBarPercentage = progressBarPercentage)
+	
+		# Get the pending status of comments
+		commentCount = Comment.getPendingStatusFromUserId (current_user.id)
+		if commentCount[0] > 0:
+			userMustReturnPeerReview = True
+		else:
+			userMustReturnPeerReview = False
+		return render_template('index.html', numberOfUploads = numberOfUploads, progressBarPercentage = progressBarPercentage, userMustReturnPeerReview = userMustReturnPeerReview)
+		 
 	
 	return render_template('index.html')
 

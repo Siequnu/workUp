@@ -16,6 +16,11 @@
 		<div class="col-md-4">
 			<p>You have uploaded {{numberOfUploads}} posts.</p>
 		</div>
+		{% if userMustReturnPeerReview %}
+		<div class="col-md-4">
+			<p>You have 1 peer review upload pending!</p>
+		</div>
+		{% endif %}
     </div>
 	<div class="container">
   <div id='bar'>

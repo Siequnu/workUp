@@ -130,5 +130,13 @@ class Comment(db.Model):
 	
 	def __repr__(self):
 		return '<Comment {}>'.format(self.comment)
+	
+	@staticmethod
+	def getPendingStatusFromUserId (userId):
+		sql = text ('SELECT COUNT(id) FROM comment WHERE user_id=' + str(userId))
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row[0])
+		return names
 
 
