@@ -90,6 +90,14 @@ class Post(db.Model):
 		names = []
 		for row in result: names.append(row[0])
 		return names
+	
+	@staticmethod
+	def getPostIdFromFilename (filename):
+		sql = text ('SELECT id FROM post WHERE filename=' + '"' + str(filename) + '"')
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row[0])
+		return names
 
 	
 class Download(db.Model):
@@ -116,9 +124,9 @@ class Comment(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	comment = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-	fileid = db.Column(db.Integer, index=True)
-	pending = db.Column(db.Boolean, default=True, nullable=False)
+	user_id = db.Column(db.Integer)
+	fileid = db.Column(db.Integer)
+	pending = db.Column(db.Boolean)
 	
 	def __repr__(self):
 		return '<Comment {}>'.format(self.comment)

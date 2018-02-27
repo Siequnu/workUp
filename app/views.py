@@ -7,7 +7,7 @@ import uuid, datetime
 
 ## SQL
 from flask_login import current_user, login_user
-from app.models import User, Post, Download
+from app.models import User, Post, Download, Comment
 from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
@@ -86,6 +86,14 @@ def downloadRandomFile():
 	download = Download(filename=filename, user_id = current_user.id)
 	db.session.add(download)
 	db.session.commit()
+	
+	# Update comments table with pending commment
+	postId = Post.getPostIdFromFilename(filename)
+	pending = 1
+	commentPending = Comment(user_id = int(current_user.id), fileid = int(postId[0]), pending = True)
+	db.session.add(commentPending)
+	db.session.commit()
+
 	return send_file(randomFile, as_attachment=True)
 
 
