@@ -3,13 +3,16 @@
   
   {% block app_content %}
   {% if admin %}
+  <body>
+	
+
   <p>
     The path to the upload folder is: {{uploadFolderPath}}
   </p>
   <p>
     There are {{numberOfFiles}} files in the uploads folder:
   </p>
-  <div class="container">
+ <div class="container">
   <div class="row">
     <div class="col-xs-12">
       <div class="table-responsive">
@@ -40,9 +43,9 @@
     </div>
   </div>
 </div>
- 
+ </body>
   {% else %}
-	
+	 <body>
 	<div class="container">
   <div class="row">
     <div class="col-xs-12">
@@ -54,6 +57,7 @@
               <th>Filename</th>
               <th>Upload date</th>
               <th>Downloads</th>
+			  <th>Comments</th>
             </tr>
           </thead>
 		  <tbody>
@@ -62,6 +66,7 @@
               <td>{{ key }}</td>
               <td>{{value[0]}}</td>
               <td>{{value[1]}}</td>
+			  <td><a href="/comments/{{value[2]}}">View comments</a></li></td>
             </tr>
            {% endfor %}
           </tbody>
@@ -74,7 +79,8 @@
     </div>
   </div>
 </div>
-
+	
+</body>
   {% endif %}
   
     {% endblock %}

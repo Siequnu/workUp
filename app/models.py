@@ -73,11 +73,19 @@ class Post(db.Model):
 		return names
 	
 	@staticmethod
-	def getOriginalUploadFilenamesAndDateAndOriginalFilenameFromUserId (userId):
-		sql = text ('SELECT original_filename, timestamp, filename FROM post WHERE user_id=' + str(userId))
+	def getPostInfoFromUserId (userId):
+		sql = text ('SELECT original_filename, timestamp, filename, id FROM post WHERE user_id=' + str(userId))
 		result = db.engine.execute(sql)
 		names = []
 		for row in result: names.append(row)
+		return names
+	
+	@staticmethod
+	def getPostOriginalFilenameFromPostId (postId):
+		sql = text ('SELECT original_filename FROM post WHERE id=' + str(postId))
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row[0])
 		return names
 
 	
