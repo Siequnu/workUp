@@ -141,9 +141,11 @@ def uploadFile():
 def fileStats():
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Get total list of uploaded files from all users
-		uploadedFiles = (os.listdir(workUpApp.config['UPLOAD_FOLDER'] ))
+		uploadedFiles = Post.getAllUploadedPostsWithFilenameAndUsername()
+		uploadedPostCount = Post.getAllUploadedPostsCount()
+		
 		uploadFolderPath = workUpApp.config['UPLOAD_FOLDER']
-		return render_template('fileStats.html', admin = True, numberOfFiles = str(fileModel.getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
+		return render_template('fileStats.html', admin = True, numberOfFiles = str(uploadedPostCount), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
 	elif current_user.is_authenticated:
 		# Get dates
 		uploadFilenamesAndDates = Post.getOriginalUploadFilenamesAndDateAndOriginalFilenameFromUserId (current_user.id)
