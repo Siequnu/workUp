@@ -103,7 +103,12 @@ def index():
 	if current_user.is_authenticated:
 		# Get number of uploads
 		numberOfUploads = str(Post.getPostCountFromUserId(current_user.id))
-		return render_template('index.html', numberOfUploads = numberOfUploads)
+	
+		# Get target number of uploads
+		targetUploads = 10
+		# Set value of progress bar
+		progressBarPercentage = 50
+		return render_template('index.html', numberOfUploads = numberOfUploads, progressBarPercentage = progressBarPercentage)
 	
 	return render_template('index.html')
 
@@ -135,6 +140,7 @@ def uploadFile():
 @login_required
 def fileStats():
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
+		# Get total list of uploaded files from all users
 		uploadedFiles = (os.listdir(workUpApp.config['UPLOAD_FOLDER'] ))
 		uploadFolderPath = workUpApp.config['UPLOAD_FOLDER']
 		return render_template('fileStats.html', admin = True, numberOfFiles = str(fileModel.getNumberOfFiles()), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
@@ -161,5 +167,4 @@ def fileStats():
 		
 	abort(403)
 	return None
-
 
