@@ -9,9 +9,38 @@
   <p>
     There are {{numberOfFiles}} files in the uploads folder:
   </p>
-  {% for file in uploadedFileNamesArray %}
-       {{ file }} <br/>
-  {% endfor %}
+  <div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsive">
+        <table summary="Users have uploaded the following files:" class="table table-bordered table-hover">
+          <caption class="text-center">Users have uploaded the following files</a>:</caption>
+		  <thead>
+            <tr>
+              <th>Filename</th>
+              <th>User</th>
+              <th>Datetime</th>
+            </tr>
+          </thead>
+		  <tbody>
+			{% for file in uploadedFileNamesArray %}
+            <tr>
+              <td>{{ file[0] }}</td>
+              <td>{{file[1]}}</td>
+              <td>{{file[2]}}</td>
+            </tr>
+           {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+            </tr>
+          </tfoot>
+        </table>
+      </div><!--end of .table-responsive-->
+    </div>
+  </div>
+</div>
+ 
   {% else %}
 	
 	<div class="container">

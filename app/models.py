@@ -37,6 +37,22 @@ class Post(db.Model):
 		return '<Post {}>'.format(self.filename)
 	
 	@staticmethod
+	def getAllUploadedPostsCount ():
+		sql = text('SELECT COUNT(id) FROM post')
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row[0])
+		return names
+	
+	@staticmethod
+	def getAllUploadedPostsWithFilenameAndUsername ():
+		sql = text('SELECT post.original_filename, user.username, post.timestamp FROM post INNER JOIN user ON user.id=post.user_id;')
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row)
+		return names
+	
+	@staticmethod
 	def getPostCountFromUserId (userId):
 		return len(Post.query.filter_by(user_id=userId).all())
 	
