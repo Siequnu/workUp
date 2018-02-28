@@ -242,7 +242,7 @@ def viewAssignments():
 			cleanAssignment['assignmentDescription'] = assignment[2]
 			cleanAssignment['assignmentDue'] = assignment[3]
 			
-			getSubmittedFileId = str(Assignment.getFilenameForSubmission(assignment[0])) # [(30,)]
+			getSubmittedFileId = str(Assignment.getUsersUploadedAssignmentsFromAssignmentId(assignment[0], current_user.id)) # [(30,)]
 			if getSubmittedFileId != '[]': # If user has submitted an upload for this reception
 				cleanSubmittedFileId = getSubmittedFileId.replace ('(', '')
 				cleanSubmittedFileId = cleanSubmittedFileId.replace (',', '')
