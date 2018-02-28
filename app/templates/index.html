@@ -8,6 +8,12 @@
 	<p>The site works as a simple upload interface, whereby uploaded works are automatically redistributed amongst the uploadees.</p>
 	<p>Uploaded files are tagged with a student number, so that the student never receives their own work back.</p>	
 	<p>workUp is currently in development by Patrick Johansson at Tsinghua University. workUp is an open-source project and can be viewed at <a href="https://github.com/Siequnu/workUp">Github!</a></p></p>                
+{% elif admin %}
+	<div class="row">
+        <div class="col-md-4">
+			<h1>Hi, Administrator {{ current_user.username }}!</h1>
+		</div>		
+    </div>
 {% else %}
 	<div class="row">
         <div class="col-md-4">
@@ -16,15 +22,18 @@
 		<div class="col-md-4">
 			<p>You have uploaded {{numberOfUploads}} posts.</p>
 		</div>
-		{% if userMustReturnPeerReview %}
-		<div class="col-md-4">
-			<p>You have 1 peer review upload pending!</p>
-		</div>
-		{% endif %}
+		
     </div>
 	<div class="container">
   <div id='bar'>
-    <h4>Task completion</h4>
+    <h4>Assignments Completion</h4>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{progressBarPercentage}}%" id='width'>
+        {{progressBarPercentage}}%
+      </div>
+    </div>
+	
+	<h4>Peer review completion</h4>
     <div class="progress">
       <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{progressBarPercentage}}%" id='width'>
         {{progressBarPercentage}}%

@@ -107,31 +107,33 @@ def uploadedFile(filename):
 @workUpApp.route('/', methods=['GET', 'POST'])
 def index():
 	if current_user.is_authenticated:
-		# Get number of uploads
-		numberOfUploads = str(Post.getPostCountFromUserId(current_user.id))
-	
-		# Get total assignments assigned to user's class
-		classId = User.getUserClassFromId(current_user.id)
-		if (classId[0] == None):
-			# User isn't part of a class - doesn't therefore have any assignments
-			pass #! todo
+		if current_user.username not in workUpApp.config['ADMIN_USERS']:
+			# Get number of uploads
+			numberOfUploads = str(Post.getPostCountFromUserId(current_user.id))
 		
-		# Get assignments due for this user
-		totalNumberOfAssignments = str(len(Assignment.getAssignmentsFromClassId (str(classId[0]))))
+			# Get total assignments assigned to user's class
+			classId = User.getUserClassFromId(current_user.id)
+			if (classId[0] == None):
+				# User isn't part of a class - doesn't therefore have any assignments
+				pass #! todo
+			
+			# Get assignments due for this user
+			totalNumberOfAssignments = str(len(Assignment.getAssignmentsFromClassId (str(classId[0]))))
+			
+			# Get the total number of assignments already uploaded by the user
+			totalPosts = Post.getPostCountFromUserId (current_user.id) #! This needs to be changed to a more robust checking method (ie. against class and assignment IDs)
+			# Set value of progress bar
+			progressBarPercentage = int(float(totalPosts)/float(totalNumberOfAssignments) * 100)
 		
-		# Get the total number of assignments already uploaded by the user
-		totalPosts = Post.getPostCountFromUserId (current_user.id) #! This needs to be changed to a more robust checking method (ie. against class and assignment IDs)
-		# Set value of progress bar
-		progressBarPercentage = int(float(totalPosts)/float(totalNumberOfAssignments) * 100)
-	
-		# Get the pending status of comments
-		commentCount = Comment.getPendingStatusFromUserId (current_user.id)
-		if commentCount[0] > 0:
-			userMustReturnPeerReview = True
+			# Get the pending status of comments
+			commentCount = Comment.getPendingStatusFromUserId (current_user.id)
+			if commentCount[0] > 0:
+				userMustReturnPeerReview = True
+			else:
+				userMustReturnPeerReview = False
+			return render_template('index.html', numberOfUploads = numberOfUploads, progressBarPercentage = progressBarPercentage)
 		else:
-			userMustReturnPeerReview = False
-		return render_template('index.html', numberOfUploads = numberOfUploads, progressBarPercentage = progressBarPercentage, userMustReturnPeerReview = userMustReturnPeerReview)
-		 
+			return render_template('index.html', admin = True)
 	
 	return render_template('index.html')
 
