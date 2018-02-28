@@ -1,6 +1,9 @@
 from flask import Flask
 from config import Config
 
+# SSL
+from flask_sslify import SSLify
+
 # SQL
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -18,7 +21,7 @@ workUpApp = Flask(__name__)
 workUpApp.config.from_object(Config)
 
 # SSL
-sslify = SSLify(app)
+sslify = SSLify(workUpApp)
 
 # SQL
 db = SQLAlchemy(workUpApp)
