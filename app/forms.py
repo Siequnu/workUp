@@ -1,7 +1,7 @@
 from app import workUpApp
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
 
@@ -19,8 +19,7 @@ class RegistrationForm(FlaskForm):
 	password = PasswordField('Password', validators=[DataRequired()])
 	password2 = PasswordField('Repeat password', validators=[DataRequired(), EqualTo('password')])
 	studentNumber = StringField('Student number', validators=[DataRequired()])
-	classChoices = workUpApp.config['CLASS_CHOICES']
-	classId = SelectField('Class ID', choices=classChoices, validators=[DataRequired()])
+	classId = SelectField('Class ID', choices=workUpApp.config['CLASS_CHOICES'], validators=[DataRequired()])
 	signUpCode = StringField('Sign-up code', validators=[DataRequired()])
 	submit = SubmitField('Register')
 
@@ -33,3 +32,12 @@ class RegistrationForm(FlaskForm):
 		user = User.query.filter_by(email=email.data).first()
 		if user is not None:
 			raise ValidationError('Please use a different email address.')
+		
+		
+class AssignmentCreationForm(FlaskForm):
+	title = StringField('Assignment title', validators=[DataRequired()])
+	description = StringField('Assignment description', validators=[DataRequired()])
+	due_date = DateField('Due date:', validators=[DataRequired()])
+	target_course = SelectField('Class ID', choices=workUpApp.config['CLASS_CHOICES'], validators=[DataRequired()])
+	submit = SubmitField('Create')
+	

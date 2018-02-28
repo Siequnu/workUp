@@ -145,9 +145,10 @@ class Assignment(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(140))
 	description = db.Column(db.String(280))
-	due_date= db.Column(db.DateTime, index=True, default=datetime.now)
+	due_date = db.Column(db.DateTime, default=datetime.now)
 	created_by_id = db.Column(db.Integer)
-	target_course = db.Column(db.String(10))
+	target_course = db.Column(db.String(120))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
 	
 	def __repr__(self):
 		return '<Assignment {}>'.format(self.title)
