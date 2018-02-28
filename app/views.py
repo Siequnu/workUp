@@ -185,12 +185,12 @@ def fileStats():
 			date = splitDatetime[0]
 			timeSplit = str.split(splitDatetime[1], ':') #['21', '50', '13.750276']
 			uploadTime = str(timeSplit[0]) + ':' + str(timeSplit[1])
-			
+			uploadDateAndtime = date + ' ' + uploadTime
 			# Get download count
 			downloadCount = Download.getDownloadCountFromFilename(str(info[2]))
 			
 			# Add arrayed information to a new dictionary entry
-			cleanDict[str(info[0])] = [uploadTime, str(downloadCount), str(info[3])]
+			cleanDict[str(info[0])] = [uploadDateAndtime, str(downloadCount), str(info[3])]
 		
 		return render_template('fileStats.html', cleanFilenamesAndDates = cleanDict)
 		
