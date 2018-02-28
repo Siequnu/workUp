@@ -2,15 +2,13 @@
   {% extends "header.html" %}
   
   {% block app_content %}
-  {% if admin %}
+  {% if templatePackages['admin']%}
   <body>
-	
-
   <p>
-    The path to the upload folder is: {{uploadFolderPath}}
+    The path to the upload folder is: {{templatePackages['uploadFolderPath']}}
   </p>
   <p>
-    There are {{numberOfFiles}} files in the uploads folder:
+    There are {{templatePackages['uploadedPostCount']}} files in the uploads folder:
   </p>
  <div class="container">
   <div class="row">
@@ -26,11 +24,11 @@
             </tr>
           </thead>
 		  <tbody>
-			{% for file in uploadedFileNamesArray %}
+			{% for file in templatePackages['uploadedFiles'] %}
             <tr>
               <td>{{ file[0] }}</td>
-              <td>{{file[1]}}</td>
-              <td>{{file[2]}}</td>
+              <td>{{ file[1] }}</td>
+              <td>{{ file[2] }}</td>
             </tr>
            {% endfor %}
           </tbody>
@@ -61,7 +59,7 @@
             </tr>
           </thead>
 		  <tbody>
-			{% for key, value in cleanFilenamesAndDates.items() %}
+			{% for key, value in templatePackages['cleanDict'].items() %}
             <tr>
               <td>{{ key }}</td>
               <td>{{value[0]}}</td>
