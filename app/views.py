@@ -217,10 +217,15 @@ def createAssignment():
 @login_required
 def viewAssignments():
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
-		posts = [
-			{'author': 'user', 'body': 'Test post #1'},
-			{'author': 'user', 'body': 'Test post #2'}
-		]
-		return render_template('viewassignments.html')
+		# Get admin view with all assignments
+		assignments = Assignment.getAllAssignments()
+		# [(1, u'title', u'descrip', u'2018-03-02 00:00:00.000000', 1, u'30640192-1', u'2018-02-28 13:05:59.287555')]
+		return render_template('viewassignments.html', assignmentsArray = assignments, admin = True)
 	elif current_user.is_authenticated:
-		return render_template('viewassignments.html')
+		# Get user class
+		classId = User.getUserClassFromId(current_user.id)
+		if (classId[0] == None):
+			return render_template('viewassignments.html') # Display no assignments
+		# Get assignments for this user
+		assignments = Assignment.getAssignmentsFromClassId (str(classId[0]))
+		return render_template('viewassignments.html', assignmentsArray = assignments)

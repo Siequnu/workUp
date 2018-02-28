@@ -3,7 +3,87 @@
   
   
   {% block app_content %}
-  
-   View assignments here
+  {% if admin %}
+   <div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsive">
+        <table summary="The following assignments have been made" class="table table-bordered table-hover">
+          <caption class="text-center">You have created the following assignments</a>:</caption>
+		  <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Description</th>
+			  <th>Due date</th>
+			  <th>Created by</th>
+			  <th>For class</th>
+			  <th>Creation time</th>
+            </tr>
+          </thead>
+		  <tbody>
+			{% for assignment in assignmentsArray %}
+            <tr>
+              <td>{{assignment[0]}}</td>
+              <td>{{assignment[1]}}</td>
+              <td>{{assignment[2]}}</td>
+			  <td>{{assignment[3]}}</td>
+			  <td>{{assignment[4]}}</td>
+			  <td>{{assignment[5]}}</td>
+			  <td>{{assignment[6]}}</td>
+            </tr>
+           {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+            </tr>
+          </tfoot>
+        </table>
+      </div><!--end of .table-responsive-->
+    </div>
+  </div>
+</div>
+   
+   {% elif assignmentsArray %}
+   
+    <div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsive">
+        <table summary="The following assignments have been made" class="table table-bordered table-hover">
+          <caption class="text-center">These are your current assignments:</a>:</caption>
+		  <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Description</th>
+			  <th>Due date</th>
+            </tr>
+          </thead>
+		  <tbody>
+			{% for assignment in assignmentsArray %}
+            <tr>
+              <td>{{assignment[0]}}</td>
+              <td>{{assignment[1]}}</td>
+              <td>{{assignment[2]}}</td>
+			  <td>{{assignment[3]}}</td>
+            </tr>
+           {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+            </tr>
+          </tfoot>
+        </table>
+      </div><!--end of .table-responsive-->
+    </div>
+  </div>
+</div>
+	
+	{% else %}
+	
+	You have no assignments at present.
+	
+	{% endif %}
   
     {% endblock %}

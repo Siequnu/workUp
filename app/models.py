@@ -28,6 +28,14 @@ class User(UserMixin, db.Model):
 
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
+	
+	@staticmethod
+	def getUserClassFromId (userId):
+		sql = text('SELECT class_id FROM user WHERE id=' + str(userId))
+		result = db.engine.execute(sql)
+		classId = []
+		for row in result: classId.append(row[0])
+		return classId
 
 
 class Post(db.Model):
@@ -152,3 +160,19 @@ class Assignment(db.Model):
 	
 	def __repr__(self):
 		return '<Assignment {}>'.format(self.title)
+	
+	@staticmethod
+	def getAllAssignments ():
+		sql = text ('SELECT * FROM assignment')
+		result = db.engine.execute(sql)
+		assignments = []
+		for row in result: assignments.append(row)
+		return assignments
+	
+	@staticmethod
+	def getAssignmentsFromClassId (classId):
+		sql = text ('SELECT * FROM assignment WHERE target_course=' + '"' + str(classId) + '"')
+		result = db.engine.execute(sql)
+		assignments = []
+		for row in result: assignments.append(row)
+		return assignments
