@@ -167,35 +167,20 @@ def uploadFile(assignmentId = False):
 @workUpApp.route("/fileStats")
 @login_required
 def fileStats():
+	import fileStatsModel
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Get total list of uploaded files from all users
-		uploadedFiles = Post.getAllUploadedPostsWithFilenameAndUsername()
-		uploadedPostCount = Post.getAllUploadedPostsCount()
-		
-		uploadFolderPath = workUpApp.config['UPLOAD_FOLDER']
-		return render_template('fileStats.html', admin = True, numberOfFiles = str(uploadedPostCount), uploadedFileNamesArray = uploadedFiles, uploadFolderPath = uploadFolderPath)
+		templatePackages = {}
+		templatePackages['uploadedFiles'] = fileStatsModel.getAllUploadedPostsWithFilenameAndUsername()
+		templatePackages['uploadedPostCount'] = str(fileStatsModel.getAllUploadedPostsCount())
+		templatePackages['uploadFolderPath'] = workUpApp.config['UPLOAD_FOLDER']
+		templatePackages['admin'] = True
+		return render_template('fileStats.html', templatePackages = templatePackages)
 	elif current_user.is_authenticated:
-		# Get dates
-		postInfo = Post.getPostInfoFromUserId (current_user.id)
-		cleanDict = {}
-		for info in postInfo:
-			# Get upload time
-			datetime = info[1] #2018-02-25 21:50:13.750276
-			splitDatetime = str.split(str(datetime)) #['2018-02-25', '21:50:13.750276']
-			date = splitDatetime[0]
-			timeSplit = str.split(splitDatetime[1], ':') #['21', '50', '13.750276']
-			uploadTime = str(timeSplit[0]) + ':' + str(timeSplit[1])
-			uploadDateAndtime = date + ' ' + uploadTime
-			# Get download count
-			downloadCount = Download.getDownloadCountFromFilename(str(info[2]))
-			
-			# Add arrayed information to a new dictionary entry
-			cleanDict[str(info[0])] = [uploadDateAndtime, str(downloadCount), str(info[3])]
-		
-		return render_template('fileStats.html', cleanFilenamesAndDates = cleanDict)
-		
+		templatePackages = {}
+		templatePackages['cleanDict'] = fileStatsModel.getPostInfoFromUserId (current_user.id)
+		return render_template('fileStats.html', templatePackages = templatePackages)
 	abort(403)
-	return None
 
 # View peer review comments
 @workUpApp.route("/comments/<fileid>")
@@ -246,7 +231,6 @@ def viewAssignments():
 		# Check if user has completed their assignments
 		for assignment in assignments:
 			cleanAssignment = {} 
-			
 			cleanAssignment['assignmentId'] = assignment[0]
 			cleanAssignment['assignmentTitle'] = assignment[1]
 			cleanAssignment['assignmentDescription'] = assignment[2]
