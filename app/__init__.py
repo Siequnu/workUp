@@ -17,6 +17,9 @@ import os
 workUpApp = Flask(__name__)
 workUpApp.config.from_object(Config)
 
+# SSL
+sslify = SSLify(app)
+
 # SQL
 db = SQLAlchemy(workUpApp)
 migrate = Migrate(workUpApp, db)
