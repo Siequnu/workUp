@@ -7,12 +7,12 @@ import uuid, datetime
 
 ## SQL
 from flask_login import current_user, login_user
-from app.models import User, Post, Download, Comment
+from app.models import User, Post, Download, Comment, Assignment
 from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
 from app import db
-from app.forms import RegistrationForm
+from app.forms import RegistrationForm, AssignmentCreationForm
 
 
 # Personal classes
@@ -195,3 +195,20 @@ def viewComments(fileid):
 		{'author': 'user', 'body': 'Test post #2'}
 	]
 	return render_template('comments.html', posts= posts, postTitle = postTitle)
+
+
+# Admin page to set new assignment
+@workUpApp.route("/createassignment", methods=['GET', 'POST'])
+@login_required
+def createAssignment():
+	if current_user.is_authenticated:
+		if current_user.username in workUpApp.config['ADMIN_USERS']:
+			form = AssignmentCreationForm()
+			if form.validate_on_submit():
+				assignment = Assignment(title=form.title.data, description=form.description.data, due_date=form.due_date.data,
+									target_course=form.target_course.data, created_by_id=current_user.id)
+				db.session.add(assignment)
+				db.session.commit()
+				flash('Assignment successfully created!')
+				return redirect(url_for('index'))
+			return render_template('createassignment.html', title='Create Assignment', form=form)
