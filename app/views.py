@@ -212,3 +212,17 @@ def createAssignment():
 				flash('Assignment successfully created!')
 				return redirect(url_for('index'))
 			return render_template('createassignment.html', title='Create Assignment', form=form)
+		
+		
+# View created assignments status
+@workUpApp.route("/viewassignments")
+@login_required
+def viewAssignments():
+	if current_user.username in workUpApp.config['ADMIN_USERS']:
+		posts = [
+			{'author': 'user', 'body': 'Test post #1'},
+			{'author': 'user', 'body': 'Test post #2'}
+		]
+		return render_template('viewassignments.html')
+	elif current_user.is_authenticated:
+		return render_template('viewassignments.html')
