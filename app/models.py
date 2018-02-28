@@ -44,6 +44,7 @@ class Post(db.Model):
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	assignment_id = db.Column(db.Integer)
 	
 	def __repr__(self):
 		return '<Post {}>'.format(self.filename)
@@ -176,3 +177,13 @@ class Assignment(db.Model):
 		assignments = []
 		for row in result: assignments.append(row)
 		return assignments
+	
+	@staticmethod
+	def getFilenameForSubmission (assignmentId):
+		sql = text ('SELECT post.id FROM assignment INNER JOIN post ON post.assignment_id=assignment.id WHERE assignment.id=' + '"' + str(assignmentId) + '"')
+		result = db.engine.execute(sql)
+		if result == False:
+			return False
+		filename = []
+		for row in result: filename.append(row)
+		return filename
