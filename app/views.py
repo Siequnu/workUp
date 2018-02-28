@@ -5,19 +5,17 @@ from random import randint
 import glob, os
 import uuid, datetime
 
-## SQL
+# SQL
 from flask_login import current_user, login_user
 from app.models import User, Post, Download, Comment, Assignment
 from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
 from app import db
-from app.forms import RegistrationForm, AssignmentCreationForm
-
+from app.forms import RegistrationForm, AssignmentCreationForm, LoginForm
 
 # Personal classes
 import fileModel
-from app.forms import LoginForm
 
 @workUpApp.before_request
 def before_request():
