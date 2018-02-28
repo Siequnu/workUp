@@ -16,6 +16,7 @@ class User(UserMixin, db.Model):
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
 	studentnumber = db.Column(db.String(12))
+	class_id = db.Column(db.String(20))
 	last_seen = db.Column(db.DateTime, default=datetime.now)
 	registered = db.Column(db.DateTime, default=datetime.now)
 
@@ -138,5 +139,16 @@ class Comment(db.Model):
 		names = []
 		for row in result: names.append(row[0])
 		return names
+	
 
-
+class Assignment(db.Model):
+	
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(140))
+	description = db.Column(db.String(280))
+	due_date= db.Column(db.DateTime, index=True, default=datetime.now)
+	created_by_id = db.Column(db.Integer)
+	target_course = db.Column(db.String(10))
+	
+	def __repr__(self):
+		return '<Assignment {}>'.format(self.title)

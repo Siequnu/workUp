@@ -39,7 +39,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
 		if form.signUpCode.data in workUpApp.config['SIGNUP_CODES']:
-			user = User(username=form.username.data, email=form.email.data, studentnumber=form.studentNumber.data)
+			user = User(username=form.username.data, email=form.email.data, studentnumber=form.studentNumber.data, class_id=form.classId.data)
 			user.set_password(form.password.data)
 			db.session.add(user)
 			db.session.commit()
