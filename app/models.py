@@ -179,8 +179,8 @@ class Assignment(db.Model):
 		return assignments
 	
 	@staticmethod
-	def getFilenameForSubmission (assignmentId):
-		sql = text ('SELECT post.id FROM assignment INNER JOIN post ON post.assignment_id=assignment.id WHERE assignment.id=' + '"' + str(assignmentId) + '"')
+	def getUsersUploadedAssignmentsFromAssignmentId (assignmentId, userId):
+		sql = text ('SELECT post.id FROM assignment INNER JOIN post ON post.assignment_id=assignment.id WHERE assignment.id=' + '"' + str(assignmentId) + '" AND user_id=' + str(userId))
 		result = db.engine.execute(sql)
 		if result == False:
 			return False

@@ -73,7 +73,7 @@
 				<td>{{assignment['submittedFilename']}}</td>
 				
 				{% else %}
-				<td><a href="/upload/{{assignment[0]}}">Upload this assignment</a></li></td>
+				<td><a href="/upload/{{assignment['assignmentId']}}">Upload this assignment</a></li></td>
 				{% endif %}
             </tr>
            {% endfor %}
