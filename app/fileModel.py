@@ -26,13 +26,13 @@ def downloadFile(filename):
 	return send_from_directory(workUpApp.config['UPLOAD_FOLDER'], filename)
 
 # Save a file to uploads folder, and update DB
-def saveFile (file):
+def saveFile (file, assignmentId = False):
 	originalFilename = getSecureFilename(file.filename)
 	randomFilename = getRandomFilename (originalFilename)
 	file.save(os.path.join(workUpApp.config['UPLOAD_FOLDER'], randomFilename))
 	
 	# Update SQL after file has saved
-	writeUploadEvent (originalFilename, randomFilename, userId = current_user.id)
+	writeUploadEvent (originalFilename, randomFilename, userId = current_user.id, assignment_id = assignmentId)
 
 # Verify a filename is secure with werkzeug library
 def getSecureFilename(filename):
@@ -45,8 +45,11 @@ def getRandomFilename(originalFilename):
 	return randomFilename
 
 # Write a file upload event to db
-def writeUploadEvent(originalFilename, randomFilename, userId):
+def writeUploadEvent(originalFilename, randomFilename, userId, assignment_id = False):
 	# Update SQL after file has saved
-	post = Post(original_filename = originalFilename, filename = randomFilename, user_id = userId)
+	if assignment_id:
+			post = Post(original_filename = originalFilename, filename = randomFilename, user_id = userId, assignment_id = assignment_id)
+	else:
+		post = Post(original_filename = originalFilename, filename = randomFilename, user_id = userId)
 	db.session.add(post)
 	db.session.commit()

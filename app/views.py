@@ -127,10 +127,11 @@ def index():
 	return render_template('index.html')
 
 
-# Upload form
-@workUpApp.route('/upload', methods=['GET', 'POST'])
+# Upload form, or upload specific file
+@workUpApp.route('/upload/<assignmentId>',methods=['GET', 'POST'])
+@workUpApp.route('/upload', methods=['GET', 'POST']) # Remove this route after development so user can only upload direct to assignment
 @login_required
-def uploadFile():
+def uploadFile(assignmentId = False):
 	# If the form has been filled out and posted:
 	if request.method == 'POST':
 		# Check if the post request has the file part
@@ -142,7 +143,10 @@ def uploadFile():
 			flash('Please rename the file.')
 			return redirect(request.url)
 		if file and fileModel.allowedFile(file.filename):
-			fileModel.saveFile(file)
+			if (assignmentId):
+				fileModel.saveFile(file, assignmentId)
+			else:
+				fileModel.saveFile(file)
 			originalFilename = fileModel.getSecureFilename(file.filename)
 			return redirect(url_for('uploadedFile',filename=originalFilename))
 	else:
@@ -225,7 +229,29 @@ def viewAssignments():
 		# Get user class
 		classId = User.getUserClassFromId(current_user.id)
 		if (classId[0] == None):
-			return render_template('viewassignments.html') # Display no assignments
+			return render_template('viewassignments.html') # User isn't part of any class - display no assignments
 		# Get assignments for this user
 		assignments = Assignment.getAssignmentsFromClassId (str(classId[0]))
-		return render_template('viewassignments.html', assignmentsArray = assignments)
+		cleanAssignmentsArray = []
+		# Check if user has completed their assignments
+		for assignment in assignments:
+			cleanAssignment = {} 
+			
+			cleanAssignment['assignmentId'] = assignment[0]
+			cleanAssignment['assignmentTitle'] = assignment[1]
+			cleanAssignment['assignmentDescription'] = assignment[2]
+			cleanAssignment['assignmentDue'] = assignment[3]
+			
+			getSubmittedFileId = str(Assignment.getFilenameForSubmission(assignment[0])) # [(30,)]
+			if getSubmittedFileId != '[]': # If user has submitted an upload for this reception
+				cleanSubmittedFileId = getSubmittedFileId.replace ('(', '')
+				cleanSubmittedFileId = cleanSubmittedFileId.replace (',', '')
+				cleanSubmittedFileId = cleanSubmittedFileId.replace (')', '')
+				cleanSubmittedFileId = cleanSubmittedFileId.replace (']', '')
+				cleanSubmittedFileId = cleanSubmittedFileId.replace ('[', '')
+				postOriginalFilename = Post.getPostOriginalFilenameFromPostId (cleanSubmittedFileId)
+				cleanAssignment['submittedFilename'] = postOriginalFilename[0]
+				
+			cleanAssignmentsArray.append(cleanAssignment)
+		return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray)
+	

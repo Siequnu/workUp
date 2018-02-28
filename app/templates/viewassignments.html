@@ -5,6 +5,7 @@
   {% block app_content %}
   {% if admin %}
    <div class="container">
+	<a href="{{url_for('createAssignment')}}">Create new assignment</a>
   <div class="row">
     <div class="col-xs-12">
       <div class="table-responsive">
@@ -58,15 +59,22 @@
               <th>Title</th>
               <th>Description</th>
 			  <th>Due date</th>
+			  <th>Upload assignment</th>
             </tr>
           </thead>
 		  <tbody>
 			{% for assignment in assignmentsArray %}
             <tr>
-              <td>{{assignment[0]}}</td>
-              <td>{{assignment[1]}}</td>
-              <td>{{assignment[2]}}</td>
-			  <td>{{assignment[3]}}</td>
+              <td>{{assignment['assignmentId']}}</td>
+              <td>{{assignment['assignmentTitle']}}</td>
+              <td>{{assignment['assignmentDescription']}}</td>
+			  <td>{{assignment['assignmentDue']}}</td>
+			  {% if assignment['submittedFilename'] %}
+				<td>{{assignment['submittedFilename']}}</td>
+				
+				{% else %}
+				<td><a href="/upload/{{assignment[0]}}">Upload this assignment</a></li></td>
+				{% endif %}
             </tr>
            {% endfor %}
           </tbody>
