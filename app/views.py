@@ -110,10 +110,19 @@ def index():
 		# Get number of uploads
 		numberOfUploads = str(Post.getPostCountFromUserId(current_user.id))
 	
-		# Get target number of uploads
-		targetUploads = 10
+		# Get total assignments assigned to user's class
+		classId = User.getUserClassFromId(current_user.id)
+		if (classId[0] == None):
+			# User isn't part of a class - doesn't therefore have any assignments
+			pass #! todo
+		
+		# Get assignments due for this user
+		totalNumberOfAssignments = str(len(Assignment.getAssignmentsFromClassId (str(classId[0]))))
+		
+		# Get the total number of assignments already uploaded by the user
+		totalPosts = Post.getPostCountFromUserId (current_user.id) #! This needs to be changed to a more robust checking method (ie. against class and assignment IDs)
 		# Set value of progress bar
-		progressBarPercentage = 50
+		progressBarPercentage = int(float(totalPosts)/float(totalNumberOfAssignments) * 100)
 	
 		# Get the pending status of comments
 		commentCount = Comment.getPendingStatusFromUserId (current_user.id)
