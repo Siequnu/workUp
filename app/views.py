@@ -129,7 +129,6 @@ def index():
 
 # Upload form, or upload specific file
 @workUpApp.route('/upload/<assignmentId>',methods=['GET', 'POST'])
-@workUpApp.route('/upload', methods=['GET', 'POST']) # Remove this route after development so user can only upload direct to assignment
 @login_required
 def uploadFile(assignmentId = False):
 	# If the form has been filled out and posted:
