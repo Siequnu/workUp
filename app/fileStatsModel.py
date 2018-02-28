@@ -21,7 +21,7 @@ def getPostInfoFromUserId (userId):
 		uploadTime = str(timeSplit[0]) + ':' + str(timeSplit[1])
 		uploadDateAndtime = date + ' ' + uploadTime
 		# Get download count
-		downloadCount = Download.getDownloadCountFromFilename(str(info[2]))
+		downloadCount = Download.getDownloadCountFromFilename(info[2])
 		
 		# Add arrayed information to a new dictionary entry
 		cleanDict[str(info[0])] = [uploadDateAndtime, str(downloadCount), str(info[3])]
