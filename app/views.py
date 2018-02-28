@@ -215,37 +215,21 @@ def createAssignment():
 @workUpApp.route("/viewassignments")
 @login_required
 def viewAssignments():
+	import assignmentsModel
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Get admin view with all assignments
-		assignments = Assignment.getAllAssignments()
+		assignments = assignmentsModel.getAllAssignments()
 		# [(1, u'title', u'descrip', u'2018-03-02 00:00:00.000000', 1, u'30640192-1', u'2018-02-28 13:05:59.287555')]
 		return render_template('viewassignments.html', assignmentsArray = assignments, admin = True)
 	elif current_user.is_authenticated:
 		# Get user class
-		classId = User.getUserClassFromId(current_user.id)
+		classId = assignmentsModel.getUserClassFromId(current_user.id)
 		if (classId[0] == None):
+			flash('You are not part of any class and can not see any assignments.')
 			return render_template('viewassignments.html') # User isn't part of any class - display no assignments
-		# Get assignments for this user
-		assignments = Assignment.getAssignmentsFromClassId (str(classId[0]))
-		cleanAssignmentsArray = []
-		# Check if user has completed their assignments
-		for assignment in assignments:
-			cleanAssignment = {} 
-			cleanAssignment['assignmentId'] = assignment[0]
-			cleanAssignment['assignmentTitle'] = assignment[1]
-			cleanAssignment['assignmentDescription'] = assignment[2]
-			cleanAssignment['assignmentDue'] = assignment[3]
-			
-			getSubmittedFileId = str(Assignment.getUsersUploadedAssignmentsFromAssignmentId(assignment[0], current_user.id)) # [(30,)]
-			if getSubmittedFileId != '[]': # If user has submitted an upload for this reception
-				cleanSubmittedFileId = getSubmittedFileId.replace ('(', '')
-				cleanSubmittedFileId = cleanSubmittedFileId.replace (',', '')
-				cleanSubmittedFileId = cleanSubmittedFileId.replace (')', '')
-				cleanSubmittedFileId = cleanSubmittedFileId.replace (']', '')
-				cleanSubmittedFileId = cleanSubmittedFileId.replace ('[', '')
-				postOriginalFilename = Post.getPostOriginalFilenameFromPostId (cleanSubmittedFileId)
-				cleanAssignment['submittedFilename'] = postOriginalFilename[0]
-				
-			cleanAssignmentsArray.append(cleanAssignment)
-		return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray)
-	
+		else:
+			# Get assignments for this user
+			cleanAssignmentsArray = assignmentsModel.getUserAssignmentInformation (current_user.id)
+			return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray)
+	abort (403)
+
