@@ -21,6 +21,7 @@ workUp has the following main dependencies:
 	flask-sqlalchemy	database backend
 	flask-migrate		database backend
 	flask-bootstrap		css theme
+	flask_sslify		maintain ssl connections
 
 Please see the complete list in requirements.txt
 
