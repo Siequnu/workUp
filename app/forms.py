@@ -41,3 +41,10 @@ class AssignmentCreationForm(FlaskForm):
 	target_course = SelectField('Class ID', choices=workUpApp.config['CLASS_CHOICES'], validators=[DataRequired()])
 	submit = SubmitField('Create')
 	
+	
+class ClassCreationForm(FlaskForm):
+	classNumber = StringField('Class number', validators=[DataRequired()])
+	classLabel = StringField('Class label', validators=[DataRequired()])
+	classTerm = StringField('Class term', validators=[DataRequired()])
+	classYear = StringField('Class year', validators=[DataRequired()])
+	submit = SubmitField('Create')
