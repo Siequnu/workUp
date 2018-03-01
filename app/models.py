@@ -163,6 +163,12 @@ class Assignment(db.Model):
 		return '<Assignment {}>'.format(self.title)
 	
 	@staticmethod
+	def deleteAssignmentFromId (assignmentId):
+		sql = text ('DELETE FROM assignment WHERE id=' + '"' + str(assignmentId) + '"')
+		result = db.engine.execute(sql)
+		return result
+	
+	@staticmethod
 	def getAllAssignments ():
 		sql = text ('SELECT * FROM assignment')
 		result = db.engine.execute(sql)
