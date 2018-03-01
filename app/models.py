@@ -205,6 +205,15 @@ class Class(db.Model):
 		return '<Assignment {}>'.format(self.class_number)
 	
 	@staticmethod
+	def getClassChoiceListForForm ():
+		allClasses = Class.getAllClasses ()
+		classNumberAndLabelList = []
+		for classInfo in allClasses:
+			classNumberAndLabelList.append((classInfo[1], classInfo[2]))
+			
+		return classNumberAndLabelList
+
+	@staticmethod
 	def getAllClasses ():
 		sql = text ('SELECT * FROM class')
 		result = db.engine.execute(sql)
