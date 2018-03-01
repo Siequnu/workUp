@@ -203,3 +203,18 @@ class Class(db.Model):
 	
 	def __repr__(self):
 		return '<Assignment {}>'.format(self.class_number)
+	
+	@staticmethod
+	def getAllClasses ():
+		sql = text ('SELECT * FROM class')
+		result = db.engine.execute(sql)
+		classes = []
+		for classInfo in result: classes.append(classInfo)
+		return classes
+	
+	@staticmethod
+	def deleteClassFromId (classId):
+		sql = text ('DELETE FROM class WHERE id=' + '"' + str(classId) + '"')
+		result = db.engine.execute(sql)
+		return result
+	
