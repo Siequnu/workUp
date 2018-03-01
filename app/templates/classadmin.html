@@ -1,0 +1,49 @@
+
+  {% extends "header.html" %}
+  
+  
+  {% block app_content %}
+  
+   <div class="container">
+	<a href="{{url_for('createClass')}}">Create new class</a>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsive">
+        <table summary="List of classes" class="table table-bordered table-hover">
+          <caption class="text-center">You have created the following classes:</a>:</caption>
+		  <thead>
+            <tr>
+              <th>ID</th>
+              <th>Number</th>
+              <th>Label</th>
+			  <th>Term</th>
+			  <th>Year</th>
+			  <th>Actions</th>
+            </tr>
+          </thead>
+		  <tbody>
+			{% for classInfo in classesArray %}
+            <tr>
+              <td>{{classInfo[0]}}</td>
+              <td>{{classInfo[1]}}</td>
+              <td>{{classInfo[2]}}</td>
+			  <td>{{classInfo[3]}}</td>
+			  <td>{{classInfo[4]}}</td>
+			  <td><a href="/deleteclass/{{classInfo[0]}}">Delete</a></td>
+            </tr>
+           {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+            </tr>
+          </tfoot>
+        </table>
+      </div><!--end of .table-responsive-->
+    </div>
+  </div>
+</div>
+   
+  
+	
+  
+    {% endblock %}

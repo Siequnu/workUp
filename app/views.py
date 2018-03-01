@@ -219,7 +219,7 @@ def createAssignment():
 				db.session.add(assignment)
 				db.session.commit()
 				flash('Assignment successfully created!')
-				return redirect(url_for('index'))
+				return redirect(url_for('viewAssignments'))
 			return render_template('createassignment.html', title='Create Assignment', form=form)
 		
 		
@@ -270,5 +270,26 @@ def createClass():
 				db.session.add(newClass)
 				db.session.commit()
 				flash('Class successfully created!')
-				return redirect(url_for('index'))
+				return redirect(url_for('classAdmin'))
 			return render_template('createclass.html', title='Create new class', form=form)
+
+
+# Admin page to view classes
+@workUpApp.route("/classadmin")
+@login_required
+def classAdmin():
+	if current_user.is_authenticated:
+		if current_user.username in workUpApp.config['ADMIN_USERS']:
+			return render_template('classadmin.html', title='Class admin', classesArray = Class.getAllClasses())
+		
+# Delete a class
+@workUpApp.route("/deleteclass/<classId>")
+@login_required
+def deleteClass(classId):
+	if current_user.username in workUpApp.config['ADMIN_USERS']:
+		Class.deleteClassFromId(classId)
+		flash('Class ' + str(classId) + ' has been deleted.')
+		return redirect(url_for('classAdmin'))	
+		
+	abort (403)
+
