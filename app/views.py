@@ -132,7 +132,10 @@ def index():
 					completedAssignments += 1
 			
 			# Set value of progress bar
-			progressBarPercentage = int(float(completedAssignments)/float(len(assignmentsForThisUser)) * 100)
+			if (len(assignmentsForThisUser) != 0):
+				progressBarPercentage = int(float(completedAssignments)/float(len(assignmentsForThisUser)) * 100)
+			else:
+				progressBarPercentage = 100
 		
 			# Get the pending status of comments
 			commentCount = Comment.getPendingStatusFromUserId (current_user.id)
