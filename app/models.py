@@ -193,3 +193,13 @@ class Assignment(db.Model):
 		filename = []
 		for row in result: filename.append(row)
 		return filename
+	
+class Class(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	class_number = db.Column(db.String(140), index=True)
+	class_label = db.Column(db.String(280))
+	class_term = db.Column(db.String(140))
+	class_year = db.Column(db.Integer)
+	
+	def __repr__(self):
+		return '<Assignment {}>'.format(self.class_number)

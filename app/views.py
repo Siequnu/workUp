@@ -7,12 +7,12 @@ import uuid, datetime
 
 # SQL
 from flask_login import current_user, login_user
-from app.models import User, Post, Download, Comment, Assignment
+from app.models import User, Post, Download, Comment, Assignment, Class
 from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
 from app import db
-from app.forms import RegistrationForm, AssignmentCreationForm, LoginForm
+from app.forms import RegistrationForm, AssignmentCreationForm, LoginForm, ClassCreationForm
 
 # Personal classes
 import fileModel
@@ -254,3 +254,18 @@ def deleteAssignment(assignmentId):
 		
 	abort (403)
 
+
+# Admin page to set new class
+@workUpApp.route("/createclass", methods=['GET', 'POST'])
+@login_required
+def createClass():
+	if current_user.is_authenticated:
+		if current_user.username in workUpApp.config['ADMIN_USERS']:
+			form = ClassCreationForm()
+			if form.validate_on_submit():
+				newClass = Class(class_number=form.classNumber.data, class_label=form.classLabel.data, class_term=form.classTerm.data, class_year = form.classYear.data)
+				db.session.add(newClass)
+				db.session.commit()
+				flash('Class successfully created!')
+				return redirect(url_for('index'))
+			return render_template('createclass.html', title='Create new class', form=form)
