@@ -281,6 +281,7 @@ def classAdmin():
 	if current_user.is_authenticated:
 		if current_user.username in workUpApp.config['ADMIN_USERS']:
 			return render_template('classadmin.html', title='Class admin', classesArray = Class.getAllClasses())
+	abort (403)
 		
 # Delete a class
 @workUpApp.route("/deleteclass/<classId>")
@@ -289,7 +290,6 @@ def deleteClass(classId):
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		Class.deleteClassFromId(classId)
 		flash('Class ' + str(classId) + ' has been deleted.')
-		return redirect(url_for('classAdmin'))	
-		
+		return redirect(url_for('classAdmin'))		
 	abort (403)
 

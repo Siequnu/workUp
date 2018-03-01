@@ -210,7 +210,6 @@ class Class(db.Model):
 		classNumberAndLabelList = []
 		for classInfo in allClasses:
 			classNumberAndLabelList.append((classInfo[1], classInfo[2]))
-			
 		return classNumberAndLabelList
 
 	@staticmethod
