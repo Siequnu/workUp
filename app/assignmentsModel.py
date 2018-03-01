@@ -10,6 +10,9 @@ def getAllAssignments ():
 def getUserClassFromId (userId):
 	return User.getUserClassFromId(userId)
 
+def deleteAssignmentFromId (assignmentId):
+	return Assignment.deleteAssignmentFromId(assignmentId)
+
 def getAssignmentsFromClassId (classId):
 	return Assignment.getAssignmentsFromClassId (str(classId[0]))
 	

@@ -232,4 +232,16 @@ def viewAssignments():
 			cleanAssignmentsArray = assignmentsModel.getUserAssignmentInformation (current_user.id)
 			return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray)
 	abort (403)
+	
+# View created assignments status
+@workUpApp.route("/deleteassignment/<assignmentId>")
+@login_required
+def deleteAssignment(assignmentId):
+	import assignmentsModel
+	if current_user.username in workUpApp.config['ADMIN_USERS']:
+		assignmentsModel.deleteAssignmentFromId(assignmentId)
+		flash('Assignment ' + str(assignmentId) + ' has been deleted.')
+		return redirect(url_for('viewAssignments'))	
+		
+	abort (403)
 
