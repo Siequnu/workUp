@@ -3,7 +3,7 @@ from app import workUpApp
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
-from app.models import User
+from app.models import User, Class
 
 
 class LoginForm(FlaskForm):
@@ -19,7 +19,10 @@ class RegistrationForm(FlaskForm):
 	password = PasswordField('Password', validators=[DataRequired()])
 	password2 = PasswordField('Repeat password', validators=[DataRequired(), EqualTo('password')])
 	studentNumber = StringField('Student number', validators=[DataRequired()])
-	classId = SelectField('Class ID', choices=workUpApp.config['CLASS_CHOICES'], validators=[DataRequired()])
+	
+	classNumberAndLabelList = Class.getClassChoiceListForForm ()
+	classId = SelectField('Class ID', choices=classNumberAndLabelList, validators=[DataRequired()])
+	
 	signUpCode = StringField('Sign-up code', validators=[DataRequired()])
 	submit = SubmitField('Register')
 
@@ -38,7 +41,7 @@ class AssignmentCreationForm(FlaskForm):
 	title = StringField('Assignment title', validators=[DataRequired()])
 	description = StringField('Assignment description', validators=[DataRequired()])
 	due_date = DateField('Due date:', validators=[DataRequired()])
-	target_course = SelectField('Class ID', choices=workUpApp.config['CLASS_CHOICES'], validators=[DataRequired()])
+	target_course = SelectField('Class ID', choices=Class.getClassChoiceListForForm (), validators=[DataRequired()])
 	submit = SubmitField('Create')
 	
 	
