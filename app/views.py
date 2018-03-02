@@ -107,6 +107,9 @@ def uploadedFile(filename):
 @workUpApp.route('/', methods=['GET', 'POST'])
 def index():
 	if current_user.is_authenticated:
+		if current_user.username in workUpApp.config['ADMIN_USERS']:	
+			
+			return render_template('index.html', admin = True)
 		if current_user.username not in workUpApp.config['ADMIN_USERS']:
 			# Get number of uploads
 			numberOfUploads = str(Post.getPostCountFromUserId(current_user.id))
@@ -144,8 +147,6 @@ def index():
 			else:
 				userMustReturnPeerReview = False
 			return render_template('index.html', numberOfUploads = numberOfUploads, progressBarPercentage = progressBarPercentage)
-		else:
-			return render_template('index.html', admin = True)
 	
 	return render_template('index.html')
 
