@@ -16,12 +16,13 @@ workUp has the following main dependencies:
 -pip:
 	Flask 
 	flask_httpauth		authentication handler
-	flask-wtf		for handling of web forms	
+	flask-wtf		for handling of web form ! See NB below regarding flask-wtf rendering of labels in RadioFields
 	flask-login		log-in handler
 	flask-sqlalchemy	database backend
 	flask-migrate		database backend
 	flask-bootstrap		css theme
 	flask_sslify		maintain ssl connections
+	flask-moment		wrapper for Moment.js
 
 Please see the complete list in requirements.txt
 
@@ -29,3 +30,22 @@ Deployment:
 	- If using wsgi_mod with apache ensure that WSGIPassAuthorization is set to On in the .htaccess file
 	- Setup server specific config in config.py
 	- Ensure static/uploads/ folder is readable by apache (ie. sudo chown www-data)
+	
+Flask-wtf NB:
+https://stackoverflow.com/questions/27705968/flask-wtform-radiofield-label-does-not-render
+It might be intended by the author of "quick_form" macro, or more likely he/she missed a line of code to render out the label of RadioField, as the same is done for other types of fields.
+To hack it, locate the file "bootstrap/wtf.html", where macro "quick_form" is defined.
+add this line:
+
+{{field.label(class="control-label")|safe}}
+
+before the "for" loop:
+
+{% for item in field -%}
+  <div class="radio">
+    <label>
+      {{item|safe}} {{item.label.text|safe}}
+    </label>
+  </div>
+{% endfor %}
+Hope this works for you.
