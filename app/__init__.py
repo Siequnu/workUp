@@ -12,9 +12,6 @@ from flask_login import LoginManager
 # Bootstrap
 from flask_bootstrap import Bootstrap
 
-# Moment.js
-from flask_moment import Moment
-
 # Logging handlers
 import logging
 from logging.handlers import RotatingFileHandler
@@ -36,9 +33,6 @@ login.login_view = 'login'
 
 # Bootstrap
 bootstrap = Bootstrap(workUpApp)
-
-# Moment
-moment = Moment(workUpApp)
 
 # Create a logs folder if non-existant
 uploadFolderPath = os.path.join(workUpApp.config['APP_ROOT'], 'uploads')
