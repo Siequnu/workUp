@@ -233,6 +233,7 @@ def viewAssignments():
 		# Get admin view with all assignments
 		assignments = assignmentsModel.getAllAssignments()
 		# [(1, u'title', u'descrip', u'2018-03-02 00:00:00.000000', 1, u'30640192-1', u'2018-02-28 13:05:59.287555')]
+		# Convert datetime to simple date with date = datetime.datetime.strptime(string, '%Y-%m-%d %H:%M:%S.%f').date()
 		return render_template('viewassignments.html', assignmentsArray = assignments, admin = True)
 	elif current_user.is_authenticated:
 		# Get user class
