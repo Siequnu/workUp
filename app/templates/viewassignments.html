@@ -62,6 +62,8 @@
               <th>Description</th>
 			  <th>Due date</th>
 			  <th>Upload assignment</th>
+			  <th>Peer review 1</th>
+			  <th>Peer review 2</th>
             </tr>
           </thead>
 		  <tbody>
@@ -73,9 +75,12 @@
 			  <td>{{assignment['assignmentDue']}}</td>
 			  {% if assignment['submittedFilename'] %}
 				<td>{{assignment['submittedFilename']}}</td>
-				
+				<td><a href="/peerreviewform/{{assignment['assignmentId']}}">Peer Review 1</a></li></td>
+				<td><a href="/peerreviewform/{{assignment['assignmentId']}}">Peer Review 2</a></li></td>
 				{% else %}
 				<td><a href="/upload/{{assignment['assignmentId']}}">Upload this assignment</a></li></td>
+				<td></td>
+				<td></td>
 				{% endif %}
             </tr>
            {% endfor %}
