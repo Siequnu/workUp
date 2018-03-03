@@ -26,13 +26,13 @@
 		  <tbody>
 			{% for assignment in assignmentsArray %}
             <tr>
-              <td>{{assignment[0]}}</td>
-              <td>{{assignment[1]}}</td>
-              <td>{{assignment[2]}}</td>
-			  <td>{{ moment(assignment[3]).format('LL') }}</td>
-			  <td>{{assignment[4]}}</td>
-			  <td>{{assignment[5]}}</td>
-			  <td>{{assignment[6]}}</td>
+              <td>{{assignment['assignmentId']}}</td>
+              <td>{{assignment['assignmentTitle']}}</td>
+              <td>{{assignment['assignmentDescription']}}</td>
+			  <td>{{assignment['assignmentDue']}}</td>
+			  <td>{{assignment['assignmentCreatedBy']}}</td>
+              <td>{{assignment['assignmentForClassId']}}</td>
+              <td>{{assignment['assignmentCreationTimestamp']}}</td>
 			  <td><a href="/deleteassignment/{{assignment[0]}}">Delete</a></td>
             </tr>
            {% endfor %}
