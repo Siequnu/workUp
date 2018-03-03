@@ -12,7 +12,7 @@ from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
 from app import db
-from app.forms import RegistrationForm, AssignmentCreationForm, LoginForm, ClassCreationForm, PeerReviewForm
+from app.forms import RegistrationForm, AssignmentCreationForm, LoginForm, ClassCreationForm, PeerReviewForm, PeerReviewFormTwo
 
 # Personal classes
 import fileModel
@@ -298,7 +298,7 @@ def deleteClass(classId):
 # Peer review feedback form
 @workUpApp.route("/peerreviewform", methods=['GET', 'POST'])
 def createPeerReview():
-	form = PeerReviewForm()
+	form = PeerReviewFormTwo()
 	if form.validate_on_submit():
 		flash('Peer review submitted succesfully')
 		return redirect(url_for('viewAssignments'))
