@@ -299,6 +299,7 @@ def deleteClass(classId):
 # Peer review feedback form
 @workUpApp.route("/peerreviewform/<postId>", methods=['GET', 'POST'])
 @workUpApp.route("/peerreviewform")
+@login_required
 def createPeerReview(postId = False):
 	form = PeerReviewFormTwo()
 	if form.validate_on_submit():
