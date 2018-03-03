@@ -1,7 +1,6 @@
-from app import workUpApp
-from app import db
-
+from app import workUpApp, db
 from app.models import Post, Download, Assignment, User
+import datetime
 
 def getAllAssignments ():
 	return Assignment.getAllAssignments()
@@ -26,7 +25,7 @@ def getUserAssignmentInformation (userId):
 		cleanAssignment['assignmentId'] = assignment[0]
 		cleanAssignment['assignmentTitle'] = assignment[1]
 		cleanAssignment['assignmentDescription'] = assignment[2]
-		cleanAssignment['assignmentDue'] = assignment[3]
+		cleanAssignment['assignmentDue'] = datetime.datetime.strptime(assignment[3], '%Y-%m-%d %H:%M:%S.%f').date()
 		
 		getSubmittedFileId = str(Assignment.getUsersUploadedAssignmentsFromAssignmentId(assignment[0], userId)) # [(30,)]
 		if getSubmittedFileId != '[]': # If user has submitted an upload for this reception
