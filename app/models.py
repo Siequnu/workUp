@@ -113,6 +113,14 @@ class Post(db.Model):
 		return filenames
 	
 	@staticmethod
+	def getPossibleDownloadsNotFromUserForThisAssignment (userId, assignmentId):
+		sql = text ('SELECT filename FROM post WHERE user_id!=' + str(userId) + ' AND assignment_id=' + str(assignmentId))
+		result = db.engine.execute(sql)
+		filenames = []
+		for row in result: filenames.append(row[0])
+		return filenames
+	
+	@staticmethod
 	def getPostOriginalFilenamesFromUserId (userId):
 		sql = text ('SELECT original_filename FROM post WHERE user_id=' + str(userId))
 		result = db.engine.execute(sql)
