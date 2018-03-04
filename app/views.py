@@ -7,12 +7,17 @@ import uuid, datetime
 
 # SQL
 from flask_login import current_user, login_user
-from app.models import User, Post, Download, Comment, Assignment, Class
+from app.models import Turma, User, Post, Download, Comment, Assignment
+from app import db
+db.create_all()
+db.session.commit()
+
 from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
-from app import db
-from app.forms import RegistrationForm, AssignmentCreationForm, LoginForm, ClassCreationForm, PeerReviewForm, PeerReviewFormTwo
+
+
+from app.forms import LoginForm, RegistrationForm, AdminRegistrationForm, AssignmentCreationForm, TurmaCreationForm, PeerReviewForm, PeerReviewFormTwo
 
 # Personal classes
 import fileModel
@@ -37,11 +42,30 @@ def register():
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		if form.signUpCode.data in workUpApp.config['SIGNUP_CODES']:
-			user = User(username=form.username.data, email=form.email.data, studentnumber=form.studentNumber.data, class_id=form.classId.data)
+			user = User(username=form.username.data, email=form.email.data, studentnumber=form.studentNumber.data, turma_id=form.turmaId.data)
 			user.set_password(form.password.data)
 			db.session.add(user)
 			db.session.commit()
 			flash('Congratulations, you are now a registered user!')
+			return redirect(url_for('login'))
+		else:
+			flash("Please ask your tutor for sign-up instructions.")
+			return redirect(url_for('login'))
+	return render_template('register.html', title='Register', form=form)
+
+# Registration
+@workUpApp.route('/registeradmin', methods=['GET', 'POST'])
+def registerAdmin():
+	if current_user.is_authenticated:
+		return redirect(url_for('index'))
+	form = AdminRegistrationForm()
+	if form.validate_on_submit():
+		if form.signUpCode.data in workUpApp.config['SIGNUP_CODES']:
+			user = User(username=form.username.data, email=form.email.data)
+			user.set_password(form.password.data)
+			db.session.add(user)
+			db.session.commit()
+			flash('Congratulations, you are now a registered administrator!')
 			return redirect(url_for('login'))
 		else:
 			flash("Please ask your tutor for sign-up instructions.")
@@ -115,13 +139,13 @@ def index():
 			numberOfUploads = str(Post.getPostCountFromUserId(current_user.id))
 		
 			# Get total assignments assigned to user's class
-			classId = User.getUserClassFromId(current_user.id)
-			if (classId[0] == None):
+			turmaId = User.getUserTurmaFromId(current_user.id)
+			if (turmaId[0] == None):
 				# User isn't part of a class - doesn't therefore have any assignments
 				pass #! todo
 			
 			# Get assignments due for this user
-			assignmentsInfo = Assignment.getAssignmentsFromClassId (str(classId[0]))
+			assignmentsInfo = Assignment.getAssignmentsFromTurmaId (str(turmaId[0]))
 			assignmentsForThisUser = []
 			for assignment in assignmentsInfo:
 				assignmentId = str(assignment[0])
@@ -216,7 +240,7 @@ def createAssignment():
 			form = AssignmentCreationForm()
 			if form.validate_on_submit():
 				assignment = Assignment(title=form.title.data, description=form.description.data, due_date=form.due_date.data,
-									target_course=form.target_course.data, created_by_id=current_user.id)
+									target_course=form.target_course.data, created_by_id=current_user.id, peer_review_form=form.peer_review_form.data)
 				db.session.add(assignment)
 				db.session.commit()
 				flash('Assignment successfully created!')
@@ -235,8 +259,8 @@ def viewAssignments():
 		return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray, admin = True)
 	elif current_user.is_authenticated:
 		# Get user class
-		classId = assignmentsModel.getUserClassFromId(current_user.id)
-		if (classId[0] == None):
+		turmaId = assignmentsModel.getUserTurmaFromId(current_user.id)
+		if (turmaId[0] == None):
 			flash('You are not part of any class and can not see any assignments.')
 			return render_template('viewassignments.html') # User isn't part of any class - display no assignments
 		else:
@@ -264,10 +288,11 @@ def deleteAssignment(assignmentId):
 def createClass():
 	if current_user.is_authenticated:
 		if current_user.username in workUpApp.config['ADMIN_USERS']:
-			form = ClassCreationForm()
+			form = TurmaCreationForm()
 			if form.validate_on_submit():
-				newClass = Class(class_number=form.classNumber.data, class_label=form.classLabel.data, class_term=form.classTerm.data, class_year = form.classYear.data)
-				db.session.add(newClass)
+				newTurma = Turma(turma_number=form.turmaNumber.data, turma_label=form.turmaLabel.data, turma_term=form.turmaTerm.data,
+								 turma_year = form.turmaYear.data)
+				db.session.add(newTurma)
 				db.session.commit()
 				flash('Class successfully created!')
 				return redirect(url_for('classAdmin'))
@@ -280,16 +305,16 @@ def createClass():
 def classAdmin():
 	if current_user.is_authenticated:
 		if current_user.username in workUpApp.config['ADMIN_USERS']:
-			return render_template('classadmin.html', title='Class admin', classesArray = Class.getAllClasses())
+			return render_template('classadmin.html', title='Class admin', classesArray = Turma.getAllTurmas())
 	abort (403)
 		
 # Delete a class
-@workUpApp.route("/deleteclass/<classId>")
+@workUpApp.route("/deleteclass/<turmaId>")
 @login_required
-def deleteClass(classId):
+def deleteClass(turmaId):
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
-		Class.deleteClassFromId(classId)
-		flash('Class ' + str(classId) + ' has been deleted.')
+		Turma.deleteClassFromId(turmaId)
+		flash('Class ' + str(turmaId) + ' has been deleted.')
 		return redirect(url_for('classAdmin'))		
 	abort (403)
 

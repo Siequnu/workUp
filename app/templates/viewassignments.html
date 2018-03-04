@@ -20,6 +20,7 @@
 			  <th>Created by</th>
 			  <th>For class</th>
 			  <th>Creation time</th>
+			  <th>Peer review form</th>
 			  <th>Actions</th>
             </tr>
           </thead>
@@ -31,9 +32,10 @@
               <td>{{assignment['assignmentDescription']}}</td>
 			  <td>{{assignment['assignmentDue']}}</td>
 			  <td>{{assignment['assignmentCreatedBy']}}</td>
-              <td>{{assignment['assignmentForClassId']}}</td>
+              <td>{{assignment['assignmentForTurmaId']}}</td>
               <td>{{assignment['assignmentCreationTimestamp']}}</td>
-			  <td><a href="/deleteassignment/{{assignment[0]}}">Delete</a></td>
+			  <td>{{assignment['assignmentPeerReviewForm']}}</td>
+			  <td><a href="/deleteassignment/{{assignment['assignmentId']}}">Delete</a></td>
             </tr>
            {% endfor %}
           </tbody>

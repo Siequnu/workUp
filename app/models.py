@@ -9,6 +9,41 @@ from sqlalchemy import text
 def load_user(id):
 	return User.query.get(int(id))
 
+class Turma(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	turma_number = db.Column(db.String(140), index=True)
+	turma_label = db.Column(db.String(280))
+	turma_term = db.Column(db.String(140))
+	turma_year = db.Column(db.Integer)
+	
+	def __repr__(self):
+		return '<Turma {}>'.format(self.turma_number)
+	
+	@staticmethod
+	def getAllTurmas ():
+		sql = text ('SELECT * FROM turma')
+		result = db.engine.execute(sql)
+		turmas = []
+		for turmaInfo in result:
+			turmas.append(turmaInfo)
+		return turmas
+
+	@staticmethod
+	def getTurmaChoiceListForForm ():
+		allTurmas = Turma.getAllTurmas ()
+		turmaNumberAndLabelList = []
+		for turmaInfo in allTurmas:
+			turmaNumberAndLabelList.append((turmaInfo[1], turmaInfo[2]))
+		return turmaNumberAndLabelList
+	
+	@staticmethod
+	def deleteTurmaFromId (turmaId):
+		sql = text ('DELETE FROM turma WHERE id=' + '"' + str(turmaId) + '"')
+		result = db.engine.execute(sql)
+		return result
+
+	
+
 
 class User(UserMixin, db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -16,7 +51,7 @@ class User(UserMixin, db.Model):
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
 	studentnumber = db.Column(db.String(12))
-	class_id = db.Column(db.String(20))
+	turma_id = db.Column(db.String(20))
 	last_seen = db.Column(db.DateTime, default=datetime.now)
 	registered = db.Column(db.DateTime, default=datetime.now)
 
@@ -30,12 +65,12 @@ class User(UserMixin, db.Model):
 		return check_password_hash(self.password_hash, password)
 	
 	@staticmethod
-	def getUserClassFromId (userId):
-		sql = text('SELECT class_id FROM user WHERE id=' + str(userId))
+	def getUserTurmaFromId (userId):
+		sql = text('SELECT turma_id FROM user WHERE id=' + str(userId))
 		result = db.engine.execute(sql)
-		classId = []
-		for row in result: classId.append(row[0])
-		return classId
+		turmaId = []
+		for row in result: turmaId.append(row[0])
+		return turmaId
 
 
 class Post(db.Model):
@@ -158,6 +193,7 @@ class Assignment(db.Model):
 	created_by_id = db.Column(db.Integer)
 	target_course = db.Column(db.String(120))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
+	peer_review_form = db.Column(db.String(120))
 	
 	def __repr__(self):
 		return '<Assignment {}>'.format(self.title)
@@ -177,8 +213,8 @@ class Assignment(db.Model):
 		return assignments
 	
 	@staticmethod
-	def getAssignmentsFromClassId (classId):
-		sql = text ('SELECT * FROM assignment WHERE target_course=' + '"' + str(classId) + '"')
+	def getAssignmentsFromTurmaId (turmaId):
+		sql = text ('SELECT * FROM assignment WHERE target_course=' + '"' + str(turmaId) + '"')
 		result = db.engine.execute(sql)
 		assignments = []
 		for row in result: assignments.append(row)
@@ -193,36 +229,4 @@ class Assignment(db.Model):
 		filename = []
 		for row in result: filename.append(row)
 		return filename
-	
-class Class(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	class_number = db.Column(db.String(140), index=True)
-	class_label = db.Column(db.String(280))
-	class_term = db.Column(db.String(140))
-	class_year = db.Column(db.Integer)
-	
-	def __repr__(self):
-		return '<Assignment {}>'.format(self.class_number)
-	
-	@staticmethod
-	def getClassChoiceListForForm ():
-		allClasses = Class.getAllClasses ()
-		classNumberAndLabelList = []
-		for classInfo in allClasses:
-			classNumberAndLabelList.append((classInfo[1], classInfo[2]))
-		return classNumberAndLabelList
-
-	@staticmethod
-	def getAllClasses ():
-		sql = text ('SELECT * FROM class')
-		result = db.engine.execute(sql)
-		classes = []
-		for classInfo in result: classes.append(classInfo)
-		return classes
-	
-	@staticmethod
-	def deleteClassFromId (classId):
-		sql = text ('DELETE FROM class WHERE id=' + '"' + str(classId) + '"')
-		result = db.engine.execute(sql)
-		return result
 	
