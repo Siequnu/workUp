@@ -96,18 +96,18 @@ def login():
 @workUpApp.route("/downloadFile/<assignmentId>")
 @login_required
 def downloadFile(assignmentId = False):
-	return render_template('downloadFile.html')
+	return render_template('downloadFile.html', assignmentId = assignmentId)
 
 # Choose a random file from uploads folder and send it out for download
-@workUpApp.route('/downloadPeerFile', methods=['POST'])
+@workUpApp.route('/downloadPeerFile/<assignmentId>', methods=['POST'])
 @login_required
-def downloadRandomFile():
+def downloadRandomFile(assignmentId):
 	# Get an array of filenames not belonging to current user
-	filesNotFromUser = Post.getPossibleDownloadsNotFromUser(current_user.id)
+	filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment(current_user.id, assignmentId)
 	numberOfFiles = len(filesNotFromUser)
 	if numberOfFiles == 0:
-		flash('There are no files currently available for download. Please contact your tutor for advice.')
-		return redirect(url_for('index'))
+		flash('There are no files currently available for download. Please check back soon.')
+		return redirect(url_for('viewAssignments'))
 	randomNumber = (randint(0,(numberOfFiles-1)))
 	filename = filesNotFromUser[randomNumber]
 	randomFile = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filename)

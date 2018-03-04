@@ -3,6 +3,6 @@
   <p><i>Please click the download button
   to download your peer-review work.</i></p>
 
-  <form action="{{ url_for('downloadRandomFile') }}" method="post">
+  <form action="/downloadPeerFile/{{assignmentId}}" method="post">
     <input type="submit" value="Download" />
   </form>{% endblock %}
