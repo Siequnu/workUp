@@ -90,6 +90,14 @@ def login():
 		return redirect(next_page)
 	return render_template('login.html', title='Sign In', form=form)
 
+
+# Access file stats
+@workUpApp.route("/downloadFile")
+@workUpApp.route("/downloadFile/<assignmentId>")
+@login_required
+def downloadFile(assignmentId = False):
+	return render_template('downloadFile.html')
+
 # Choose a random file from uploads folder and send it out for download
 @workUpApp.route('/downloadPeerFile', methods=['POST'])
 @login_required
@@ -117,14 +125,6 @@ def downloadRandomFile():
 	db.session.commit()
 
 	return send_file(randomFile, as_attachment=True)
-
-
-# Sends out a file for download
-# Input: filename (must be in upload folder)
-@workUpApp.route('/uploaded/<filename>')
-@login_required
-def uploadedFile(filename):
-	return render_template ('fileUploaded.html')
 
 
 # Main entrance to the app
@@ -195,7 +195,8 @@ def uploadFile(assignmentId = False):
 			else:
 				fileModel.saveFile(file)
 			originalFilename = fileModel.getSecureFilename(file.filename)
-			return redirect(url_for('uploadedFile',filename=originalFilename))
+			flash('File ' + str(originalFilename) + ' successfully uploaded')
+			return redirect(url_for('viewAssignments'))
 	else:
 		return render_template('fileUpload.html')
 
