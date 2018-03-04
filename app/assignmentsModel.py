@@ -11,26 +11,27 @@ def getAllAssignments ():
 		cleanAssignment['assignmentId'] = assignment[0]
 		cleanAssignment['assignmentTitle'] = assignment[1]
 		cleanAssignment['assignmentDescription'] = assignment[2]
-		cleanAssignment['assignmentDue'] = datetime.datetime.strptime(assignment[3], '%Y-%m-%d %H:%M:%S.%f').date()
+		cleanAssignment['assignmentDue'] = datetime.datetime.strptime(assignment[3], '%Y-%m-%d').date()
 		cleanAssignment['assignmentCreatedBy'] = assignment[4]
-		cleanAssignment['assignmentForClassId'] = assignment[5]
+		cleanAssignment['assignmentForTurmaId'] = assignment[5]
 		cleanAssignment['assignmentCreationTimestamp'] = assignment[6]
+		cleanAssignment['assignmentPeerReviewForm'] = assignment[7]
 		cleanAssignmentsArray.append(cleanAssignment)
 	
 	return cleanAssignmentsArray
 	
-def getUserClassFromId (userId):
-	return User.getUserClassFromId(userId)
+def getUserTurmaFromId (userId):
+	return User.getUserTurmaFromId(userId)
 
 def deleteAssignmentFromId (assignmentId):
 	return Assignment.deleteAssignmentFromId(assignmentId)
 
-def getAssignmentsFromClassId (classId):
-	return Assignment.getAssignmentsFromClassId (str(classId[0]))
+def getAssignmentsFromTurmaId (turmaId):
+	return Assignment.getAssignmentsFromTurmaId (str(turmaId[0]))
 	
 def getUserAssignmentInformation (userId):
-	classId = getUserClassFromId (userId)
-	assignments = getAssignmentsFromClassId (classId)
+	turmaId = getUserTurmaFromId (userId)
+	assignments = getAssignmentsFromTurmaId (turmaId)
 	cleanAssignmentsArray = []
 	# Check if user has completed their assignments
 	for assignment in assignments:
@@ -38,7 +39,7 @@ def getUserAssignmentInformation (userId):
 		cleanAssignment['assignmentId'] = assignment[0]
 		cleanAssignment['assignmentTitle'] = assignment[1]
 		cleanAssignment['assignmentDescription'] = assignment[2]
-		cleanAssignment['assignmentDue'] = datetime.datetime.strptime(assignment[3], '%Y-%m-%d %H:%M:%S.%f').date()
+		cleanAssignment['assignmentDue'] = datetime.datetime.strptime(assignment[3], '%Y-%m-%d').date()
 		
 		getSubmittedFileId = str(Assignment.getUsersUploadedAssignmentsFromAssignmentId(assignment[0], userId)) # [(30,)]
 		if getSubmittedFileId != '[]': # If user has submitted an upload for this reception
