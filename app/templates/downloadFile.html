@@ -5,4 +5,8 @@
 
   <form action="/downloadPeerFile/{{assignmentId}}" method="post">
     <input type="submit" value="Download" />
-  </form>{% endblock %}
+  </form>
+  
+  <a href="{{url_for('createPeerReview')}}" class="btn btn-primary" role="button" aria-disabled="true">Go to peer review form</a>
+  
+  {% endblock %}

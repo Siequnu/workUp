@@ -28,6 +28,26 @@ def deleteAssignmentFromId (assignmentId):
 
 def getAssignmentsFromTurmaId (turmaId):
 	return Assignment.getAssignmentsFromTurmaId (str(turmaId[0]))
+
+def getAssignmentDueDateFromId (assignmentId):
+	return Assignment.getAssignmentDueDateFromId (assignmentId)
+
+def checkIfAssignmentIsOver (assignmentId):
+	from datetime import datetime
+	# Get due date from assignmentId
+	dueDate = Assignment.getAssignmentDueDateFromId (assignmentId)
+	# Format of date/time strings;
+	date_format = "%Y-%m-%d"
+	# Create datetime objects from the strings
+	dueDate = datetime.strptime(dueDate[0][0], date_format)
+	now = datetime.now()
+	
+	if dueDate < now:
+		# Assignment is closed
+		return True
+	else:
+		# Assignment still open
+		return False
 	
 def getUserAssignmentInformation (userId):
 	turmaId = getUserTurmaFromId (userId)
