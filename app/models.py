@@ -180,6 +180,7 @@ class Comment(db.Model):
 	user_id = db.Column(db.Integer)
 	fileid = db.Column(db.Integer)
 	pending = db.Column(db.Boolean)
+	assignment_id = db.Column(db.String(140))
 	
 	def __repr__(self):
 		return '<Comment {}>'.format(self.comment)
@@ -211,6 +212,14 @@ class Assignment(db.Model):
 		sql = text ('DELETE FROM assignment WHERE id=' + '"' + str(assignmentId) + '"')
 		result = db.engine.execute(sql)
 		return result
+	
+	@staticmethod
+	def getAssignmentDueDateFromId (assignmentId):
+		sql = text ('SELECT due_date FROM assignment WHERE id=' + '"' + str(assignmentId) + '"')
+		result = db.engine.execute(sql)
+		dueDate = []
+		for row in result: dueDate.append(row)
+		return dueDate
 	
 	@staticmethod
 	def getAllAssignments ():

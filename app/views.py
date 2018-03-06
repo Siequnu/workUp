@@ -96,7 +96,17 @@ def login():
 @workUpApp.route("/downloadFile/<assignmentId>")
 @login_required
 def downloadFile(assignmentId = False):
-	return render_template('downloadFile.html', assignmentId = assignmentId)
+	# If the assignment hasn't closed yet, flash message to wait until after deadline
+	import assignmentsModel
+	assignmentIsOver = assignmentsModel.checkIfAssignmentIsOver (assignmentId)
+	
+	if assignmentIsOver == True:
+		return render_template('downloadFile.html', assignmentId = assignmentId)
+	else:
+		flash ("The assignment hasn't closed yet. Please wait until the deadline is over, then try again to download a work for peer review.")
+		return redirect (url_for('viewAssignments'))
+		
+	
 
 # Choose a random file from uploads folder and send it out for download
 @workUpApp.route('/downloadPeerFile/<assignmentId>', methods=['POST'])
@@ -119,8 +129,7 @@ def downloadRandomFile(assignmentId):
 	
 	# Update comments table with pending commment
 	postId = Post.getPostIdFromFilename(filename)
-	pending = 1
-	commentPending = Comment(user_id = int(current_user.id), fileid = int(postId[0]), pending = True)
+	commentPending = Comment(user_id = int(current_user.id), fileid = int(postId[0]), pending = True, assignment_id=assignmentId)
 	db.session.add(commentPending)
 	db.session.commit()
 
