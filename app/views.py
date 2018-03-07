@@ -4,6 +4,7 @@ from flask import render_template, session, request, Response, make_response, se
 from random import randint
 import glob, os
 import uuid, datetime
+import json, pickle
 
 # SQL
 from flask_login import current_user, login_user
@@ -96,13 +97,12 @@ def login():
 @workUpApp.route("/downloadFile/<assignmentId>")
 @login_required
 def downloadFile(assignmentId = False):
-	# If the assignment hasn't closed yet, flash message to wait until after deadline
 	import assignmentsModel
 	assignmentIsOver = assignmentsModel.checkIfAssignmentIsOver (assignmentId)
-	
 	if assignmentIsOver == True:
 		return render_template('downloadFile.html', assignmentId = assignmentId)
 	else:
+		# If the assignment hasn't closed yet, flash message to wait until after deadline
 		flash ("The assignment hasn't closed yet. Please wait until the deadline is over, then try again to download a work for peer review.")
 		return redirect (url_for('viewAssignments'))
 		
@@ -112,6 +112,24 @@ def downloadFile(assignmentId = False):
 @workUpApp.route('/downloadPeerFile/<assignmentId>', methods=['POST'])
 @login_required
 def downloadRandomFile(assignmentId):
+	# Check if user has any previous downloads with pending peer reviews
+	pendingAssignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignmentId)
+	if len(pendingAssignments) > 0:
+		# User has a pending assignment, send them the same file as before
+		alreadyDownloadedAndPendingReviewFileId = pendingAssignments[0][1]
+		flash('You have a peer review that you have not yet completed. You have redownloaded the same file.')
+		# Get filename of the post from Id
+		filenameToDownload = Post.getPostFilenameFromPostId (alreadyDownloadedAndPendingReviewFileId)
+		
+		filePath = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filenameToDownload[0])
+		
+		# Send SQL data to database
+		download = Download(filename=filenameToDownload[0], user_id = current_user.id)
+		db.session.add(download)
+		db.session.commit()
+		
+		return send_file(filePath, as_attachment=True)
+	
 	# Get an array of filenames not belonging to current user
 	filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment(current_user.id, assignmentId)
 	numberOfFiles = len(filesNotFromUser)
@@ -172,13 +190,14 @@ def index():
 				progressBarPercentage = int(float(completedAssignments)/float(len(assignmentsForThisUser)) * 100)
 			else:
 				progressBarPercentage = 100
-		
+			'''
 			# Get the pending status of comments
 			commentCount = Comment.getPendingStatusFromUserId (current_user.id)
 			if commentCount[0] > 0:
 				userMustReturnPeerReview = True
 			else:
 				userMustReturnPeerReview = False
+				'''
 			return render_template('index.html', numberOfUploads = numberOfUploads, progressBarPercentage = progressBarPercentage)
 	
 	return render_template('index.html')
@@ -271,11 +290,12 @@ def viewAssignments():
 		# Get user class
 		turmaId = assignmentsModel.getUserTurmaFromId(current_user.id)
 		if (turmaId[0] == None):
-			flash('You are not part of any class and can not see any assignments.')
+			flash('You are not part of any class and can not see any assignments. Ask your tutor for help to join a class.')
 			return render_template('viewassignments.html') # User isn't part of any class - display no assignments
 		else:
 			# Get assignments for this user
 			cleanAssignmentsArray = assignmentsModel.getUserAssignmentInformation (current_user.id)
+			#return str(cleanAssignmentsArray)
 			return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray)
 	abort (403)
 	
@@ -330,12 +350,56 @@ def deleteClass(turmaId):
 
 
 # Peer review feedback form
-@workUpApp.route("/peerreviewform/<postId>", methods=['GET', 'POST'])
-@workUpApp.route("/peerreviewform")
+@workUpApp.route("/peerreviewform/<assignmentId>", methods=['GET', 'POST'])
+@workUpApp.route("/peerreviewform", methods=['GET', 'POST'])
 @login_required
-def createPeerReview(postId = False):
+def createPeerReview(assignmentId = False):
 	form = PeerReviewFormTwo()
 	if form.validate_on_submit():
-		flash('Peer review submitted succesfully')
+		# Serialise the form contents
+		formFields = {}
+		for fieldTitle, fieldContents in form.data.items():
+			formFields[fieldTitle] = fieldContents
+		# Clean the csrf_token and submit fields
+		del formFields['csrf_token']
+		del formFields['submit']
+		formContents = pickle.dumps(formFields)
+		
+		# Check if user has any previous downloads with pending peer reviews
+		pendingAssignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignmentId)
+		if len(pendingAssignments) > 0:
+			# User has a pending peer review - update the empty comment field with the contents of this form and remove pending status
+			pendingCommentId = pendingAssignments[0][0]
+			updateComment = Comment.updatePendingCommentWithComment(pendingCommentId, formContents)
+		
+		# The database is now updated with the comment - check the total completed comments
+		completedComments = Comment.getCountCompleteCommentsFromUserIdAndAssignmentId (current_user.id, assignmentId)
+		if completedComments[0][0] == 1:
+			# This is the first peer review, submit
+			flash('Peer review 1 submitted succesfully!')
+		elif completedComments[0][0] == 2:
+			# This is the second peer review, submit
+			flash('Peer review 2 submitted succesfully!')
 		return redirect(url_for('viewAssignments'))
 	return render_template('peerreviewform.html', title='Submit a peer review', form=form)
+
+# View a completed and populated peer review form
+@workUpApp.route("/viewPeerReview/<assignmentId>/<peerReviewNumber>", methods=['GET', 'POST'])
+@login_required
+def viewPeerReview(assignmentId, peerReviewNumber):
+	# Get the form from the assignmentId
+	#peerFormName = Assignment.getAssignmentPeerReviewFormFromAssignmentId (assignmentId)
+	
+	# Get the first or second peer review - these will be in created order in the DB
+	comments = Comment.getCommentContentFromAssignmentIdAndUserId (assignmentId, current_user.id)
+	if int(peerReviewNumber) == 1:
+		unpackedComments = pickle.loads(comments[0][0])
+	elif int(peerReviewNumber) == 2:
+		unpackedComments = pickle.loads(comments[1][0])
+	# Populate the form
+	form = PeerReviewFormTwo(**unpackedComments)
+	# Delete submit button
+	del form.submit
+	flash('You can not edit this peer review as it has already been submitted.')
+	return render_template('peerreviewform.html', title='View a peer review', form=form)
+

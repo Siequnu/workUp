@@ -102,7 +102,7 @@ class PeerReviewForm(FlaskForm):
 	stimulatingPieceDescription = StringField('Comment and justification:', validators=[DataRequired()])
 	
 	furtherSuggestionsDescription = StringField('Do you have any suggestions for how this author can improve on this piece or develop it further for the final research essay? Have you got any suggestions that you believe might assist the author in general?', validators=[DataRequired()])
-	submit = SubmitField('Create')
+	submit = SubmitField('Submit')
 	
 class PeerReviewFormTwo (FlaskForm):
 	
@@ -122,4 +122,4 @@ class PeerReviewFormTwo (FlaskForm):
 	essayRequirementLabel = "Suggest some points for the author to improve"
 	pointsToImproveField = TextAreaField(label=essayRequirementLabel, validators=[DataRequired()])
 	
-	submit = SubmitField('Create')
+	submit = SubmitField('Submit')
