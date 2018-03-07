@@ -151,6 +151,14 @@ class Post(db.Model):
 		names = []
 		for row in result: names.append(row[0])
 		return names
+	
+	@staticmethod
+	def getPostFilenameFromPostId (postId):
+		sql = text ('SELECT filename FROM post WHERE id=' + '"' + str(postId) + '"')
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row[0])
+		return names
 
 	
 class Download(db.Model):
@@ -186,11 +194,33 @@ class Comment(db.Model):
 		return '<Comment {}>'.format(self.comment)
 	
 	@staticmethod
-	def getPendingStatusFromUserId (userId):
-		sql = text ('SELECT COUNT(id) FROM comment WHERE user_id=' + str(userId))
+	def getPendingStatusFromUserIdAndAssignmentId (userId, assignmentId):
+		sql = text ('SELECT id, fileid FROM comment WHERE user_id=' + str(userId) + ' AND assignment_id=' + str(assignmentId) + ' AND pending=1')
 		result = db.engine.execute(sql)
 		names = []
-		for row in result: names.append(row[0])
+		for row in result: names.append(row)
+		return names
+	
+	@staticmethod
+	def updatePendingCommentWithComment (commentId, peerReviewContents):
+		sql = text ('UPDATE comment SET pending=0, comment="' + str(peerReviewContents) + '" WHERE id="' + str(commentId) + '"')
+		result = db.engine.execute(sql)
+		return result
+	
+	@staticmethod
+	def getCountCompleteCommentsFromUserIdAndAssignmentId (userId, assignmentId):
+		sql = text ("SELECT COUNT(id) FROM comment WHERE user_id='" + str(userId) + "' AND assignment_id='" + str(assignmentId) + "' AND pending=0")
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row)
+		return names
+	
+	@staticmethod
+	def getCommentContentFromAssignmentIdAndUserId (assignmentId, userId):
+		sql = text ("SELECT comment FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND user_id='" + str(userId) + "'")
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row)
 		return names
 	
 
@@ -237,6 +267,14 @@ class Assignment(db.Model):
 		for row in result: assignments.append(row)
 		return assignments
 	
+	@staticmethod
+	def getAssignmentPeerReviewFormFromAssignmentId (assignmentId):
+		sql = text ('SELECT peer_review_form FROM assignment WHERE id=' + '"' + str(assignmentId) + '"')
+		result = db.engine.execute(sql)
+		assignments = []
+		for row in result: assignments.append(row)
+		return assignments
+
 	@staticmethod
 	def getUsersUploadedAssignmentsFromAssignmentId (assignmentId, userId):
 		sql = text ('SELECT post.id FROM assignment INNER JOIN post ON post.assignment_id=assignment.id WHERE assignment.id=' + '"' + str(assignmentId) + '" AND user_id=' + str(userId))
