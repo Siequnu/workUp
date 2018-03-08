@@ -162,6 +162,14 @@ class Post(db.Model):
 		names = []
 		for row in result: names.append(row[0])
 		return names
+	
+	@staticmethod
+	def getAssignmentIdFromPostId (postId):
+		sql = text ('SELECT assignment_id FROM post WHERE id=' + '"' + str(postId) + '"')
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row[0])
+		return names
 
 	
 class Download(db.Model):
@@ -221,6 +229,14 @@ class Comment(db.Model):
 	@staticmethod
 	def getCommentContentFromAssignmentIdAndUserId (assignmentId, userId):
 		sql = text ("SELECT comment FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND user_id='" + str(userId) + "'")
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row)
+		return names
+	
+	@staticmethod
+	def getCommentContentFromAssignmentIdAndFileId (assignmentId, fileId):
+		sql = text ("SELECT comment FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND fileid='" + str(fileId) + "'")
 		result = db.engine.execute(sql)
 		names = []
 		for row in result: names.append(row)
