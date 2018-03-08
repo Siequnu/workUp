@@ -258,8 +258,20 @@ def fileStats():
 
 # View peer review comments
 @workUpApp.route("/comments/<fileid>")
+@login_required
 def viewComments(fileid):
+	#!# Make sure that only the AUTHOR can check comments on their file!
+	
+	# Get assignment ID from post ID
+	assignmentId = Post.getAssignmentIdFromPostId (fileid)
+	# Get the all the peer review comments for this file
+	comments = Comment.getCommentContentFromAssignmentIdAndFileId (assignmentId[0], fileid)
+	return str(comments)
+	# Get the right form for each comment based on the assignment (should form class name be saved directly in the comments table as well?)
+	# Get assignment original filename
 	post = Post.getPostOriginalFilenameFromPostId(fileid)
+	
+	# Array of comments (this should instead be seperate buttons to view each peer review feedback form)
 	postTitle = post[0]
 	posts = [
 		{'author': 'user', 'body': 'Test post #1'},
