@@ -130,8 +130,16 @@ def downloadRandomFile(assignmentId):
 		
 		return send_file(filePath, as_attachment=True)
 	
-	# Get an array of filenames not belonging to current user
-	filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment(current_user.id, assignmentId)
+	# Make sure not to give the same file to the same peer reviewer twice
+	# Get comments from the user
+	completedCommentsIdsAndFileId = Comment.getCommentIdsAndFileIdFromAssignmentIdAndUserId (assignmentId, current_user.id)
+	if completedCommentsIdsAndFileId == []:
+		filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId)
+	else:
+		# Get an array of filenames not belonging to current user
+		previousDownloadFileId = completedCommentsIdsAndFileId[0][1]
+		filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId, previousDownloadFileId)
+	
 	numberOfFiles = len(filesNotFromUser)
 	if numberOfFiles == 0:
 		flash('There are no files currently available for download. Please check back soon.')
@@ -250,8 +258,20 @@ def fileStats():
 
 # View peer review comments
 @workUpApp.route("/comments/<fileid>")
+@login_required
 def viewComments(fileid):
+	#!# Make sure that only the AUTHOR can check comments on their file!
+	
+	# Get assignment ID from post ID
+	assignmentId = Post.getAssignmentIdFromPostId (fileid)
+	# Get the all the peer review comments for this file
+	comments = Comment.getCommentContentFromAssignmentIdAndFileId (assignmentId[0], fileid)
+	return str(comments)
+	# Get the right form for each comment based on the assignment (should form class name be saved directly in the comments table as well?)
+	# Get assignment original filename
 	post = Post.getPostOriginalFilenameFromPostId(fileid)
+	
+	# Array of comments (this should instead be seperate buttons to view each peer review feedback form)
 	postTitle = post[0]
 	posts = [
 		{'author': 'user', 'body': 'Test post #1'},
@@ -295,7 +315,6 @@ def viewAssignments():
 		else:
 			# Get assignments for this user
 			cleanAssignmentsArray = assignmentsModel.getUserAssignmentInformation (current_user.id)
-			#return str(cleanAssignmentsArray)
 			return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray)
 	abort (403)
 	
