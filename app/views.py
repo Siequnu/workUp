@@ -130,8 +130,14 @@ def downloadRandomFile(assignmentId):
 		
 		return send_file(filePath, as_attachment=True)
 	
+	# Make sure not to give the same file to the same peer reviewer twice
+	# Get comments from the user
+	completedCommentsIdsAndFileId = Comment.getCommentIdsAndFileIdFromAssignmentIdAndUserId (assignmentId, current_user.id)
+	previousDownloadFileId = completedCommentsIdsAndFileId[0][1]
+	
 	# Get an array of filenames not belonging to current user
-	filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment(current_user.id, assignmentId)
+	filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId, previousDownloadFileId)
+	#filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment(current_user.id, assignmentId)
 	numberOfFiles = len(filesNotFromUser)
 	if numberOfFiles == 0:
 		flash('There are no files currently available for download. Please check back soon.')
@@ -295,7 +301,6 @@ def viewAssignments():
 		else:
 			# Get assignments for this user
 			cleanAssignmentsArray = assignmentsModel.getUserAssignmentInformation (current_user.id)
-			#return str(cleanAssignmentsArray)
 			return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray)
 	abort (403)
 	

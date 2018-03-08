@@ -113,8 +113,11 @@ class Post(db.Model):
 		return filenames
 	
 	@staticmethod
-	def getPossibleDownloadsNotFromUserForThisAssignment (userId, assignmentId):
-		sql = text ('SELECT filename FROM post WHERE user_id!=' + str(userId) + ' AND assignment_id=' + str(assignmentId))
+	def getPossibleDownloadsNotFromUserForThisAssignment (userId, assignmentId, previousDownloadFileId = False):
+		if previousDownloadFileId:
+			sql = text ('SELECT filename FROM post WHERE user_id!=' + str(userId) + ' AND assignment_id=' + str(assignmentId) + ' AND id!=' + str(previousDownloadFileId))
+		else:
+			sql = text ('SELECT filename FROM post WHERE user_id!=' + str(userId) + ' AND assignment_id=' + str(assignmentId))
 		result = db.engine.execute(sql)
 		filenames = []
 		for row in result: filenames.append(row[0])
@@ -218,6 +221,14 @@ class Comment(db.Model):
 	@staticmethod
 	def getCommentContentFromAssignmentIdAndUserId (assignmentId, userId):
 		sql = text ("SELECT comment FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND user_id='" + str(userId) + "'")
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row)
+		return names
+	
+	@staticmethod
+	def getCommentIdsAndFileIdFromAssignmentIdAndUserId (assignmentId, userId):
+		sql = text ("SELECT id, fileid FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND user_id='" + str(userId) + "'")
 		result = db.engine.execute(sql)
 		names = []
 		for row in result: names.append(row)
