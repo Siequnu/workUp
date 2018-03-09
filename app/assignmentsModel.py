@@ -1,6 +1,8 @@
 from app import workUpApp, db
 from app.models import Post, Download, Assignment, User, Comment
 import datetime
+import time
+from datetime import datetime
 
 def getAllAssignments ():
 	assignments = Assignment.getAllAssignments()
@@ -11,7 +13,7 @@ def getAllAssignments ():
 		cleanAssignment['assignmentId'] = assignment[0]
 		cleanAssignment['assignmentTitle'] = assignment[1]
 		cleanAssignment['assignmentDescription'] = assignment[2]
-		cleanAssignment['assignmentDue'] = datetime.datetime.strptime(assignment[3], '%Y-%m-%d').date()
+		cleanAssignment['assignmentDue'] = datetime.strptime(assignment[3], '%Y-%m-%d').date()
 		cleanAssignment['assignmentCreatedBy'] = assignment[4]
 		cleanAssignment['assignmentForTurmaId'] = assignment[5]
 		cleanAssignment['assignmentCreationTimestamp'] = assignment[6]
@@ -33,21 +35,20 @@ def getAssignmentDueDateFromId (assignmentId):
 	return Assignment.getAssignmentDueDateFromId (assignmentId)
 
 def checkIfAssignmentIsOver (assignmentId):
-	from datetime import datetime
 	# Get due date from assignmentId
 	dueDate = Assignment.getAssignmentDueDateFromId (assignmentId)
-	# Format of date/time strings;
-	date_format = "%Y-%m-%d"
+	# Format of date/time strings
+	dateFormat = "%Y-%m-%d"
 	# Create datetime objects from the strings
-	dueDate = datetime.strptime(dueDate[0][0], date_format)
-	now = datetime.now()
+	dueDate = datetime.strptime(dueDate[0][0], dateFormat)
+	now = datetime.strptime(time.strftime(dateFormat), dateFormat)
 	
-	if dueDate < now:
-		# Assignment is closed
-		return True
-	else:
-		# Assignment still open
+	if dueDate >= now:
+		# Assignsment is still open
 		return False
+	else:
+		# Assignment closed
+		return True
 	
 def getUserAssignmentInformation (userId):
 	turmaId = getUserTurmaFromId (userId)
@@ -59,7 +60,8 @@ def getUserAssignmentInformation (userId):
 		cleanAssignment['assignmentId'] = assignment[0]
 		cleanAssignment['assignmentTitle'] = assignment[1]
 		cleanAssignment['assignmentDescription'] = assignment[2]
-		cleanAssignment['assignmentDue'] = datetime.datetime.strptime(assignment[3], '%Y-%m-%d').date()
+		cleanAssignment['assignmentDue'] = datetime.strptime(assignment[3], '%Y-%m-%d').date()
+		cleanAssignment['assignmentIsPastDeadline'] = checkIfAssignmentIsOver(assignment[0])
 		
 		getSubmittedFileId = str(Assignment.getUsersUploadedAssignmentsFromAssignmentId(assignment[0], userId)) # [(30,)]
 		if getSubmittedFileId != '[]': # If user has submitted an upload for this reception
@@ -72,7 +74,7 @@ def getUserAssignmentInformation (userId):
 			cleanAssignment['submittedFilename'] = postOriginalFilename[0]
 			
 			# Check for uploaded or pending peer-reviews
-			#!# This can either be 0 pending and 0 complete, 0/1 pending and 1 complete, or 0 pending and 2 complete
+			# This can either be 0 pending and 0 complete, 0/1 pending and 1 complete, or 0 pending and 2 complete
 			completeCount = Comment.getCountCompleteCommentsFromUserIdAndAssignmentId (userId, assignment[0])
 			cleanAssignment['completePeerReviewCount'] = completeCount[0][0]
 			

@@ -88,10 +88,14 @@
 					<td><a href="/viewPeerReview/{{assignment['assignmentId']}}/2" class="btn btn-success btn-sm" role="button" aria-disabled="true">Submitted!</a></td>
 				{% endif %}
 			{% else %}
-				<td><a href="/upload/{{assignment['assignmentId']}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Upload this assignment</a></td>
+         {% if assignment['assignmentIsPastDeadline'] %}
+				<td><a href="/upload/{{assignment['assignmentId']}}" class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true">Assignment overdue. Contact your tutor.</a></td>
+         {% else %}
+         <td><a href="/upload/{{assignment['assignmentId']}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Upload your assignment</a></td>
+				{% endif %}
+        <td><a href="" class="btn btn-default btn-sm disabled" role="button" aria-disabled="true">Submit</a></td>
 				<td><a href="" class="btn btn-default btn-sm disabled" role="button" aria-disabled="true">Submit</a></td>
-				<td><a href="" class="btn btn-default btn-sm disabled" role="button" aria-disabled="true">Submit</a></td>
-			{% endif %}
+        {% endif %}
             </tr>
            {% endfor %}
           </tbody>
