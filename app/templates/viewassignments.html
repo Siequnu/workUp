@@ -76,7 +76,8 @@
               <td>{{assignment['assignmentDescription']}}</td>
 			  <td>{{assignment['assignmentDue']}}</td>
 			  {% if assignment['submittedFilename'] %}
-				<td>{{assignment['submittedFilename']}}</td>
+				<td><a href="" class="btn btn-success btn-sm disabled" role="button" aria-disabled="true">{{assignment['submittedFilename']}}</a></td>
+        
 				{% if assignment['completePeerReviewCount'] == 0 %}
 					<td><a href="/downloadFile/{{assignment['assignmentId']}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit</a></td>
 					<td><a href="/downloadFile/{{assignment['assignmentId']}}" class="btn btn-default btn-sm disabled" role="button" aria-disabled="true">Submit</a></td>
