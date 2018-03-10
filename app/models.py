@@ -9,6 +9,29 @@ from sqlalchemy import text
 def load_user(id):
 	return User.query.get(int(id))
 
+@staticmethod
+def getFromDb (columnsArray, fromTable, conditionsArray = False):
+	# Assemble SQL query from input variables
+	sqlQuery = 'SELECT '
+	columnsString = ''
+	while len(columnsArray) > 1:	
+		columnsString = columnsString + columnsArray.pop() + ', '
+	columnsString = columnsString + columnsArray.pop()
+	sqlQuery = sqlQuery + columnsString + ' FROM ' + str(fromTable)
+	
+	if conditionsArray:
+		conditionsString = ''
+		while len(conditionsArray) > 1:	
+			conditionsString = conditionsString + conditionsArray.pop() + ' AND '
+		conditionsString = conditionsString + conditionsArray.pop()
+		sqlQuery = sqlQuery + ' WHERE ' + str(conditionsString)
+	
+	sql = text(sqlQuery)
+	result = db.engine.execute(sql)
+	names = []
+	for row in result: names.append(row)
+	return names
+
 class Turma(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	turma_number = db.Column(db.String(140), index=True)
@@ -82,31 +105,7 @@ class Post(db.Model):
 	assignment_id = db.Column(db.Integer)
 	
 	def __repr__(self):
-		return '<Post {}>'.format(self.filename)
-	
-	@staticmethod
-	def getFromPost (columnsArray, fromTable, conditionsArray = False):
-		# Assemble SQL query from input variables
-		sqlQuery = 'SELECT '
-		columnsString = ''
-		while len(columnsArray) > 1:	
-			columnsString = columnsString + columnsArray.pop() + ', '
-		columnsString = columnsString + columnsArray.pop()
-		sqlQuery = sqlQuery + columnsString + ' FROM ' + str(fromTable)
-		
-		if conditionsArray:
-			conditionsString = ''
-			while len(conditionsArray) > 1:	
-				conditionsString = conditionsString + conditionsArray.pop() + ' AND '
-			conditionsString = conditionsString + conditionsArray.pop()
-			sqlQuery = sqlQuery + ' WHERE ' + str(conditionsString)
-		
-		sql = text(sqlQuery)
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row)
-		return names
-		
+		return '<Post {}>'.format(self.filename)		
 	
 	@staticmethod
 	def getAllUploadedPostsCount ():
