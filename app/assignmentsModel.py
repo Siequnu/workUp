@@ -1,8 +1,10 @@
 from app import workUpApp, db
+import app.models
 from app.models import Post, Download, Assignment, User, Comment
 import datetime
-import time
 from datetime import datetime
+import time
+import string
 
 def getAllAssignments ():
 	assignments = Assignment.getAllAssignments()
@@ -70,8 +72,9 @@ def getUserAssignmentInformation (userId):
 			cleanSubmittedFileId = cleanSubmittedFileId.replace (')', '')
 			cleanSubmittedFileId = cleanSubmittedFileId.replace (']', '')
 			cleanSubmittedFileId = cleanSubmittedFileId.replace ('[', '')
-			postOriginalFilename = Post.getPostOriginalFilenameFromPostId (cleanSubmittedFileId)
-			cleanAssignment['submittedFilename'] = postOriginalFilename[0]
+			postOriginalFilename = app.models.selectFromDb(['original_filename'], 'post', [string.join(('id=', str(cleanSubmittedFileId)), '')])
+			cleanAssignment['submittedFilename'] = postOriginalFilename[0][0]
+			
 			
 			# Check for uploaded or pending peer-reviews
 			# This can either be 0 pending and 0 complete, 0/1 pending and 1 complete, or 0 pending and 2 complete

@@ -162,14 +162,6 @@ class Post(db.Model):
 		return names
 	
 	@staticmethod
-	def getPostOriginalFilenameFromPostId (postId):
-		sql = text ('SELECT original_filename FROM post WHERE id=' + str(postId))
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row[0])
-		return names
-	
-	@staticmethod
 	def getPostIdFromFilename (filename):
 		sql = text ('SELECT id FROM post WHERE filename=' + '"' + str(filename) + '"')
 		result = db.engine.execute(sql)
