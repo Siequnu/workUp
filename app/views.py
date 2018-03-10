@@ -196,13 +196,26 @@ def index():
 				if userUploadedAssignmentId:
 					completedAssignments += 1
 			
-			# Set value of progress bar
+			# Set value of assignment upload progress bar
 			if (len(assignmentsForThisUser) != 0):
-				progressBarPercentage = int(float(completedAssignments)/float(len(assignmentsForThisUser)) * 100)
+				assignmentUploadProgressBarPercentage = int(float(completedAssignments)/float(len(assignmentsForThisUser)) * 100)
 			else:
-				progressBarPercentage = 100
+				assignmentUploadProgressBarPercentage = 100
 				
-			return render_template('index.html', numberOfUploads = numberOfUploads, progressBarPercentage = progressBarPercentage)
+			# Set the value of the peer review progress bar
+			totalNumberOfPeerReviewsExpected = (len(assignmentsForThisUser)) * 2 # At two peer reviews per assignment
+			conditions = []
+			conditions.append(string.join(('user_id=', str(current_user.id)), ''))
+			conditions.append('pending=0')
+			commentIds = app.models.selectFromDb(['id'], 'comment', conditions)
+			totalNumberOfCompletedPeerReviews = (len(commentIds))
+			
+			if totalNumberOfPeerReviewsExpected != 0:
+				peerReviewProgressBarPercentage = int(float(totalNumberOfCompletedPeerReviews)/float(totalNumberOfPeerReviewsExpected) * 100)
+			else:
+				peerReviewProgressBarPercentage = 100
+				
+			return render_template('index.html', numberOfUploads = numberOfUploads, assignmentUploadProgressBarPercentage = assignmentUploadProgressBarPercentage, peerReviewProgressBarPercentage = peerReviewProgressBarPercentage)
 	
 	return render_template('index.html')
 
