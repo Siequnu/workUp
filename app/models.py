@@ -170,6 +170,12 @@ class Post(db.Model):
 		names = []
 		for row in result: names.append(row[0])
 		return names
+	
+	@staticmethod
+	def deletePostsFromAssignmentId (assignmentId):
+		sql = text ('DELETE FROM post WHERE assignment_id=' + '"' + str(assignmentId) + '"')
+		result = db.engine.execute(sql)
+		return result
 
 	
 class Download(db.Model):
@@ -265,6 +271,12 @@ class Comment(db.Model):
 		names = []
 		for row in result: names.append(row)
 		return names
+	
+	@staticmethod
+	def deleteCommentsFromAssignmentId (assignmentId):
+		sql = text ('DELETE FROM comment WHERE assignment_id=' + '"' + str(assignmentId) + '"')
+		result = db.engine.execute(sql)
+		return result
 	
 
 class Assignment(db.Model):

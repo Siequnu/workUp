@@ -327,11 +327,22 @@ def viewAssignments():
 @login_required
 def deleteAssignment(assignmentId):
 	import assignmentsModel
+	
+	#!# This should delete all user posts and comments associated with this assignment
+	
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
+		# Delete the assignment
 		assignmentsModel.deleteAssignmentFromId(assignmentId)
-		flash('Assignment ' + str(assignmentId) + ' has been deleted.')
-		return redirect(url_for('viewAssignments'))	
+	
+		# Delete all posts for this assignment
+		Post.deletePostsFromAssignmentId(assignmentId)
+		# Delete all downloads of those posts
 		
+		# Delete all comments for those posts
+		Comment.deleteCommentsFromAssignmentId(assignmentId)
+		
+		flash('Assignment ' + str(assignmentId) + ' has been deleted.')
+		return redirect(url_for('viewAssignments'))
 	abort (403)
 
 
@@ -417,6 +428,8 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 		assignmentId = Comment.getAssignmentIdFromCommentId(commentId)
 		# Get the form from the assignmentId
 		peerReviewFormName = Assignment.getAssignmentPeerReviewFormFromAssignmentId (assignmentId[0][0])
+		#!# This will be empty here if the assignment has been deleted but user still has comments.
+		
 		# Get the comment content from ID
 		comment = Comment.getCommentFromId (commentId)
 		unpackedComments = pickle.loads(comment[0][0])
