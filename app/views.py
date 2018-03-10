@@ -199,6 +199,7 @@ def index():
 				progressBarPercentage = int(float(completedAssignments)/float(len(assignmentsForThisUser)) * 100)
 			else:
 				progressBarPercentage = 100
+			
 			'''
 			# Get the pending status of comments
 			commentCount = Comment.getPendingStatusFromUserId (current_user.id)
@@ -207,6 +208,7 @@ def index():
 			else:
 				userMustReturnPeerReview = False
 				'''
+				
 			return render_template('index.html', numberOfUploads = numberOfUploads, progressBarPercentage = progressBarPercentage)
 	
 	return render_template('index.html')
