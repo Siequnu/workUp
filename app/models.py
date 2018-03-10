@@ -9,8 +9,7 @@ from sqlalchemy import text
 def load_user(id):
 	return User.query.get(int(id))
 
-@staticmethod
-def getFromDb (columnsArray, fromTable, conditionsArray = False):
+def selectFromDb (columnsArray, fromTable, conditionsArray = False):
 	# Assemble SQL query from input variables
 	sqlQuery = 'SELECT '
 	columnsString = ''
