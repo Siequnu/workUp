@@ -6,6 +6,7 @@ import glob, os
 import uuid, datetime
 import json, pickle
 import importlib
+import string
 
 # SQL
 from flask_login import current_user, login_user
@@ -260,29 +261,31 @@ def fileStats():
 	abort(403)
 
 # View peer review comments
-@workUpApp.route("/comments/<fileid>")
+@workUpApp.route("/comments/<fileId>")
 @login_required
-def viewComments(fileid):
-	#!# Make sure that only the AUTHOR can check comments on their file!
-	
-	# Get assignment ID from post ID
-	assignmentId = Post.getAssignmentIdFromPostId (fileid)
-	
-	# Get a list of peer reviews for this file and this user, and have an array of buttons
-	# with assignment ID and file ID pointing to viewPeerReview method
-	commentIds = Comment.getCommentIdsFromAssignmentIdAndFileId(assignmentId[0], fileid)
-	
-	cleanCommentIds = []
-	for row in commentIds:
-		for id in row:
-			cleanCommentIds.append(id)
+def viewComments(fileId):
+	# Make sure that only the AUTHOR can check comments on their file!
+	userId = app.models.selectFromDb(['user_id'], 'post', [string.join(('id=', str(fileId)), '')])
+	if userId != []: # The post exists	
+		if userId[0][0] == current_user.id:
+			# Get assignment ID from post ID
+			assignmentId = Post.getAssignmentIdFromPostId (fileId)
 			
-	# Get assignment original filename
-	post = Post.getPostOriginalFilenameFromPostId(fileid)
-	postTitle = post[0]
-	
-	return render_template('comments.html', cleanCommentIds = cleanCommentIds, postTitle = postTitle)
-
+			# Get a list of peer reviews for this file and this user, and have an array of buttons
+			# with assignment ID and file ID pointing to viewPeerReview method
+			commentIds = Comment.getCommentIdsFromAssignmentIdAndFileId(assignmentId[0], fileId)
+			
+			cleanCommentIds = []
+			for row in commentIds:
+				for id in row:
+					cleanCommentIds.append(id)
+					
+			# Get assignment original filename
+			post = Post.getPostOriginalFilenameFromPostId(fileId)
+			postTitle = post[0]
+			
+			return render_template('comments.html', cleanCommentIds = cleanCommentIds, postTitle = postTitle)
+	abort (403)
 
 # Admin page to set new assignment
 @workUpApp.route("/createassignment", methods=['GET', 'POST'])
