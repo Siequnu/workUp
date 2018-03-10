@@ -236,7 +236,7 @@ class Comment(db.Model):
 	
 	@staticmethod
 	def getCommentIdsFromAssignmentIdAndFileId (assignmentId, fileId):
-		sql = text ("SELECT id FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND fileid='" + str(fileId) + "'")
+		sql = text ("SELECT id FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND fileid='" + str(fileId) + "' AND pending=0")
 		result = db.engine.execute(sql)
 		names = []
 		for row in result: names.append(row)
