@@ -176,13 +176,14 @@ def index():
 			numberOfUploads = str(Post.getPostCountFromUserId(current_user.id))
 		
 			# Get total assignments assigned to user's class
-			turmaId = User.getUserTurmaFromId(current_user.id)
-			if (turmaId[0] == None):
+			turmaId = app.models.selectFromDb(['turma_id'], 'user', [(str('id="' + str(current_user.id) + '"'))])
+			if (turmaId[0][0] == None):
 				flash('You do not appear to be part of a class. Please contact your tutor for assistance.')
 				return render_template('index.html')
 			
 			# Get assignments due for this user
-			assignmentsInfo = Assignment.getAssignmentsFromTurmaId (str(turmaId[0]))
+			assignmentsInfo = app.models.selectFromDb(['*'], 'assignment', [ (str('target_course="' + turmaId[0][0] + '"')) ])
+			
 			assignmentsForThisUser = []
 			for assignment in assignmentsInfo:
 				assignmentId = str(assignment[0])
