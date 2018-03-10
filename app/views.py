@@ -283,8 +283,8 @@ def viewComments(fileId):
 					cleanCommentIds.append(id)
 					
 			# Get assignment original filename
-			post = Post.getPostOriginalFilenameFromPostId(fileId)
-			postTitle = post[0]
+			post = app.models.selectFromDb(['original_filename'], 'post', [string.join(('id=', str(fileId)), '')])
+			postTitle = post[0][0]
 			
 			return render_template('comments.html', cleanCommentIds = cleanCommentIds, postTitle = postTitle)
 	abort (403)
