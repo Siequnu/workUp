@@ -28,24 +28,30 @@
 	</div>
 			<div class="container">
 	<div id='bar'>
-    <h4>Assignments Completion</h4>
+    <h4>Assignments completion</h4>
     <div class="progress">
-      {% if progressBarPercentage==100 %}
-			<div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{progressBarPercentage}}%" id='width'>
-				{{progressBarPercentage}}%
+      {% if assignmentUploadProgressBarPercentage==100 %}
+			<div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{assignmentUploadProgressBarPercentage}}%" id='width'>
+				{{assignmentUploadProgressBarPercentage}}%
 			{% else %}
-			<div class="progress-bar progress-bar-striped active " role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{progressBarPercentage}}%" id='width'>
-			  {{progressBarPercentage}}%
+			<div class="progress-bar progress-bar-striped active " role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{assignmentUploadProgressBarPercentage}}%" id='width'>
+			  {{assignmentUploadProgressBarPercentage}}%
 			{% endif %}
       </div>
     </div>
 	
 	<h4>Peer review completion</h4>
     <div class="progress">
-      <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{progressBarPercentage}}%" id='width'>
-        {{progressBarPercentage}}%
+      {% if peerReviewProgressBarPercentage==100 %}
+			<div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peerReviewProgressBarPercentage}}%" id='width'>
+				{{peerReviewProgressBarPercentage}}%
+			{% else %}
+			<div class="progress-bar progress-bar-striped active " role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peerReviewProgressBarPercentage}}%" id='width'>
+			  {{peerReviewProgressBarPercentage}}%
+			{% endif %}
       </div>
     </div>
+	
   </div>
 </div>
 {% endif %}
