@@ -44,7 +44,7 @@ def checkIfAssignmentIsOver (assignmentId):
 	now = datetime.strptime(time.strftime(dateFormat), dateFormat)
 	
 	if dueDate >= now:
-		# Assignsment is still open
+		# Assignment is still open
 		return False
 	else:
 		# Assignment closed

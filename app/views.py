@@ -5,6 +5,7 @@ from random import randint
 import glob, os
 import uuid, datetime
 import json, pickle
+import importlib
 
 # SQL
 from flask_login import current_user, login_user
@@ -17,7 +18,7 @@ from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
 
-
+import app.forms
 from app.forms import LoginForm, RegistrationForm, AdminRegistrationForm, AssignmentCreationForm, TurmaCreationForm, PeerReviewForm, PeerReviewFormTwo
 
 # Personal classes
@@ -264,20 +265,49 @@ def viewComments(fileid):
 	
 	# Get assignment ID from post ID
 	assignmentId = Post.getAssignmentIdFromPostId (fileid)
-	# Get the all the peer review comments for this file
-	comments = Comment.getCommentContentFromAssignmentIdAndFileId (assignmentId[0], fileid)
-	return str(comments)
-	# Get the right form for each comment based on the assignment (should form class name be saved directly in the comments table as well?)
+	
+	# Get a list of peer reviews for this file and this user, and have an array of buttons
+	# with assignment ID and file ID pointing to viewPeerReview method
+	commentIds = Comment.getCommentIdsFromAssignmentIdAndFileId(assignmentId[0], fileid)
+	
+	'''
+	# Unpickle results
+	unpickledComments = []
+	for row in comments:
+		for comment in row:
+			unpickledComments.append (pickle.loads(comment))
+	'''
+	cleanCommentIds = []
+	for row in commentIds:
+		for id in row:
+			cleanCommentIds.append(id)
+			
 	# Get assignment original filename
 	post = Post.getPostOriginalFilenameFromPostId(fileid)
-	
-	# Array of comments (this should instead be seperate buttons to view each peer review feedback form)
 	postTitle = post[0]
-	posts = [
-		{'author': 'user', 'body': 'Test post #1'},
-		{'author': 'user', 'body': 'Test post #2'}
-	]
-	return render_template('comments.html', posts= posts, postTitle = postTitle)
+	
+	return render_template('comments.html', cleanCommentIds = cleanCommentIds, postTitle = postTitle)
+
+# View a completed and populated peer review form
+@workUpApp.route("/viewPeerComment/<commentId>", methods=['GET', 'POST'])
+@login_required
+def viewPeerReviewFromCommentId(commentId):
+	# Get assignment ID from comment ID
+	assignmentId = Comment.getAssignmentIdFromCommentId(commentId)
+	# Get the form from the assignmentId
+	peerReviewFormName = Assignment.getAssignmentPeerReviewFormFromAssignmentId (assignmentId[0][0])
+	# Get the comment content from ID
+	comment = Comment.getCommentFromId (commentId)
+	unpickledComment = pickle.loads(comment[0][0])
+	
+	# Import the form class
+	formClass = getattr(app.forms, str(peerReviewFormName[0][0]))
+	# Populate the form
+	form = formClass(**unpickledComment)
+	# Delete submit button
+	del form.submit
+	flash('You can not edit this peer review as it has already been submitted.')
+	return render_template('peerreviewform.html', title='View a peer review', form=form)
 
 
 # Admin page to set new assignment
@@ -407,16 +437,17 @@ def createPeerReview(assignmentId = False):
 @login_required
 def viewPeerReview(assignmentId, peerReviewNumber):
 	# Get the form from the assignmentId
-	#peerFormName = Assignment.getAssignmentPeerReviewFormFromAssignmentId (assignmentId)
-	
+	peerReviewFormName = Assignment.getAssignmentPeerReviewFormFromAssignmentId (assignmentId)
 	# Get the first or second peer review - these will be in created order in the DB
 	comments = Comment.getCommentContentFromAssignmentIdAndUserId (assignmentId, current_user.id)
 	if int(peerReviewNumber) == 1:
 		unpackedComments = pickle.loads(comments[0][0])
 	elif int(peerReviewNumber) == 2:
 		unpackedComments = pickle.loads(comments[1][0])
+	# Import the form class
+	formClass = getattr(app.forms, str(peerReviewFormName[0][0]))
 	# Populate the form
-	form = PeerReviewFormTwo(**unpackedComments)
+	form = formClass(**unpackedComments)
 	# Delete submit button
 	del form.submit
 	flash('You can not edit this peer review as it has already been submitted.')
