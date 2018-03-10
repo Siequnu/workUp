@@ -80,7 +80,7 @@
         
 				{% if assignment['completePeerReviewCount'] == 0 %}
 					<td><a href="/downloadFile/{{assignment['assignmentId']}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit</a></td>
-					<td><a href="/downloadFile/{{assignment['assignmentId']}}" class="btn btn-default btn-sm disabled" role="button" aria-disabled="true">Submit</a></td>
+					<td><a href="" class="btn btn-default btn-sm disabled" role="button" aria-disabled="true">Submit</a></td>
 				{% elif assignment['completePeerReviewCount'] == 1 %}
 					<td><a href="/viewPeerReview/{{assignment['assignmentId']}}/1" class="btn btn-success btn-sm" role="button" aria-disabled="true">Submitted!</a></td>
 					<td><a href="/downloadFile/{{assignment['assignmentId']}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit</a></td>
@@ -90,7 +90,7 @@
 				{% endif %}
 			{% else %}
          {% if assignment['assignmentIsPastDeadline'] %}
-				<td><a href="/upload/{{assignment['assignmentId']}}" class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true">Assignment overdue. Contact your tutor.</a></td>
+				<td><a href="" class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true">Assignment overdue. Contact your tutor.</a></td>
          {% else %}
          <td><a href="/upload/{{assignment['assignmentId']}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Upload your assignment</a></td>
 				{% endif %}

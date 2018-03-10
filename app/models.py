@@ -235,8 +235,8 @@ class Comment(db.Model):
 		return names
 	
 	@staticmethod
-	def getCommentContentFromAssignmentIdAndFileId (assignmentId, fileId):
-		sql = text ("SELECT comment FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND fileid='" + str(fileId) + "'")
+	def getCommentIdsFromAssignmentIdAndFileId (assignmentId, fileId):
+		sql = text ("SELECT id FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND fileid='" + str(fileId) + "'")
 		result = db.engine.execute(sql)
 		names = []
 		for row in result: names.append(row)
@@ -245,6 +245,22 @@ class Comment(db.Model):
 	@staticmethod
 	def getCommentIdsAndFileIdFromAssignmentIdAndUserId (assignmentId, userId):
 		sql = text ("SELECT id, fileid FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND user_id='" + str(userId) + "'")
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row)
+		return names
+	
+	@staticmethod
+	def getAssignmentIdFromCommentId (commentId):
+		sql = text ("SELECT assignment_id FROM comment WHERE id='" + str(commentId) + "'")
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row)
+		return names
+	
+	@staticmethod
+	def getCommentFromId (commentId):
+		sql = text ("SELECT comment FROM comment WHERE id='" + str(commentId) + "'")
 		result = db.engine.execute(sql)
 		names = []
 		for row in result: names.append(row)

@@ -8,9 +8,9 @@
 	
     {{postTitle}}
     <hr>
-    {% for post in posts %}
+    {% for id in cleanCommentIds %}
     <p>
-    {{ post.author.username }} says: <b>{{ post.body }}</b>
+    <td><a href="/viewPeerComment/{{id}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review</a></td>
     </p>
     {% endfor %}
 
