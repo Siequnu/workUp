@@ -85,6 +85,30 @@ class Post(db.Model):
 		return '<Post {}>'.format(self.filename)
 	
 	@staticmethod
+	def getFromPost (columnsArray, fromTable, conditionsArray = False):
+		# Assemble SQL query from input variables
+		sqlQuery = 'SELECT '
+		columnsString = ''
+		while len(columnsArray) > 1:	
+			columnsString = columnsString + columnsArray.pop() + ', '
+		columnsString = columnsString + columnsArray.pop()
+		sqlQuery = sqlQuery + columnsString + ' FROM ' + str(fromTable)
+		
+		if conditionsArray:
+			conditionsString = ''
+			while len(conditionsArray) > 1:	
+				conditionsString = conditionsString + conditionsArray.pop() + ' AND '
+			conditionsString = conditionsString + conditionsArray.pop()
+			sqlQuery = sqlQuery + ' WHERE ' + str(conditionsString)
+		
+		sql = text(sqlQuery)
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row)
+		return names
+		
+	
+	@staticmethod
 	def getAllUploadedPostsCount ():
 		sql = text('SELECT COUNT(id) FROM post')
 		result = db.engine.execute(sql)
