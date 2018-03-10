@@ -178,8 +178,8 @@ def index():
 			# Get total assignments assigned to user's class
 			turmaId = User.getUserTurmaFromId(current_user.id)
 			if (turmaId[0] == None):
-				# User isn't part of a class - doesn't therefore have any assignments
-				pass #! todo
+				flash('You do not appear to be part of a class. Please contact your tutor for assistance.')
+				return render_template('index.html')
 			
 			# Get assignments due for this user
 			assignmentsInfo = Assignment.getAssignmentsFromTurmaId (str(turmaId[0]))
@@ -200,15 +200,6 @@ def index():
 				progressBarPercentage = int(float(completedAssignments)/float(len(assignmentsForThisUser)) * 100)
 			else:
 				progressBarPercentage = 100
-			
-			'''
-			# Get the pending status of comments
-			commentCount = Comment.getPendingStatusFromUserId (current_user.id)
-			if commentCount[0] > 0:
-				userMustReturnPeerReview = True
-			else:
-				userMustReturnPeerReview = False
-				'''
 				
 			return render_template('index.html', numberOfUploads = numberOfUploads, progressBarPercentage = progressBarPercentage)
 	
