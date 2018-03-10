@@ -186,14 +186,6 @@ class Post(db.Model):
 		return names
 	
 	@staticmethod
-	def getAssignmentIdFromPostId (postId):
-		sql = text ('SELECT assignment_id FROM post WHERE id=' + '"' + str(postId) + '"')
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row[0])
-		return names
-	
-	@staticmethod
 	def deletePostsFromAssignmentId (assignmentId):
 		sql = text ('DELETE FROM post WHERE assignment_id=' + '"' + str(assignmentId) + '"')
 		result = db.engine.execute(sql)
@@ -257,14 +249,6 @@ class Comment(db.Model):
 	@staticmethod
 	def getCommentContentFromAssignmentIdAndUserId (assignmentId, userId):
 		sql = text ("SELECT comment FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND user_id='" + str(userId) + "'")
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row)
-		return names
-	
-	@staticmethod
-	def getCommentIdsFromAssignmentIdAndFileId (assignmentId, fileId):
-		sql = text ("SELECT id FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND fileid='" + str(fileId) + "' AND pending=0")
 		result = db.engine.execute(sql)
 		names = []
 		for row in result: names.append(row)

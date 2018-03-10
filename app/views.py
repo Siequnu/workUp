@@ -269,12 +269,14 @@ def viewComments(fileId):
 	if userId != []: # The post exists	
 		if userId[0][0] == current_user.id:
 			# Get assignment ID from post ID
-			assignmentId = Post.getAssignmentIdFromPostId (fileId)
+			assignmentId = app.models.selectFromDb(['assignment_id'], 'post', [string.join(('id=', str(fileId)), '')])
 			
-			# Get a list of peer reviews for this file and this user, and have an array of buttons
-			# with assignment ID and file ID pointing to viewPeerReview method
-			commentIds = Comment.getCommentIdsFromAssignmentIdAndFileId(assignmentId[0], fileId)
-			
+			# Get comment Ids associated with this post
+			conditions = []
+			conditions.append(string.join(('assignment_id=', str(assignmentId[0][0])), ''))
+			conditions.append(string.join(('fileid=', str(fileId)), ''))
+			conditions.append('pending=0')
+			commentIds = app.models.selectFromDb(['id'], 'comment', conditions)
 			cleanCommentIds = []
 			for row in commentIds:
 				for id in row:
