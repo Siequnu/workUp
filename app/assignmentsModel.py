@@ -7,7 +7,7 @@ import time
 import string
 
 def getAllAssignments ():
-	assignments = Assignment.getAllAssignments()
+	assignments = app.models.selectFromDb(['*'], 'assignment')
 	# [(1, u'title', u'descrip', u'2018-03-02 00:00:00.000000', 1, u'30640192-1', u'2018-02-28 13:05:59.287555')]
 	cleanAssignmentsArray = []
 	for assignment in assignments:
@@ -34,11 +34,15 @@ def getAssignmentsFromTurmaId (turmaId):
 	return Assignment.getAssignmentsFromTurmaId (str(turmaId[0]))
 
 def getAssignmentDueDateFromId (assignmentId):
-	return Assignment.getAssignmentDueDateFromId (assignmentId)
+	conditions = []
+	conditions.append (str('id="' + str(assignmentId) + '"'))
+	return app.models.selectFromDb(['due_date'], 'assignment', conditions)
 
 def checkIfAssignmentIsOver (assignmentId):
 	# Get due date from assignmentId
-	dueDate = Assignment.getAssignmentDueDateFromId (assignmentId)
+	conditions = []
+	conditions.append (str('id="' + str(assignmentId) + '"'))
+	dueDate = app.models.selectFromDb(['due_date'], 'assignment', conditions)
 	# Format of date/time strings
 	dateFormat = "%Y-%m-%d"
 	# Create datetime objects from the strings
