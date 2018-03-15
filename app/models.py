@@ -255,14 +255,6 @@ class Comment(db.Model):
 		return names
 	
 	@staticmethod
-	def getCommentFromId (commentId):
-		sql = text ("SELECT comment FROM comment WHERE id='" + str(commentId) + "'")
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row)
-		return names
-	
-	@staticmethod
 	def deleteCommentsFromAssignmentId (assignmentId):
 		sql = text ('DELETE FROM comment WHERE assignment_id=' + '"' + str(assignmentId) + '"')
 		result = db.engine.execute(sql)
