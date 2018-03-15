@@ -383,7 +383,8 @@ def createClass():
 def classAdmin():
 	if current_user.is_authenticated:
 		if current_user.username in workUpApp.config['ADMIN_USERS']:
-			return render_template('classadmin.html', title='Class admin', classesArray = Turma.getAllTurmas())
+			classesArray = app.models.selectFromDb(['*'], 'turma')
+			return render_template('classAdmin.html', title='Class admin', classesArray = classesArray)
 	abort (403)
 		
 # Delete a class

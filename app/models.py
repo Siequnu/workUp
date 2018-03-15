@@ -40,19 +40,11 @@ class Turma(db.Model):
 	
 	def __repr__(self):
 		return '<Turma {}>'.format(self.turma_number)
-	
-	@staticmethod
-	def getAllTurmas ():
-		sql = text ('SELECT * FROM turma')
-		result = db.engine.execute(sql)
-		turmas = []
-		for turmaInfo in result:
-			turmas.append(turmaInfo)
-		return turmas
+
 
 	@staticmethod
 	def getTurmaChoiceListForForm ():
-		allTurmas = Turma.getAllTurmas ()
+		allTurmas = selectFromDb(['*'], 'turma')
 		turmaNumberAndLabelList = []
 		for turmaInfo in allTurmas:
 			turmaNumberAndLabelList.append((turmaInfo[1], turmaInfo[2]))
@@ -271,22 +263,6 @@ class Assignment(db.Model):
 		sql = text ('DELETE FROM assignment WHERE id=' + '"' + str(assignmentId) + '"')
 		result = db.engine.execute(sql)
 		return result
-	
-	@staticmethod
-	def getAssignmentDueDateFromId (assignmentId):
-		sql = text ('SELECT due_date FROM assignment WHERE id=' + '"' + str(assignmentId) + '"')
-		result = db.engine.execute(sql)
-		dueDate = []
-		for row in result: dueDate.append(row)
-		return dueDate
-	
-	@staticmethod
-	def getAllAssignments ():
-		sql = text ('SELECT * FROM assignment')
-		result = db.engine.execute(sql)
-		assignments = []
-		for row in result: assignments.append(row)
-		return assignments
 	
 	@staticmethod
 	def getAssignmentsFromTurmaId (turmaId):
