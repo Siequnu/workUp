@@ -441,7 +441,7 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 		#!# This will be empty here if the assignment has been deleted but user still has comments.
 		
 		# Get the comment content from ID
-		comment = Comment.getCommentFromId (commentId)
+		comment = app.models.selectFromDb(['comment'],'comment',[(str('id="'+str(commentId)+'"'))])
 		unpackedComments = pickle.loads(comment[0][0])
 	else:
 		# Get the form from the assignmentId
