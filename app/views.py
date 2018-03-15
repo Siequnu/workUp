@@ -177,8 +177,12 @@ def index():
 			return render_template('index.html', admin = True)
 		if current_user.username not in workUpApp.config['ADMIN_USERS']:
 			# Get number of uploads
-			numberOfUploads = str(Post.getPostCountFromUserId(current_user.id))
-		
+			conditionsArray = []
+			conditionsArray.append (str('user_id="' + str(current_user.id) + '"'))
+			count = True
+			numberOfUploads = app.models.selectFromDb(['id'], 'post', conditionsArray, count)
+			numberOfUploads = numberOfUploads[0][0]
+			
 			# Get total assignments assigned to user's class
 			turmaId = app.models.selectFromDb(['turma_id'], 'user', [(str('id="' + str(current_user.id) + '"'))])
 			if (turmaId[0][0] == None):

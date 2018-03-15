@@ -32,7 +32,7 @@ def selectFromDb (columnsArray, fromTable, conditionsArray = False, count = Fals
 		sqlQuery = sqlQuery + ' WHERE ' + str(conditionsString)
 	
 	sql = text(sqlQuery)
-	result = db.engine.execute(sql)
+	result = db.engine.execute(sql)	
 	names = []
 	for row in result: names.append(row)
 	return names
@@ -111,10 +111,6 @@ class Post(db.Model):
 		names = []
 		for row in result: names.append(row)
 		return names
-	
-	@staticmethod
-	def getPostCountFromUserId (userId):
-		return len(Post.query.filter_by(user_id=userId).all())
 	
 	@staticmethod
 	def getPossibleDownloadsNotFromUser (userId):
