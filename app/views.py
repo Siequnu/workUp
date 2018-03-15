@@ -435,7 +435,7 @@ def createPeerReview(assignmentId = False):
 def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = False):
 	if commentId:
 		# Get assignment ID from comment ID
-		assignmentId = Comment.getAssignmentIdFromCommentId(commentId)
+		assignmentId = app.models.selectFromDb(['assignment_id'],'comment',[(str('id="'+str(commentId)+'"'))])
 		# Get the form from the assignmentId
 		peerReviewFormName = Assignment.getAssignmentPeerReviewFormFromAssignmentId (assignmentId[0][0])
 		#!# This will be empty here if the assignment has been deleted but user still has comments.
