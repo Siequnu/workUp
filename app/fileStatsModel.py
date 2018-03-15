@@ -2,6 +2,9 @@ from app import workUpApp
 from app import db
 
 from app.models import Post, Download
+import app.models
+
+import string
 
 def getAllUploadedPostsWithFilenameAndUsername ():
 		return Post.getAllUploadedPostsWithFilenameAndUsername()
@@ -20,10 +23,15 @@ def getPostInfoFromUserId (userId):
 		timeSplit = str.split(splitDatetime[1], ':') #['21', '50', '13.750276']
 		uploadTime = str(timeSplit[0]) + ':' + str(timeSplit[1])
 		uploadDateAndtime = date + ' ' + uploadTime
-		# Get download count
-		downloadCount = Download.getDownloadCountFromFilename(info[2])
+		
+		# Get completed comment count from file ID
+		fileId = app.models.selectFromDb(['id'], 'post', [(str('filename="' + str(info[2]) + '"'))])
+		conditions = []
+		conditions.append(string.join(('fileid=', str(fileId[0][0])), ''))
+		conditions.append('pending=0')
+		peerReviewCount = app.models.selectFromDb(['id'], 'comment', conditions)
 		
 		# Add arrayed information to a new dictionary entry
-		cleanDict[str(info[0])] = [uploadDateAndtime, str(downloadCount), str(info[3])]
+		cleanDict[str(info[0])] = [uploadDateAndtime, str(len(peerReviewCount)), str(info[3])]
 		
 	return cleanDict
