@@ -9,14 +9,20 @@ from sqlalchemy import text
 def load_user(id):
 	return User.query.get(int(id))
 
-def selectFromDb (columnsArray, fromTable, conditionsArray = False):
+def selectFromDb (columnsArray, fromTable, conditionsArray = False, count = False):
 	# Assemble SQL query from input variables
-	sqlQuery = 'SELECT '
-	columnsString = ''
-	while len(columnsArray) > 1:	
-		columnsString = columnsString + columnsArray.pop() + ', '
-	columnsString = columnsString + columnsArray.pop()
-	sqlQuery = sqlQuery + columnsString + ' FROM ' + str(fromTable)
+	if count:
+		sqlQuery = 'SELECT COUNT ('
+		columnsString = ''
+		columnsString = columnsString + columnsArray.pop()
+		sqlQuery = sqlQuery + columnsString + ') FROM ' + str(fromTable)
+	else:
+		sqlQuery = 'SELECT '
+		columnsString = ''
+		while len(columnsArray) > 1:	
+			columnsString = columnsString + columnsArray.pop() + ', '
+		columnsString = columnsString + columnsArray.pop()
+		sqlQuery = sqlQuery + columnsString + ' FROM ' + str(fromTable)
 	
 	if conditionsArray:
 		conditionsString = ''
@@ -97,14 +103,6 @@ class Post(db.Model):
 	
 	def __repr__(self):
 		return '<Post {}>'.format(self.filename)		
-	
-	@staticmethod
-	def getAllUploadedPostsCount ():
-		sql = text('SELECT COUNT(id) FROM post')
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row[0])
-		return names
 	
 	@staticmethod
 	def getAllUploadedPostsWithFilenameAndUsername ():

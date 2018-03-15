@@ -10,7 +10,8 @@ def getAllUploadedPostsWithFilenameAndUsername ():
 		return Post.getAllUploadedPostsWithFilenameAndUsername()
 		
 def getAllUploadedPostsCount():
-		return Post.getAllUploadedPostsCount()
+		count = app.models.selectFromDb (['id'], 'POST', conditionsArray = False, count = True)
+		return count[0][0]
 		
 def getPostInfoFromUserId (userId):
 	postInfo = Post.getPostInfoFromUserId (userId)
