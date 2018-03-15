@@ -255,14 +255,6 @@ class Comment(db.Model):
 		return names
 	
 	@staticmethod
-	def getAssignmentIdFromCommentId (commentId):
-		sql = text ("SELECT assignment_id FROM comment WHERE id='" + str(commentId) + "'")
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row)
-		return names
-	
-	@staticmethod
 	def getCommentFromId (commentId):
 		sql = text ("SELECT comment FROM comment WHERE id='" + str(commentId) + "'")
 		result = db.engine.execute(sql)
