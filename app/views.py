@@ -134,7 +134,11 @@ def downloadRandomFile(assignmentId):
 	
 	# Make sure not to give the same file to the same peer reviewer twice
 	# Get comments from the user
-	completedCommentsIdsAndFileId = Comment.getCommentIdsAndFileIdFromAssignmentIdAndUserId (assignmentId, current_user.id)
+	conditions = []
+	conditions.append (str('assignment_id="' + str(assignmentId) + '"'))
+	conditions.append (str('user_id="' + str(current_user.id) + '"'))
+	completedCommentsIdsAndFileId = app.models.selectFromDb(['id', 'fileid'], 'comment', conditions)
+	
 	if completedCommentsIdsAndFileId == []:
 		filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId)
 	else:

@@ -247,14 +247,6 @@ class Comment(db.Model):
 		return names
 	
 	@staticmethod
-	def getCommentIdsAndFileIdFromAssignmentIdAndUserId (assignmentId, userId):
-		sql = text ("SELECT id, fileid FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND user_id='" + str(userId) + "'")
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row)
-		return names
-	
-	@staticmethod
 	def deleteCommentsFromAssignmentId (assignmentId):
 		sql = text ('DELETE FROM comment WHERE assignment_id=' + '"' + str(assignmentId) + '"')
 		result = db.engine.execute(sql)
