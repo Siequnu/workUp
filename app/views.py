@@ -447,11 +447,19 @@ def createPeerReview(assignmentId = False):
 @login_required
 def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = False):
 	if commentId:
+		# Check if this peer review is intended for the user trying to view it
+		# What file was it made for
+		fileId = app.models.selectFromDb(['fileid'], 'comment', [str('id="' + str(commentId) + '"')])
+		# Who owns that file
+		owner = app.models.selectFromDb(['user_id'], 'post', [str('id="' + str(fileId[0][0]) + '"')])
+		# Is it the same person trying to view this comment?
+		if current_user.id is not owner[0][0]:
+			abort (403)
+		
 		# Get assignment ID from comment ID
 		assignmentId = app.models.selectFromDb(['assignment_id'],'comment',[(str('id="'+str(commentId)+'"'))])
 		# Get the form from the assignmentId
 		peerReviewFormName = app.models.selectFromDb(['peer_review_form'],'assignment',[(str('id="'+str(assignmentId[0][0])+'"'))])
-		#!# This will be empty here if the assignment has been deleted but user still has comments.
 		
 		# Get the comment content from ID
 		comment = app.models.selectFromDb(['comment'],'comment',[(str('id="'+str(commentId)+'"'))])
