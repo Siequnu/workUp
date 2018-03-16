@@ -9,14 +9,14 @@
 	<p>Uploaded files are tagged with a student number, so that the student never receives their own work back.</p>	              
 {% elif admin %}
 	<div class="row">
-        <div class="col-md-4">
+        <div class="col-md-8">
 			<h1>Hi, Administrator {{ current_user.username }}!</h1>
 		</div>		
     </div>
 	<li><a href="{{url_for('classAdmin')}}">Class admin</a></li>
 {% else %}
 	<div class="row">
-        <div class="col-md-4">
+        <div class="col-md-8">
 			<h1>Hi, {{ current_user.username }}!</h1>
 		</div>
   </div>
