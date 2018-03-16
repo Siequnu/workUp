@@ -25,13 +25,21 @@ def getAllAssignments ():
 	return cleanAssignmentsArray
 	
 def getUserTurmaFromId (userId):
-	return User.getUserTurmaFromId(userId)
+	conditions = []
+	conditions.append (str('id="' + str(userId) + '"'))
+	turma = app.models.selectFromDb(['turma_id'], 'user', conditions)
+	try:
+		return turma[0][0]
+	except:
+		return False
 
 def deleteAssignmentFromId (assignmentId):
 	return Assignment.deleteAssignmentFromId(assignmentId)
 
 def getAssignmentsFromTurmaId (turmaId):
-	return Assignment.getAssignmentsFromTurmaId (str(turmaId[0]))
+	conditions = []
+	conditions.append (str('target_course="' + str(turmaId) + '"'))
+	return app.models.selectFromDb(['*'], 'assignment', conditions)
 
 def getAssignmentDueDateFromId (assignmentId):
 	conditions = []
