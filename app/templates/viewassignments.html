@@ -4,6 +4,13 @@
   
   {% block app_content %}
   {% if admin %}
+  <div class="row">
+        <div class="col-md-8">
+			<h1>Admin assignments view</h1>
+		</div>
+  </div>
+
+<br />
    <div class="container">
 	<a href="{{url_for('createAssignment')}}">Create new assignment</a>
   <div class="row">
