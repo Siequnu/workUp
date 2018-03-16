@@ -121,12 +121,14 @@ def downloadRandomFile(assignmentId):
 		alreadyDownloadedAndPendingReviewFileId = pendingAssignments[0][1]
 		flash('You have a peer review that you have not yet completed. You have redownloaded the same file.')
 		# Get filename of the post from Id
-		filenameToDownload = Post.getPostFilenameFromPostId (alreadyDownloadedAndPendingReviewFileId)
+		conditions = []
+		conditions.append(str('id="' + str(alreadyDownloadedAndPendingReviewFileId) + '"'))
+		filenameToDownload = app.models.selectFromDb(['filename'], 'post', conditions)
 		
-		filePath = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filenameToDownload[0])
+		filePath = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filenameToDownload[0][0])
 		
 		# Send SQL data to database
-		download = Download(filename=filenameToDownload[0], user_id = current_user.id)
+		download = Download(filename=filenameToDownload[0][0], user_id = current_user.id)
 		db.session.add(download)
 		db.session.commit()
 		
@@ -160,8 +162,10 @@ def downloadRandomFile(assignmentId):
 	db.session.commit()
 	
 	# Update comments table with pending commment
-	postId = Post.getPostIdFromFilename(filename)
-	commentPending = Comment(user_id = int(current_user.id), fileid = int(postId[0]), pending = True, assignment_id=assignmentId)
+	conditions = []
+	conditions.append (str('filename="' + str(filename) + '"'))
+	postId = app.models.selectFromDb(['id'], 'post', conditions)
+	commentPending = Comment(user_id = int(current_user.id), fileid = int(postId[0][0]), pending = True, assignment_id=assignmentId)
 	db.session.add(commentPending)
 	db.session.commit()
 

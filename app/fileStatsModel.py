@@ -14,7 +14,9 @@ def getAllUploadedPostsCount():
 		return count[0][0]
 		
 def getPostInfoFromUserId (userId):
-	postInfo = Post.getPostInfoFromUserId (userId)
+	conditions = []
+	conditions.append(str('user_id="' + str(userId) + '"'))
+	postInfo = app.models.selectFromDb (['id', 'filename', 'timestamp', 'original_filename'], 'post', conditions)
 	cleanDict = {}
 	for info in postInfo:
 		# Get upload time

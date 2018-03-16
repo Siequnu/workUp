@@ -113,14 +113,6 @@ class Post(db.Model):
 		return names
 	
 	@staticmethod
-	def getPossibleDownloadsNotFromUser (userId):
-		sql = text ('SELECT filename FROM post WHERE user_id!=' + str(userId))
-		result = db.engine.execute(sql)
-		filenames = []
-		for row in result: filenames.append(row[0])
-		return filenames
-	
-	@staticmethod
 	def getPossibleDownloadsNotFromUserForThisAssignment (userId, assignmentId, previousDownloadFileId = False):
 		if previousDownloadFileId:
 			sql = text ('SELECT filename FROM post WHERE user_id!=' + str(userId) + ' AND assignment_id=' + str(assignmentId) + ' AND id!=' + str(previousDownloadFileId))
@@ -130,38 +122,6 @@ class Post(db.Model):
 		filenames = []
 		for row in result: filenames.append(row[0])
 		return filenames
-	
-	@staticmethod
-	def getPostOriginalFilenamesFromUserId (userId):
-		sql = text ('SELECT original_filename FROM post WHERE user_id=' + str(userId))
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row[0])
-		return names
-	
-	@staticmethod
-	def getPostInfoFromUserId (userId):
-		sql = text ('SELECT original_filename, timestamp, filename, id FROM post WHERE user_id=' + str(userId))
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row)
-		return names
-	
-	@staticmethod
-	def getPostIdFromFilename (filename):
-		sql = text ('SELECT id FROM post WHERE filename=' + '"' + str(filename) + '"')
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row[0])
-		return names
-	
-	@staticmethod
-	def getPostFilenameFromPostId (postId):
-		sql = text ('SELECT filename FROM post WHERE id=' + '"' + str(postId) + '"')
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row[0])
-		return names
 	
 	@staticmethod
 	def deletePostsFromAssignmentId (assignmentId):
