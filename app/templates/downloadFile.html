@@ -1,12 +1,20 @@
   {% extends "header.html" %} {% block app_content %}
+<div class="row">
+        <div class="col-md-8">
+			<h1>Download peer-review file</h1>
+		</div>
+  </div>
 
-  <p><i>Please click the download button
+<br />
+  <p><i>First, click the download button
   to download your peer-review work.</i></p>
+  
+  
 
   <form action="/downloadPeerFile/{{assignmentId}}" method="post">
     <input type="submit" value="Download" />
   </form>
-  
+  <br /><br /><p><i>Then, click 'Go to peer review form'.</i></p>
   <a href="/peerreviewform/{{assignmentId}}" class="btn btn-primary" role="button" aria-disabled="true">Go to peer review form</a>
   
   {% endblock %}
