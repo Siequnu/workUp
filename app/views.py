@@ -335,7 +335,7 @@ def viewAssignments():
 	elif current_user.is_authenticated:
 		# Get user class
 		turmaId = assignmentsModel.getUserTurmaFromId(current_user.id)
-		if (turmaId[0] == None):
+		if (turmaId == False):
 			flash('You are not part of any class and can not see any assignments. Ask your tutor for help to join a class.')
 			return render_template('viewassignments.html') # User isn't part of any class - display no assignments
 		else:
@@ -450,17 +450,20 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 		# Get assignment ID from comment ID
 		assignmentId = app.models.selectFromDb(['assignment_id'],'comment',[(str('id="'+str(commentId)+'"'))])
 		# Get the form from the assignmentId
-		peerReviewFormName = Assignment.getAssignmentPeerReviewFormFromAssignmentId (assignmentId[0][0])
+		peerReviewFormName = app.models.selectFromDb(['peer_review_form'],'assignment',[(str('id="'+str(assignmentId[0][0])+'"'))])
 		#!# This will be empty here if the assignment has been deleted but user still has comments.
 		
 		# Get the comment content from ID
 		comment = app.models.selectFromDb(['comment'],'comment',[(str('id="'+str(commentId)+'"'))])
 		unpackedComments = pickle.loads(comment[0][0])
 	else:
-		# Get the form from the assignmentId
-		peerReviewFormName = Assignment.getAssignmentPeerReviewFormFromAssignmentId (assignmentId)
+		# Get the form from the assignmentId	
+		peerReviewFormName = app.models.selectFromDb(['peer_review_form'],'assignment',[(str('id="'+str(assignmentId)+'"'))])
 		# Get the first or second peer review - these will be in created order in the DB
-		comments = Comment.getCommentContentFromAssignmentIdAndUserId (assignmentId, current_user.id)
+		conditions = []
+		conditions.append (str('assignment_id="' + str(assignmentId) + '"'))
+		conditions.append (str('user_id="' + str(current_user.id) + '"'))
+		comments = app.models.selectFromDb(['comment'],'comment',conditions)
 		if int(peerReviewNumber) == 1:
 			unpackedComments = pickle.loads(comments[0][0])
 		elif int(peerReviewNumber) == 2:

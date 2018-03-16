@@ -84,14 +84,6 @@ class User(UserMixin, db.Model):
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
 	
-	@staticmethod
-	def getUserTurmaFromId (userId):
-		sql = text('SELECT turma_id FROM user WHERE id=' + str(userId))
-		result = db.engine.execute(sql)
-		turmaId = []
-		for row in result: turmaId.append(row[0])
-		return turmaId
-
 
 class Post(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -140,14 +132,6 @@ class Download(db.Model):
 	def __repr__(self):
 		return '<Post {}>'.format(self.filename)
 	
-	@staticmethod
-	def getDownloadCountFromFilename (filename):
-		sql = text ('SELECT COUNT(id) FROM download WHERE filename=' + '"' + str(filename) + '"')
-		result = db.engine.execute(sql)
-		count = []
-		for row in result: count.append(row[0])
-		return count
-	
 
 class Comment(db.Model):
 	
@@ -185,14 +169,6 @@ class Comment(db.Model):
 		return names
 	
 	@staticmethod
-	def getCommentContentFromAssignmentIdAndUserId (assignmentId, userId):
-		sql = text ("SELECT comment FROM comment WHERE assignment_id='" + str(assignmentId) + "' AND user_id='" + str(userId) + "'")
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row)
-		return names
-	
-	@staticmethod
 	def deleteCommentsFromAssignmentId (assignmentId):
 		sql = text ('DELETE FROM comment WHERE assignment_id=' + '"' + str(assignmentId) + '"')
 		result = db.engine.execute(sql)
@@ -217,22 +193,6 @@ class Assignment(db.Model):
 		sql = text ('DELETE FROM assignment WHERE id=' + '"' + str(assignmentId) + '"')
 		result = db.engine.execute(sql)
 		return result
-	
-	@staticmethod
-	def getAssignmentsFromTurmaId (turmaId):
-		sql = text ('SELECT * FROM assignment WHERE target_course=' + '"' + str(turmaId) + '"')
-		result = db.engine.execute(sql)
-		assignments = []
-		for row in result: assignments.append(row)
-		return assignments
-	
-	@staticmethod
-	def getAssignmentPeerReviewFormFromAssignmentId (assignmentId):
-		sql = text ('SELECT peer_review_form FROM assignment WHERE id=' + '"' + str(assignmentId) + '"')
-		result = db.engine.execute(sql)
-		assignments = []
-		for row in result: assignments.append(row)
-		return assignments
 
 	@staticmethod
 	def getUsersUploadedAssignmentsFromAssignmentId (assignmentId, userId):
