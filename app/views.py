@@ -203,13 +203,12 @@ def index():
 def uploadFile(assignmentId = False):
 	# If the form has been filled out and posted:
 	if request.method == 'POST':
-		# Check if the post request has the file part
 		if 'file' not in request.files:
-			flash('No file uploaded.')
+			flash('No file uploaded. Please try again or contact your tutor.')
 			return redirect(request.url)
 		file = request.files['file']
 		if file.filename == '':
-			flash('Please rename the file.')
+			flash('The filename is blank. Please rename the file.')
 			return redirect(request.url)
 		if file and fileModel.allowedFile(file.filename):
 			if (assignmentId):
@@ -217,7 +216,7 @@ def uploadFile(assignmentId = False):
 			else:
 				fileModel.saveFile(file)
 			originalFilename = fileModel.getSecureFilename(file.filename)
-			flash('File ' + str(originalFilename) + ' successfully uploaded')
+			flash('Your file ' + str(originalFilename) + ' successfully uploaded')
 			return redirect(url_for('viewAssignments'))
 	else:
 		return render_template('fileUpload.html')
