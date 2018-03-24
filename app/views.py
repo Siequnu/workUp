@@ -24,6 +24,8 @@ from app.forms import LoginForm, RegistrationForm, AdminRegistrationForm, Assign
 
 # Personal classes
 import fileModel
+import fileStatsModel
+import assignmentsModel
 
 @workUpApp.before_request
 def before_request():
@@ -123,10 +125,8 @@ def downloadRandomFile(assignmentId):
 		# Get filename of the post from Id
 		conditions = []
 		conditions.append(str('id="' + str(alreadyDownloadedAndPendingReviewFileId) + '"'))
-		filenameToDownload = app.models.selectFromDb(['filename'], 'post', conditions)
-		
+		filenameToDownload = app.models.selectFromDb(['filename'], 'post', conditions)		
 		filePath = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filenameToDownload[0][0])
-		
 		# Send SQL data to database
 		download = Download(filename=filenameToDownload[0][0], user_id = current_user.id)
 		db.session.add(download)
@@ -135,7 +135,7 @@ def downloadRandomFile(assignmentId):
 		return send_file(filePath, as_attachment=True)
 	
 	# Make sure not to give the same file to the same peer reviewer twice
-	# Get comments from the user
+	# Get list of files the user has already submitted reviews for
 	conditions = []
 	conditions.append (str('assignment_id="' + str(assignmentId) + '"'))
 	conditions.append (str('user_id="' + str(current_user.id) + '"'))
@@ -143,6 +143,7 @@ def downloadRandomFile(assignmentId):
 	
 	if completedCommentsIdsAndFileId == []:
 		filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId)
+		
 	else:
 		# Get an array of filenames not belonging to current user
 		previousDownloadFileId = completedCommentsIdsAndFileId[0][1]
@@ -176,26 +177,20 @@ def downloadRandomFile(assignmentId):
 @workUpApp.route('/', methods=['GET', 'POST'])
 def index():
 	if current_user.is_authenticated:
-		if current_user.username in workUpApp.config['ADMIN_USERS']:	
-			
+		if current_user.username in workUpApp.config['ADMIN_USERS']:		
 			return render_template('index.html', admin = True)
+		
 		if current_user.username not in workUpApp.config['ADMIN_USERS']:
 			# Get number of uploads
-			conditionsArray = []
-			conditionsArray.append (str('user_id="' + str(current_user.id) + '"'))
-			count = True
-			numberOfUploads = app.models.selectFromDb(['id'], 'post', conditionsArray, count)
-			numberOfUploads = numberOfUploads[0][0]
-			
+			numberOfUploads = fileStatsModel.getUploadedPostCountFromCurrentUserId()
 			# Get total assignments assigned to user's class
-			turmaId = app.models.selectFromDb(['turma_id'], 'user', [(str('id="' + str(current_user.id) + '"'))])
-			if (turmaId[0][0] == None):
+			turmaId = assignmentsModel.getUserTurmaFromId (current_user.id)
+			if (turmaId == False):
 				flash('You do not appear to be part of a class. Please contact your tutor for assistance.')
 				return render_template('index.html')
 			
 			# Get assignments due for this user
-			assignmentsInfo = app.models.selectFromDb(['*'], 'assignment', [ (str('target_course="' + turmaId[0][0] + '"')) ])
-			
+			assignmentsInfo = assignmentsModel.getAssignmentsFromTurmaId(turmaId)
 			assignmentsForThisUser = []
 			for assignment in assignmentsInfo:
 				assignmentId = str(assignment[0])
@@ -262,7 +257,7 @@ def uploadFile(assignmentId = False):
 @workUpApp.route("/fileStats")
 @login_required
 def fileStats():
-	import fileStatsModel
+	
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Get total list of uploaded files from all users
 		templatePackages = {}
