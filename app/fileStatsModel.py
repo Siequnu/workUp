@@ -4,6 +4,8 @@ from app import db
 from app.models import Post, Download
 import app.models
 
+from flask_login import current_user
+
 import string
 
 def getAllUploadedPostsWithFilenameAndUsername ():
@@ -12,7 +14,14 @@ def getAllUploadedPostsWithFilenameAndUsername ():
 def getAllUploadedPostsCount():
 		count = app.models.selectFromDb (['id'], 'POST', conditionsArray = False, count = True)
 		return count[0][0]
-		
+
+def getUploadedPostCountFromCurrentUserId ():
+	conditionsArray = []
+	conditionsArray.append (str('user_id="' + str(current_user.id) + '"'))
+	count = True
+	numberOfUploads = app.models.selectFromDb(['id'], 'post', conditionsArray, count)
+	return numberOfUploads[0][0]
+
 def getPostInfoFromUserId (userId):
 	conditions = []
 	conditions.append(str('user_id="' + str(userId) + '"'))
