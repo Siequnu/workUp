@@ -189,39 +189,9 @@ def index():
 				flash('You do not appear to be part of a class. Please contact your tutor for assistance.')
 				return render_template('index.html')
 			
-			# Get assignments due for this user
-			assignmentsInfo = assignmentsModel.getAssignmentsFromTurmaId(turmaId)
-			assignmentsForThisUser = []
-			for assignment in assignmentsInfo:
-				assignmentId = str(assignment[0])
-				assignmentsForThisUser.append(assignmentId)
+			assignmentUploadProgressBarPercentage = assignmentsModel.getAssignmentUploadProgressPercentage ()
+			peerReviewProgressBarPercentage = assignmentsModel.getPeerReviewProgressPercentage()
 			
-			# Check if user has uploaded each assignment
-			completedAssignments = 0
-			for assignmentId in assignmentsForThisUser:
-				userUploadedAssignmentId = Assignment.getUsersUploadedAssignmentsFromAssignmentId (assignmentId, current_user.id)
-				if userUploadedAssignmentId:
-					completedAssignments += 1
-			
-			# Set value of assignment upload progress bar
-			if (len(assignmentsForThisUser) != 0):
-				assignmentUploadProgressBarPercentage = int(float(completedAssignments)/float(len(assignmentsForThisUser)) * 100)
-			else:
-				assignmentUploadProgressBarPercentage = 100
-				
-			# Set the value of the peer review progress bar
-			totalNumberOfPeerReviewsExpected = (len(assignmentsForThisUser)) * 2 # At two peer reviews per assignment
-			conditions = []
-			conditions.append(string.join(('user_id=', str(current_user.id)), ''))
-			conditions.append('pending=0')
-			commentIds = app.models.selectFromDb(['id'], 'comment', conditions)
-			totalNumberOfCompletedPeerReviews = (len(commentIds))
-			
-			if totalNumberOfPeerReviewsExpected != 0:
-				peerReviewProgressBarPercentage = int(float(totalNumberOfCompletedPeerReviews)/float(totalNumberOfPeerReviewsExpected) * 100)
-			else:
-				peerReviewProgressBarPercentage = 100
-				
 			return render_template('index.html', numberOfUploads = numberOfUploads, assignmentUploadProgressBarPercentage = assignmentUploadProgressBarPercentage, peerReviewProgressBarPercentage = peerReviewProgressBarPercentage)
 	
 	return render_template('index.html')
