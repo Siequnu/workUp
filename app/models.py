@@ -204,3 +204,15 @@ class Assignment(db.Model):
 		for row in result: filename.append(row)
 		return filename
 	
+
+class PeerReviewForm(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(140))
+	description = db.Column(db.String(280))
+	serialisedFormData = db.Column(db.String(280))
+	created_by_id = db.Column(db.Integer)
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
+	
+	def __repr__(self):
+		return '<PeerReviewForm {}>'.format(self.title)
+	
