@@ -95,7 +95,7 @@ RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 
 ```sh
 $ sudo a2ensite workUp
-```sh
+```
 
 * SSL certification can be obtained for free using the [Certbot ACME client](https://certbot.eff.org)
 
@@ -116,8 +116,11 @@ $ pip install -r /path/to/requirements.txt
 ## Deployment notes
 
 * If using **libapache2-mod-wsgi** (`wsgi_mod`) with apache ensure that **WSGIPassAuthorization** is set to `On` in the `.htaccess` file
+
 * Setup server specific config in `config.py`
+
 * Ensure `/static/uploads/` folder is readable by apache:
+
 ```sh
 $ sudo chown -R www-data static/uploads
 ```
