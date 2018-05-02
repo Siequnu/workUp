@@ -20,7 +20,7 @@ workUp is an attempt to make a software that:
 
 * provides a clear and easy to use student- and admin-facing interface.
 
-![Submit peer review](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/submit_peerreview.png)
+![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/view_assignments.png)
 
 ## How It Works
 
@@ -34,8 +34,8 @@ Students can log-in to view their assignments, and once an assignment has been u
 can submit peer reviews for two other assignments. These peer reviews are guided through a feedback form,
 although as students get more comfortable in providing feedback, progressively less guided forms can be
 given to students.
+![Submit peer review](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/submit_peerreview.png)
 
-![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/view_assignments.png)
 
 ## Deployment
 
