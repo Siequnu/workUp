@@ -2,7 +2,23 @@
 workUp is a app web application designed to help teachers distribute student work for peer review.
 
 Managing student work for peer distribution is time consuming and can be a large impediment to
-teachers implementing this very beneficial study method.
+teachers implementing this otherwise very beneficial study method. It is hoped that this app can
+assist lecturers in implementing peer-review in their classes.
+
+## Literature Review
+
+Despite the overwhelming research in support of peer review as an educational tool (Liu, Psyarchik & Taylor, 2002; Brammer & Rees, 2007; Graff, 2009)
+it remains to be implemented in many classrooms. One cause of this is time constraints, and the inherently time consuming nature of peer-review (Crowe, Silva & Ceresola, 2015).
+
+One solution to this is the use of peer-review software to automate administrative tasks inherent to peer review. While [comparative studies](https://www.reap.ac.uk/PEER/Software.aspx) have
+been made, most software for this purpose is expensive, and suitable only for large-scale deployment at a University- or College- level. Sofwares like **Aropa**, **Calibrated Peer Review**,
+**PeerMark (TURNITIN)**, and **PRAZE** are hard to set-up, resource-intensive to run and require a large amount of commitement and computer knowledge from education practitioners.
+
+workUp is an attempt to make a software that:
+
+* provides simple deployment that can be achieved by any university lecturer,
+
+* provides a clear and easy to use student- and admin-facing interface.
 
 ## How It Works
 
@@ -17,7 +33,7 @@ can submit peer reviews for two other assignments. These peer reviews are guided
 although as students get more comfortable in providing feedback, progressively less guided forms can be
 given to students.
 
-## Usage
+## Deployment
 
 * This git can be cloned onto a deployment server.
 
@@ -31,7 +47,7 @@ and the `application.secret_key`.
 import sys
 import logging
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0,"//PATH_TO_WORKUP_ROOT/workUp/")
+sys.path.insert(0,"/PATH_TO_WORKUP_ROOT/workUp/")
 
 from app import workUpApp as application
 application.secret_key = *************
@@ -67,6 +83,8 @@ RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 
 * SSL certification can be obtained for free from https://letsencrypt.org
 
+* The initial database should be greated by using `flask db init`, `flask db migrate` and finally `flask db commit` to generate tables from the `models.py` page.
+
 ## Deployment notes
 
 * If using **libapache2-mod-wsgi** (`wsgi_mod`) with apache ensure that **WSGIPassAuthorization** is set to `On` in the `.htaccess` file
@@ -101,7 +119,7 @@ The following third-party libraries are used:
 
 There is a bug in the **Flask-wtf** library, whereby Flask wtf form radio-button labels do not render.
 
-This issue is discussed at length [on Stackoverflow] (https://stackoverflow.com/questions/27705968/flask-wtform-radiofield-label-does-not-render)
+This issue is discussed at length [on Stackoverflow](https://stackoverflow.com/questions/27705968/flask-wtform-radiofield-label-does-not-render)
 
 
 >It might be intended by the author of "quick_form" macro, or more likely he/she missed a
