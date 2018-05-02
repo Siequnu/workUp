@@ -60,13 +60,15 @@ RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 ```
 
+* SSL certification can be obtained for free from https://letsencrypt.org
+
 ## Deployment notes
 
-* If using **libapache2-mod-wsgi** (`wsgi_mod`) with apache ensure that **WSGIPassAuthorization** is set to On in the .htaccess file
+* If using **libapache2-mod-wsgi** (`wsgi_mod`) with apache ensure that **WSGIPassAuthorization** is set to `On` in the `.htaccess` file
 * Setup server specific config in `config.py`
 * Ensure `/static/uploads/` folder is readable by apache:
 ```sh
-$ sudo chown www-data ...
+$ sudo chown -R www-data static/uploads
 ```
 
 
@@ -103,7 +105,7 @@ It might be intended by the author of "quick_form" macro, or more likely he/she 
 The solution proposed is:
 
 "To hack it, locate the file "bootstrap/wtf.html", where macro "quick_form" is defined.
-Add this line:"
+Add this line:"ssl
 
 ```sh
 {{field.label(class="control-label")|safe}}
