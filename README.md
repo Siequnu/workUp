@@ -12,7 +12,7 @@ it remains to be implemented in many classrooms. One cause of this is time const
 
 One solution to this is the use of peer-review software to automate administrative tasks inherent to peer review. While [comparative studies](https://www.reap.ac.uk/PEER/Software.aspx) have
 been made, most software for this purpose is expensive, and suitable only for large-scale deployment at a University- or College- level. Sofwares like **Aropa**, **Calibrated Peer Review**,
-**PeerMark (TURNITIN)**, and **PRAZE** are hard to set-up, resource-intensive to run and require a large amount of commitement and computer knowledge from education practitioners.
+**PeerMark (TURNITIN)**, and **PRAZE** are hard to set-up, resource-intensive to run and require a large amount of commitment and computer knowledge from education practitioners.
 
 workUp is an attempt to make a software that:
 
