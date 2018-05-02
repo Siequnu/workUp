@@ -20,7 +20,12 @@ from flask_login import login_required
 from werkzeug.urls import url_parse
 
 import app.forms
-from app.forms import LoginForm, RegistrationForm, AdminRegistrationForm, AssignmentCreationForm, TurmaCreationForm, PeerReviewForm, PeerReviewFormTwo
+from app.forms import LoginForm, RegistrationForm, AdminRegistrationForm, AssignmentCreationForm, TurmaCreationForm, PeerReviewForm, PeerReviewFormTwo, FormModel
+
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField, RadioField, FormField, TextAreaField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from forms import FormModel
 
 # Personal classes
 import fileModel
@@ -38,6 +43,18 @@ def before_request():
 def logout():
 	logout_user()
 	return redirect(url_for('index'))
+
+
+# Registration
+@workUpApp.route('/lab', methods=['GET', 'POST'])
+def lab():
+	FormModel.username = TextAreaField('username')
+	names = ['yes', 'no', 'ymaybe', 'hooray']
+	for name in names:
+		setattr(FormModel, name, TextAreaField(name.title()))	
+	form = FormModel()
+	return render_template('lab.html', form=form)
+
 
 # Registration
 @workUpApp.route('/register', methods=['GET', 'POST'])
@@ -65,7 +82,7 @@ def registerAdmin():
 		return redirect(url_for('index'))
 	form = AdminRegistrationForm()
 	if form.validate_on_submit():
-		if form.signUpCode.data in workUpApp.config['SIGNUP_CODES']:
+		if form.signUpCode.data in workUpApp.config['ADMIN_SIGNUP_CODES']:
 			user = User(username=form.username.data, email=form.email.data)
 			user.set_password(form.password.data)
 			db.session.add(user)
@@ -308,26 +325,20 @@ def viewAssignments():
 			return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray)
 	abort (403)
 	
-# View created assignments status
+#Delete all user posts and comments associated with this assignment
 @workUpApp.route("/deleteassignment/<assignmentId>")
 @login_required
 def deleteAssignment(assignmentId):
-	import assignmentsModel
-	
-	#!# This should delete all user posts and comments associated with this assignment
-	
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Delete the assignment
 		assignmentsModel.deleteAssignmentFromId(assignmentId)
-	
 		# Delete all posts for this assignment
 		Post.deletePostsFromAssignmentId(assignmentId)
-		# Delete all downloads of those posts
-		
+		# Download records are not deleted for future reference
 		# Delete all comments for those posts
 		Comment.deleteCommentsFromAssignmentId(assignmentId)
 		
-		flash('Assignment ' + str(assignmentId) + ' has been deleted.')
+		flash('Assignment ' + str(assignmentId) + ' , and all related uploaded files and comments have been deleted.')
 		return redirect(url_for('viewAssignments'))
 	abort (403)
 
@@ -369,8 +380,7 @@ def deleteClass(turmaId):
 		return redirect(url_for('classAdmin'))		
 	abort (403)
 
-
-# Peer review feedback form
+# Display an empty review feedback form
 @workUpApp.route("/peerreviewform/<assignmentId>", methods=['GET', 'POST'])
 @workUpApp.route("/peerreviewform", methods=['GET', 'POST'])
 @login_required
@@ -450,3 +460,56 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 	del form.submit
 	
 	return render_template('peerreviewform.html', title='View a peer review', form=form)
+
+
+# Admin page to create new peer review form
+@workUpApp.route("/addPeerReviewForm", methods=['GET', 'POST'])
+@login_required
+def addPeerReviewForm():
+	if current_user.is_authenticated and current_user.username in workUpApp.config['ADMIN_USERS']:	
+		# If first form is completed, dynamically generate second form
+		if request.form:
+			# Remove csrf_token, submit fields to leave only the completed boxes
+			formDict = request.form.to_dict()
+			del formDict['csrf_token']
+			del formDict['submit']
+			# Sort dictionary by keys
+			sortedDict = json.dumps(formDict, sort_keys=True)
+			# Dynamically generate new form for title/label information
+			for questionNumber, fieldName in sortedDict:
+				if fieldName == 'TextAreaField':
+					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
+				elif fieldName == 'BooleanField':
+					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
+				elif fieldName == 'StringField':
+					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
+				elif fieldName == 'RadioField':
+					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
+				FormModel.submit = SubmitField('Next step')
+				form = FormModel()
+			
+		else:
+			# Generate dynamic field names
+			numberOfFields = 10
+			i = 1
+			names = []
+			while i < numberOfFields:
+				names.append('Question ' + str(i))
+				i = i+1
+			questionTypes = [('StringField', 'StringField'), ('BooleanField', 'BooleanField'), ('RadioField', 'RadioField'), ('TextAreaField', 'TextAreaField')]
+			for name in names:
+				setattr(FormModel, name, RadioField(label=name, choices=questionTypes))
+			FormModel.submit = SubmitField('Next step')
+			form = FormModel()
+		
+		return render_template('addPeerReviewForm.html', title='Create new peer review form', form=form)
+
+# Admin page to view classes
+@workUpApp.route("/peerReviewFormAdmin")
+@login_required
+def peerReviewFormAdmin():
+	if current_user.is_authenticated:
+		if current_user.username in workUpApp.config['ADMIN_USERS']:
+			classesArray = app.models.selectFromDb(['*'], 'turma')
+			return render_template('classAdmin.html', title='Class admin', classesArray = classesArray)
+	abort (403)
