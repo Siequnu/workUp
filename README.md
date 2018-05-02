@@ -12,6 +12,11 @@ redistributed amongst the uploadees.
 Uploaded files are tagged with a student number, so that the student never receives
 their own work back.
 
+Students can log-in to view their assignments, and once an assignment has been upload, the student
+can submit peer reviews for two other assignments. These peer reviews are guided through a feedback form,
+although as students get more comfortable in providing feedback, progressively less guided forms can be
+given to students.
+
 ## Usage
 
 * This git can be cloned onto a deployment server.
@@ -19,7 +24,7 @@ their own work back.
 * `config.py.sample` should be cp to `config.py` and the administration sign-up codes filled in.
 
 * a workUp.wsgi file should be created in `/PATH_TO_WORKUP_ROOT/workUp`. Adjust the `sys.path.insert`
-and the `application.secret_key`
+and the `application.secret_key`.
 
 ```sh
 #!/usr/bin/python
@@ -96,11 +101,11 @@ The following third-party libraries are used:
 
 There is a bug in the **Flask-wtf** library, whereby Flask wtf form radio-button labels do not render.
 
-This issue is discussed at length here: https://stackoverflow.com/questions/27705968/flask-wtform-radiofield-label-does-not-render
+This issue is discussed at length [on Stackoverflow] (https://stackoverflow.com/questions/27705968/flask-wtform-radiofield-label-does-not-render)
 
-```sh
-It might be intended by the author of "quick_form" macro, or more likely he/she missed a line of code to render out the label of RadioField, as the same is done for other types of fields.
-```
+
+>It might be intended by the author of "quick_form" macro, or more likely he/she missed a
+>line of code to render out the label of RadioField, as the same is done for other types of fields.
 
 The solution proposed is:
 
