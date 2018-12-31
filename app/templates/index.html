@@ -17,11 +17,13 @@
 	<li><a href="{{url_for('addPeerReviewForm')}}">Create new peer review form</a></li>
 	<li><a href="{{url_for('peerReviewFormAdmin')}}">Manage peer review forms</a></li>
 {% else %}
+		
 	<div class="row">
         <div class="col-md-8">
 			<h1>Hi, {{ current_user.username }}!</h1>
 		</div>
   </div>
+	 <hr>
 	<br /><br />
 	<div class="container">
   		<div class="col-md-4">
@@ -37,19 +39,19 @@
 			<div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{assignmentUploadProgressBarPercentage}}%" id='width'>
 				{{assignmentUploadProgressBarPercentage}}%
 			{% else %}
-			<div class="progress-bar progress-bar-striped active " role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{assignmentUploadProgressBarPercentage}}%" id='width'>
+			<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{assignmentUploadProgressBarPercentage}}%" id='width'>
 			  {{assignmentUploadProgressBarPercentage}}%
 			{% endif %}
       </div>
     </div>
-	
+		<br /><br />
 	<h4>Peer review completion</h4>
     <div class="progress">
       {% if peerReviewProgressBarPercentage==100 %}
 			<div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peerReviewProgressBarPercentage}}%" id='width'>
 				{{peerReviewProgressBarPercentage}}%
 			{% else %}
-			<div class="progress-bar progress-bar-striped active " role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peerReviewProgressBarPercentage}}%" id='width'>
+			<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peerReviewProgressBarPercentage}}%" id='width'>
 			  {{peerReviewProgressBarPercentage}}%
 			{% endif %}
       </div>
