@@ -6,7 +6,6 @@ import glob, os
 import uuid, datetime
 import json, pickle
 import importlib
-import string
 
 # SQL
 from flask_login import current_user, login_user
@@ -263,16 +262,16 @@ def fileStats():
 @login_required
 def viewComments(fileId):
 	# Make sure that only the AUTHOR can check comments on their file!
-	userId = app.models.selectFromDb(['user_id'], 'post', [string.join(('id=', str(fileId)), '')])
+	userId = app.models.selectFromDb(['user_id'], 'post', [''.join(('id=', str(fileId)))])
 	if userId != []: # The post exists	
 		if userId[0][0] == current_user.id:
 			# Get assignment ID from post ID
-			assignmentId = app.models.selectFromDb(['assignment_id'], 'post', [string.join(('id=', str(fileId)), '')])
+			assignmentId = app.models.selectFromDb(['assignment_id'], 'post', [''.join(('id=', str(fileId)))])
 			
 			# Get comment Ids associated with this post
 			conditions = []
-			conditions.append(string.join(('assignment_id=', str(assignmentId[0][0])), ''))
-			conditions.append(string.join(('fileid=', str(fileId)), ''))
+			conditions.append(''.join(('assignment_id=', str(assignmentId[0][0]))))
+			conditions.append(''.join(('fileid=', str(fileId))))
 			conditions.append('pending=0')
 			commentIds = app.models.selectFromDb(['id'], 'comment', conditions)
 			cleanCommentIds = []
@@ -281,7 +280,7 @@ def viewComments(fileId):
 					cleanCommentIds.append(id)
 					
 			# Get assignment original filename
-			post = app.models.selectFromDb(['original_filename'], 'post', [string.join(('id=', str(fileId)), '')])
+			post = app.models.selectFromDb(['original_filename'], 'post', [''.join(('id=', str(fileId)))])
 			postTitle = post[0][0]
 			
 			return render_template('comments.html', cleanCommentIds = cleanCommentIds, postTitle = postTitle)
