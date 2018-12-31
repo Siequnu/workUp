@@ -12,6 +12,7 @@ from flask_login import LoginManager
 # Bootstrap
 from flask_bootstrap import Bootstrap
 
+
 # Logging handlers
 import logging
 from logging.handlers import RotatingFileHandler
