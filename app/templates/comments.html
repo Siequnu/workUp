@@ -6,12 +6,13 @@
   
   {% else %}
 	<div class="row">
-        <div class="col-md-4">
+        <div class="col-md-8">
 			<h1>View comments</h1>
 		</div>
   </div>
     {{postTitle}}
     <hr>
+   
     {% if cleanCommentIds|length == 0 %}
       <p><em>No peer reviews have been submitted for this work.<br /><br />
   Check back later.</em></p>

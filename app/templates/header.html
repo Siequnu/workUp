@@ -13,13 +13,12 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-         <a class="navbar-brand" href="#">
+         <a class="navbar-brand" href="{{ url_for('index') }}">
     
     <img src="/static/w_logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-    </a>
-        
-        <a class="navbar-brand"
-           href="{{ url_for('index') }}">workUp! - Peer Review</a>
+    workUp
+         </a>
+  
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 {{ render_nav_item('index', 'Home', use_li=True) }}
@@ -36,7 +35,7 @@
         </div>
     </nav>
 {% endblock %}
-
+<br /><br />
 {% block content %}
     <div class="container">
         {% with messages = get_flashed_messages() %}
@@ -54,6 +53,7 @@
 
 
 <footer class="text-center">
+    	<br /><br />
         {% block footer %}
             <small> &copy; 2018    workUp - Tsinghua University. Written by Patrick Johansson</small>
         {% endblock %}
