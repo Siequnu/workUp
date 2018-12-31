@@ -6,8 +6,6 @@ import app.models
 
 from flask_login import current_user
 
-import string
-
 def getAllUploadedPostsWithFilenameAndUsername ():
 		return Post.getAllUploadedPostsWithFilenameAndUsername()
 		
@@ -39,7 +37,7 @@ def getPostInfoFromUserId (userId):
 		# Get completed comment count from file ID
 		fileId = app.models.selectFromDb(['id'], 'post', [(str('filename="' + str(info[2]) + '"'))])
 		conditions = []
-		conditions.append(string.join(('fileid=', str(fileId[0][0])), ''))
+		conditions.append(''.join(('fileid=', str(fileId[0][0]))))
 		conditions.append('pending=0')
 		peerReviewCount = app.models.selectFromDb(['id'], 'comment', conditions)
 		

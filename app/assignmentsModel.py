@@ -4,7 +4,6 @@ from app.models import Post, Download, Assignment, User, Comment
 import datetime
 from datetime import datetime
 import time
-import string
 from flask_login import current_user
 
 def getAllAssignments ():
@@ -85,7 +84,7 @@ def getUserAssignmentInformation (userId):
 			cleanSubmittedFileId = cleanSubmittedFileId.replace (')', '')
 			cleanSubmittedFileId = cleanSubmittedFileId.replace (']', '')
 			cleanSubmittedFileId = cleanSubmittedFileId.replace ('[', '')
-			postOriginalFilename = app.models.selectFromDb(['original_filename'], 'post', [string.join(('id=', str(cleanSubmittedFileId)), '')])
+			postOriginalFilename = app.models.selectFromDb(['original_filename'], 'post', [''.join(('id=', str(cleanSubmittedFileId)))])
 			cleanAssignment['submittedFilename'] = postOriginalFilename[0][0]
 			
 			
@@ -137,7 +136,7 @@ def getPeerReviewProgressPercentage ():
 	
 	totalNumberOfPeerReviewsExpected = (len(assignmentsForThisUser)) * 2 # At two peer reviews per assignment
 	conditions = []
-	conditions.append(string.join(('user_id=', str(current_user.id)), ''))
+	conditions.append(''.join(('user_id=', str(current_user.id)))	)
 	conditions.append('pending=0')
 	commentIds = app.models.selectFromDb(['id'], 'comment', conditions)
 	totalNumberOfCompletedPeerReviews = (len(commentIds))
