@@ -47,12 +47,12 @@ def logout():
 # Registration
 @workUpApp.route('/lab', methods=['GET', 'POST'])
 def lab():
-	FormModel.username = TextAreaField('username')
-	names = ['yes', 'no', 'ymaybe', 'hooray']
-	for name in names:
-		setattr(FormModel, name, TextAreaField(name.title()))	
-	form = FormModel()
-	return render_template('lab.html', form=form)
+	return render_template('lab.html')
+
+# Dashboard
+@workUpApp.route('/dashboard', methods=['GET'])
+def dashboard():
+	return render_template('dashboard.html')
 
 
 # Registration
@@ -60,19 +60,23 @@ def lab():
 def register():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
-	form = RegistrationForm()
-	if form.validate_on_submit():
-		if form.signUpCode.data in workUpApp.config['SIGNUP_CODES']:
-			user = User(username=form.username.data, email=form.email.data, studentnumber=form.studentNumber.data, turma_id=form.turmaId.data)
-			user.set_password(form.password.data)
-			db.session.add(user)
-			db.session.commit()
-			flash('Congratulations, you are now a registered user!')
-			return redirect(url_for('login'))
-		else:
-			flash("Please ask your tutor for sign-up instructions.")
-			return redirect(url_for('login'))
-	return render_template('register.html', title='Register', form=form)
+	if workUpApp.config['REGISTRATION_IS_OPEN'] == True:
+		form = RegistrationForm()
+		if form.validate_on_submit():
+			if form.signUpCode.data in workUpApp.config['SIGNUP_CODES']:
+				user = User(username=form.username.data, email=form.email.data, studentnumber=form.studentNumber.data, turma_id=form.turmaId.data)
+				user.set_password(form.password.data)
+				db.session.add(user)
+				db.session.commit()
+				flash('Congratulations, you are now a registered user!')
+				return redirect(url_for('login'))
+			else:
+				flash("Please ask your tutor for sign-up instructions.")
+				return redirect(url_for('login'))
+		return render_template('register.html', title='Register', form=form)
+	else:
+		flash("Sign up is currently closed.")
+		return redirect(url_for('index'))
 
 # Registration
 @workUpApp.route('/registeradmin', methods=['GET', 'POST'])
@@ -123,7 +127,7 @@ def downloadFile(assignmentId = False):
 		return render_template('downloadFile.html', assignmentId = assignmentId)
 	else:
 		# If the assignment hasn't closed yet, flash message to wait until after deadline
-		flash ("The assignment hasn't closed yet. Please wait until the deadline is over, then try again to download a work for peer review.")
+		flash ("The assignment hasn't closed yet. Please wait until the deadline is over, then try again to download an assignemnt to review.")
 		return redirect (url_for('viewAssignments'))
 		
 	
