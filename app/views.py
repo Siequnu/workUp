@@ -43,16 +43,10 @@ def logout():
 	logout_user()
 	return redirect(url_for('index'))
 
-
-# Registration
+# Lab
 @workUpApp.route('/lab', methods=['GET', 'POST'])
 def lab():
 	return render_template('lab.html')
-
-# Dashboard
-@workUpApp.route('/dashboard', methods=['GET'])
-def dashboard():
-	return render_template('dashboard.html')
 
 
 # Registration
