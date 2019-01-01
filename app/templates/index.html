@@ -3,19 +3,55 @@
 {% block app_content %}
 
 {% if current_user.is_anonymous %}
-	<h1>workUp - Peer Review Distribution Tool</h1>
-	<p>workUp is a app web application designed to help teachers distribute student work for peer review.</p>
-	<p>The site works as a simple upload interface, whereby uploaded works are automatically redistributed amongst the uploadees.</p>
-	<p>Uploaded files are tagged with a student number, so that the student never receives their own work back.</p>	              
+	<div class="jumbotron">
+  <h1 class="display-4">workUp - Peer Review</h1>
+  <p class="lead">workUp is a web app that distributes work for peer review.</p>
+  <hr class="my-4">
+  <p>It allows students to track assignments and receive randomised work for peer review.</p>
+  <a class="btn btn-primary btn-lg" href="{{url_for('register')}}" role="button">Student registration</a>
+	</div>
+	<hr>
+	<br /><br />
+             
 {% elif admin %}
 	<div class="row">
-        <div class="col-md-8">
+        
 			<h1>Hi, Administrator {{ current_user.username }}!</h1>
-		</div>		
+				
     </div>
-	<li><a href="{{url_for('classAdmin')}}">Class admin</a></li>
-	<li><a href="{{url_for('addPeerReviewForm')}}">Create new peer review form</a></li>
-	<li><a href="{{url_for('peerReviewFormAdmin')}}">Manage peer review forms</a></li>
+	
+	<hr>
+	<br /><br />
+	<div class="card-deck">
+	 <div class="card bg-light mb-2" style="max-width: 20rem;">
+		<div class="card-header">Class admin
+		</div>
+    <div class="card-body">
+      <h5 class="card-title">Add or remove classes, and edit class information.</h5>
+      <a class="btn btn-primary" href="{{url_for('classAdmin')}}" role="button">Class admin</a>
+    </div>
+  </div>
+	 
+	 <div class="card bg-light mb-2" style="max-width: 20rem;">
+		<div class="card-header">Peer review forms
+		</div>
+    <div class="card-body">
+      <h5 class="card-title">Add or remove peer review forms.</h5>
+      <p><a class="btn btn-primary" href="{{url_for('addPeerReviewForm')}}" role="button">Create new peer review form</a></p>
+			<a class="btn btn-primary" href="{{url_for('peerReviewFormAdmin')}}" role="button">Manage peer review forms</a>
+    </div>
+  </div>
+	 
+	 <div class="card bg-light mb-2" style="max-width: 20rem;">
+		<div class="card-header">Create assignment
+		</div>
+    <div class="card-body">
+      <h5 class="card-title">Create a new assignment</h5>
+			<a class="btn btn-primary" href="{{url_for('createAssignment')}}" role="button">Create assignment</a>
+    </div>
+  </div>
+	 
+	</div>
 {% else %}
 		
 	<div class="row">

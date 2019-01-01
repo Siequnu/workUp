@@ -12,11 +12,9 @@ from flask_login import LoginManager
 # Bootstrap
 from flask_bootstrap import Bootstrap
 
-
 # Logging handlers
-import logging
+import logging, os
 from logging.handlers import RotatingFileHandler
-import os
 
 workUpApp = Flask(__name__)
 workUpApp.config.from_object(Config)
