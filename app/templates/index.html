@@ -19,23 +19,36 @@
 {% else %}
 		
 	<div class="row">
-        <div class="col-md-8">
-			<h1>Hi, {{ current_user.username }}!</h1>
-		</div>
-  </div>
+         <div class="container"> 
+			<h1 class="text-warning">Hi, {{ current_user.username }}!</h1>
+	</div>
+				 </div>
 	 <hr>
 	<br /><br />
-</div>
-	 <div class="card" style="max-width: 18rem;">
+<div class="card-deck">
+	 <div class="card bg-light mb-2" style="max-width: 20rem;">
+		<div class="card-header">Your info
+		</div>
     <div class="card-body">
-      <h5 class="card-title">User stats:</h5>
-      <p class="card-text">You have uploaded {{numberOfUploads}} posts.</p>
+      
+      <h5 class="card-title">You have uploaded {{numberOfUploads}} posts.</h5>
+      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    </div>
+  </div>
+	 
+	 <div class="card bg-light mb-2" style="max-width: 20rem;">
+		<div class="card-header">Peer reviews
+		</div>
+    <div class="card-body">
+      
+      <h5 class="card-title">Your essays have been reviewed {{numberOfUploads}} times.</h5>
       <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
     </div>
   </div>
 </div>
+
 	<br />
-	
+	<div class="card-deck">
 	<div class="card">
   <div class="card-header">
     <h4>Assignments completion</h4>
@@ -53,7 +66,8 @@
     </div>
   </div>
 </div>
-	<br>
+	
+	
 	<div class="card">
   <div class="card-header">
     <h4>Peer review completion</h4>
@@ -70,6 +84,9 @@
       </div>
     </div>
 </div>
+		 </div>
+	
+	</div>
 	
 {% endif %}				
 
