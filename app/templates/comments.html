@@ -12,7 +12,7 @@
   </div>
     {{postTitle}}
     <hr>
-   
+  <br>
     {% if cleanCommentIds|length == 0 %}
       <p><em>No peer reviews have been submitted for this work.<br /><br />
   Check back later.</em></p>
@@ -25,5 +25,5 @@
     {% endif %}
 
   {% endif %}
-  
+  <a href="{{url_for('fileStats')}}" class="btn btn-primary">< Back</a>
     {% endblock %}
