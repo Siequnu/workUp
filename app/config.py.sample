@@ -10,6 +10,7 @@ class Config(object):
 	ADMIN_USERS = {''}
 	SIGNUP_CODES = {''}
 	ADMIN_SIGNUP_CODES = {''}
+	REGISTRATION_IS_OPEN = False
 	
 	# SQL
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
