@@ -25,16 +25,23 @@
   </div>
 	 <hr>
 	<br /><br />
-	<div class="container">
-  		<div class="col-md-4">
-			<p>You have uploaded {{numberOfUploads}} posts.</p>
-		</div>
-	</div>
+</div>
+	 <div class="card" style="max-width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">User stats:</h5>
+      <p class="card-text">You have uploaded {{numberOfUploads}} posts.</p>
+      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    </div>
+  </div>
+</div>
 	<br />
-			<div class="container">
-	<div id='bar'>
+	
+	<div class="card">
+  <div class="card-header">
     <h4>Assignments completion</h4>
-    <div class="progress">
+  </div>
+  <div class="card-body">
+     <div class="progress">
       {% if assignmentUploadProgressBarPercentage==100 %}
 			<div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{assignmentUploadProgressBarPercentage}}%" id='width'>
 				{{assignmentUploadProgressBarPercentage}}%
@@ -44,9 +51,15 @@
 			{% endif %}
       </div>
     </div>
-		<br /><br />
-	<h4>Peer review completion</h4>
-    <div class="progress">
+  </div>
+</div>
+	<br>
+	<div class="card">
+  <div class="card-header">
+    <h4>Peer review completion</h4>
+  </div>
+  <div class="card-body">
+     <div class="progress">
       {% if peerReviewProgressBarPercentage==100 %}
 			<div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peerReviewProgressBarPercentage}}%" id='width'>
 				{{peerReviewProgressBarPercentage}}%
@@ -56,10 +69,8 @@
 			{% endif %}
       </div>
     </div>
-	
-  </div>
 </div>
-{% endif %}
-					
+	
+{% endif %}				
 
 {% endblock %}
