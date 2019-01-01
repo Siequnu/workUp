@@ -60,35 +60,22 @@
  <hr>
     <br></br>
  <div class="container">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="table-responsive">
-        <table summary="You have uploaded the following files:" class="table table-bordered table-hover">
-          <caption class="text-center">Here you can view the files you have uploaded and their download status</a>:</caption>
-		  <thead>
-            <tr>
-              <th>Filename</th>
-              <th>Upload date</th>
-              <th>Peer reviews</th>
-			  <th>Comments</th>
-            </tr>
-          </thead>
-		  <tbody>
-			{% for key, value in templatePackages['cleanDict'].items() %}
-            <tr>
-              <td>{{ key }}</td>
-              <td>{{value[0]}}</td>
-              <td>{{value[1]}}</td>
-			  <td><a href="/comments/{{value[2]}}">View comments</a></li></td>
-            </tr>
-           {% endfor %}
-          </tbody>
-          <tfoot>
-            <tr>
-            </tr>
-          </tfoot>
-        </table>
-      </div><!--end of .table-responsive-->
+  <div class="card-deck">
+  
+  {% for key, value in templatePackages['cleanDict'].items() %}
+  
+  <div class="card bg-light mb-3" style="max-width: 18rem;">
+  <div class="card-header">{{ key }}</div>
+  <div class="card-body">
+    <h5 class="card-title">Peer reviews: {{value[1]}}</h5>
+    <p class="card-text">Date uploaded: {{value[0]}}</p>
+    <a href="/comments/{{value[2]}}" class="btn btn-primary">View comments</a>
+    
+  </div>
+</div>
+  {% endfor %}
+  
+  </div>
     </div>
   </div>
 </div>
