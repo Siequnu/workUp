@@ -18,7 +18,7 @@ from werkzeug.urls import url_parse
 
 # Forms
 import app.forms
-from app.forms import LoginForm, RegistrationForm, AdminRegistrationForm, AssignmentCreationForm, TurmaCreationForm, PeerReviewForm, PeerReviewFormTwo, FormModel
+from app.forms import LoginForm, RegistrationForm, AdminRegistrationForm, AssignmentCreationForm, TurmaCreationForm, PeerReviewForm, PeerReviewFormTwo, FormModel, EmailForm , PasswordForm
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField, RadioField, FormField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
@@ -80,6 +80,42 @@ def register():
 	else:
 		flash("Sign up is currently closed.")
 		return redirect(url_for('index'))
+
+
+# Reset password form
+@workUpApp.route('/reset', methods=["GET", "POST"])
+def reset():
+	form = EmailForm()
+	if form.validate_on_submit():
+		user = User.query.filter_by(email=form.email.data).first_or_404()
+		subject = "Password reset requested"
+		token = util.ts.dumps(user.email, salt=workUpApp.config["TS_RECOVER_SALT"])
+
+		recover_url = url_for('reset_with_token', token=token, _external=True)
+		html = render_template('email/recover.html', recover_url=recover_url)
+		
+		util.sendEmail(user.email, subject, html)
+		flash('Email has been sent!')
+		return redirect(url_for('index'))
+		
+	return render_template('reset.html', form=form)
+
+
+# Reset password with token
+@workUpApp.route('/reset/<token>', methods=["GET", "POST"])
+def reset_with_token(token):
+	try:
+		email = util.ts.loads(token, salt=workUpApp.config['TS_RECOVER_SALT'], max_age=workUpApp.config['TS_MAX_AGE'])
+	except:
+		abort(404)
+	form = PasswordForm()
+	if form.validate_on_submit():
+		user = User.query.filter_by(email=email).first_or_404()
+		user.set_password(form.password.data)
+		db.session.commit()
+		1/0
+		return redirect(url_for('login'))
+	return render_template('reset_with_token.html', form=form, token=token)
 
 
 # Confirm email
