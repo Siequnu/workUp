@@ -8,8 +8,7 @@ from flask_login import login_required
 
 # Models
 import assignmentsModel
-import fileModel
-import fileStatsModel
+import models_files
 
 
 
@@ -20,14 +19,14 @@ def fileStats():
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Get total list of uploaded files from all users
 		templatePackages = {}
-		templatePackages['uploadedFiles'] = fileStatsModel.getAllUploadsWithFilenameAndUsername()
-		templatePackages['uploadedPostCount'] = str(fileStatsModel.getAllUploadsCount())
+		templatePackages['uploadedFiles'] = models_files.getAllUploadsWithFilenameAndUsername()
+		templatePackages['uploadedPostCount'] = str(models_files.getAllUploadsCount())
 		templatePackages['uploadFolderPath'] = workUpApp.config['UPLOAD_FOLDER']
 		templatePackages['admin'] = True
 		return render_template('fileStats.html', templatePackages = templatePackages)
 	elif current_user.is_authenticated:
 		templatePackages = {}
-		templatePackages['cleanDict'] = fileStatsModel.getPostInfoFromUserId (current_user.id)
+		templatePackages['cleanDict'] = models_files.getPostInfoFromUserId (current_user.id)
 		return render_template('fileStats.html', templatePackages = templatePackages)
 	abort(403)
 
@@ -61,12 +60,12 @@ def uploadFile(assignmentId = False):
 		if file.filename == '':
 			flash('The filename is blank. Please rename the file.')
 			return redirect(request.url)
-		if file and fileModel.allowedFile(file.filename):
+		if file and models_files.allowedFile(file.filename):
 			if (assignmentId):
-				fileModel.saveFile(file, assignmentId)
+				models_files.saveFile(file, assignmentId)
 			else:
-				fileModel.saveFile(file)
-			originalFilename = fileModel.getSecureFilename(file.filename)
+				models_files.saveFile(file)
+			originalFilename = models_files.getSecureFilename(file.filename)
 			flash('Your file ' + str(originalFilename) + ' successfully uploaded')
 			return redirect(url_for('viewAssignments'))
 		else:
