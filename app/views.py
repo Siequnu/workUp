@@ -312,5 +312,5 @@ def peerReviewFormAdmin():
 	if current_user.is_authenticated:
 		if current_user.username in workUpApp.config['ADMIN_USERS']:
 			classesArray = app.models.selectFromDb(['*'], 'turma')
-			return render_template('classAdmin.html', title='Class admin', classesArray = classesArray)
+			return render_template('admin/classAdmin.html', title='Class admin', classesArray = classesArray)
 	abort (403)
