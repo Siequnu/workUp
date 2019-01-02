@@ -76,6 +76,14 @@ class TurmaCreationForm(FlaskForm):
 	turmaYear = StringField('Class year', validators=[DataRequired()])
 	submit = SubmitField('Create')
 
+class EmailForm(FlaskForm):
+	email = StringField('Email', validators=[DataRequired(), Email()])
+	submit = SubmitField('Request password reset.')
+
+class PasswordForm(FlaskForm):
+	password = PasswordField('Password', validators=[DataRequired()])
+	submit = SubmitField('Reset password.')
+
 class FormModel (FlaskForm):
 	pass
 	
