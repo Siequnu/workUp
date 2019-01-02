@@ -1,4 +1,4 @@
-from app import workUpApp, db
+from app import workUpApp
 from flask import render_template, redirect, url_for, session, flash, request
 
 import datetime
