@@ -7,7 +7,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User, Turma
 
 # Import user defined peer review forms
-from peerReviewForms import *
+from forms_peer_review import *
 
 
 class LoginForm(FlaskForm):
