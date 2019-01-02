@@ -15,7 +15,7 @@ from flask_login import logout_user
 from app.models import User
 from app import db
 
-# User classes
+# Utility classes
 import util
 
 # Forms
@@ -80,7 +80,7 @@ def registerAdmin():
 			flash('Congratulations, you are now a registered administrator!')
 			return redirect(url_for('login'))
 		else:
-			flash("Please ask your tutor for sign-up instructions.")
+			flash("Admin sign-up failed.")
 			return redirect(url_for('login'))
 	return render_template('register.html', title='Register', form=form)
 
