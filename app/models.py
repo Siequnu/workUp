@@ -86,7 +86,7 @@ class User(UserMixin, db.Model):
 		return check_password_hash(self.password_hash, password)
 	
 
-class Post(db.Model):
+class Upload(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	original_filename = db.Column(db.String(140))
 	filename = db.Column(db.String(140))
@@ -95,11 +95,11 @@ class Post(db.Model):
 	assignment_id = db.Column(db.Integer)
 	
 	def __repr__(self):
-		return '<Post {}>'.format(self.filename)		
+		return '<Upload {}>'.format(self.filename)		
 	
 	@staticmethod
-	def getAllUploadedPostsWithFilenameAndUsername ():
-		sql = text('SELECT post.original_filename, user.username, post.timestamp FROM post INNER JOIN user ON user.id=post.user_id;')
+	def getAllUploadsWithFilenameAndUsername ():
+		sql = text('SELECT upload.original_filename, user.username, upload.timestamp FROM upload INNER JOIN user ON user.id=upload.user_id;')
 		result = db.engine.execute(sql)
 		names = []
 		for row in result: names.append(row)
@@ -108,17 +108,17 @@ class Post(db.Model):
 	@staticmethod
 	def getPossibleDownloadsNotFromUserForThisAssignment (userId, assignmentId, previousDownloadFileId = False):
 		if previousDownloadFileId:
-			sql = text ('SELECT filename FROM post WHERE user_id!=' + str(userId) + ' AND assignment_id=' + str(assignmentId) + ' AND id!=' + str(previousDownloadFileId))
+			sql = text ('SELECT filename FROM upload WHERE user_id!=' + str(userId) + ' AND assignment_id=' + str(assignmentId) + ' AND id!=' + str(previousDownloadFileId))
 		else:
-			sql = text ('SELECT filename FROM post WHERE user_id!=' + str(userId) + ' AND assignment_id=' + str(assignmentId))
+			sql = text ('SELECT filename FROM upload WHERE user_id!=' + str(userId) + ' AND assignment_id=' + str(assignmentId))
 		result = db.engine.execute(sql)
 		filenames = []
 		for row in result: filenames.append(row[0])
 		return filenames
 	
 	@staticmethod
-	def deletePostsFromAssignmentId (assignmentId):
-		sql = text ('DELETE FROM post WHERE assignment_id=' + '"' + str(assignmentId) + '"')
+	def deleteAllUploadsFromAssignmentId (assignmentId):
+		sql = text ('DELETE FROM upload WHERE assignment_id=' + '"' + str(assignmentId) + '"')
 		result = db.engine.execute(sql)
 		return result
 
@@ -131,7 +131,7 @@ class Download(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	
 	def __repr__(self):
-		return '<Post {}>'.format(self.filename)
+		return '<Download {}>'.format(self.filename)
 	
 
 class Comment(db.Model):
@@ -197,7 +197,7 @@ class Assignment(db.Model):
 
 	@staticmethod
 	def getUsersUploadedAssignmentsFromAssignmentId (assignmentId, userId):
-		sql = text ('SELECT post.id FROM assignment INNER JOIN post ON post.assignment_id=assignment.id WHERE assignment.id=' + '"' + str(assignmentId) + '" AND user_id=' + str(userId))
+		sql = text ('SELECT upload.id FROM assignment INNER JOIN upload ON upload.assignment_id=assignment.id WHERE assignment.id=' + '"' + str(assignmentId) + '" AND user_id=' + str(userId))
 		result = db.engine.execute(sql)
 		if result == False:
 			return False
