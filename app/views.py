@@ -9,7 +9,7 @@ import importlib
 
 # SQL
 from flask_login import current_user, login_user
-from app.models import Turma, User, Post, Download, Comment, Assignment
+from app.models import Turma, User, Upload, Download, Comment, Assignment
 from app import db
 db.create_all()
 db.session.commit()
@@ -136,10 +136,10 @@ def downloadRandomFile(assignmentId):
 		# User has a pending assignment, send them the same file as before
 		alreadyDownloadedAndPendingReviewFileId = pendingAssignments[0][1]
 		flash('You have a peer review that you have not yet completed. You have redownloaded the same file.')
-		# Get filename of the post from Id
+		# Get filename of the upload from Id
 		conditions = []
 		conditions.append(str('id="' + str(alreadyDownloadedAndPendingReviewFileId) + '"'))
-		filenameToDownload = app.models.selectFromDb(['filename'], 'post', conditions)		
+		filenameToDownload = app.models.selectFromDb(['filename'], 'upload', conditions)		
 		filePath = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filenameToDownload[0][0])
 		# Send SQL data to database
 		download = Download(filename=filenameToDownload[0][0], user_id = current_user.id)
@@ -156,12 +156,12 @@ def downloadRandomFile(assignmentId):
 	completedCommentsIdsAndFileId = app.models.selectFromDb(['id', 'fileid'], 'comment', conditions)
 	
 	if completedCommentsIdsAndFileId == []:
-		filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId)
+		filesNotFromUser = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId)
 		
 	else:
 		# Get an array of filenames not belonging to current user
 		previousDownloadFileId = completedCommentsIdsAndFileId[0][1]
-		filesNotFromUser = Post.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId, previousDownloadFileId)
+		filesNotFromUser = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId, previousDownloadFileId)
 	
 	numberOfFiles = len(filesNotFromUser)
 	if numberOfFiles == 0:
@@ -179,8 +179,8 @@ def downloadRandomFile(assignmentId):
 	# Update comments table with pending commment
 	conditions = []
 	conditions.append (str('filename="' + str(filename) + '"'))
-	postId = app.models.selectFromDb(['id'], 'post', conditions)
-	commentPending = Comment(user_id = int(current_user.id), fileid = int(postId[0][0]), pending = True, assignment_id=assignmentId)
+	uploadId = app.models.selectFromDb(['id'], 'upload', conditions)
+	commentPending = Comment(user_id = int(current_user.id), fileid = int(uploadId[0][0]), pending = True, assignment_id=assignmentId)
 	db.session.add(commentPending)
 	db.session.commit()
 
@@ -196,7 +196,7 @@ def index():
 		
 		if current_user.username not in workUpApp.config['ADMIN_USERS']:
 			# Get number of uploads
-			numberOfUploads = fileStatsModel.getUploadedPostCountFromCurrentUserId()
+			numberOfUploads = fileStatsModel.getUploadCountFromCurrentUserId()
 			# Get total assignments assigned to user's class
 			turmaId = assignmentsModel.getUserTurmaFromId (current_user.id)
 			if (turmaId == False):
@@ -247,8 +247,8 @@ def fileStats():
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Get total list of uploaded files from all users
 		templatePackages = {}
-		templatePackages['uploadedFiles'] = fileStatsModel.getAllUploadedPostsWithFilenameAndUsername()
-		templatePackages['uploadedPostCount'] = str(fileStatsModel.getAllUploadedPostsCount())
+		templatePackages['uploadedFiles'] = fileStatsModel.getAllUploadsWithFilenameAndUsername()
+		templatePackages['uploadedPostCount'] = str(fileStatsModel.getAllUploadsCount())
 		templatePackages['uploadFolderPath'] = workUpApp.config['UPLOAD_FOLDER']
 		templatePackages['admin'] = True
 		return render_template('fileStats.html', templatePackages = templatePackages)
@@ -263,13 +263,13 @@ def fileStats():
 @login_required
 def viewComments(fileId):
 	# Make sure that only the AUTHOR can check comments on their file!
-	userId = app.models.selectFromDb(['user_id'], 'post', [''.join(('id=', str(fileId)))])
-	if userId != []: # The post exists	
+	userId = app.models.selectFromDb(['user_id'], 'upload', [''.join(('id=', str(fileId)))])
+	if userId != []: # The upload exists	
 		if userId[0][0] == current_user.id:
-			# Get assignment ID from post ID
-			assignmentId = app.models.selectFromDb(['assignment_id'], 'post', [''.join(('id=', str(fileId)))])
+			# Get assignment ID from upload ID
+			assignmentId = app.models.selectFromDb(['assignment_id'], 'upload', [''.join(('id=', str(fileId)))])
 			
-			# Get comment Ids associated with this post
+			# Get comment Ids associated with this upload
 			conditions = []
 			conditions.append(''.join(('assignment_id=', str(assignmentId[0][0]))))
 			conditions.append(''.join(('fileid=', str(fileId))))
@@ -281,10 +281,10 @@ def viewComments(fileId):
 					cleanCommentIds.append(id)
 					
 			# Get assignment original filename
-			post = app.models.selectFromDb(['original_filename'], 'post', [''.join(('id=', str(fileId)))])
-			postTitle = post[0][0]
+			upload = app.models.selectFromDb(['original_filename'], 'upload', [''.join(('id=', str(fileId)))])
+			uploadTitle = upload[0][0]
 			
-			return render_template('comments.html', cleanCommentIds = cleanCommentIds, postTitle = postTitle)
+			return render_template('comments.html', cleanCommentIds = cleanCommentIds, uploadTitle = uploadTitle)
 	abort (403)
 
 # Admin page to set new assignment
@@ -325,20 +325,20 @@ def viewAssignments():
 			return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray)
 	abort (403)
 	
-#Delete all user posts and comments associated with this assignment
+#Delete all user uploads and comments associated with this assignment
 @workUpApp.route("/deleteassignment/<assignmentId>")
 @login_required
 def deleteAssignment(assignmentId):
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Delete the assignment
 		assignmentsModel.deleteAssignmentFromId(assignmentId)
-		# Delete all posts for this assignment
-		Post.deletePostsFromAssignmentId(assignmentId)
+		# Delete all uploads for this assignment
+		Upload.deleteAllUploadsFromAssignmentId(assignmentId)
 		# Download records are not deleted for future reference
-		# Delete all comments for those posts
+		# Delete all comments for those uploads
 		Comment.deleteCommentsFromAssignmentId(assignmentId)
 		
-		flash('Assignment ' + str(assignmentId) + ' , and all related uploaded files and comments have been deleted.')
+		flash('Assignment ' + str(assignmentId) + ' , and all related uploaded files and comments have been deleted from the db. Download records have been kept.')
 		return redirect(url_for('viewAssignments'))
 	abort (403)
 
@@ -430,7 +430,7 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 		# What file was it made for
 		fileId = app.models.selectFromDb(['fileid'], 'comment', [str('id="' + str(commentId) + '"')])
 		# Who owns that file
-		owner = app.models.selectFromDb(['user_id'], 'post', [str('id="' + str(fileId[0][0]) + '"')])
+		owner = app.models.selectFromDb(['user_id'], 'upload', [str('id="' + str(fileId[0][0]) + '"')])
 		# Is it the same person trying to view this comment?
 		if current_user.id is not owner[0][0]:
 			abort (403)

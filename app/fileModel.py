@@ -6,7 +6,7 @@ import uuid, datetime
 
 # SQL for DB operations
 from flask_login import current_user
-from app.models import User, Post, Download
+from app.models import User, Upload, Download
 from app import db
 
 # Check filename and extension permissibility
@@ -48,8 +48,8 @@ def getRandomFilename(originalFilename):
 def writeUploadEvent(originalFilename, randomFilename, userId, assignment_id = False):
 	# Update SQL after file has saved
 	if assignment_id:
-			post = Post(original_filename = originalFilename, filename = randomFilename, user_id = userId, assignment_id = assignment_id)
+			upload = Upload(original_filename = originalFilename, filename = randomFilename, user_id = userId, assignment_id = assignment_id)
 	else:
-		post = Post(original_filename = originalFilename, filename = randomFilename, user_id = userId)
-	db.session.add(post)
+		upload = Upload(original_filename = originalFilename, filename = randomFilename, user_id = userId)
+	db.session.add(upload)
 	db.session.commit()

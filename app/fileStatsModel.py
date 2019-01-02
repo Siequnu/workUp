@@ -1,31 +1,31 @@
 from app import workUpApp
 from app import db
 
-from app.models import Post, Download
+from app.models import Upload, Download
 import app.models
 
 from flask_login import current_user
 
-def getAllUploadedPostsWithFilenameAndUsername ():
-		return Post.getAllUploadedPostsWithFilenameAndUsername()
+def getAllUploadsWithFilenameAndUsername ():
+		return Upload.getAllUploadsWithFilenameAndUsername()
 		
-def getAllUploadedPostsCount():
-		count = app.models.selectFromDb (['id'], 'POST', conditionsArray = False, count = True)
+def getAllUploadsCount():
+		count = app.models.selectFromDb (['id'], 'upload', conditionsArray = False, count = True)
 		return count[0][0]
 
-def getUploadedPostCountFromCurrentUserId ():
+def getUploadCountFromCurrentUserId ():
 	conditionsArray = []
 	conditionsArray.append (str('user_id="' + str(current_user.id) + '"'))
 	count = True
-	numberOfUploads = app.models.selectFromDb(['id'], 'post', conditionsArray, count)
+	numberOfUploads = app.models.selectFromDb(['id'], 'upload', conditionsArray, count)
 	return numberOfUploads[0][0]
 
 def getPostInfoFromUserId (userId):
 	conditions = []
 	conditions.append(str('user_id="' + str(userId) + '"'))
-	postInfo = app.models.selectFromDb (['id', 'filename', 'timestamp', 'original_filename'], 'post', conditions)
+	uploadInfo = app.models.selectFromDb (['id', 'filename', 'timestamp', 'original_filename'], 'upload', conditions)
 	cleanDict = {}
-	for info in postInfo:
+	for info in uploadInfo:
 		# Get upload time
 		datetime = info[1] #2018-02-25 21:50:13.750276
 		splitDatetime = str.split(str(datetime)) #['2018-02-25', '21:50:13.750276']
@@ -35,7 +35,7 @@ def getPostInfoFromUserId (userId):
 		uploadDateAndtime = date + ' ' + uploadTime
 		
 		# Get completed comment count from file ID
-		fileId = app.models.selectFromDb(['id'], 'post', [(str('filename="' + str(info[2]) + '"'))])
+		fileId = app.models.selectFromDb(['id'], 'upload', [(str('filename="' + str(info[2]) + '"'))])
 		conditions = []
 		conditions.append(''.join(('fileid=', str(fileId[0][0]))))
 		conditions.append('pending=0')
