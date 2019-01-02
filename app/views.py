@@ -24,7 +24,7 @@ from forms import FormModel
 
 # Personal classes
 import models_files
-import assignmentsModel
+import models_assignments
 import util
 
 import views_user
@@ -111,13 +111,13 @@ def index():
 			# Get number of uploads
 			numberOfUploads = models_files.getUploadCountFromCurrentUserId()
 			# Get total assignments assigned to user's class
-			turmaId = assignmentsModel.getUserTurmaFromId (current_user.id)
+			turmaId = models_assignments.getUserTurmaFromId (current_user.id)
 			if (turmaId == False):
 				flash('You do not appear to be part of a class. Please contact your tutor for assistance.')
 				return render_template('index.html')
 			
-			assignmentUploadProgressBarPercentage = assignmentsModel.getAssignmentUploadProgressPercentage ()
-			peerReviewProgressBarPercentage = assignmentsModel.getPeerReviewProgressPercentage()
+			assignmentUploadProgressBarPercentage = models_assignments.getAssignmentUploadProgressPercentage ()
+			peerReviewProgressBarPercentage = models_assignments.getPeerReviewProgressPercentage()
 			
 			return render_template('index.html', numberOfUploads = numberOfUploads, assignmentUploadProgressBarPercentage = assignmentUploadProgressBarPercentage, peerReviewProgressBarPercentage = peerReviewProgressBarPercentage)
 	
@@ -174,20 +174,20 @@ def createAssignment():
 @workUpApp.route("/viewassignments")
 @login_required
 def viewAssignments():
-	import assignmentsModel
+	import models_assignments
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Get admin view with all assignments
-		cleanAssignmentsArray = assignmentsModel.getAllAssignments()
+		cleanAssignmentsArray = models_assignments.getAllAssignments()
 		return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray, admin = True)
 	elif current_user.is_authenticated:
 		# Get user class
-		turmaId = assignmentsModel.getUserTurmaFromId(current_user.id)
+		turmaId = models_assignments.getUserTurmaFromId(current_user.id)
 		if (turmaId == False):
 			flash('You are not part of any class and can not see any assignments. Ask your tutor for help to join a class.')
 			return render_template('viewassignments.html') # User isn't part of any class - display no assignments
 		else:
 			# Get assignments for this user
-			cleanAssignmentsArray = assignmentsModel.getUserAssignmentInformation (current_user.id)
+			cleanAssignmentsArray = models_assignments.getUserAssignmentInformation (current_user.id)
 			return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray)
 	abort (403)
 	
@@ -197,7 +197,7 @@ def viewAssignments():
 def deleteAssignment(assignmentId):
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Delete the assignment
-		assignmentsModel.deleteAssignmentFromId(assignmentId)
+		models_assignments.deleteAssignmentFromId(assignmentId)
 		# Delete all uploads for this assignment
 		Upload.deleteAllUploadsFromAssignmentId(assignmentId)
 		# Download records are not deleted for future reference
