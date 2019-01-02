@@ -23,8 +23,7 @@ from wtforms.validators import DataRequired
 from forms import FormModel
 
 # Personal classes
-import fileModel
-import fileStatsModel
+import models_files
 import assignmentsModel
 import util
 
@@ -110,7 +109,7 @@ def index():
 		
 		if current_user.username not in workUpApp.config['ADMIN_USERS']:
 			# Get number of uploads
-			numberOfUploads = fileStatsModel.getUploadCountFromCurrentUserId()
+			numberOfUploads = models_files.getUploadCountFromCurrentUserId()
 			# Get total assignments assigned to user's class
 			turmaId = assignmentsModel.getUserTurmaFromId (current_user.id)
 			if (turmaId == False):
