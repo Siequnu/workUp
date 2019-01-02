@@ -75,6 +75,7 @@ class User(UserMixin, db.Model):
 	turma_id = db.Column(db.String(20))
 	last_seen = db.Column(db.DateTime, default=datetime.now)
 	registered = db.Column(db.DateTime, default=datetime.now)
+	email_confirmed = db.Column(db.Boolean, default=False)
 
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
@@ -84,6 +85,19 @@ class User(UserMixin, db.Model):
 
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
+
+	@staticmethod
+	def checkEmailConfirmationStatus (user):
+		sql = text('SELECT email_confirmed FROM user WHERE username ="' + str(user) + '"')
+		result = db.engine.execute(sql)
+		names = []
+		for row in result: names.append(row)
+		if names[0][0] == 1:
+			return True
+		else:
+			return False
+		
+	
 	
 
 class Upload(db.Model):
