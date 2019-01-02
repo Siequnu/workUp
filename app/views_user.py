@@ -1,5 +1,5 @@
 from app import workUpApp
-from flask import render_template, redirect, url_for, session, flash, request
+from flask import render_template, redirect, url_for, session, flash, request, abort
 
 import datetime
 
@@ -130,7 +130,7 @@ def confirm_email(token):
 	user.email_confirmed = True
 	db.session.add(user)
 	db.session.commit()
-	flash('Congratulations, you have registered your email!')
+	flash('Your email has been confirmed. Please log-in now.')
 	return redirect(url_for('login'))
 
 
@@ -148,7 +148,7 @@ def reset():
 		html = render_template('email/recover.html', recover_url=recover_url)
 		
 		util.sendEmail(user.email, subject, html)
-		flash('Email has been sent!')
+		flash('An email has been sent to your inbox with a link to recover your password.')
 		return redirect(url_for('index'))
 		
 	return render_template('user/reset.html', form=form)
@@ -167,6 +167,7 @@ def reset_with_token(token):
 		user = User.query.filter_by(email=email).first_or_404()
 		user.set_password(form.password.data)
 		db.session.commit()
+		flash('Your password has been changed. You can now log-in with your new password.')
 		return redirect(url_for('login'))
 	return render_template('user/reset_with_token.html', form=form, token=token)
 

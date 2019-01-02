@@ -5,6 +5,7 @@ class Config(object):
 	SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(12)
 	MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 	APP_ROOT = basedir
+	
 	UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
 	ALLOWED_EXTENSIONS = set(['txt', 'zip', 'pdf', 'doc', 'docx', 'pages'])
 	ADMIN_USERS = {''}
@@ -17,6 +18,10 @@ class Config(object):
 	SMTP_USERNAME = ''
 	SMTP_PASSWORD = ''
 	SMTP_FROM_ADDRESS = ''
+	
+	TS_SALT = os.environ.get('SECRET_KEY') or os.urandom(12)
+	TS_RECOVER_SALT = os.environ.get('SECRET_KEY') or os.urandom(12)
+	TS_MAX_AGE = 86400
 	
 	# SQL
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
