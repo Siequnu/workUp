@@ -4,7 +4,7 @@ from flask import render_template, session, request, Response, make_response, se
 from random import randint
 import glob, os
 import uuid, datetime
-import json, pickle
+import json
 import importlib
 
 # SQL
@@ -232,6 +232,9 @@ def uploadFile(assignmentId = False):
 			originalFilename = fileModel.getSecureFilename(file.filename)
 			flash('Your file ' + str(originalFilename) + ' successfully uploaded')
 			return redirect(url_for('viewAssignments'))
+		else:
+			flash('You can not upload this kind of file.')
+			return redirect(url_for('viewAssignments'))
 	else:
 		return render_template('fileUpload.html')
 
@@ -391,7 +394,7 @@ def createPeerReview(assignmentId = False):
 		# Clean the csrf_token and submit fields
 		del formFields['csrf_token']
 		del formFields['submit']
-		formContents = pickle.dumps(formFields)
+		formContents = json.dumps(formFields)
 		
 		# Check if user has any previous downloads with pending peer reviews
 		pendingAssignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignmentId)
@@ -434,7 +437,7 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 		
 		# Get the comment content from ID
 		comment = app.models.selectFromDb(['comment'],'comment',[(str('id="'+str(commentId)+'"'))])
-		unpackedComments = pickle.loads(comment[0][0])
+		unpackedComments = json.loads(comment[0][0])
 	else:
 		# Get the form from the assignmentId	
 		peerReviewFormName = app.models.selectFromDb(['peer_review_form'],'assignment',[(str('id="'+str(assignmentId)+'"'))])
@@ -444,9 +447,9 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 		conditions.append (str('user_id="' + str(current_user.id) + '"'))
 		comments = app.models.selectFromDb(['comment'],'comment',conditions)
 		if int(peerReviewNumber) == 1:
-			unpackedComments = pickle.loads(comments[0][0])
+			unpackedComments = json.loads(comments[0][0])
 		elif int(peerReviewNumber) == 2:
-			unpackedComments = pickle.loads(comments[1][0])
+			unpackedComments = json.loads(comments[1][0])
 		flash('You can not edit this peer review as it has already been submitted.')
 	
 	# Import the form class
