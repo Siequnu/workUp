@@ -7,7 +7,7 @@ from flask_login import current_user
 from flask_login import login_required
 
 # Models
-import assignmentsModel
+import models_assignments
 import models_files
 
 
@@ -37,7 +37,7 @@ def fileStats():
 @workUpApp.route("/downloadFile/<assignmentId>")
 @login_required
 def downloadFile(assignmentId = False):
-	assignmentIsOver = assignmentsModel.checkIfAssignmentIsOver (assignmentId)
+	assignmentIsOver = models_assignments.checkIfAssignmentIsOver (assignmentId)
 	if assignmentIsOver == True:
 		return render_template('downloadFile.html', assignmentId = assignmentId)
 	else:
