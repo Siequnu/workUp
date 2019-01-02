@@ -53,7 +53,7 @@ def login():
 		if not next_page or url_parse(next_page).netloc != '':
 			next_page = url_for('index')
 		return redirect(next_page)
-	return render_template('login.html', title='Sign In', form=form)
+	return render_template('user/login.html', title='Sign In', form=form)
 
 
 
@@ -82,7 +82,7 @@ def registerAdmin():
 		else:
 			flash("Admin sign-up failed.")
 			return redirect(url_for('login'))
-	return render_template('register.html', title='Register', form=form)
+	return render_template('user/register.html', title='Register', form=form)
 
 
 
@@ -112,7 +112,7 @@ def register():
 			else:
 				flash("Please ask your tutor for sign-up instructions.")
 				return redirect(url_for('login'))
-		return render_template('register.html', title='Register', form=form)
+		return render_template('user/register.html', title='Register', form=form)
 	else:
 		flash("Sign up is currently closed.")
 		return redirect(url_for('index'))
@@ -151,7 +151,7 @@ def reset():
 		flash('Email has been sent!')
 		return redirect(url_for('index'))
 		
-	return render_template('reset.html', form=form)
+	return render_template('user/reset.html', form=form)
 
 
 
@@ -168,7 +168,7 @@ def reset_with_token(token):
 		user.set_password(form.password.data)
 		db.session.commit()
 		return redirect(url_for('login'))
-	return render_template('reset_with_token.html', form=form, token=token)
+	return render_template('user/reset_with_token.html', form=form, token=token)
 
 
 	
