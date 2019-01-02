@@ -12,6 +12,12 @@ class Config(object):
 	ADMIN_SIGNUP_CODES = {''}
 	REGISTRATION_IS_OPEN = False
 	
+	SMTP_SERVER = ''
+	SMTP_PORT = 580
+	SMTP_USERNAME = ''
+	SMTP_PASSWORD = ''
+	SMTP_FROM_ADDRESS = ''
+	
 	# SQL
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
 		'sqlite:///' + os.path.join(basedir, 'workUpApp.db')

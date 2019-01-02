@@ -2,10 +2,7 @@ from app import workUpApp
 
 from flask import render_template, session, request, Response, make_response, send_file, redirect, url_for, send_from_directory, flash, abort
 from random import randint
-import glob, os
-import uuid, datetime
-import json
-import importlib
+import glob, os, uuid, datetime, json, importlib
 
 # SQL
 from flask_login import current_user, login_user
@@ -14,13 +11,14 @@ from app import db
 db.create_all()
 db.session.commit()
 
+# Login
 from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
 
+# Forms
 import app.forms
 from app.forms import LoginForm, RegistrationForm, AdminRegistrationForm, AssignmentCreationForm, TurmaCreationForm, PeerReviewForm, PeerReviewFormTwo, FormModel
-
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField, RadioField, FormField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
@@ -30,6 +28,7 @@ from forms import FormModel
 import fileModel
 import fileStatsModel
 import assignmentsModel
+import util
 
 @workUpApp.before_request
 def before_request():
