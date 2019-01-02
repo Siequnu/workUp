@@ -385,7 +385,12 @@ def deleteClass(turmaId):
 @workUpApp.route("/peerreviewform", methods=['GET', 'POST'])
 @login_required
 def createPeerReview(assignmentId = False):
-	form = PeerReviewFormTwo()
+	# Get the appropriate peer review form for the assignment via assignment ID
+	if assignmentId:
+		peerReviewForm = Assignment.getPeerReviewFormFromAssignmentId(assignmentId)
+		peerReviewFormName = peerReviewForm[0][0]	
+		form = eval(peerReviewFormName)()
+	
 	if form.validate_on_submit():
 		# Serialise the form contents
 		formFields = {}
