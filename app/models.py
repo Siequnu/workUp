@@ -48,7 +48,6 @@ class Turma(db.Model):
 	def __repr__(self):
 		return '<Turma {}>'.format(self.turma_number)
 
-
 	@staticmethod
 	def getTurmaChoiceListForForm ():
 		allTurmas = selectFromDb(['*'], 'turma')
@@ -96,7 +95,6 @@ class User(UserMixin, db.Model):
 			return True
 		else:
 			return False
-		
 	
 	
 
@@ -137,6 +135,7 @@ class Upload(db.Model):
 		return result
 
 	
+	
 class Download(db.Model):
 	
 	id = db.Column(db.Integer, primary_key=True)
@@ -147,6 +146,7 @@ class Download(db.Model):
 	def __repr__(self):
 		return '<Download {}>'.format(self.filename)
 	
+
 
 class Comment(db.Model):
 	
@@ -190,6 +190,7 @@ class Comment(db.Model):
 		return result
 	
 
+
 class Assignment(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(140))
@@ -229,6 +230,7 @@ class Assignment(db.Model):
 		for row in result: filename.append(row)
 		return filename
 	
+
 
 class PeerReviewForm(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
