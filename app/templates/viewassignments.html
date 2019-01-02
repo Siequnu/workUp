@@ -83,11 +83,11 @@
                             <a href="" class="btn btn-default btn-sm disabled" role="button" disabled="true">Submit Review 2</a>
                   
                     {% elif assignment['completePeerReviewCount'] == 1 %}
-                        <a href="/viewPeerReview/{{assignment['assignmentId']}}/1" class="btn btn-success btn-sm" role="button" aria-disabled="true">Submitted!</a>
-                        <a href="/downloadFile/{{assignment['assignmentId']}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit</a>
+                        <a href="/viewPeerReview/{{assignment['assignmentId']}}/1" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
+                        <a href="/downloadFile/{{assignment['assignmentId']}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 2</a>
                     {% elif assignment['completePeerReviewCount'] == 2 %}
-                      	<a href="/viewPeerReview/{{assignment['assignmentId']}}/1" class="btn btn-success btn-sm" role="button" aria-disabled="true">Submitted!</a>
-                      	<a href="/viewPeerReview/{{assignment['assignmentId']}}/2" class="btn btn-success btn-sm" role="button" aria-disabled="true">Submitted!</a>
+                      	<a href="/viewPeerReview/{{assignment['assignmentId']}}/1" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
+                      	<a href="/viewPeerReview/{{assignment['assignmentId']}}/2" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 2</a>
                     {% endif %}
                 {% else %}
                     {% if assignment['assignmentIsPastDeadline'] %}
@@ -95,8 +95,8 @@
                     {% else %}
                         <a href="/upload/{{assignment['assignmentId']}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Upload your assignment</a>
                     {% endif %}
-               <a href="" class="btn btn-default btn-sm disabled" role="button" aria-disabled="true">Submit</a>
-              <a href="" class="btn btn-default btn-sm disabled" role="button" aria-disabled="true">Submit</a>
+               <a href="" class="btn btn-default btn-sm" role="button" aria-disabled="true">Submit Review 1</a>
+              <a href="" class="btn btn-default btn-sm" role="button" aria-disabled="true">Submit Review 2</a>
             {% endif %}
       
           </div>

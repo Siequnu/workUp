@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
 from sqlalchemy import text
+import json
 
 @login.user_loader
 def load_user(id):
@@ -156,7 +157,7 @@ class Comment(db.Model):
 	
 	@staticmethod
 	def updatePendingCommentWithComment (commentId, peerReviewContents):
-		sql = text ('UPDATE comment SET pending=0, comment="' + str(peerReviewContents) + '" WHERE id="' + str(commentId) + '"')
+		sql = text ("UPDATE comment SET pending=0, comment='" + str(peerReviewContents) + "' WHERE id='" + str(commentId) + "'")
 		result = db.engine.execute(sql)
 		return result
 	
