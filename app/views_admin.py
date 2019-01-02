@@ -27,7 +27,7 @@ def createAssignment():
 				db.session.commit()
 				flash('Assignment successfully created!')
 				return redirect(url_for('viewAssignments'))
-			return render_template('createassignment.html', title='Create Assignment', form=form)
+			return render_template('admin/create_assignment.html', title='Create Assignment', form=form)
 
 	
 	
@@ -64,7 +64,7 @@ def createClass():
 				db.session.commit()
 				flash('Class successfully created!')
 				return redirect(url_for('classAdmin'))
-			return render_template('createclass.html', title='Create new class', form=form)
+			return render_template('admin/create_class.html', title='Create new class', form=form)
 
 
 
@@ -75,7 +75,7 @@ def classAdmin():
 	if current_user.is_authenticated:
 		if current_user.username in workUpApp.config['ADMIN_USERS']:
 			classesArray = app.models.selectFromDb(['*'], 'turma')
-			return render_template('classAdmin.html', title='Class admin', classesArray = classesArray)
+			return render_template('admin/class_admin.html', title='Class admin', classesArray = classesArray)
 	abort (403)
 	
 	
