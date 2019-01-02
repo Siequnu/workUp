@@ -1,4 +1,7 @@
 from app import workUpApp
+from itsdangerous import URLSafeTimedSerializer
+
+ts = URLSafeTimedSerializer(workUpApp.config["SECRET_KEY"])
 
 def sendEmail (to, subject, text):
 	import smtplib

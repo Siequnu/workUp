@@ -61,7 +61,17 @@ def register():
 				user.set_password(form.password.data)
 				db.session.add(user)
 				db.session.commit()
-				flash('Congratulations, you are now a registered user!')
+				
+				# Now we'll send the email confirmation link
+				subject = "Confirm your email"
+				token = util.ts.dumps(str(form.email.data), salt=workUpApp.config["TS_SALT"])
+				confirm_url = url_for('confirm_email', token=token, _external=True)
+				html = render_template('email/activate.html',confirm_url=confirm_url)
+
+				# We'll assume that send_email has been defined in myapp/util.py
+				util.sendEmail (user.email, subject, html)
+				
+				flash('Congratulations, you are now a registered user! Please confirm your email.')
 				return redirect(url_for('login'))
 			else:
 				flash("Please ask your tutor for sign-up instructions.")
@@ -70,6 +80,23 @@ def register():
 	else:
 		flash("Sign up is currently closed.")
 		return redirect(url_for('index'))
+
+
+# Confirm email
+@workUpApp.route('/confirm/<token>')
+def confirm_email(token):
+	try:
+		email = util.ts.loads(token, salt=workUpApp.config["TS_SALT"], max_age=86400)
+	except:
+		abort(404)
+	user = User.query.filter_by(email=email).first_or_404()
+	user.email_confirmed = True
+	
+	db.session.add(user)
+	db.session.commit()
+	flash('Congratulations, you have registered your email!')
+	return redirect(url_for('login'))
+
 
 # Registration
 @workUpApp.route('/registeradmin', methods=['GET', 'POST'])
@@ -101,6 +128,11 @@ def login():
 		if user is None or not user.check_password(form.password.data):
 			flash('Invalid username or password')
 			return redirect(url_for('login'))
+		# Check for email validation
+		if User.checkEmailConfirmationStatus(user.username) == False:
+			flash('Please confirm your email.')
+			return redirect(url_for('login'))
+		
 		login_user(user, remember=form.remember_me.data)
 		next_page = request.args.get('next')
 		if not next_page or url_parse(next_page).netloc != '':
