@@ -7,6 +7,8 @@ from flask_sslify import SSLify
 # SQL
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+
+# Log-in
 from flask_login import LoginManager
 
 # Bootstrap

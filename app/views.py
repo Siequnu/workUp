@@ -1,12 +1,12 @@
 from app import workUpApp
 
-from flask import render_template, session, request, Response, make_response, send_file, redirect, url_for, send_from_directory, flash, abort
+from flask import render_template, request, send_file, redirect, url_for, send_from_directory, flash, abort
 from random import randint
 import os, datetime, json
 
 # SQL
 from flask_login import current_user
-from app.models import Turma, User, Upload, Download, Comment, Assignment
+from app.models import Turma, Upload, Comment, Assignment
 from app import db
 db.create_all()
 db.session.commit()
@@ -16,8 +16,7 @@ from flask_login import login_required
 
 # Forms
 import app.forms
-from app.forms import AssignmentCreationForm, TurmaCreationForm, PeerReviewForm, PeerReviewFormTwo, FormModel
-from flask_wtf import FlaskForm
+from app.forms import FormModel
 from wtforms import StringField, BooleanField, SubmitField, RadioField, FormField, TextAreaField
 from wtforms.validators import DataRequired
 from forms import FormModel
