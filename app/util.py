@@ -1,24 +1,19 @@
 from app import workUpApp
 from itsdangerous import URLSafeTimedSerializer
 
+import smtplib
+import email.message
+
 ts = URLSafeTimedSerializer(workUpApp.config["SECRET_KEY"])
 
 def sendEmail (to, subject, text):
-	import smtplib
+	msg = email.message.Message()
 	
-	FROM = workUpApp.config['SMTP_FROM_ADDRESS']
-	TO = [str(to)]
-	SUBJECT = str(subject)
-	TEXT = str(text)
-	
-	# Prepare actual message
-	message = """\
-	From: %s
-	To: %s
-	Subject: %s
-	
-	%s
-	""" % (FROM, ", ".join(TO), SUBJECT, TEXT)
+	msg['From'] = workUpApp.config['SMTP_FROM_ADDRESS']
+	msg['To'] = str(to)
+	msg['Subject'] = str(subject)
+	msg.add_header('Content-Type','text/html')
+	msg.set_payload (str(text))
 	
 	# Send the mail
 	s = smtplib.SMTP(workUpApp.config['SMTP_SERVER'],workUpApp.config['SMTP_PORT'])
@@ -26,5 +21,5 @@ def sendEmail (to, subject, text):
 	s.starttls()
 	s.ehlo()
 	s.login(workUpApp.config['SMTP_USERNAME'], workUpApp.config['SMTP_PASSWORD'])
-	s.sendmail(FROM, TO, message)
+	s.sendmail(msg['From'], msg['To'], msg.as_string())
 	s.quit()
