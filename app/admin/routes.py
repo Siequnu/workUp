@@ -30,7 +30,7 @@ def createAssignment():
 				db.session.add(assignment)
 				db.session.commit()
 				flash('Assignment successfully created!')
-				return redirect(url_for('admin.viewAssignments'))
+				return redirect(url_for('viewAssignments'))
 			return render_template('admin/create_assignment.html', title='Create Assignment', form=form)
 
 	
@@ -49,7 +49,7 @@ def deleteAssignment(assignmentId):
 		Comment.deleteCommentsFromAssignmentId(assignmentId)
 		
 		flash('Assignment ' + str(assignmentId) + ', and all related uploaded files and comments have been deleted from the db. Download records have been kept.')
-		return redirect(url_for('admin.viewAssignments'))
+		return redirect(url_for('viewAssignments'))
 	abort (403)
 	
 	
