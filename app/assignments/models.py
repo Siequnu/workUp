@@ -1,4 +1,4 @@
-from app import workUpApp, db
+from app import db
 import app.models
 from app.models import Upload, Download, Assignment, User, Comment
 import datetime

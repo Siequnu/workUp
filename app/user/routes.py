@@ -1,6 +1,4 @@
-from app import workUpApp
-
-from flask import render_template, redirect, url_for, session, flash, request, abort
+from flask import render_template, redirect, url_for, session, flash, request, abort, current_app
 import datetime
 
 # Login
@@ -60,10 +58,10 @@ def logout():
 def register():
 	if current_user.is_authenticated:
 		return redirect(url_for('main.index'))
-	if workUpApp.config['REGISTRATION_IS_OPEN'] == True:
+	if current_app.config['REGISTRATION_IS_OPEN'] == True:
 		form = app.user.forms.RegistrationForm()
 		if form.validate_on_submit():
-			if form.signUpCode.data in workUpApp.config['SIGNUP_CODES']:
+			if form.signUpCode.data in current_app.config['SIGNUP_CODES']:
 				user = User(username=form.username.data, email=form.email.data, studentnumber=form.studentNumber.data, turma_id=form.turmaId.data)
 				user.set_password(form.password.data)
 				db.session.add(user)
@@ -71,7 +69,7 @@ def register():
 				
 				# Send the email confirmation link
 				subject = "Confirm your email"
-				token = app.email.ts.dumps(str(form.email.data), salt=workUpApp.config["TS_SALT"])
+				token = app.email.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
 				confirm_url = url_for('user.confirm_email', token=token, _external=True)
 				html = render_template('email/activate.html',confirm_url=confirm_url)
 				app.email.sendEmail (user.email, subject, html)
@@ -92,7 +90,7 @@ def register():
 @bp.route('/confirm/<token>')
 def confirm_email(token):
 	try:
-		email = app.email.ts.loads(token, salt=workUpApp.config["TS_SALT"], max_age=86400)
+		email = app.email.ts.loads(token, salt=current_app.config["TS_SALT"], max_age=86400)
 	except:
 		abort(404)
 	user = User.query.filter_by(email=email).first_or_404()
@@ -111,7 +109,7 @@ def reset():
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first_or_404()
 		subject = "Password reset requested"
-		token = app.email.ts.dumps(user.email, salt=workUpApp.config["TS_RECOVER_SALT"])
+		token = app.email.ts.dumps(user.email, salt=current_app.config["TS_RECOVER_SALT"])
 
 		recover_url = url_for('user.reset_with_token', token=token, _external=True)
 		html = render_template('email/recover.html', recover_url=recover_url)
@@ -128,7 +126,7 @@ def reset():
 @bp.route('/reset/<token>', methods=["GET", "POST"])
 def reset_with_token(token):
 	try:
-		email = app.email.ts.loads(token, salt=workUpApp.config['TS_RECOVER_SALT'], max_age=workUpApp.config['TS_MAX_AGE'])
+		email = app.email.ts.loads(token, salt=current_app.config['TS_RECOVER_SALT'], max_age=current_app.config['TS_MAX_AGE'])
 	except:
 		abort(404)
 	form = app.user.forms.PasswordForm()

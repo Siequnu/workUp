@@ -1,6 +1,4 @@
-from app import workUpApp
-
-from flask import render_template, request, send_file, redirect, url_for, send_from_directory, flash, abort
+from flask import render_template, request, send_file, redirect, url_for, send_from_directory, flash, abort, current_app
 from random import randint
 import os, datetime, json
 
@@ -8,6 +6,7 @@ import os, datetime, json
 from flask_login import current_user
 from app.models import Turma, Upload, Comment, Assignment, Download
 from app import db
+
 db.create_all()
 db.session.commit()
 
@@ -57,7 +56,7 @@ def downloadRandomFile(assignmentId):
 		conditions = []
 		conditions.append(str('id="' + str(alreadyDownloadedAndPendingReviewFileId) + '"'))
 		filenameToDownload = app.models.selectFromDb(['filename'], 'upload', conditions)		
-		filePath = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filenameToDownload[0][0])
+		filePath = os.path.join (current_app.config['UPLOAD_FOLDER'], filenameToDownload[0][0])
 		# Send SQL data to database
 		download = Download(filename=filenameToDownload[0][0], user_id = current_user.id)
 		db.session.add(download)
@@ -86,7 +85,7 @@ def downloadRandomFile(assignmentId):
 		return redirect(url_for('main.viewAssignments'))
 	randomNumber = (randint(0,(numberOfFiles-1)))
 	filename = filesNotFromUser[randomNumber]
-	randomFile = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filename)
+	randomFile = os.path.join (current_app.config['UPLOAD_FOLDER'], filename)
 	
 	# Send SQL data to database
 	download = Download(filename=filename, user_id = current_user.id)
@@ -109,10 +108,10 @@ def downloadRandomFile(assignmentId):
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
 	if current_user.is_authenticated:
-		if current_user.username in workUpApp.config['ADMIN_USERS']:		
+		if current_user.username in current_app.config['ADMIN_USERS']:		
 			return render_template('index.html', admin = True)
 		
-		if current_user.username not in workUpApp.config['ADMIN_USERS']:
+		if current_user.username not in current_app.config['ADMIN_USERS']:
 			# Get number of uploads
 			numberOfUploads = app.files.models.getUploadCountFromCurrentUserId()
 			# Get total assignments assigned to user's class
@@ -162,7 +161,7 @@ def viewComments(fileId):
 @bp.route("/viewassignments")
 @login_required
 def viewAssignments():
-	if current_user.username in workUpApp.config['ADMIN_USERS']:
+	if current_user.username in current_app.config['ADMIN_USERS']:
 		# Get admin view with all assignments
 		cleanAssignmentsArray = app.assignments.models.getAllAssignments()
 		return render_template('assignments/viewassignments.html', assignmentsArray = cleanAssignmentsArray, admin = True)
@@ -271,7 +270,7 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 @bp.route("/addPeerReviewForm", methods=['GET', 'POST'])
 @login_required
 def addPeerReviewForm():
-	if current_user.is_authenticated and current_user.username in workUpApp.config['ADMIN_USERS']:	
+	if current_user.is_authenticated and current_user.username in current_app.config['ADMIN_USERS']:	
 		# If first form is completed, dynamically generate second form
 		if request.form:
 			# Remove csrf_token, submit fields to leave only the completed boxes
@@ -314,7 +313,7 @@ def addPeerReviewForm():
 @login_required
 def peerReviewFormAdmin():
 	if current_user.is_authenticated:
-		if current_user.username in workUpApp.config['ADMIN_USERS']:
+		if current_user.username in current_app.config['ADMIN_USERS']:
 			classesArray = app.models.selectFromDb(['*'], 'turma')
 			return render_template('admin/classAdmin.html', title='Class admin', classesArray = classesArray)
 	abort (403)

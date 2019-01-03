@@ -1,6 +1,4 @@
-from app import workUpApp
-
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import current_user
 
 # Login
@@ -16,12 +14,12 @@ from app.files import models
 @bp.route("/fileStats")
 @login_required
 def fileStats():
-	if current_user.username in workUpApp.config['ADMIN_USERS']:
+	if current_user.username in current_app.config['ADMIN_USERS']:
 		# Get total list of uploaded files from all users
 		templatePackages = {}
 		templatePackages['uploadedFiles'] = models.getAllUploadsWithFilenameAndUsername()
 		templatePackages['uploadedPostCount'] = str(models.getAllUploadsCount())
-		templatePackages['uploadFolderPath'] = workUpApp.config['UPLOAD_FOLDER']
+		templatePackages['uploadFolderPath'] = current_app.config['UPLOAD_FOLDER']
 		templatePackages['admin'] = True
 		return render_template('files/fileStats.html', templatePackages = templatePackages)
 	elif current_user.is_authenticated:

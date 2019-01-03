@@ -1,6 +1,4 @@
-from app import workUpApp
-
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import current_user
 
 from app.admin.forms import AssignmentCreationForm, TurmaCreationForm
@@ -22,7 +20,7 @@ from app.admin import bp
 @login_required
 def createAssignment():
 	if current_user.is_authenticated:
-		if current_user.username in workUpApp.config['ADMIN_USERS']:
+		if current_user.username in current_app.config['ADMIN_USERS']:
 			form = app.admin.forms.AssignmentCreationForm()
 			if form.validate_on_submit():
 				assignment = Assignment(title=form.title.data, description=form.description.data, due_date=form.due_date.data,
@@ -39,7 +37,7 @@ def createAssignment():
 @bp.route("/deleteassignment/<assignmentId>")
 @login_required
 def deleteAssignment(assignmentId):
-	if current_user.username in workUpApp.config['ADMIN_USERS']:
+	if current_user.username in current_app.config['ADMIN_USERS']:
 		# Delete the assignment
 		app.assignments.models.deleteAssignmentFromId(assignmentId)
 		# Delete all uploads for this assignment
@@ -59,7 +57,7 @@ def deleteAssignment(assignmentId):
 @login_required
 def createClass():
 	if current_user.is_authenticated:
-		if current_user.username in workUpApp.config['ADMIN_USERS']:
+		if current_user.username in current_app.config['ADMIN_USERS']:
 			form = app.admin.forms.TurmaCreationForm()
 			if form.validate_on_submit():
 				newTurma = Turma(turma_number=form.turmaNumber.data, turma_label=form.turmaLabel.data, turma_term=form.turmaTerm.data,
@@ -77,7 +75,7 @@ def createClass():
 @login_required
 def classAdmin():
 	if current_user.is_authenticated:
-		if current_user.username in workUpApp.config['ADMIN_USERS']:
+		if current_user.username in current_app.config['ADMIN_USERS']:
 			classesArray = app.models.selectFromDb(['*'], 'turma')
 			return render_template('admin/class_admin.html', title='Class admin', classesArray = classesArray)
 	abort (403)
@@ -88,7 +86,7 @@ def classAdmin():
 @bp.route("/deleteclass/<turmaId>")
 @login_required
 def deleteClass(turmaId):
-	if current_user.username in workUpApp.config['ADMIN_USERS']:
+	if current_user.username in current_app.config['ADMIN_USERS']:
 		Turma.deleteTurmaFromId(turmaId)
 		flash('Class ' + str(turmaId) + ' has been deleted.')
 		return redirect(url_for('admin.classAdmin'))		
