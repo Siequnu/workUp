@@ -1,5 +1,5 @@
 from flask import Flask
-from config import Config
+from .config import Config
 
 # SSL
 from flask_sslify import SSLify

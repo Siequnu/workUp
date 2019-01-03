@@ -21,7 +21,7 @@ from app.forms_peer_review import *
 
 from wtforms import StringField, BooleanField, SubmitField, RadioField, FormField, TextAreaField
 from wtforms.validators import DataRequired
-from forms import FormModel
+from .forms import FormModel
 
 # Personal classes
 import email
@@ -258,7 +258,7 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 		flash('You can not edit this peer review as it has already been submitted.')
 	
 	# Import the form class
-	formClass = getattr(app.forms, str(peerReviewFormName[0][0]))
+	formClass = getattr(app.forms_peer_review, str(peerReviewFormName[0][0]))
 	# Populate the form
 	form = formClass(**unpackedComments)
 	# Delete submit button
