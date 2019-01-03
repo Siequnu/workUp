@@ -19,7 +19,7 @@
     {% else %}
       {% for id in cleanCommentIds %}
       <p>
-      <td><a href="/viewPeerComment/{{id}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review</a></td>
+      <td><a href="{{url_for('assignments.viewPeerComment', assignmentId=id)}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review</a></td>
       </p>
       {% endfor %}
     {% endif %}
