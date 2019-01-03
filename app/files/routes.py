@@ -43,7 +43,7 @@ def downloadFile(assignmentId = False):
 	else:
 		# If the assignment hasn't closed yet, flash message to wait until after deadline
 		flash ("The assignment hasn't closed yet. Please wait until the deadline is over, then try again to download an assignemnt to review.")
-		return redirect (url_for('viewAssignments'))
+		return redirect (url_for('main.viewAssignments'))
 		
 
 	
@@ -67,10 +67,10 @@ def uploadFile(assignmentId = False):
 				models.saveFile(file)
 			originalFilename = models.getSecureFilename(file.filename)
 			flash('Your file ' + str(originalFilename) + ' successfully uploaded')
-			return redirect(url_for('viewAssignments'))
+			return redirect(url_for('main.viewAssignments'))
 		else:
 			flash('You can not upload this kind of file.')
-			return redirect(url_for('viewAssignments'))
+			return redirect(url_for('main.viewAssignments'))
 	else:
 		return render_template('files/fileUpload.html')
 

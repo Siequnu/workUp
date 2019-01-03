@@ -11,10 +11,10 @@
   
   
 
-  <form action="/downloadPeerFile/{{assignmentId}}" method="post">
+  <form action="{{url_for('main.downloadRandomFile', assignmentId = assignmentId)}}" method="post">
     <input type="submit" value="Download" />
   </form>
   <br /><br /><p><i>Then, click 'Go to peer review form'.</i></p>
-  <a href="/assignments/peerreviewform/{{assignmentId}}" class="btn btn-primary" role="button" aria-disabled="true">Go to peer review form</a>
+  <a href="{{url_for('main.createPeerReview', assignmentId = assignmentId)}}" class="btn btn-primary" role="button" aria-disabled="true">Go to peer review form</a>
   
   {% endblock %}
