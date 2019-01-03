@@ -7,39 +7,39 @@ from flask_login import current_user
 from flask_login import login_required
 
 # Models
-import models_assignments
-import models_files
+import app.assignments.models
 
-
+from app.files import bp
+from app.files import models
 
 # Access file stats
-@workUpApp.route("/fileStats")
+@bp.route("/fileStats")
 @login_required
 def fileStats():
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Get total list of uploaded files from all users
 		templatePackages = {}
-		templatePackages['uploadedFiles'] = models_files.getAllUploadsWithFilenameAndUsername()
-		templatePackages['uploadedPostCount'] = str(models_files.getAllUploadsCount())
+		templatePackages['uploadedFiles'] = models.getAllUploadsWithFilenameAndUsername()
+		templatePackages['uploadedPostCount'] = str(models.getAllUploadsCount())
 		templatePackages['uploadFolderPath'] = workUpApp.config['UPLOAD_FOLDER']
 		templatePackages['admin'] = True
-		return render_template('fileStats.html', templatePackages = templatePackages)
+		return render_template('files/fileStats.html', templatePackages = templatePackages)
 	elif current_user.is_authenticated:
 		templatePackages = {}
-		templatePackages['cleanDict'] = models_files.getPostInfoFromUserId (current_user.id)
-		return render_template('fileStats.html', templatePackages = templatePackages)
+		templatePackages['cleanDict'] = models.getPostInfoFromUserId (current_user.id)
+		return render_template('files/fileStats.html', templatePackages = templatePackages)
 	abort(403)
 
 
 
 # Download a file for peer review
-@workUpApp.route("/downloadFile")
-@workUpApp.route("/downloadFile/<assignmentId>")
+@bp.route("/downloadFile")
+@bp.route("/downloadFile/<assignmentId>")
 @login_required
 def downloadFile(assignmentId = False):
-	assignmentIsOver = models_assignments.checkIfAssignmentIsOver (assignmentId)
+	assignmentIsOver = app.assignments.models.checkIfAssignmentIsOver (assignmentId)
 	if assignmentIsOver == True:
-		return render_template('downloadFile.html', assignmentId = assignmentId)
+		return render_template('files/downloadFile.html', assignmentId = assignmentId)
 	else:
 		# If the assignment hasn't closed yet, flash message to wait until after deadline
 		flash ("The assignment hasn't closed yet. Please wait until the deadline is over, then try again to download an assignemnt to review.")
@@ -48,7 +48,7 @@ def downloadFile(assignmentId = False):
 
 	
 # Upload form, or upload specific file
-@workUpApp.route('/upload/<assignmentId>',methods=['GET', 'POST'])
+@bp.route('/upload/<assignmentId>',methods=['GET', 'POST'])
 @login_required
 def uploadFile(assignmentId = False):
 	# If the form has been filled out and posted:
@@ -60,18 +60,18 @@ def uploadFile(assignmentId = False):
 		if file.filename == '':
 			flash('The filename is blank. Please rename the file.')
 			return redirect(request.url)
-		if file and models_files.allowedFile(file.filename):
+		if file and models.allowedFile(file.filename):
 			if (assignmentId):
-				models_files.saveFile(file, assignmentId)
+				models.saveFile(file, assignmentId)
 			else:
-				models_files.saveFile(file)
-			originalFilename = models_files.getSecureFilename(file.filename)
+				models.saveFile(file)
+			originalFilename = models.getSecureFilename(file.filename)
 			flash('Your file ' + str(originalFilename) + ' successfully uploaded')
 			return redirect(url_for('viewAssignments'))
 		else:
 			flash('You can not upload this kind of file.')
 			return redirect(url_for('viewAssignments'))
 	else:
-		return render_template('fileUpload.html')
+		return render_template('files/fileUpload.html')
 
 	

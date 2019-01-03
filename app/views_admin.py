@@ -6,7 +6,6 @@ from flask_login import current_user
 from app.forms import AssignmentCreationForm, TurmaCreationForm
 from app import db
 
-import models_assignments
 from app.models import Assignment, Upload, Comment, Turma
 import app.models
 
