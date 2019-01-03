@@ -1,5 +1,3 @@
-from app import workUpApp
-
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField, RadioField, FormField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo

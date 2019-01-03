@@ -1,5 +1,5 @@
-from app import workUpApp, db, models
-from flask import send_from_directory
+from app import db, models
+from flask import send_from_directory, current_app
 from werkzeug import secure_filename
 import os
 import uuid, datetime
@@ -59,7 +59,7 @@ def getPostInfoFromUserId (userId):
 # Check filename and extension permissibility
 def allowedFile(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in workUpApp.config['ALLOWED_EXTENSIONS']
+           filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
 
 def getFileExtension(filename):
@@ -68,19 +68,19 @@ def getFileExtension(filename):
 
 # Return the number of files in the upload folder
 def getNumberOfFiles():
-	return (len (os.listdir(workUpApp.config['UPLOAD_FOLDER'])))
+	return (len (os.listdir(current_app.config['UPLOAD_FOLDER'])))
 
 
 # Send out specific file for download
 def downloadFile(filename):
-	return send_from_directory(workUpApp.config['UPLOAD_FOLDER'], filename)
+	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 
 # Save a file to uploads folder, and update DB
 def saveFile (file, assignmentId = False):
 	originalFilename = getSecureFilename(file.filename)
 	randomFilename = getRandomFilename (originalFilename)
-	file.save(os.path.join(workUpApp.config['UPLOAD_FOLDER'], randomFilename))
+	file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], randomFilename))
 	
 	# Update SQL after file has saved
 	writeUploadEvent (originalFilename, randomFilename, userId = current_user.id, assignment_id = assignmentId)
