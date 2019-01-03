@@ -67,6 +67,9 @@ workUpApp.register_blueprint(files_bp, url_prefix='/files')
 from app.files import bp as assignments_bp
 workUpApp.register_blueprint(assignments_bp, url_prefix='/assignments')
 
+from app.admin import bp as admin_bp
+workUpApp.register_blueprint(admin_bp, url_prefix='/admin')
+
 # Import other classes
 from app import views, models
 

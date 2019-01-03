@@ -11,7 +11,7 @@
 
 <br />
    <div class="container">
-	<a href="{{url_for('createClass')}}">Create new class</a>
+	<a href="{{url_for('admin.createClass')}}">Create new class</a>
   <div class="row">
     <div class="col-xs-12">
       <div class="table">
@@ -35,7 +35,7 @@
               <td>{{classInfo[2]}}</td>
 			  <td>{{classInfo[3]}}</td>
 			  <td>{{classInfo[4]}}</td>
-			  <td><a href="/deleteclass/{{classInfo[0]}}">Delete</a></td>
+			  <td><a href="/admin/deleteclass/{{classInfo[0]}}">Delete</a></td>
             </tr>
            {% endfor %}
           </tbody>
