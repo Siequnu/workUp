@@ -25,7 +25,6 @@ from forms import FormModel
 
 # Personal classes
 import util
-import views_admin
 
 
 
