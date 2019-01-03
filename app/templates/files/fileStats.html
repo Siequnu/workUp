@@ -69,7 +69,7 @@
   <div class="card-body">
     <h5 class="card-title">Peer reviews: {{value[1]}}</h5>
     <p class="card-text">Date uploaded: {{value[0]}}</p>
-    <a href="/comments/{{value[2]}}" class="btn btn-primary">View comments</a>
+    <a href="{{url_for('main.viewComments', fileId = value[2])}}" class="btn btn-primary">View comments</a>
     
   </div>
 </div>

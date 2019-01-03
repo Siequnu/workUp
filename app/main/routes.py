@@ -11,24 +11,23 @@ from app import db
 db.create_all()
 db.session.commit()
 
+# Blueprint
+from app.main import bp
+
 # Login
 from flask_login import login_required
 
 # Forms
-import app.forms
-from app.forms import FormModel
+from app.main.forms import FormModel
 from app.forms_peer_review import *
+
+# Models
+import app.assignments.models
 
 from wtforms import StringField, BooleanField, SubmitField, RadioField, FormField, TextAreaField
 from wtforms.validators import DataRequired
-from .forms import FormModel
 
-# Personal classes
-import email
-
-
-
-@workUpApp.before_request
+@bp.before_request
 def before_request():
 	if current_user.is_authenticated:
 		current_user.last_seen = datetime.datetime.now()
@@ -38,14 +37,14 @@ def before_request():
 
 
 # Lab
-@workUpApp.route('/lab', methods=['GET', 'POST'])
+@bp.route('/lab', methods=['GET', 'POST'])
 def lab():
 	return render_template('lab.html')
 
 	
 
 # Choose a random file from uploads folder and send it out for download
-@workUpApp.route('/downloadPeerFile/<assignmentId>', methods=['POST'])
+@bp.route('/downloadPeerFile/<assignmentId>', methods=['POST'])
 @login_required
 def downloadRandomFile(assignmentId):
 	# Check if user has any previous downloads with pending peer reviews
@@ -84,7 +83,7 @@ def downloadRandomFile(assignmentId):
 	numberOfFiles = len(filesNotFromUser)
 	if numberOfFiles == 0:
 		flash('There are no files currently available for download. Please check back soon.')
-		return redirect(url_for('viewAssignments'))
+		return redirect(url_for('main.viewAssignments'))
 	randomNumber = (randint(0,(numberOfFiles-1)))
 	filename = filesNotFromUser[randomNumber]
 	randomFile = os.path.join (workUpApp.config['UPLOAD_FOLDER'], filename)
@@ -106,7 +105,8 @@ def downloadRandomFile(assignmentId):
 
 
 # Main entrance to the app
-@workUpApp.route('/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/index', methods=['GET', 'POST'])
 def index():
 	if current_user.is_authenticated:
 		if current_user.username in workUpApp.config['ADMIN_USERS']:		
@@ -130,7 +130,7 @@ def index():
 
 
 # View peer review comments
-@workUpApp.route("/comments/<fileId>")
+@bp.route("/comments/<fileId>")
 @login_required
 def viewComments(fileId):
 	# Make sure that only the AUTHOR can check comments on their file!
@@ -159,7 +159,7 @@ def viewComments(fileId):
 	abort (403)
 
 # View created assignments status
-@workUpApp.route("/viewassignments")
+@bp.route("/viewassignments")
 @login_required
 def viewAssignments():
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
@@ -181,8 +181,8 @@ def viewAssignments():
 	
 
 # Display an empty review feedback form
-@workUpApp.route("/assignments/peerreviewform/<assignmentId>", methods=['GET', 'POST'])
-@workUpApp.route("/assignments/peerreviewform", methods=['GET', 'POST'])
+@bp.route("/assignments/peerreviewform/<assignmentId>", methods=['GET', 'POST'])
+@bp.route("/assignments/peerreviewform", methods=['GET', 'POST'])
 @login_required
 def createPeerReview(assignmentId = False):
 	# Get the appropriate peer review form for the assignment via assignment ID
@@ -216,13 +216,13 @@ def createPeerReview(assignmentId = False):
 		elif completedComments[0][0] == 2:
 			# This is the second peer review, submit
 			flash('Peer review 2 submitted succesfully!')
-		return redirect(url_for('viewAssignments'))
+		return redirect(url_for('main.viewAssignments'))
 	return render_template('assignments/peerreviewform.html', title='Submit a peer review', form=form)
 
 # View a completed and populated peer review form
 # This accepts both the user's own peer reviews, and other users' reviews
-@workUpApp.route("/viewPeerReview/<assignmentId>/<peerReviewNumber>", methods=['GET', 'POST'])
-@workUpApp.route("/viewPeerComment/<commentId>", methods=['GET', 'POST'])
+@bp.route("/viewPeerReviewFromAssignment/<assignmentId>/<peerReviewNumber>", methods=['GET', 'POST'])
+@bp.route("/viewPeerComment/<commentId>", methods=['GET', 'POST'])
 @login_required
 def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = False):
 	if commentId:
@@ -268,7 +268,7 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 
 
 # Admin page to create new peer review form
-@workUpApp.route("/addPeerReviewForm", methods=['GET', 'POST'])
+@bp.route("/addPeerReviewForm", methods=['GET', 'POST'])
 @login_required
 def addPeerReviewForm():
 	if current_user.is_authenticated and current_user.username in workUpApp.config['ADMIN_USERS']:	
@@ -310,7 +310,7 @@ def addPeerReviewForm():
 		return render_template('addPeerReviewForm.html', title='Create new peer review form', form=form)
 
 # Admin page to view classes
-@workUpApp.route("/peerReviewFormAdmin")
+@bp.route("/peerReviewFormAdmin")
 @login_required
 def peerReviewFormAdmin():
 	if current_user.is_authenticated:

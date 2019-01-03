@@ -19,14 +19,14 @@ from app import db
 import app.email
 
 # Forms
-import app.forms
+import app.main.forms
 from app.user import bp
 
 # Log-in page
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
 	if current_user.is_authenticated:
-		return redirect(url_for('index'))
+		return redirect(url_for('main.index'))
 	form = app.user.forms.LoginForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(username=form.username.data).first()
@@ -41,7 +41,7 @@ def login():
 		login_user(user, remember=form.remember_me.data)
 		next_page = request.args.get('next')
 		if not next_page or url_parse(next_page).netloc != '':
-			next_page = url_for('index')
+			next_page = url_for('main.index')
 		return redirect(next_page)
 	return render_template('user/login.html', title='Sign In', form=form)
 
@@ -51,7 +51,7 @@ def login():
 @bp.route('/logout')
 def logout():
 	logout_user()
-	return redirect(url_for('index'))
+	return redirect(url_for('main.index'))
 
 
 
@@ -59,7 +59,7 @@ def logout():
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
 	if current_user.is_authenticated:
-		return redirect(url_for('index'))
+		return redirect(url_for('main.index'))
 	if workUpApp.config['REGISTRATION_IS_OPEN'] == True:
 		form = app.user.forms.RegistrationForm()
 		if form.validate_on_submit():
@@ -84,7 +84,7 @@ def register():
 		return render_template('user/register.html', title='Register', form=form)
 	else:
 		flash("Sign up is currently closed.")
-		return redirect(url_for('index'))
+		return redirect(url_for('main.index'))
 
 
 
@@ -118,7 +118,7 @@ def reset():
 		
 		app.email.sendEmail(user.email, subject, html)
 		flash('An email has been sent to your inbox with a link to recover your password.')
-		return redirect(url_for('index'))
+		return redirect(url_for('main.index'))
 		
 	return render_template('user/reset.html', form=form)
 
