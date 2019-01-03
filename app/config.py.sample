@@ -10,7 +10,6 @@ class Config(object):
 	ALLOWED_EXTENSIONS = set(['txt', 'zip', 'pdf', 'doc', 'docx', 'pages'])
 	ADMIN_USERS = {''}
 	SIGNUP_CODES = {''}
-	ADMIN_SIGNUP_CODES = {''}
 	REGISTRATION_IS_OPEN = False
 	
 	SMTP_SERVER = ''
