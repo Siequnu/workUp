@@ -1,13 +1,14 @@
 {% extends "header.html" %}
 
+{% from 'bootstrap/form.html' import render_form %}
+
 {% block app_content %}
 
 {% block body %}
-<form action="" method="POST">
-    {{ form.hidden_tag() }}
-    {{ form.password.label }}: {{ form.password }}<br>
-    
-    <p>{{ form.submit() }}</p>
-</form>
+<div class="row">
+        <div class="col-md-4">
+            {{ render_form(form) }}
+        </div>
+    </div>
 {% endblock %}
 {% endblock %}
