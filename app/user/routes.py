@@ -1,6 +1,6 @@
 from app import workUpApp
-from flask import render_template, redirect, url_for, session, flash, request, abort
 
+from flask import render_template, redirect, url_for, session, flash, request, abort
 import datetime
 
 # Login
@@ -16,24 +16,17 @@ from app.models import User
 from app import db
 
 # Utility classes
-import util
+import app.util
 
 # Forms
 import app.forms
 from app.forms import RegistrationForm, AdminRegistrationForm, EmailForm , PasswordForm, LoginForm
 
-
-
-@workUpApp.before_request
-def before_request():
-	if current_user.is_authenticated:
-		current_user.last_seen = datetime.datetime.now()
-		db.session.commit()
-
+from app.user import bp
 
 
 # Log-in page
-@workUpApp.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
@@ -42,11 +35,11 @@ def login():
 		user = User.query.filter_by(username=form.username.data).first()
 		if user is None or not user.check_password(form.password.data):
 			flash('Invalid username or password')
-			return redirect(url_for('login'))
+			return redirect(url_for('user.login'))
 		# Check for email validation
 		if User.checkEmailConfirmationStatus(user.username) == False:
 			flash('Please confirm your email.')
-			return redirect(url_for('login'))
+			return redirect(url_for('user.login'))
 		
 		login_user(user, remember=form.remember_me.data)
 		next_page = request.args.get('next')
@@ -58,7 +51,7 @@ def login():
 
 
 # Log-out page
-@workUpApp.route('/logout')
+@bp.route('/logout')
 def logout():
 	logout_user()
 	return redirect(url_for('index'))
@@ -66,7 +59,7 @@ def logout():
 
 
 # Registration
-@workUpApp.route('/registeradmin', methods=['GET', 'POST'])
+@bp.route('/registeradmin', methods=['GET', 'POST'])
 def registerAdmin():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
@@ -78,16 +71,16 @@ def registerAdmin():
 			db.session.add(user)
 			db.session.commit()
 			flash('Congratulations, you are now a registered administrator!')
-			return redirect(url_for('login'))
+			return redirect(url_for('user.login'))
 		else:
 			flash("Admin sign-up failed.")
-			return redirect(url_for('login'))
+			return redirect(url_for('user.login'))
 	return render_template('user/register.html', title='Register', form=form)
 
 
 
 # Registration
-@workUpApp.route('/register', methods=['GET', 'POST'])
+@bp.route('/register', methods=['GET', 'POST'])
 def register():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
@@ -103,15 +96,15 @@ def register():
 				# Send the email confirmation link
 				subject = "Confirm your email"
 				token = util.ts.dumps(str(form.email.data), salt=workUpApp.config["TS_SALT"])
-				confirm_url = url_for('confirm_email', token=token, _external=True)
+				confirm_url = url_for('user.confirm_email', token=token, _external=True)
 				html = render_template('email/activate.html',confirm_url=confirm_url)
 				util.sendEmail (user.email, subject, html)
 				
 				flash('Congratulations, you are now a registered user! Please confirm your email.')
-				return redirect(url_for('login'))
+				return redirect(url_for('user.login'))
 			else:
 				flash("Please ask your tutor for sign-up instructions.")
-				return redirect(url_for('login'))
+				return redirect(url_for('user.login'))
 		return render_template('user/register.html', title='Register', form=form)
 	else:
 		flash("Sign up is currently closed.")
@@ -120,7 +113,7 @@ def register():
 
 
 # Confirm email
-@workUpApp.route('/confirm/<token>')
+@bp.route('/confirm/<token>')
 def confirm_email(token):
 	try:
 		email = util.ts.loads(token, salt=workUpApp.config["TS_SALT"], max_age=86400)
@@ -131,12 +124,12 @@ def confirm_email(token):
 	db.session.add(user)
 	db.session.commit()
 	flash('Your email has been confirmed. Please log-in now.')
-	return redirect(url_for('login'))
+	return redirect(url_for('user.login'))
 
 
 
 # Reset password form
-@workUpApp.route('/reset', methods=["GET", "POST"])
+@bp.route('/reset', methods=["GET", "POST"])
 def reset():
 	form = EmailForm()
 	if form.validate_on_submit():
@@ -144,7 +137,7 @@ def reset():
 		subject = "Password reset requested"
 		token = util.ts.dumps(user.email, salt=workUpApp.config["TS_RECOVER_SALT"])
 
-		recover_url = url_for('reset_with_token', token=token, _external=True)
+		recover_url = url_for('user.reset_with_token', token=token, _external=True)
 		html = render_template('email/recover.html', recover_url=recover_url)
 		
 		util.sendEmail(user.email, subject, html)
@@ -156,7 +149,7 @@ def reset():
 
 
 # Reset password with token
-@workUpApp.route('/reset/<token>', methods=["GET", "POST"])
+@bp.route('/reset/<token>', methods=["GET", "POST"])
 def reset_with_token(token):
 	try:
 		email = util.ts.loads(token, salt=workUpApp.config['TS_RECOVER_SALT'], max_age=workUpApp.config['TS_MAX_AGE'])
@@ -168,7 +161,7 @@ def reset_with_token(token):
 		user.set_password(form.password.data)
 		db.session.commit()
 		flash('Your password has been changed. You can now log-in with your new password.')
-		return redirect(url_for('login'))
+		return redirect(url_for('user.login'))
 	return render_template('user/reset_with_token.html', form=form, token=token)
 
 

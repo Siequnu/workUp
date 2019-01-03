@@ -30,7 +30,7 @@ migrate = Migrate(workUpApp, db)
 
 # Log-in
 login = LoginManager(workUpApp)
-login.login_view = 'login'
+login.login_view = 'user.login'
 
 # Bootstrap
 bootstrap = Bootstrap(workUpApp)
@@ -54,5 +54,19 @@ if not workUpApp.debug:
 	workUpApp.logger.setLevel(logging.INFO)
 	workUpApp.logger.info('workUpApp startup')
 
-from app import views, models, errors
+# Import templates
+from app.errors import bp as errors_bp
+workUpApp.register_blueprint(errors_bp)
+
+from app.user import bp as user_bp
+workUpApp.register_blueprint(user_bp, url_prefix='/user')
+
+from app.files import bp as files_bp
+workUpApp.register_blueprint(files_bp, url_prefix='/files')
+
+from app.files import bp as assignments_bp
+workUpApp.register_blueprint(assignments_bp, url_prefix='/assignments')
+
+# Import other classes
+from app import views, models
 

@@ -6,7 +6,7 @@ import os, datetime, json
 
 # SQL
 from flask_login import current_user
-from app.models import Turma, Upload, Comment, Assignment
+from app.models import Turma, Upload, Comment, Assignment, Download
 from app import db
 db.create_all()
 db.session.commit()
@@ -17,18 +17,24 @@ from flask_login import login_required
 # Forms
 import app.forms
 from app.forms import FormModel
+from app.forms_peer_review import *
+
 from wtforms import StringField, BooleanField, SubmitField, RadioField, FormField, TextAreaField
 from wtforms.validators import DataRequired
 from forms import FormModel
 
 # Personal classes
-import models_files
-import models_assignments
 import util
-
-import views_user
-import views_files
 import views_admin
+
+
+
+@workUpApp.before_request
+def before_request():
+	if current_user.is_authenticated:
+		current_user.last_seen = datetime.datetime.now()
+		db.session.commit()
+
 
 
 
@@ -109,15 +115,15 @@ def index():
 		
 		if current_user.username not in workUpApp.config['ADMIN_USERS']:
 			# Get number of uploads
-			numberOfUploads = models_files.getUploadCountFromCurrentUserId()
+			numberOfUploads = app.files.models.getUploadCountFromCurrentUserId()
 			# Get total assignments assigned to user's class
-			turmaId = models_assignments.getUserTurmaFromId (current_user.id)
+			turmaId = app.assignments.models.getUserTurmaFromId (current_user.id)
 			if (turmaId == False):
 				flash('You do not appear to be part of a class. Please contact your tutor for assistance.')
 				return render_template('index.html')
 			
-			assignmentUploadProgressBarPercentage = models_assignments.getAssignmentUploadProgressPercentage ()
-			peerReviewProgressBarPercentage = models_assignments.getPeerReviewProgressPercentage()
+			assignmentUploadProgressBarPercentage = app.assignments.models.getAssignmentUploadProgressPercentage ()
+			peerReviewProgressBarPercentage = app.assignments.models.getPeerReviewProgressPercentage()
 			
 			return render_template('index.html', numberOfUploads = numberOfUploads, assignmentUploadProgressBarPercentage = assignmentUploadProgressBarPercentage, peerReviewProgressBarPercentage = peerReviewProgressBarPercentage)
 	
@@ -150,35 +156,34 @@ def viewComments(fileId):
 			upload = app.models.selectFromDb(['original_filename'], 'upload', [''.join(('id=', str(fileId)))])
 			uploadTitle = upload[0][0]
 			
-			return render_template('comments.html', cleanCommentIds = cleanCommentIds, uploadTitle = uploadTitle)
+			return render_template('assignments/comments.html', cleanCommentIds = cleanCommentIds, uploadTitle = uploadTitle)
 	abort (403)
 
 # View created assignments status
 @workUpApp.route("/viewassignments")
 @login_required
 def viewAssignments():
-	import models_assignments
 	if current_user.username in workUpApp.config['ADMIN_USERS']:
 		# Get admin view with all assignments
-		cleanAssignmentsArray = models_assignments.getAllAssignments()
-		return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray, admin = True)
+		cleanAssignmentsArray = app.assignments.models.getAllAssignments()
+		return render_template('assignments/viewassignments.html', assignmentsArray = cleanAssignmentsArray, admin = True)
 	elif current_user.is_authenticated:
 		# Get user class
-		turmaId = models_assignments.getUserTurmaFromId(current_user.id)
+		turmaId = app.assignments.models.getUserTurmaFromId(current_user.id)
 		if (turmaId == False):
 			flash('You are not part of any class and can not see any assignments. Ask your tutor for help to join a class.')
-			return render_template('viewassignments.html') # User isn't part of any class - display no assignments
+			return render_template('assignments/viewassignments.html') # User isn't part of any class - display no assignments
 		else:
 			# Get assignments for this user
-			cleanAssignmentsArray = models_assignments.getUserAssignmentInformation (current_user.id)
-			return render_template('viewassignments.html', assignmentsArray = cleanAssignmentsArray)
+			cleanAssignmentsArray = app.assignments.models.getUserAssignmentInformation (current_user.id)
+			return render_template('assignments/viewassignments.html', assignmentsArray = cleanAssignmentsArray)
 	abort (403)
 	
 	
 
 # Display an empty review feedback form
-@workUpApp.route("/peerreviewform/<assignmentId>", methods=['GET', 'POST'])
-@workUpApp.route("/peerreviewform", methods=['GET', 'POST'])
+@workUpApp.route("/assignments/peerreviewform/<assignmentId>", methods=['GET', 'POST'])
+@workUpApp.route("/assignments/peerreviewform", methods=['GET', 'POST'])
 @login_required
 def createPeerReview(assignmentId = False):
 	# Get the appropriate peer review form for the assignment via assignment ID
@@ -213,7 +218,7 @@ def createPeerReview(assignmentId = False):
 			# This is the second peer review, submit
 			flash('Peer review 2 submitted succesfully!')
 		return redirect(url_for('viewAssignments'))
-	return render_template('peerreviewform.html', title='Submit a peer review', form=form)
+	return render_template('assignments/peerreviewform.html', title='Submit a peer review', form=form)
 
 # View a completed and populated peer review form
 # This accepts both the user's own peer reviews, and other users' reviews
@@ -260,7 +265,7 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 	# Delete submit button
 	del form.submit
 	
-	return render_template('peerreviewform.html', title='View a peer review', form=form)
+	return render_template('assignments/peerreviewform.html', title='View a peer review', form=form)
 
 
 # Admin page to create new peer review form

@@ -1,4 +1,4 @@
-from app import workUpApp
+from app import workUpApp, db, models
 from flask import send_from_directory
 from werkzeug import secure_filename
 import os
@@ -7,7 +7,6 @@ import uuid, datetime
 # SQL for DB operations
 from flask_login import current_user
 from app.models import User, Upload, Download
-from app import db, models
 
 
 

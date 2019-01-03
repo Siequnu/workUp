@@ -22,14 +22,14 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 {{ render_nav_item('index', 'Home', use_li=True) }}
-                {{ render_nav_item('fileStats', 'Uploads', use_li=True) }}
+                {{ render_nav_item('files.fileStats', 'Uploads', use_li=True) }}
                 {{ render_nav_item('viewAssignments', 'Assignments', use_li=True) }}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                    {% if current_user.is_anonymous %}
-                    {{ render_nav_item('login', 'Login', use_li=True) }}                  
+                    {{ render_nav_item('user.login', 'Login', use_li=True) }}                  
                     {% else %}
-                    {{ render_nav_item('logout', 'Logout', use_li=True) }}
+                    {{ render_nav_item('user.logout', 'Logout', use_li=True) }}
                     {% endif %}
                 </ul>
         </div>
