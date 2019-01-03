@@ -24,7 +24,7 @@ from wtforms.validators import DataRequired
 from forms import FormModel
 
 # Personal classes
-import util
+import email
 
 
 

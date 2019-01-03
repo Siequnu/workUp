@@ -16,7 +16,7 @@ from app.models import User
 from app import db
 
 # Utility classes
-import app.util
+import app.email
 
 # Forms
 import app.forms
@@ -71,10 +71,10 @@ def register():
 				
 				# Send the email confirmation link
 				subject = "Confirm your email"
-				token = app.util.ts.dumps(str(form.email.data), salt=workUpApp.config["TS_SALT"])
+				token = app.email.ts.dumps(str(form.email.data), salt=workUpApp.config["TS_SALT"])
 				confirm_url = url_for('user.confirm_email', token=token, _external=True)
 				html = render_template('email/activate.html',confirm_url=confirm_url)
-				app.util.sendEmail (user.email, subject, html)
+				app.email.sendEmail (user.email, subject, html)
 				
 				flash('Congratulations, you are now a registered user! Please confirm your email.')
 				return redirect(url_for('user.login'))
@@ -92,7 +92,7 @@ def register():
 @bp.route('/confirm/<token>')
 def confirm_email(token):
 	try:
-		email = app.util.ts.loads(token, salt=workUpApp.config["TS_SALT"], max_age=86400)
+		email = app.email.ts.loads(token, salt=workUpApp.config["TS_SALT"], max_age=86400)
 	except:
 		abort(404)
 	user = User.query.filter_by(email=email).first_or_404()
@@ -111,12 +111,12 @@ def reset():
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first_or_404()
 		subject = "Password reset requested"
-		token = app.util.ts.dumps(user.email, salt=workUpApp.config["TS_RECOVER_SALT"])
+		token = app.email.ts.dumps(user.email, salt=workUpApp.config["TS_RECOVER_SALT"])
 
 		recover_url = url_for('user.reset_with_token', token=token, _external=True)
 		html = render_template('email/recover.html', recover_url=recover_url)
 		
-		app.util.sendEmail(user.email, subject, html)
+		app.email.sendEmail(user.email, subject, html)
 		flash('An email has been sent to your inbox with a link to recover your password.')
 		return redirect(url_for('index'))
 		
@@ -128,7 +128,7 @@ def reset():
 @bp.route('/reset/<token>', methods=["GET", "POST"])
 def reset_with_token(token):
 	try:
-		email = app.util.ts.loads(token, salt=workUpApp.config['TS_RECOVER_SALT'], max_age=workUpApp.config['TS_MAX_AGE'])
+		email = app.email.ts.loads(token, salt=workUpApp.config['TS_RECOVER_SALT'], max_age=workUpApp.config['TS_MAX_AGE'])
 	except:
 		abort(404)
 	form = app.user.forms.PasswordForm()
