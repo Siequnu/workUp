@@ -3,14 +3,20 @@
 {% from 'bootstrap/form.html' import render_form %}
 
 {% block app_content %}
- 
- <h1>Sign In</h1>
-<div class="row">
-        <div class="col-md-4">
-            {{ render_form(form) }}
-        </div>
+ <div class="container">
+
+ <div class="card bg-light mb-3" style="max-width: 25rem;">
+  <div class="card-body">
+    <h1>Login</h1>
+    <hr>
+    <br>
+      {{ render_form(form) }}
+      <br>
+  </div>
+    <div class="card-footer">
+        <p><a href="{{ url_for('user.register') }}" class="btn btn-outline-primary">New user?</a></p>
+        <a href="{{ url_for('user.reset') }}" class="btn btn-outline-primary">Forgot your password?</a>
     </div>
-	
-    <p>New User? <a href="{{ url_for('user.register') }}">Click to Register!</a></p>
-    <p>Forgot your password? <a href="{{ url_for('user.reset') }}">Forgot here to reset.</a></p>
+  </div>
+</div>
 {% endblock %}

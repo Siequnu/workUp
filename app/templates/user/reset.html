@@ -5,10 +5,21 @@
 {% block app_content %}
 
 {% block body %}
-<div class="row">
-        <div class="col-md-4">
-            {{ render_form(form) }}
-        </div>
-    </div>
+
+ <div class="container">
+
+ <div class="card bg-light mb-3" style="max-width: 25rem;">
+  <div class="card-body">
+    <h1>Reset password</h1>
+    <hr>
+    <br>
+    <h6>Please enter your email address to reset your password.</h6>
+    <br>
+      {{ render_form(form) }}
+      <br>
+  </div>
+  </div>
+</div>
+
 {% endblock %}
 {% endblock %}
