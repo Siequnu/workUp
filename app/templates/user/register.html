@@ -2,10 +2,20 @@
 {% from 'bootstrap/form.html' import render_form %}
 
 {% block app_content %}
+
+
+{% block body %}
+
+ <div class="container">
+
+ <div class="card bg-light mb-3" style="max-width: 25rem;">
+  <div class="card-body">
     <h1>Register</h1>
-    <div class="row">
-        <div class="col-md-4">
-            {{ render_form(form) }}
-        </div>
-    </div>
+    <hr>
+    <br>
+      {{ render_form(form) }}
+  </div>
+  </div>
+</div>
+{% endblock %}
 {% endblock %}
