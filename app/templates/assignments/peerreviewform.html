@@ -4,13 +4,17 @@
   
   {% block app_content %}
   
-   <h1>Peer review</h1>
-   <hr>
-   <br>
-    <div class="row">
-        <div class="col-md-8">
-            {{ render_form(form) }}
-        </div>
-    </div>
+  <div class="container">
+
+ <div class="card bg-light mb-3" style="max-width: 50rem;">
+  <div class="card-body">
+    <h1>Peer review</h1>
+    <hr>
+    <br>
+     {{ render_form(form) }}
+    <br>
+  </div>
+</div>
+
   
     {% endblock %}
