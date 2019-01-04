@@ -17,11 +17,10 @@ class RegistrationForm(FlaskForm):
 	username = StringField('Username', validators=[DataRequired()])
 	email = StringField('Email', validators=[DataRequired(), Email()])
 	password = PasswordField('Password', validators=[DataRequired()])
-	password2 = PasswordField('Repeat password', validators=[DataRequired(), EqualTo('password')])
 	studentNumber = StringField('Student number', validators=[DataRequired()])
 	
 	turmaNumberAndLabelList = Turma.getTurmaChoiceListForForm ()
-	turmaId = SelectField('Class ID', choices=turmaNumberAndLabelList, validators=[DataRequired()])
+	turmaId = SelectField('Class', choices=turmaNumberAndLabelList, validators=[DataRequired()])
 	
 	signUpCode = StringField('Sign-up code', validators=[DataRequired()])
 	submit = SubmitField('Register')
