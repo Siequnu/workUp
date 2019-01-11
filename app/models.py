@@ -102,6 +102,37 @@ class User(UserMixin, db.Model):
 			return False
 		
 	@staticmethod
+	def get_all_user_info ():
+		sql = text('SELECT id, username, email, turma_id, last_seen, registered, email_confirmed, is_admin FROM user')
+		result = db.engine.execute(sql)
+		clean_user_data = []
+		for user in result: 
+			user_data = {}
+			user_data['id'] = user[0]
+			user_data['username'] = user[1]
+			user_data['email'] = user[2]
+			user_data['turma_id'] = user[3]
+			user_data['last_seen'] = user[4]
+			user_data['registered'] = user[5]
+			user_data['email_confirmed'] = user[6]
+			user_data['is_admin'] = user[7]
+			clean_user_data.append(user_data)
+		return clean_user_data
+	
+	@staticmethod
+	def give_admin_rights(user_id):
+		sql = text ("UPDATE user SET is_admin=1 WHERE id='" + str(user_id) + "'")
+		result = db.engine.execute(sql)
+		return result
+	
+	@staticmethod
+	def remove_admin_rights(user_id):
+		sql = text ("UPDATE user SET is_admin=0 WHERE id='" + str(user_id) + "'")
+		result = db.engine.execute(sql)
+		return result
+		
+		
+	@staticmethod
 	def get_admin_users_list ():
 		sql = text('SELECT username FROM user WHERE is_admin ="' + str(1) + '"')
 		result = db.engine.execute(sql)
