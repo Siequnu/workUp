@@ -117,6 +117,36 @@ def register_admin():
 		return render_template('admin/register_admin.html', title='Register Admin', form=form)
 	else:
 		abort(403)
+		
+		
+# Convert normal user into admin
+@bp.route('/give_admin_rights/<user_id>', methods=['GET', 'POST'])
+@login_required
+def give_admin_rights(user_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		try:
+			# Make DB call to convert user into admin
+			app.models.User.give_admin_rights(user_id)
+			flash('User successfully made into administrator.')
+		except:
+			flash('An error occured when changing the user to an administrator.')
+		return redirect(url_for('admin.manage_users'))
+	else:
+		abort(403)
+		
+# Remove admin rights from user
+@bp.route('/remove_admin_rights/<user_id>', methods=['GET', 'POST'])
+@login_required
+def remove_admin_rights(user_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		try:	
+			app.models.User.remove_admin_rights(user_id)
+			flash('Administrator rights removed from the user.')
+		except:
+			flash('An error occured when changing the user to an administrator.')
+		return redirect(url_for('admin.manage_users'))
+	else:
+		abort(403)
 
 
 # Admin Registration
@@ -124,6 +154,6 @@ def register_admin():
 @login_required
 def manage_users():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		admin_usernames = app.models.User.get_admin_users_list()
-		return render_template('admin/manage_users.html', title='Manage Users', )
+		user_data = app.models.User.get_all_user_info()
+		return render_template('admin/manage_users.html', title='Manage Users', user_data = user_data)
 	abort(403)
