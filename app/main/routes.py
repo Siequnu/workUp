@@ -82,7 +82,7 @@ def downloadRandomFile(assignmentId):
 	numberOfFiles = len(filesNotFromUser)
 	if numberOfFiles == 0:
 		flash('There are no files currently available for download. Please check back soon.')
-		return redirect(url_for('main.viewAssignments'))
+		return redirect(url_for('assignments.view_assignments'))
 	randomNumber = (randint(0,(numberOfFiles-1)))
 	filename = filesNotFromUser[randomNumber]
 	randomFile = os.path.join (current_app.config['UPLOAD_FOLDER'], filename)
@@ -108,10 +108,9 @@ def downloadRandomFile(assignmentId):
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
 	if current_user.is_authenticated:
-		if current_user.username in current_app.config['ADMIN_USERS']:		
+		if app.models.is_admin(current_user.username):
 			return render_template('index.html', admin = True)
-		
-		if current_user.username not in current_app.config['ADMIN_USERS']:
+		else:
 			# Get number of uploads
 			numberOfUploads = app.files.models.getUploadCountFromCurrentUserId()
 			# Get total assignments assigned to user's class
@@ -156,27 +155,6 @@ def viewComments(fileId):
 			
 			return render_template('assignments/comments.html', cleanCommentIds = cleanCommentIds, uploadTitle = uploadTitle)
 	abort (403)
-
-# View created assignments status
-@bp.route("/viewassignments")
-@login_required
-def viewAssignments():
-	if current_user.username in current_app.config['ADMIN_USERS']:
-		# Get admin view with all assignments
-		cleanAssignmentsArray = app.assignments.models.getAllAssignments()
-		return render_template('assignments/viewassignments.html', assignmentsArray = cleanAssignmentsArray, admin = True)
-	elif current_user.is_authenticated:
-		# Get user class
-		turmaId = app.assignments.models.getUserTurmaFromId(current_user.id)
-		if (turmaId == False):
-			flash('You are not part of any class and can not see any assignments. Ask your tutor for help to join a class.')
-			return render_template('assignments/viewassignments.html') # User isn't part of any class - display no assignments
-		else:
-			# Get assignments for this user
-			cleanAssignmentsArray = app.assignments.models.getUserAssignmentInformation (current_user.id)
-			return render_template('assignments/viewassignments.html', assignmentsArray = cleanAssignmentsArray)
-	abort (403)
-	
 	
 
 # Display an empty review feedback form
@@ -215,7 +193,7 @@ def createPeerReview(assignmentId = False):
 		elif completedComments[0][0] == 2:
 			# This is the second peer review, submit
 			flash('Peer review 2 submitted succesfully!')
-		return redirect(url_for('main.viewAssignments'))
+		return redirect(url_for('assignments.view_assignments'))
 	return render_template('assignments/peerreviewform.html', title='Submit a peer review', form=form)
 
 # View a completed and populated peer review form
@@ -270,7 +248,7 @@ def viewPeerReview(assignmentId = False, peerReviewNumber = False, commentId = F
 @bp.route("/addPeerReviewForm", methods=['GET', 'POST'])
 @login_required
 def addPeerReviewForm():
-	if current_user.is_authenticated and current_user.username in current_app.config['ADMIN_USERS']:	
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		# If first form is completed, dynamically generate second form
 		if request.form:
 			# Remove csrf_token, submit fields to leave only the completed boxes
@@ -307,13 +285,13 @@ def addPeerReviewForm():
 			form = FormModel()
 		
 		return render_template('addPeerReviewForm.html', title='Create new peer review form', form=form)
+	abort(403)
 
 # Admin page to view classes
 @bp.route("/peerReviewFormAdmin")
 @login_required
 def peerReviewFormAdmin():
-	if current_user.is_authenticated:
-		if current_user.username in current_app.config['ADMIN_USERS']:
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 			classesArray = app.models.selectFromDb(['*'], 'turma')
 			return render_template('admin/classAdmin.html', title='Class admin', classesArray = classesArray)
 	abort (403)

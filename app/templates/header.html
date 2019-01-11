@@ -23,7 +23,7 @@
             <ul class="navbar-nav mr-auto">
                 {{ render_nav_item('main.index', 'Home', use_li=True) }}
                 {{ render_nav_item('files.fileStats', 'Uploads', use_li=True) }}
-                {{ render_nav_item('main.viewAssignments', 'Assignments', use_li=True) }}
+                {{ render_nav_item('assignments.view_assignments', 'Assignments', use_li=True) }}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                    {% if current_user.is_anonymous %}

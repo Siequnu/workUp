@@ -28,8 +28,10 @@
 		<div class="card-header">Class admin
 		</div>
     <div class="card-body">
-      <h5 class="card-title">Add or remove classes, and edit class information.</h5>
-      <a class="btn btn-primary" href="{{url_for('admin.classAdmin')}}" role="button">Class admin</a>
+      <h5 class="card-title">Add or remove classes, and edit class information.</h5><hr>
+      <p><a class="btn btn-primary" href="{{url_for('admin.classAdmin')}}" role="button">Class admin</a></p>
+			<a class="btn btn-primary" href="{{url_for('admin.createClass')}}" role="button">Create new class</a>
+			
     </div>
   </div>
 	 
@@ -37,8 +39,8 @@
 		<div class="card-header">Peer review forms
 		</div>
     <div class="card-body">
-      <h5 class="card-title">Add or remove peer review forms.</h5>
-      <p><a class="btn btn-primary" href="{{url_for('main.addPeerReviewForm')}}" role="button">Create new peer review form</a></p>
+      <h5 class="card-title">Add or remove peer review forms.</h5><hr>
+      <p><a class="btn btn-primary" href="{{url_for('main.addPeerReviewForm')}}" role="button">New peer review form</a></p>
 			<a class="btn btn-primary" href="{{url_for('main.peerReviewFormAdmin')}}" role="button">Manage peer review forms</a>
     </div>
   </div>
@@ -47,12 +49,25 @@
 		<div class="card-header">Create assignment
 		</div>
     <div class="card-body">
-      <h5 class="card-title">Create a new assignment</h5>
-			<a class="btn btn-primary" href="{{url_for('admin.createAssignment')}}" role="button">Create assignment</a>
+      <h5 class="card-title">Create a new assignment</h5><hr>
+			<p><a class="btn btn-primary" href="{{url_for('admin.createAssignment')}}" role="button">Create assignment</a></p>
+			<p><a class="btn btn-primary" href="{{url_for('admin.createAssignment')}}" role="button">Manage assignments</a></p>
+    </div>
+  </div>	 
+</div>
+	
+	<br /><br />
+	<div class="card-deck">
+	 <div class="card bg-light mb-2" style="max-width: 20rem;">
+		<div class="card-header">User admin
+		</div>
+    <div class="card-body">
+      <h5 class="card-title">Manage users</h5><hr>
+			<p><a class="btn btn-primary" href="{{url_for('admin.register_admin')}}" role="button">Create new admin</a></p>
+			<a class="btn btn-primary" href="{{url_for('admin.manage_users')}}" role="button">Manage users</a>		
     </div>
   </div>
-	 
-	</div>
+	
 {% else %}
 		
 	<div class="row">
