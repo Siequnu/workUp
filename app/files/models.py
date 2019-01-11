@@ -52,7 +52,7 @@ def getPostInfoFromUserId (userId):
 		
 		# Add arrayed information to a new dictionary entry
 		cleanDict[str(info[0])] = [uploadDateAndtime, str(len(peerReviewCount)), str(info[3])]
-		
+	print (cleanDict)	
 	return cleanDict
 
 
