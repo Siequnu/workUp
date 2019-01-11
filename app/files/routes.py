@@ -40,9 +40,8 @@ def downloadFile(assignmentId = False):
 		return render_template('files/downloadFile.html', assignmentId = assignmentId)
 	else:
 		# If the assignment hasn't closed yet, flash message to wait until after deadline
-		flash ("The assignment hasn't closed yet. Please wait until the deadline is over, then try again to download an assignemnt to review.")
+		flash ("The assignment hasn't closed yet. Please wait until the deadline is over, then try again to download an assignment to review.")
 		return redirect (url_for('assignments.view_assignments'))
-		
 
 	
 # Upload form, or upload specific file
