@@ -1,43 +1,75 @@
-{% from 'bootstrap/nav.html' import render_nav_item %}
 {{ bootstrap.load_css() }}
 
-<title>{% block title %}
+<!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="/static/bootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Plugin CSS -->
+    <link href="/static/bootstrap/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/bootstrap/css/freelancer.min.css" rel="stylesheet">
+
+<title>
+{% block title %}
     {% if title %}{{ title }} - workUp{% else %}Peer-review work upload tool{% endif %}
 {% endblock %}
 </title>
 
 {% block navbar %}
 
-    <nav class="navbar navbar-expand-lg bg-secondary navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+<!-- Navigation -->
+    <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav"> 
+        <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+             
+             <i class="fa fa-bars"></i>
+            
         </button>
+        
+        
          <a class="navbar-brand" href="{{ url_for('main.index') }}">
-    
-    <img src="/static/w_logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-    workUp
-         </a>
+            <img src="/static/w_logo.png" width="40" height="40" class="d-inline-block align-middle" alt=""> workUp</a>
   
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">     
             <ul class="navbar-nav mr-auto">
-                {{ render_nav_item('main.index', 'Home', use_li=True) }}
-                {{ render_nav_item('files.fileStats', 'Uploads', use_li=True) }}
-                {{ render_nav_item('assignments.view_assignments', 'Assignments', use_li=True) }}
+                <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('main.index')}}">Home</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('files.fileStats')}}">Uploads</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('assignments.view_assignments')}}">Assignments</a>
+            </li>
+                
+                
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                    {% if current_user.is_anonymous %}
-                    {{ render_nav_item('user.login', 'Login', use_li=True) }}                  
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('user.login')}}">Login</a>
+                    </li>
                     {% else %}
-                    {{ render_nav_item('user.logout', 'Logout', use_li=True) }}
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('user.logout')}}">Logout</a>
+                    </li>
                     {% endif %}
                 </ul>
         </div>
     </nav>
+    <br><br>
+    <br></br>
 {% endblock %}
-<br /><br />
+
+
 {% block content %}
-    <div class="container">
+        <br>
+        <div class="container">    
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
@@ -45,18 +77,21 @@
             {% endfor %}
         {% endif %}
         {% endwith %}
+        </div>
 
         {# application content needs to be provided in the app_content block #}
-        {% block app_content %}{% endblock %}
-    </div>
+        {% block app_content %}
+        
+        {% endblock %}
 {% endblock %}
 
+<div class="container">    
 <footer class="text-center">
     	<br /><br />
         {% block footer %}
             <small> &copy; 2018    workUp - Tsinghua University. Written by Patrick Johansson</small>
         {% endblock %}
     </footer>
-</main>
+</div>
 
 {{ bootstrap.load_js() }}
