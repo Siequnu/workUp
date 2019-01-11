@@ -42,8 +42,10 @@
               <td>{{user['registered']}}</td>
               <td>{{user['email_confirmed']}}</td>
               <td>{{user['is_admin']}}</td>
-              <td><a href="{{url_for('admin.give_admin_rights', user_id = user['id'])}}">Make admin</a>
-                <a href="{{url_for('admin.remove_admin_rights', user_id = user['id'])}}">Remove admin rights</a>
+              <td>
+               <a href="{{url_for('admin.give_admin_rights', user_id = user['id'])}}" class="btn btn-outline-primary btn-sm" role="button">Make admin</a>
+               <p></p>
+               <p><a href="{{url_for('admin.remove_admin_rights', user_id = user['id'])}}" class="btn btn-outline-danger btn-sm" role="button">Remove admin</a></p>
               </td>
             </tr>
            {% endfor %}
