@@ -16,12 +16,19 @@ def getAllAssignments ():
 		cleanAssignment['assignmentTitle'] = assignment[1]
 		cleanAssignment['assignmentDescription'] = assignment[2]
 		cleanAssignment['assignmentDue'] = datetime.strptime(assignment[3], '%Y-%m-%d').date()
-		cleanAssignment['assignmentCreatedBy'] = assignment[4]
+		# Try and replace the user id with a username (if fails, user might have been deleted)
+		try:
+			conditions = []
+			conditions.append (str('id="' + str(assignment[4]) + '"'))
+			username = app.models.selectFromDb(['username'], 'user', conditions)
+			cleanAssignment['assignmentCreatedBy'] = username[0][0]
+		except:
+			cleanAssignment['assignmentCreatedBy'] = assignment[4]
 		cleanAssignment['assignmentForTurmaId'] = assignment[5]
 		cleanAssignment['assignmentCreationTimestamp'] = assignment[6]
 		cleanAssignment['assignmentPeerReviewForm'] = assignment[7]
 		cleanAssignmentsArray.append(cleanAssignment)
-	
+		
 	return cleanAssignmentsArray
 	
 def getUserTurmaFromId (userId):

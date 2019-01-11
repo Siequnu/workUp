@@ -7,17 +7,19 @@
   <div class="row">
         <div class="col-md-8">
         	<h1>Admin assignments view</h1>
+         <hr>
         </div>
     </div>
 
   <br />
    <div class="container">
-    	<a href="{{url_for('admin.createAssignment')}}">Create new assignment</a>
+     <p><a class="btn btn-primary" href="{{url_for('admin.createAssignment')}}" role="button">Create assignment</a></p>
+     <br>
+      <br>
       <div class="row">
         <div class="col-xs-12">
           <div class="table-responsive">
             <table summary="The following assignments have been made" class="table table-bordered table-hover">
-            <caption class="text-center">You have created the following assignments</a>:</caption>
         	  <thead>
               <tr>
               <th>ID</th>

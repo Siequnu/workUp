@@ -10,6 +10,10 @@ import json
 def load_user(id):
 	return User.query.get(int(id))
 
+def is_admin (username):
+	# Returns True if user is admin, False if not
+	return username in User.get_admin_users_list() 
+
 def selectFromDb (columnsArray, fromTable, conditionsArray = False, count = False):
 	# Assemble SQL query from input variables
 	if count:
@@ -75,6 +79,7 @@ class User(UserMixin, db.Model):
 	last_seen = db.Column(db.DateTime, default=datetime.now)
 	registered = db.Column(db.DateTime, default=datetime.now)
 	email_confirmed = db.Column(db.Boolean, default=False)
+	is_admin = db.Column(db.Boolean, default=False)
 
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
@@ -95,6 +100,18 @@ class User(UserMixin, db.Model):
 			return True
 		else:
 			return False
+		
+	@staticmethod
+	def get_admin_users_list ():
+		sql = text('SELECT username FROM user WHERE is_admin ="' + str(1) + '"')
+		result = db.engine.execute(sql)
+		# Unpack results from sql object
+		usernames = []
+		for row in result: usernames.append(row)
+		# Clean results from tuple to array
+		clean_usernames = []
+		for username_tuple in usernames: clean_usernames.append(username_tuple[0])
+		return clean_usernames
 	
 	
 

@@ -2,12 +2,8 @@ from flask import render_template, redirect, url_for, session, flash, request, a
 import datetime
 
 # Login
-from flask_login import current_user, login_user
-from flask_login import login_required
+from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
-
-# Logout
-from flask_login import logout_user
 
 # Register
 from app.models import User

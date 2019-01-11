@@ -14,7 +14,7 @@ from app.files import models
 @bp.route("/fileStats")
 @login_required
 def fileStats():
-	if current_user.username in current_app.config['ADMIN_USERS']:
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		# Get total list of uploaded files from all users
 		templatePackages = {}
 		templatePackages['uploadedFiles'] = models.getAllUploadsWithFilenameAndUsername()
@@ -41,7 +41,7 @@ def downloadFile(assignmentId = False):
 	else:
 		# If the assignment hasn't closed yet, flash message to wait until after deadline
 		flash ("The assignment hasn't closed yet. Please wait until the deadline is over, then try again to download an assignemnt to review.")
-		return redirect (url_for('main.viewAssignments'))
+		return redirect (url_for('assignments.view_assignments'))
 		
 
 	
@@ -65,10 +65,10 @@ def uploadFile(assignmentId = False):
 				models.saveFile(file)
 			originalFilename = models.getSecureFilename(file.filename)
 			flash('Your file ' + str(originalFilename) + ' successfully uploaded')
-			return redirect(url_for('main.viewAssignments'))
+			return redirect(url_for('assignments.view_assignments'))
 		else:
 			flash('You can not upload this kind of file.')
-			return redirect(url_for('main.viewAssignments'))
+			return redirect(url_for('assignments.view_assignments'))
 	else:
 		return render_template('files/fileUpload.html')
 
