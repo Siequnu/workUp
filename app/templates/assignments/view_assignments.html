@@ -3,6 +3,8 @@
   
   
   {% block app_content %}
+<div class="container">
+<br>
   {% if admin %}
   <div class="row">
         <div class="col-md-8">
@@ -112,4 +114,5 @@
       {% else %}
       	You have no assignments at present.
     	{% endif %}
-  {% endblock %}
+  </div>
+{% endblock %}

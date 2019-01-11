@@ -3,6 +3,8 @@
 {% from 'bootstrap/form.html' import render_form %}
 
 {% block app_content %}
+<div class="container">
+<br>
  <div class="container">
 
  <div class="card bg-light mb-3" style="max-width: 25rem;">
@@ -18,5 +20,6 @@
         <a href="{{ url_for('user.reset') }}" class="btn btn-outline-primary">Forgot your password?</a>
     </div>
   </div>
+</div>
 </div>
 {% endblock %}
