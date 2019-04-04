@@ -23,3 +23,5 @@ def view_assignments():
 			cleanAssignmentsArray = app.assignments.models.getUserAssignmentInformation (current_user.id)
 			return render_template('assignments/view_assignments.html', assignmentsArray = cleanAssignmentsArray)
 	abort (403)
+	
+	

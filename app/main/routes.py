@@ -40,68 +40,6 @@ def before_request():
 def lab():
 	return render_template('lab.html')
 
-	
-
-# Choose a random file from uploads folder and send it out for download
-@bp.route('/downloadPeerFile/<assignmentId>', methods=['POST'])
-@login_required
-def downloadRandomFile(assignmentId):
-	# Check if user has any previous downloads with pending peer reviews
-	pendingAssignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignmentId)
-	if len(pendingAssignments) > 0:
-		# User has a pending assignment, send them the same file as before
-		alreadyDownloadedAndPendingReviewFileId = pendingAssignments[0][1]
-		flash('You have a peer review that you have not yet completed. You have redownloaded the same file.')
-		# Get filename of the upload from Id
-		conditions = []
-		conditions.append(str('id="' + str(alreadyDownloadedAndPendingReviewFileId) + '"'))
-		filenameToDownload = app.models.selectFromDb(['filename'], 'upload', conditions)		
-		filePath = os.path.join (current_app.config['UPLOAD_FOLDER'], filenameToDownload[0][0])
-		# Send SQL data to database
-		download = Download(filename=filenameToDownload[0][0], user_id = current_user.id)
-		db.session.add(download)
-		db.session.commit()
-		
-		return send_file(filePath, as_attachment=True)
-	
-	# Make sure not to give the same file to the same peer reviewer twice
-	# Get list of files the user has already submitted reviews for
-	conditions = []
-	conditions.append (str('assignment_id="' + str(assignmentId) + '"'))
-	conditions.append (str('user_id="' + str(current_user.id) + '"'))
-	completedCommentsIdsAndFileId = app.models.selectFromDb(['id', 'fileid'], 'comment', conditions)
-	
-	if completedCommentsIdsAndFileId == []:
-		filesNotFromUser = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId)
-		
-	else:
-		# Get an array of filenames not belonging to current user
-		previousDownloadFileId = completedCommentsIdsAndFileId[0][1]
-		filesNotFromUser = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId, previousDownloadFileId)
-	
-	numberOfFiles = len(filesNotFromUser)
-	if numberOfFiles == 0:
-		flash('There are no files currently available for download. Please check back soon.')
-		return redirect(url_for('assignments.view_assignments'))
-	randomNumber = (randint(0,(numberOfFiles-1)))
-	filename = filesNotFromUser[randomNumber]
-	randomFile = os.path.join (current_app.config['UPLOAD_FOLDER'], filename)
-	
-	# Send SQL data to database
-	download = Download(filename=filename, user_id = current_user.id)
-	db.session.add(download)
-	db.session.commit()
-	
-	# Update comments table with pending commment
-	conditions = []
-	conditions.append (str('filename="' + str(filename) + '"'))
-	uploadId = app.models.selectFromDb(['id'], 'upload', conditions)
-	commentPending = Comment(user_id = int(current_user.id), fileid = int(uploadId[0][0]), pending = True, assignment_id=assignmentId)
-	db.session.add(commentPending)
-	db.session.commit()
-
-	return send_file(randomFile, as_attachment=True)
-
 
 # Main entrance to the app
 @bp.route('/', methods=['GET', 'POST'])
@@ -195,6 +133,7 @@ def createPeerReview(assignmentId = False):
 			flash('Peer review 2 submitted succesfully!')
 		return redirect(url_for('assignments.view_assignments'))
 	return render_template('assignments/peerreviewform.html', title='Submit a peer review', form=form)
+
 
 # View a completed and populated peer review form
 # This accepts both the user's own peer reviews, and other users' reviews

@@ -14,14 +14,14 @@
       <div class="card-body">
          <h1>View comments</h1>
 
-         {{uploadTitle}}
+         {{upload_title}}
          <hr>
          <br>
-         {% if cleanCommentIds|length == 0 %}
+         {% if clean_comment_ids|length == 0 %}
            <p><em>No peer reviews have been submitted for this work.<br /><br />
          Check back later.</em></p>
          {% else %}
-         {% for id in cleanCommentIds %}
+         {% for id in clean_comment_ids %}
              <p>
            <td><a href="{{url_for('main.viewPeerReview', commentId=id)}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review</a></td>
            </p>
@@ -31,7 +31,7 @@
        {% endif %}
       </div>
   <div class="card-footer">
-  <a href="{{url_for('files.fileStats')}}" class="btn btn-primary">< Back</a>
+  <a href="{{url_for('files.file_stats')}}" class="btn btn-primary">< Back</a>
   <br>
   </div>
   </div>

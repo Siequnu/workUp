@@ -4,7 +4,7 @@
   {% block app_content %}
 <div class="container">
 <br>
-  {% if templatePackages['admin']%}
+  {% if template_packages['admin']%}
   <div class="row">
         <div class="col-md-8">
 			<h1>Admin file stats view</h1>
@@ -14,10 +14,10 @@
 <br />
   <body>
   <p>
-    The path to the upload folder is: {{templatePackages['uploadFolderPath']}}
+    The path to the upload folder is: {{template_packages['uploadFolderPath']}}
   </p>
   <p>
-    There are {{templatePackages['uploadedPostCount']}} files in the uploads folder:
+    There are {{template_packages['uploadedPostCount']}} files in the uploads folder:
   </p>
  <div class="container">
   <div class="row">
@@ -33,7 +33,7 @@
             </tr>
           </thead>
 		  <tbody>
-			{% for file in templatePackages['uploadedFiles'] %}
+			{% for file in template_packages['uploadedFiles'] %}
             <tr>
               <td>{{ file[0] }}</td>
               <td>{{ file[1] }}</td>
@@ -64,14 +64,14 @@
  <div class="container">
   <div class="card-deck">
   
-  {% for key, value in templatePackages['cleanDict'].items() %}
+  {% for key, value in template_packages['cleanDict'].items() %}
   
   <div class="card bg-light mb-3" style="max-width: 18rem;">
   <div class="card-header">{{ key }}</div>
   <div class="card-body">
     <h5 class="card-title">Peer reviews: {{value[1]}}</h5>
     <p class="card-text">Date uploaded: {{value[0]}}</p>
-    <a href="{{url_for('main.viewComments', fileId = value[2])}}" class="btn btn-primary">View comments</a>
+    <a href="{{url_for('files.view_comments', file_id = value[2])}}" class="btn btn-primary">View comments</a>
     
   </div>
 </div>
