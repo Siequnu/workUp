@@ -65,36 +65,6 @@ def index():
 	return render_template('index.html')
 
 
-# View peer review comments
-@bp.route("/comments/<fileId>")
-@login_required
-def viewComments(fileId):
-	# Make sure that only the AUTHOR can check comments on their file!
-	userId = app.models.selectFromDb(['user_id'], 'upload', [''.join(('id=', str(fileId)))])
-	if userId != []: # The upload exists	
-		if userId[0][0] == current_user.id:
-			# Get assignment ID from upload ID
-			assignmentId = app.models.selectFromDb(['assignment_id'], 'upload', [''.join(('id=', str(fileId)))])
-			
-			# Get comment Ids associated with this upload
-			conditions = []
-			conditions.append(''.join(('assignment_id=', str(assignmentId[0][0]))))
-			conditions.append(''.join(('fileid=', str(fileId))))
-			conditions.append('pending=0')
-			commentIds = app.models.selectFromDb(['id'], 'comment', conditions)
-			cleanCommentIds = []
-			for row in commentIds:
-				for id in row:
-					cleanCommentIds.append(id)
-					
-			# Get assignment original filename
-			upload = app.models.selectFromDb(['original_filename'], 'upload', [''.join(('id=', str(fileId)))])
-			uploadTitle = upload[0][0]
-			
-			return render_template('assignments/comments.html', cleanCommentIds = cleanCommentIds, uploadTitle = uploadTitle)
-	abort (403)
-	
-
 # Display an empty review feedback form
 @bp.route("/assignments/peerreviewform/<assignmentId>", methods=['GET', 'POST'])
 @bp.route("/assignments/peerreviewform", methods=['GET', 'POST'])
