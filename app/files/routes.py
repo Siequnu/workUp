@@ -10,10 +10,14 @@ import app.assignments.models
 
 from app.files import bp
 from app.files import models
-from app.models import Comment, Download, Upload
+from app.models import Comment, Download, Upload, Assignment
 
 from random import randint
 import os, datetime, json
+
+# Forms
+from app.main.forms import FormModel
+from app.forms_peer_review import *
 
 # Access file stats
 @bp.route("/file_stats")
@@ -171,3 +175,93 @@ def view_comments(file_id):
 			return render_template('files/view_comments.html', clean_comment_ids = clean_comment_ids, upload_title = upload_title)
 	abort (403)
 	
+	
+	
+
+# Display an empty review feedback form
+@bp.route("/peer_review_form/<assignment_id>", methods=['GET', 'POST'])
+@bp.route("/peer_review_form", methods=['GET', 'POST'])
+@login_required
+def create_peer_review(assignment_id = False):
+	# Get the appropriate peer review form for the assignment via assignment ID
+	if assignment_id:
+		peer_review_form = Assignment.getPeerReviewFormFromAssignmentId(assignment_id)
+		peer_review_form_name = peer_review_form[0][0]	
+		form = eval(peer_review_form_name)()
+	
+	if form.validate_on_submit():
+		# Serialise the form contents
+		form_fields = {}
+		for field_title, field_contents in form.data.items():
+			form_fields[field_title] = field_contents
+		# Clean the csrf_token and submit fields
+		del form_fields['csrf_token']
+		del form_fields['submit']
+		form_contents = json.dumps(form_fields)
+		
+		# Check if user has any previous downloads with pending peer reviews
+		pending_assignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignment_id)
+		if len(pending_assignments) > 0:
+			# User has a pending peer review - update the empty comment field with the contents of this form and remove pending status
+			pending_comment_id = pending_assignments[0][0]
+			update_comment = Comment.updatePendingCommentWithComment(pending_comment_id, form_contents)
+		
+		# The database is now updated with the comment - check the total completed comments
+		completed_comments = Comment.getCountCompleteCommentsFromUserIdAndAssignmentId (current_user.id, assignment_id)
+		if completed_comments[0][0] == 1:
+			# This is the first peer review, submit
+			flash('Peer review 1 submitted succesfully!')
+		elif completed_comments[0][0] == 2:
+			# This is the second peer review, submit
+			flash('Peer review 2 submitted succesfully!')
+		return redirect(url_for('assignments.view_assignments'))
+	return render_template('files/peer_review_form.html', title='Submit a peer review', form=form)
+	
+
+
+# View a completed and populated peer review form
+# This accepts both the user's own peer reviews, and other users' reviews
+@bp.route("/view_peer_review_from_assignment/<assignment_id>/<peer_review_number>", methods=['GET', 'POST'])
+@bp.route("/view_peer_comment/<comment_id>", methods=['GET', 'POST'])
+@login_required
+def view_peer_review(assignment_id = False, peer_review_number = False, comment_id = False):
+	if comment_id:
+		# Check if this peer review is intended for the user trying to view it
+		# What file was it made for
+		file_id = app.models.selectFromDb(['fileid'], 'comment', [str('id="' + str(comment_id) + '"')])
+		# Who owns that file
+		owner = app.models.selectFromDb(['user_id'], 'upload', [str('id="' + str(file_id[0][0]) + '"')])
+		# Is it the same person trying to view this comment?
+		if current_user.id is not owner[0][0]:
+			abort (403)
+		
+		# Get assignment ID from comment ID
+		assignment_id = app.models.selectFromDb(['assignment_id'],'comment',[(str('id="'+str(comment_id)+'"'))])
+		# Get the form from the assignmentId
+		peer_review_form_name = app.models.selectFromDb(['peer_review_form'],'assignment',[(str('id="'+str(assignment_id[0][0])+'"'))])
+		
+		# Get the comment content from ID
+		comment = app.models.selectFromDb(['comment'],'comment',[(str('id="'+str(comment_id)+'"'))])
+		unpacked_comments = json.loads(comment[0][0])
+	else:
+		# Get the form from the assignmentId	
+		peer_review_form_name = app.models.selectFromDb(['peer_review_form'],'assignment',[(str('id="'+str(assignment_id)+'"'))])
+		# Get the first or second peer review - these will be in created order in the DB
+		conditions = []
+		conditions.append (str('assignment_id="' + str(assignment_id) + '"'))
+		conditions.append (str('user_id="' + str(current_user.id) + '"'))
+		comments = app.models.selectFromDb(['comment'],'comment',conditions)
+		if int(peer_review_number) == 1:
+			unpacked_comments = json.loads(comments[0][0])
+		elif int(peer_review_number) == 2:
+			unpacked_comments = json.loads(comments[1][0])
+		flash('You can not edit this peer review as it has already been submitted.')
+	
+	# Import the form class
+	form_class = getattr(app.forms_peer_review, str(peer_review_form_name[0][0]))
+	# Populate the form
+	form = form_class(**unpacked_comments)
+	# Delete submit button
+	del form.submit
+	
+	return render_template('files/peer_review_form.html', title='View a peer review', form=form)
