@@ -1,32 +1,99 @@
-from flask import render_template, flash, redirect, url_for, request, current_app
+from flask import render_template, flash, redirect, url_for, request, current_app, send_file
 from flask_login import current_user
 
 # Login
 from flask_login import login_required
+from app import db
 
 # Models
 import app.assignments.models
 
 from app.files import bp
 from app.files import models
+from app.models import Comment, Download, Upload
+
+from random import randint
+import os, datetime, json
 
 # Access file stats
-@bp.route("/fileStats")
+@bp.route("/file_stats")
 @login_required
-def fileStats():
+def file_stats():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		# Get total list of uploaded files from all users
-		templatePackages = {}
-		templatePackages['uploadedFiles'] = models.getAllUploadsWithFilenameAndUsername()
-		templatePackages['uploadedPostCount'] = str(models.getAllUploadsCount())
-		templatePackages['uploadFolderPath'] = current_app.config['UPLOAD_FOLDER']
-		templatePackages['admin'] = True
-		return render_template('files/fileStats.html', templatePackages = templatePackages)
+		template_packages = {}
+		template_packages['uploadedFiles'] = models.getAllUploadsWithFilenameAndUsername()
+		template_packages['uploadedPostCount'] = str(models.getAllUploadsCount())
+		template_packages['uploadFolderPath'] = current_app.config['UPLOAD_FOLDER']
+		template_packages['admin'] = True
+		return render_template('files/file_stats.html', template_packages = template_packages)
 	elif current_user.is_authenticated:
-		templatePackages = {}
-		templatePackages['cleanDict'] = models.getPostInfoFromUserId (current_user.id)
-		return render_template('files/fileStats.html', templatePackages = templatePackages)
+		template_packages = {}
+		template_packages['cleanDict'] = models.getPostInfoFromUserId (current_user.id)
+		return render_template('files/file_stats.html', template_packages = template_packages)
 	abort(403)
+
+
+
+# Choose a random file from uploads folder and send it out for download
+@bp.route('/downloadPeerFile/<assignmentId>', methods=['POST'])
+@login_required
+def downloadRandomFile(assignmentId):
+	# Check if user has any previous downloads with pending peer reviews
+	pendingAssignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignmentId)
+	if len(pendingAssignments) > 0:
+		# User has a pending assignment, send them the same file as before
+		alreadyDownloadedAndPendingReviewFileId = pendingAssignments[0][1]
+		flash('You have a peer review that you have not yet completed. You have redownloaded the same file.')
+		# Get filename of the upload from Id
+		conditions = []
+		conditions.append(str('id="' + str(alreadyDownloadedAndPendingReviewFileId) + '"'))
+		filenameToDownload = app.models.selectFromDb(['filename'], 'upload', conditions)		
+		filePath = os.path.join (current_app.config['UPLOAD_FOLDER'], filenameToDownload[0][0])
+		# Send SQL data to database
+		download = Download(filename=filenameToDownload[0][0], user_id = current_user.id)
+		db.session.add(download)
+		db.session.commit()
+		
+		return send_file(filePath, as_attachment=True)
+	
+	# Make sure not to give the same file to the same peer reviewer twice
+	# Get list of files the user has already submitted reviews for
+	conditions = []
+	conditions.append (str('assignment_id="' + str(assignmentId) + '"'))
+	conditions.append (str('user_id="' + str(current_user.id) + '"'))
+	completedCommentsIdsAndFileId = app.models.selectFromDb(['id', 'fileid'], 'comment', conditions)
+	
+	if completedCommentsIdsAndFileId == []:
+		filesNotFromUser = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId)
+		
+	else:
+		# Get an array of filenames not belonging to current user
+		previousDownloadFileId = completedCommentsIdsAndFileId[0][1]
+		filesNotFromUser = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId, previousDownloadFileId)
+	
+	numberOfFiles = len(filesNotFromUser)
+	if numberOfFiles == 0:
+		flash('There are no files currently available for download. Please check back soon.')
+		return redirect(url_for('assignments.view_assignments'))
+	randomNumber = (randint(0,(numberOfFiles-1)))
+	filename = filesNotFromUser[randomNumber]
+	randomFile = os.path.join (current_app.config['UPLOAD_FOLDER'], filename)
+	
+	# Send SQL data to database
+	download = Download(filename=filename, user_id = current_user.id)
+	db.session.add(download)
+	db.session.commit()
+	
+	# Update comments table with pending commment
+	conditions = []
+	conditions.append (str('filename="' + str(filename) + '"'))
+	uploadId = app.models.selectFromDb(['id'], 'upload', conditions)
+	commentPending = Comment(user_id = int(current_user.id), fileid = int(uploadId[0][0]), pending = True, assignment_id=assignmentId)
+	db.session.add(commentPending)
+	db.session.commit()
+
+	return send_file(randomFile, as_attachment=True)
 
 
 
@@ -71,4 +138,35 @@ def uploadFile(assignmentId = False):
 	else:
 		return render_template('files/fileUpload.html')
 
+	
+	
+
+# View peer review comments
+@bp.route("/comments/<file_id>")
+@login_required
+def view_comments(file_id):
+	# Make sure that only the AUTHOR can check comments on their file!
+	user_id = app.models.selectFromDb(['user_id'], 'upload', [''.join(('id=', str(file_id)))])
+	if user_id != []: # The upload exists	
+		if user_id[0][0] == current_user.id:
+			# Get assignment ID from upload ID
+			assignment_id = app.models.selectFromDb(['assignment_id'], 'upload', [''.join(('id=', str(file_id)))])
+			
+			# Get comment Ids associated with this upload
+			conditions = []
+			conditions.append(''.join(('assignment_id=', str(assignment_id[0][0]))))
+			conditions.append(''.join(('fileid=', str(file_id))))
+			conditions.append('pending=0')
+			comment_ids = app.models.selectFromDb(['id'], 'comment', conditions)
+			clean_comment_ids = []
+			for row in comment_ids:
+				for id in row:
+					clean_comment_ids.append(id)
+					
+			# Get assignment original filename
+			upload = app.models.selectFromDb(['original_filename'], 'upload', [''.join(('id=', str(file_id)))])
+			upload_title = upload[0][0]
+			
+			return render_template('files/view_comments.html', clean_comment_ids = clean_comment_ids, upload_title = upload_title)
+	abort (403)
 	
