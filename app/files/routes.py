@@ -146,6 +146,7 @@ def uploadFile(assignmentId = False):
 @login_required
 def view_comments(file_id):
 	# Make sure that only the AUTHOR can check comments on their file!
+	#!# What about admin
 	user_id = app.models.selectFromDb(['user_id'], 'upload', [''.join(('id=', str(file_id)))])
 	if user_id != []: # The upload exists	
 		if user_id[0][0] == current_user.id:
