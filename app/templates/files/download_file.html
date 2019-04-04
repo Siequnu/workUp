@@ -14,13 +14,13 @@
     <br>
     <h6>1. Click the download button to download an assignment.</h6>
     <br>
-      <form action="{{url_for('files.downloadRandomFile', assignmentId = assignmentId)}}" method="post">
+      <form action="{{url_for('files.download_random_file', assignment_id = assignment_id)}}" method="post">
         <input type="submit" value="Download" />
       </form>
   </div>
     <div class="card-footer">
     <p><h6>2. After reading the assignment, fill out a peer review.</h6></p>
-  <a href="{{url_for('files.create_peer_review', assignment_id = assignmentId)}}" class="btn btn-primary" role="button">Go to peer review form</a>
+  <a href="{{url_for('files.create_peer_review', assignment_id = assignment_id)}}" class="btn btn-primary" role="button">Go to peer review form</a>
   <br></br>
     </div>
   </div>

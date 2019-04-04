@@ -40,49 +40,49 @@ def file_stats():
 
 
 # Choose a random file from uploads folder and send it out for download
-@bp.route('/downloadPeerFile/<assignmentId>', methods=['POST'])
+@bp.route('/download_random_file/<assignment_id>', methods=['POST'])
 @login_required
-def downloadRandomFile(assignmentId):
+def download_random_file(assignment_id):
 	# Check if user has any previous downloads with pending peer reviews
-	pendingAssignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignmentId)
-	if len(pendingAssignments) > 0:
+	pending_assignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignment_id)
+	if len(pending_assignments) > 0:
 		# User has a pending assignment, send them the same file as before
-		alreadyDownloadedAndPendingReviewFileId = pendingAssignments[0][1]
+		already_downloaded_and_pending_review_file_id = pending_assignments[0][1]
 		flash('You have a peer review that you have not yet completed. You have redownloaded the same file.')
 		# Get filename of the upload from Id
 		conditions = []
-		conditions.append(str('id="' + str(alreadyDownloadedAndPendingReviewFileId) + '"'))
-		filenameToDownload = app.models.selectFromDb(['filename'], 'upload', conditions)		
-		filePath = os.path.join (current_app.config['UPLOAD_FOLDER'], filenameToDownload[0][0])
+		conditions.append(str('id="' + str(already_downloaded_and_pending_review_file_id) + '"'))
+		filename_to_download = app.models.selectFromDb(['filename'], 'upload', conditions)		
+		file_path = os.path.join (current_app.config['UPLOAD_FOLDER'], filename_to_download[0][0])
 		# Send SQL data to database
-		download = Download(filename=filenameToDownload[0][0], user_id = current_user.id)
+		download = Download(filename=filename_to_download[0][0], user_id = current_user.id)
 		db.session.add(download)
 		db.session.commit()
 		
-		return send_file(filePath, as_attachment=True)
+		return send_file(file_path, as_attachment=True)
 	
 	# Make sure not to give the same file to the same peer reviewer twice
 	# Get list of files the user has already submitted reviews for
 	conditions = []
-	conditions.append (str('assignment_id="' + str(assignmentId) + '"'))
+	conditions.append (str('assignment_id="' + str(assignment_id) + '"'))
 	conditions.append (str('user_id="' + str(current_user.id) + '"'))
-	completedCommentsIdsAndFileId = app.models.selectFromDb(['id', 'fileid'], 'comment', conditions)
+	completed_comments_ids_and_file_id = app.models.selectFromDb(['id', 'fileid'], 'comment', conditions)
 	
-	if completedCommentsIdsAndFileId == []:
-		filesNotFromUser = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId)
+	if completed_comments_ids_and_file_id == []:
+		files_not_from_user = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignment_id)
 		
 	else:
 		# Get an array of filenames not belonging to current user
-		previousDownloadFileId = completedCommentsIdsAndFileId[0][1]
-		filesNotFromUser = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignmentId, previousDownloadFileId)
+		previous_download_file_id = completed_comments_ids_and_file_id[0][1]
+		files_not_from_user = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignment_id, previous_download_file_id)
 	
-	numberOfFiles = len(filesNotFromUser)
-	if numberOfFiles == 0:
+	number_of_files = len(files_not_from_user)
+	if number_of_files == 0:
 		flash('There are no files currently available for download. Please check back soon.')
 		return redirect(url_for('assignments.view_assignments'))
-	randomNumber = (randint(0,(numberOfFiles-1)))
-	filename = filesNotFromUser[randomNumber]
-	randomFile = os.path.join (current_app.config['UPLOAD_FOLDER'], filename)
+	random_number = (randint(0,(numberOfFiles-1)))
+	filename = files_not_from_user[random_number]
+	random_file = os.path.join (current_app.config['UPLOAD_FOLDER'], filename)
 	
 	# Send SQL data to database
 	download = Download(filename=filename, user_id = current_user.id)
@@ -92,23 +92,23 @@ def downloadRandomFile(assignmentId):
 	# Update comments table with pending commment
 	conditions = []
 	conditions.append (str('filename="' + str(filename) + '"'))
-	uploadId = app.models.selectFromDb(['id'], 'upload', conditions)
-	commentPending = Comment(user_id = int(current_user.id), fileid = int(uploadId[0][0]), pending = True, assignment_id=assignmentId)
-	db.session.add(commentPending)
+	upload_id = app.models.selectFromDb(['id'], 'upload', conditions)
+	comment_pending = Comment(user_id = int(current_user.id), fileid = int(upload_if[0][0]), pending = True, assignment_id=assignment_id)
+	db.session.add(comment_pending)
 	db.session.commit()
 
-	return send_file(randomFile, as_attachment=True)
+	return send_file(random_file, as_attachment=True)
 
 
 
 # Download a file for peer review
-@bp.route("/downloadFile")
-@bp.route("/downloadFile/<assignmentId>")
+@bp.route("/download_file")
+@bp.route("/download_file/<assignment_id>")
 @login_required
-def downloadFile(assignmentId = False):
-	assignmentIsOver = app.assignments.models.checkIfAssignmentIsOver (assignmentId)
-	if assignmentIsOver == True:
-		return render_template('files/downloadFile.html', assignmentId = assignmentId)
+def download_file(assignment_id = False):
+	assignment_is_over = app.assignments.models.checkIfAssignmentIsOver (assignment_id)
+	if assignment_is_over == True:
+		return render_template('files/download_file.html', assignment_id = assignment_id)
 	else:
 		# If the assignment hasn't closed yet, flash message to wait until after deadline
 		flash ("The assignment hasn't closed yet. Please wait until the deadline is over, then try again to download an assignment to review.")

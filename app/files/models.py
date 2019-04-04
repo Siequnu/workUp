@@ -72,7 +72,7 @@ def getNumberOfFiles():
 
 
 # Send out specific file for download
-def downloadFile(filename):
+def download_file(filename):
 	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 
