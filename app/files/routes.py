@@ -80,7 +80,7 @@ def download_random_file(assignment_id):
 	if number_of_files == 0:
 		flash('There are no files currently available for download. Please check back soon.')
 		return redirect(url_for('assignments.view_assignments'))
-	random_number = (randint(0,(numberOfFiles-1)))
+	random_number = (randint(0,(number_of_files-1)))
 	filename = files_not_from_user[random_number]
 	random_file = os.path.join (current_app.config['UPLOAD_FOLDER'], filename)
 	
