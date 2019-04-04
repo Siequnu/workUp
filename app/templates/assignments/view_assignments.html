@@ -83,12 +83,12 @@
                         <a href="" class="btn btn-secondary btn-lg btn-sm disabled " role="button" aria-disabled="true">{{assignment['submittedFilename']}}</a>
                      {% if assignment['completePeerReviewCount'] == 0 %}
                         
-                         <a href="{{url_for('files.downloadFile', assignmentId = assignment['assignmentId'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 1</a>
+                         <a href="{{url_for('files.download_file', assignment_id = assignment['assignmentId'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 1</a>
                             <a href="#" class="btn btn-default btn-sm disabled" role="button" disabled="true">Submit Review 2</a>
                   
                     {% elif assignment['completePeerReviewCount'] == 1 %}
                         <a href="{{url_for('files.view_peer_review', assignment_id = assignment['assignmentId'], peer_review_number = 1)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
-                        <a href="{{url_for('files.downloadFile', assignmentId = assignment['assignmentId'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 2</a>
+                        <a href="{{url_for('files.download_file', assignment_id = assignment['assignmentId'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 2</a>
                     {% elif assignment['completePeerReviewCount'] == 2 %}
                       <a href="{{url_for('files.view_peer_review', assignment_id = assignment['assignmentId'], peer_review_number = 1)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
                       <a href="{{url_for('files.view_peer_review', assignment_id = assignment['assignmentId'], peer_review_number = 2)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 2</a>
