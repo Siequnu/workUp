@@ -40,8 +40,8 @@ def getUserTurmaFromId (userId):
 	except:
 		return False
 
-def deleteAssignmentFromId (assignmentId):
-	return Assignment.deleteAssignmentFromId(assignmentId)
+def delete_assignment_from_id (assignment_id):
+	return Assignment.delete_assignment_from_id(assignment_id)
 
 def getAssignmentsFromTurmaId (turmaId):
 	conditions = []

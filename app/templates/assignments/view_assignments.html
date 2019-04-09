@@ -15,7 +15,7 @@
 
   <br />
    <div class="container">
-     <p><a class="btn btn-primary" href="{{url_for('admin.createAssignment')}}" role="button">Create assignment</a></p>
+     <p><a class="btn btn-primary" href="{{url_for('assignments.create_assignment')}}" role="button">Create assignment</a></p>
      <br>
       <br>
       <div class="row">
@@ -46,7 +46,7 @@
               <td>{{assignment['assignmentForTurmaId']}}</td>
               <td>{{assignment['assignmentCreationTimestamp']}}</td>
 			  <td>{{assignment['assignmentPeerReviewForm']}}</td>
-			  <td><a href="{{url_for('admin.deleteAssignment', assignmentId = assignment['assignmentId'])}}">Delete</a></td>
+			  <td><a href="{{url_for('assignments.delete_assignment', assignment_id = assignment['assignmentId'])}}">Delete</a></td>
             </tr>
            {% endfor %}
           </tbody>

@@ -247,14 +247,15 @@ class Assignment(db.Model):
 	created_by_id = db.Column(db.Integer)
 	target_course = db.Column(db.String(120))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
+	peer_review_necessary = db.Column(db.Boolean, default=False)
 	peer_review_form = db.Column(db.String(120))
 	
 	def __repr__(self):
 		return '<Assignment {}>'.format(self.title)
 	
 	@staticmethod
-	def deleteAssignmentFromId (assignmentId):
-		sql = text ('DELETE FROM assignment WHERE id=' + '"' + str(assignmentId) + '"')
+	def delete_assignment_from_id (assignment_id):
+		sql = text ('DELETE FROM assignment WHERE id=' + '"' + str(assignment_id) + '"')
 		result = db.engine.execute(sql)
 		return result
 
