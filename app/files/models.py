@@ -20,9 +20,8 @@ def getAllUploadsWithFilenameAndUsername ():
 		return Upload.getAllUploadsWithFilenameAndUsername()
 	
 
-def getAllUploadsCount():
-		count = models.selectFromDb (['id'], 'upload', conditionsArray = False, count = True)
-		return count[0][0]
+def get_all_uploads_count():
+		return Upload.query.count()
 
 
 def getUploadCountFromCurrentUserId ():

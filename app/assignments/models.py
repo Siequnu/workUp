@@ -6,31 +6,10 @@ from datetime import datetime
 import time
 from flask_login import current_user
 
-def get_all_assignments_info ():
-	assignments = app.models.selectFromDb(['*'], 'assignment')
-	# [(1, u'title', u'descrip', u'2018-03-02 00:00:00.000000', 1, u'30640192-1', u'2018-02-28 13:05:59.287555')]
-	cleanAssignmentsArray = []
-	for assignment in assignments:
-		cleanAssignment = {} 
-		cleanAssignment['assignmentId'] = assignment[0]
-		cleanAssignment['assignmentTitle'] = assignment[1]
-		cleanAssignment['assignmentDescription'] = assignment[2]
-		cleanAssignment['assignmentDue'] = datetime.strptime(assignment[3], '%Y-%m-%d').date()
-		# Try and replace the user id with a username (if fails, user might have been deleted)
-		try:
-			conditions = []
-			conditions.append (str('id="' + str(assignment[4]) + '"'))
-			username = app.models.selectFromDb(['username'], 'user', conditions)
-			cleanAssignment['assignmentCreatedBy'] = username[0][0]
-		except:
-			cleanAssignment['assignmentCreatedBy'] = assignment[4]
-		cleanAssignment['assignmentForTurmaId'] = assignment[5]
-		cleanAssignment['assignmentCreationTimestamp'] = datetime.strptime(assignment[6], '%Y-%m-%d %H:%M:%S.%f').date()
-		cleanAssignment['peer_review_necessary'] = assignment[7]
-		cleanAssignment['assignmentPeerReviewForm'] = assignment[8]
-		cleanAssignmentsArray.append(cleanAssignment)
-		
-	return cleanAssignmentsArray
+def get_all_assignments_info (): 
+	return db.session.query(
+		Assignment, User).join(
+		User, Assignment.created_by_id == User.id).all()
 
 def delete_assignment_from_id (assignment_id):
 	return Assignment.delete_assignment_from_id(assignment_id)
