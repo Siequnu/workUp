@@ -104,21 +104,7 @@ class User(UserMixin, db.Model):
 		
 	@staticmethod
 	def get_all_user_info ():
-		sql = text('SELECT id, username, email, turma_id, last_seen, registered, email_confirmed, is_admin FROM user')
-		result = db.engine.execute(sql)
-		clean_user_data = []
-		for user in result: 
-			user_data = {}
-			user_data['id'] = user[0]
-			user_data['username'] = user[1]
-			user_data['email'] = user[2]
-			user_data['turma_id'] = user[3]
-			user_data['last_seen'] = user[4]
-			user_data['registered'] = user[5]
-			user_data['email_confirmed'] = user[6]
-			user_data['is_admin'] = user[7]
-			clean_user_data.append(user_data)
-		return clean_user_data
+		return User.query.all()
 	
 	@staticmethod
 	def give_admin_rights(user_id):
