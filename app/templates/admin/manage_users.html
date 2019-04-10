@@ -36,14 +36,14 @@
 		  <tbody>
 			{% for user in user_data %}
             <tr>
-              <td>{{user['id']}}</td>
-              <td>{{user['username']}}</td>
-              <td>{{user['email']}}</td>
-              <td>{{user['turma_id']}}</td>
-              <td>{{user['last_seen']}}</td>
-              <td>{{user['registered']}}</td>
-              <td>{{user['email_confirmed']}}</td>
-              <td>{{user['is_admin']}}</td>
+              <td>{{user.id}}</td>
+              <td>{{user.username}}</td>
+              <td>{{user.email}}</td>
+              <td>{{user.turma_id}}</td>
+              <td>{{user.last_seen}}</td>
+              <td>{{user.registered}}</td>
+              <td>{{user.email_confirmed}}</td>
+              <td>{{user.is_admin}}</td>
               <td>
                <a href="{{url_for('admin.give_admin_rights', user_id = user['id'])}}" class="btn btn-outline-primary btn-sm" role="button">Make admin</a>
                <p></p>
