@@ -9,32 +9,11 @@ from flask_login import current_user
 from app.models import User, Upload, Download
 
 
-def get_all_uploads_from_assignment_id (assignment_id):
-	conditions = []
-	conditions.append('assignment_id="' + str(assignment_id) + '"')
-	upload_info = models.selectFromDb (['id', 'original_filename', 'filename', 'timestamp', 'user_id'], 'upload', conditions)
-	clean_dict = {}
-	for info in upload_info:
-		# Clean upload time
-		datetime = info[3] #2018-02-25 21:50:13.750276
-		splitDatetime = str.split(str(datetime)) #['2018-02-25', '21:50:13.750276']
-		date = splitDatetime[0]
-		timeSplit = str.split(splitDatetime[1], ':') #['21', '50', '13.750276']
-		uploadTime = str(timeSplit[0]) + ':' + str(timeSplit[1])
-		uploadDateAndtime = date + ' ' + uploadTime
-		
-		# Get completed comment count from file ID
-		fileId = models.selectFromDb(['id'], 'upload', [(str('filename="' + str(info[1]) + '"'))])
-		conditions = []
-		conditions.append(''.join(('fileid=', str(fileId[0][0]))))
-		conditions.append('pending=0')
-		peerReviewCount = models.selectFromDb(['id'], 'comment', conditions)
-		
-		# Add arrayed information to a new dictionary entry
-		clean_dict[str(info[0])] = [uploadDateAndtime, str(len(peerReviewCount)), str(info[3])]
-	print (clean_dict)	
-	return clean_dict
-	
+def get_all_uploads_from_assignment_id (assignment_id):	
+	return db.session.query(
+		Upload, User).join(
+		User).filter(
+		Upload.assignment_id == assignment_id).all()	
 
 
 def getAllUploadsWithFilenameAndUsername ():
