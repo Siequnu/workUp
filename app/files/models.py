@@ -9,12 +9,38 @@ from flask_login import current_user
 from app.models import User, Upload, Download
 
 
+def get_all_uploads_from_assignment_id (assignment_id):
+	conditions = []
+	conditions.append('assignment_id="' + str(assignment_id) + '"')
+	upload_info = models.selectFromDb (['id', 'original_filename', 'filename', 'timestamp', 'user_id'], 'upload', conditions)
+	clean_dict = {}
+	for info in upload_info:
+		# Clean upload time
+		datetime = info[3] #2018-02-25 21:50:13.750276
+		splitDatetime = str.split(str(datetime)) #['2018-02-25', '21:50:13.750276']
+		date = splitDatetime[0]
+		timeSplit = str.split(splitDatetime[1], ':') #['21', '50', '13.750276']
+		uploadTime = str(timeSplit[0]) + ':' + str(timeSplit[1])
+		uploadDateAndtime = date + ' ' + uploadTime
+		
+		# Get completed comment count from file ID
+		fileId = models.selectFromDb(['id'], 'upload', [(str('filename="' + str(info[1]) + '"'))])
+		conditions = []
+		conditions.append(''.join(('fileid=', str(fileId[0][0]))))
+		conditions.append('pending=0')
+		peerReviewCount = models.selectFromDb(['id'], 'comment', conditions)
+		
+		# Add arrayed information to a new dictionary entry
+		clean_dict[str(info[0])] = [uploadDateAndtime, str(len(peerReviewCount)), str(info[3])]
+	print (clean_dict)	
+	return clean_dict
+	
+
 
 def getAllUploadsWithFilenameAndUsername ():
 		return Upload.getAllUploadsWithFilenameAndUsername()
-
-
 	
+
 def getAllUploadsCount():
 		count = models.selectFromDb (['id'], 'upload', conditionsArray = False, count = True)
 		return count[0][0]
@@ -28,7 +54,6 @@ def getUploadCountFromCurrentUserId ():
 	return numberOfUploads[0][0]
 
 
-
 def getPostInfoFromUserId (userId):
 	conditions = []
 	conditions.append(str('user_id="' + str(userId) + '"'))
@@ -36,7 +61,7 @@ def getPostInfoFromUserId (userId):
 	cleanDict = {}
 	for info in uploadInfo:
 		# Get upload time
-		datetime = info[1] #2018-02-25 21:50:13.750276
+		datetime = info[2] #2018-02-25 21:50:13.750276
 		splitDatetime = str.split(str(datetime)) #['2018-02-25', '21:50:13.750276']
 		date = splitDatetime[0]
 		timeSplit = str.split(splitDatetime[1], ':') #['21', '50', '13.750276']
@@ -44,15 +69,14 @@ def getPostInfoFromUserId (userId):
 		uploadDateAndtime = date + ' ' + uploadTime
 		
 		# Get completed comment count from file ID
-		fileId = models.selectFromDb(['id'], 'upload', [(str('filename="' + str(info[2]) + '"'))])
+		fileId = models.selectFromDb(['id'], 'upload', [(str('filename="' + str(info[1]) + '"'))])
 		conditions = []
 		conditions.append(''.join(('fileid=', str(fileId[0][0]))))
 		conditions.append('pending=0')
 		peerReviewCount = models.selectFromDb(['id'], 'comment', conditions)
 		
 		# Add arrayed information to a new dictionary entry
-		cleanDict[str(info[0])] = [uploadDateAndtime, str(len(peerReviewCount)), str(info[3])]
-	print (cleanDict)	
+		cleanDict[str(info[3])] = [uploadDateAndtime, str(len(peerReviewCount)), str(info[0])]
 	return cleanDict
 
 
@@ -87,7 +111,6 @@ def saveFile (file, assignmentId = False):
 
 # Verify a filename is secure with werkzeug library
 def getSecureFilename(filename):
-
 	return secure_filename(filename)
 
 

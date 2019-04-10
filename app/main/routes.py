@@ -4,7 +4,7 @@ import os, datetime, json
 
 # SQL
 from flask_login import current_user
-from app.models import Turma, Upload, Comment, Assignment, Download
+from app.models import Turma, Upload, Comment, Assignment, Download, User
 from app import db
 
 db.create_all()
@@ -52,7 +52,7 @@ def index():
 			# Get number of uploads
 			numberOfUploads = app.files.models.getUploadCountFromCurrentUserId()
 			# Get total assignments assigned to user's class
-			turmaId = app.assignments.models.getUserTurmaFromId (current_user.id)
+			turmaId = User.get_user_turma_from_user_id (current_user.id)
 			if (turmaId == False):
 				flash('You do not appear to be part of a class. Please contact your tutor for assistance.')
 				return render_template('index.html')

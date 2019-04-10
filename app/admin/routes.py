@@ -17,9 +17,9 @@ from app.admin import bp
 	
 	
 # Admin page to set new class
-@bp.route("/createclass", methods=['GET', 'POST'])
+@bp.route("/create_class", methods=['GET', 'POST'])
 @login_required
-def createClass():
+def create_class():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = app.admin.forms.TurmaCreationForm()
 		if form.validate_on_submit():

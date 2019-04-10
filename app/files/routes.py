@@ -73,7 +73,7 @@ def download_random_file(assignment_id):
 		
 	else:
 		# Get an array of filenames not belonging to current user
-		previous_download_file_id = completed_comments_ids_and_file_id[0][1]
+		previous_download_file_id = completed_comments_ids_and_file_id[0][0]
 		files_not_from_user = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignment_id, previous_download_file_id)
 	
 	number_of_files = len(files_not_from_user)
@@ -93,7 +93,7 @@ def download_random_file(assignment_id):
 	conditions = []
 	conditions.append (str('filename="' + str(filename) + '"'))
 	upload_id = app.models.selectFromDb(['id'], 'upload', conditions)
-	comment_pending = Comment(user_id = int(current_user.id), fileid = int(upload_if[0][0]), pending = True, assignment_id=assignment_id)
+	comment_pending = Comment(user_id = int(current_user.id), fileid = int(upload_id[0][0]), pending = True, assignment_id=assignment_id)
 	db.session.add(comment_pending)
 	db.session.commit()
 
@@ -115,10 +115,10 @@ def download_file(assignment_id = False):
 		return redirect (url_for('assignments.view_assignments'))
 
 	
-# Upload form, or upload specific file
-@bp.route('/upload/<assignmentId>',methods=['GET', 'POST'])
+# Student form to upload a file to an assignment
+@bp.route('/upload/<assignment_id>',methods=['GET', 'POST'])
 @login_required
-def uploadFile(assignmentId = False):
+def upload_file(assignment_id):
 	# If the form has been filled out and posted:
 	if request.method == 'POST':
 		if 'file' not in request.files:
@@ -129,18 +129,15 @@ def uploadFile(assignmentId = False):
 			flash('The filename is blank. Please rename the file.')
 			return redirect(request.url)
 		if file and models.allowedFile(file.filename):
-			if (assignmentId):
-				models.saveFile(file, assignmentId)
-			else:
-				models.saveFile(file)
-			originalFilename = models.getSecureFilename(file.filename)
-			flash('Your file ' + str(originalFilename) + ' successfully uploaded')
+			models.saveFile(file, assignment_id)
+			original_filename = models.getSecureFilename(file.filename)
+			flash('Your file ' + str(original_filename) + ' successfully uploaded')
 			return redirect(url_for('assignments.view_assignments'))
 		else:
 			flash('You can not upload this kind of file.')
 			return redirect(url_for('assignments.view_assignments'))
 	else:
-		return render_template('files/fileUpload.html')
+		return render_template('files/upload_file.html')
 
 	
 	

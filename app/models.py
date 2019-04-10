@@ -24,6 +24,7 @@ def selectFromDb (columnsArray, fromTable, conditionsArray = False, count = Fals
 	else:
 		sqlQuery = 'SELECT '
 		columnsString = ''
+		columnsArray.reverse()
 		while len(columnsArray) > 1:	
 			columnsString = columnsString + columnsArray.pop() + ', '
 		columnsString = columnsString + columnsArray.pop()
@@ -143,6 +144,17 @@ class User(UserMixin, db.Model):
 		clean_usernames = []
 		for username_tuple in usernames: clean_usernames.append(username_tuple[0])
 		return clean_usernames
+	
+	@staticmethod
+	def get_user_turma_from_user_id (user_id):
+		conditions = []
+		conditions.append (str('id="' + str(user_id) + '"'))
+		turma = selectFromDb(['turma_id'], 'user', conditions)
+		try:
+			return turma[0][0]
+		except:
+			return False
+
 	
 	
 
