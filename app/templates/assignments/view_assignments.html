@@ -36,17 +36,17 @@
             </tr>
           </thead>
 		  <tbody>
-			{% for assignment in assignmentsArray %}
+			{% for assignment, user in assignmentsArray %}
             <tr>
-              <td>{{assignment['assignmentId']}}</td>
-              <td>{{assignment['assignmentTitle']}}</td>
-              <td>{{assignment['assignmentDescription']}}</td>
-			  <td>{{assignment['assignmentDue']}}</td>
-			  <td>{{assignment['assignmentCreatedBy']}}</td>
-              <td>{{assignment['assignmentForTurmaId']}}</td>
-              <td>{{assignment['assignmentCreationTimestamp']}}</td>
-              <td>{{assignment['peer_review_necessary']}}</td>
-			  <td>{{assignment['assignmentPeerReviewForm']}}</td>
+              <td>{{assignment.id}}</td>
+              <td>{{assignment.title}}</td>
+              <td>{{assignment.description}}</td>
+			  <td>{{assignment.due_date}}</td>
+			  <td>{{user.username}}</td>
+              <td>{{assignment.target_course}}</td>
+              <td>{{assignment.timestamp}}</td>
+              <td>{{assignment.peer_review_necessary}}</td>
+			  <td>{{assignment.peer_review_form}}</td>
 			  <td>
       <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment['assignmentId'])}}">Delete</a>
       <a href="{{url_for('assignments.view_assignment_details', assignment_id = assignment['assignmentId'])}}">View Details</a>
