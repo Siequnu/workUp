@@ -6,7 +6,7 @@ from datetime import datetime
 import time
 from flask_login import current_user
 
-def getAllAssignments ():
+def get_all_assignments_info ():
 	assignments = app.models.selectFromDb(['*'], 'assignment')
 	# [(1, u'title', u'descrip', u'2018-03-02 00:00:00.000000', 1, u'30640192-1', u'2018-02-28 13:05:59.287555')]
 	cleanAssignmentsArray = []
@@ -25,27 +25,19 @@ def getAllAssignments ():
 		except:
 			cleanAssignment['assignmentCreatedBy'] = assignment[4]
 		cleanAssignment['assignmentForTurmaId'] = assignment[5]
-		cleanAssignment['assignmentCreationTimestamp'] = assignment[6]
-		cleanAssignment['assignmentPeerReviewForm'] = assignment[7]
+		cleanAssignment['assignmentCreationTimestamp'] = datetime.strptime(assignment[6], '%Y-%m-%d %H:%M:%S.%f').date()
+		cleanAssignment['peer_review_necessary'] = assignment[7]
+		cleanAssignment['assignmentPeerReviewForm'] = assignment[8]
 		cleanAssignmentsArray.append(cleanAssignment)
 		
 	return cleanAssignmentsArray
-	
-def getUserTurmaFromId (userId):
-	conditions = []
-	conditions.append (str('id="' + str(userId) + '"'))
-	turma = app.models.selectFromDb(['turma_id'], 'user', conditions)
-	try:
-		return turma[0][0]
-	except:
-		return False
 
 def delete_assignment_from_id (assignment_id):
 	return Assignment.delete_assignment_from_id(assignment_id)
 
-def getAssignmentsFromTurmaId (turmaId):
+def get_assignments_from_turma_id (turma_id):
 	conditions = []
-	conditions.append (str('target_course="' + str(turmaId) + '"'))
+	conditions.append (str('target_course="' + str(turma_id) + '"'))
 	return app.models.selectFromDb(['*'], 'assignment', conditions)
 
 def getAssignmentDueDateFromId (assignmentId):
@@ -71,20 +63,21 @@ def checkIfAssignmentIsOver (assignmentId):
 		# Assignment closed
 		return True
 	
-def getUserAssignmentInformation (userId):
-	turmaId = getUserTurmaFromId (userId)
-	assignments = getAssignmentsFromTurmaId (turmaId)
-	cleanAssignmentsArray = []
+def get_user_assignment_info (user_id):
+	turma_id = User.get_user_turma_from_user_id (user_id)
+	assignments = get_assignments_from_turma_id (turma_id)
+	clean_assignments_array = []
 	# Check if user has completed their assignments
 	for assignment in assignments:
-		cleanAssignment = {} 
-		cleanAssignment['assignmentId'] = assignment[0]
-		cleanAssignment['assignmentTitle'] = assignment[1]
-		cleanAssignment['assignmentDescription'] = assignment[2]
-		cleanAssignment['assignmentDue'] = datetime.strptime(assignment[3], '%Y-%m-%d').date()
-		cleanAssignment['assignmentIsPastDeadline'] = checkIfAssignmentIsOver(assignment[0])
+		clean_assignment = {} 
+		clean_assignment['assignmentId'] = assignment[0]
+		clean_assignment['assignmentTitle'] = assignment[1]
+		clean_assignment['assignmentDescription'] = assignment[2]
+		clean_assignment['assignmentDue'] = datetime.strptime(assignment[3], '%Y-%m-%d').date()
+		clean_assignment['peer_review_necessary'] = assignment[7]
+		clean_assignment['assignmentIsPastDeadline'] = checkIfAssignmentIsOver(assignment[0])
 		
-		getSubmittedFileId = str(Assignment.getUsersUploadedAssignmentsFromAssignmentId(assignment[0], userId)) # [(30,)]
+		getSubmittedFileId = str(Assignment.getUsersUploadedAssignmentsFromAssignmentId(assignment[0], user_id)) # [(30,)]
 		if getSubmittedFileId != '[]': # If user has submitted an upload for this reception
 			cleanSubmittedFileId = getSubmittedFileId.replace ('(', '')
 			cleanSubmittedFileId = cleanSubmittedFileId.replace (',', '')
@@ -92,23 +85,23 @@ def getUserAssignmentInformation (userId):
 			cleanSubmittedFileId = cleanSubmittedFileId.replace (']', '')
 			cleanSubmittedFileId = cleanSubmittedFileId.replace ('[', '')
 			uploadOriginalFilename = app.models.selectFromDb(['original_filename'], 'upload', [''.join(('id=', str(cleanSubmittedFileId)))])
-			cleanAssignment['submittedFilename'] = uploadOriginalFilename[0][0]
+			clean_assignment['submittedFilename'] = uploadOriginalFilename[0][0]
 			
 			# Check for uploaded or pending peer-reviews
 			# This can either be 0 pending and 0 complete, 0/1 pending and 1 complete, or 0 pending and 2 complete
-			completeCount = Comment.getCountCompleteCommentsFromUserIdAndAssignmentId (userId, assignment[0])
-			cleanAssignment['completePeerReviewCount'] = completeCount[0][0]
+			completeCount = Comment.getCountCompleteCommentsFromUserIdAndAssignmentId (user_id, assignment[0])
+			clean_assignment['completePeerReviewCount'] = completeCount[0][0]
 			
-		cleanAssignmentsArray.append(cleanAssignment)
+		clean_assignments_array.append(clean_assignment)
 	
-	return cleanAssignmentsArray
+	return clean_assignments_array
 
 def getAssignmentUploadProgressPercentage ():
 	# Get turmaId for this user
-	turmaId = getUserTurmaFromId (current_user.id)
+	turmaId = User.get_user_turma_from_user_id (current_user.id)
 	
 	# Get assignments due for this user
-	assignmentsInfo = getAssignmentsFromTurmaId(turmaId)
+	assignmentsInfo = get_assignments_from_turma_id(turmaId)
 	assignmentsForThisUser = []
 	for assignment in assignmentsInfo:
 		assignmentId = str(assignment[0])
@@ -131,10 +124,10 @@ def getAssignmentUploadProgressPercentage ():
 	
 def getPeerReviewProgressPercentage ():
 	# Get turmaId for this user
-	turmaId = getUserTurmaFromId (current_user.id)
+	turmaId = User.get_user_turma_from_user_id (current_user.id)
 	
 	# Get assignments due for this user
-	assignmentsInfo = getAssignmentsFromTurmaId(turmaId)
+	assignmentsInfo = get_assignments_from_turma_id(turmaId)
 	assignmentsForThisUser = []
 	for assignment in assignmentsInfo:
 		assignmentId = str(assignment[0])

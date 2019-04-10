@@ -1,0 +1,64 @@
+
+  {% extends "header.html" %}
+  
+  
+  {% block app_content %}
+<div class="container">
+<br>
+ 
+  <div class="row">
+        <div class="col-md-8">
+        	<h1>View Assignment Details</h1>
+         <hr>
+        </div>
+    </div>
+  <br />
+   <div class="container">
+     <br>
+      <br>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="table-responsive">
+            <table summary="The following assignments have been made" class="table table-bordered table-hover">
+        	  <thead>
+              <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Description</th>
+        		  <th>Due date</th>
+        		  <th>Created by</th>
+        		  <th>For class</th>
+        		  <th>Creation time</th>
+            <th>Peer Review Necessary</th>
+        		  <th>Peer review form</th>
+        		  <th>Actions</th>
+            </tr>
+          </thead>
+		  <tbody>
+			{% for assignment in assignmentsArray %}
+            <tr>
+              <td>{{assignment['assignmentId']}}</td>
+              <td>{{assignment['assignmentTitle']}}</td>
+              <td>{{assignment['assignmentDescription']}}</td>
+			  <td>{{assignment['assignmentDue']}}</td>
+			  <td>{{assignment['assignmentCreatedBy']}}</td>
+              <td>{{assignment['assignmentForTurmaId']}}</td>
+              <td>{{assignment['assignmentCreationTimestamp']}}</td>
+    
+			  <td>{{assignment['assignmentPeerReviewForm']}}</td>
+			  <td>
+     </td>
+            </tr>
+           {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+            </tr>
+          </tfoot>
+        </table>
+      </div><!--end of .table-responsive-->
+    </div>
+  </div>
+</div>
+  </div>
+{% endblock %}

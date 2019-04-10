@@ -12,7 +12,6 @@
          <hr>
         </div>
     </div>
-
   <br />
    <div class="container">
      <p><a class="btn btn-primary" href="{{url_for('assignments.create_assignment')}}" role="button">Create assignment</a></p>
@@ -31,6 +30,7 @@
         		  <th>Created by</th>
         		  <th>For class</th>
         		  <th>Creation time</th>
+            <th>Peer Review Necessary</th>
         		  <th>Peer review form</th>
         		  <th>Actions</th>
             </tr>
@@ -45,8 +45,12 @@
 			  <td>{{assignment['assignmentCreatedBy']}}</td>
               <td>{{assignment['assignmentForTurmaId']}}</td>
               <td>{{assignment['assignmentCreationTimestamp']}}</td>
+              <td>{{assignment['peer_review_necessary']}}</td>
 			  <td>{{assignment['assignmentPeerReviewForm']}}</td>
-			  <td><a href="{{url_for('assignments.delete_assignment', assignment_id = assignment['assignmentId'])}}">Delete</a></td>
+			  <td>
+      <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment['assignmentId'])}}">Delete</a>
+      <a href="{{url_for('assignments.view_assignment_details', assignment_id = assignment['assignmentId'])}}">View Details</a>
+     </td>
             </tr>
            {% endfor %}
           </tbody>
@@ -81,23 +85,30 @@
         <div class="card-footer">
                  {% if assignment['submittedFilename'] %}                   
                         <a href="" class="btn btn-secondary btn-lg btn-sm disabled " role="button" aria-disabled="true">{{assignment['submittedFilename']}}</a>
-                     {% if assignment['completePeerReviewCount'] == 0 %}
-                        
-                         <a href="{{url_for('files.download_file', assignment_id = assignment['assignmentId'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 1</a>
-                            <a href="#" class="btn btn-default btn-sm disabled" role="button" disabled="true">Submit Review 2</a>
-                  
-                    {% elif assignment['completePeerReviewCount'] == 1 %}
-                        <a href="{{url_for('files.view_peer_review', assignment_id = assignment['assignmentId'], peer_review_number = 1)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
-                        <a href="{{url_for('files.download_file', assignment_id = assignment['assignmentId'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 2</a>
-                    {% elif assignment['completePeerReviewCount'] == 2 %}
-                      <a href="{{url_for('files.view_peer_review', assignment_id = assignment['assignmentId'], peer_review_number = 1)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
-                      <a href="{{url_for('files.view_peer_review', assignment_id = assignment['assignmentId'], peer_review_number = 2)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 2</a>
-                    {% endif %}
+                     
+                     {% if assignment['peer_review_necessary'] == 1 %}                   
+                     
+                        {% if assignment['completePeerReviewCount'] == 0 %}
+                           
+                            <a href="{{url_for('files.download_file', assignment_id = assignment['assignmentId'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 1</a>
+                               <a href="#" class="btn btn-default btn-sm disabled" role="button" disabled="true">Submit Review 2</a>
+                     
+                         {% elif assignment['completePeerReviewCount'] == 1 %}
+                            <a href="{{url_for('files.view_peer_review', assignment_id = assignment['assignmentId'], peer_review_number = 1)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
+                           <a href="{{url_for('files.download_file', assignment_id = assignment['assignmentId'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 2</a>
+                         {% elif assignment['completePeerReviewCount'] == 2 %}
+                         <a href="{{url_for('files.view_peer_review', assignment_id = assignment['assignmentId'], peer_review_number = 1)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
+                         <a href="{{url_for('files.view_peer_review', assignment_id = assignment['assignmentId'], peer_review_number = 2)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 2</a>
+                         {% endif %}
+                     {% else %}
+                      <a href="" class="btn btn-info btn-lg btn-sm disabled " role="button" aria-disabled="true">This assignment will not be peer-reviewed</a>
+                     
+                     {% endif %}
                 {% else %}
                     {% if assignment['assignmentIsPastDeadline'] %}
                       <a href="#" class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true">Assignment overdue.</a>
                     {% else %}
-                        <a href="files/upload/{{assignment['assignmentId']}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Upload your assignment</a>
+                        <a href="{{url_for('files.upload_file', assignment_id = assignment['assignmentId'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Upload your assignment</a>
                     {% endif %}
                <a href="" class="btn btn-default btn-sm" role="button" aria-disabled="true">Submit Review 1</a>
               <a href="" class="btn btn-default btn-sm" role="button" aria-disabled="true">Submit Review 2</a>
