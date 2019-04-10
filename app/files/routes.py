@@ -45,6 +45,7 @@ def file_stats():
 def download_random_file(assignment_id):
 	# Check if user has any previous downloads with pending peer reviews
 	pending_assignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignment_id)
+	print (pending_assignments) # (2, 1) if first assignment, or [] if none left?
 	if len(pending_assignments) > 0:
 		# User has a pending assignment, send them the same file as before
 		already_downloaded_and_pending_review_file_id = pending_assignments[0][1]
@@ -213,7 +214,31 @@ def create_peer_review(assignment_id = False):
 			flash('Peer review 2 submitted succesfully!')
 		return redirect(url_for('assignments.view_assignments'))
 	return render_template('files/peer_review_form.html', title='Submit a peer review', form=form)
+
+
+# Display an empty review feedback form
+@bp.route("/create_teacher_review/<upload_id>", methods=['GET', 'POST'])
+@login_required
+def create_teacher_review(upload_id):
+	# Get the appropriate peer review form
+	peer_review_form = models.get_peer_review_form_from_upload_id (upload_id)
+	form = eval(peer_review_form)()
 	
+	if form.validate_on_submit():
+		# Serialise the form contents
+		form_fields = {}
+		for field_title, field_contents in form.data.items():
+			form_fields[field_title] = field_contents
+		# Clean the csrf_token and submit fields
+		del form_fields['csrf_token']
+		del form_fields['submit']
+		form_contents = json.dumps(form_fields)
+		
+		update_comment = models.add_teacher_comment_to_upload(form_contents, upload_id)
+		
+		flash('Teacher review submitted succesfully!')
+		return redirect(url_for('assignments.view_assignments'))
+	return render_template('files/peer_review_form.html', title='Submit a teacher review', form=form)
 
 
 # View a completed and populated peer review form

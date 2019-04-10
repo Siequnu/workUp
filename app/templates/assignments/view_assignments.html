@@ -48,8 +48,9 @@
               <td>{{assignment.peer_review_necessary}}</td>
 			  <td>{{assignment.peer_review_form}}</td>
 			  <td>
-      <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment['assignmentId'])}}">Delete</a>
-      <a href="{{url_for('assignments.view_assignment_details', assignment_id = assignment['assignmentId'])}}">View Details</a>
+      <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment.id)}}">  <img src='/static/trash-alt.svg' alt="Delete Assignment" width="25" heigth="25%"></a>
+      <a href="{{url_for('assignments.view_assignment_details', assignment_id = assignment.id)}}">  <img src='/static/edit.svg' alt="View Details" width="25" heigth="25%"></a>
+      
      </td>
             </tr>
            {% endfor %}
@@ -110,8 +111,7 @@
                     {% else %}
                         <a href="{{url_for('files.upload_file', assignment_id = assignment['assignmentId'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Upload your assignment</a>
                     {% endif %}
-               <a href="" class="btn btn-default btn-sm" role="button" aria-disabled="true">Submit Review 1</a>
-              <a href="" class="btn btn-default btn-sm" role="button" aria-disabled="true">Submit Review 2</a>
+              
             {% endif %}
       
           </div>
