@@ -164,7 +164,7 @@ class Upload(db.Model):
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-	assignment_id = db.Column(db.Integer)
+	assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
 	
 	def __repr__(self):
 		return '<Upload {}>'.format(self.filename)		

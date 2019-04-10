@@ -34,8 +34,8 @@ def view_assignments():
 def view_assignment_details(assignment_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		# Get all files that have been uploaded for this assignment
-		clean_assignments_array = app.files.models.get_all_uploads_from_assignment_id(assignment_id)
-		return render_template('assignments/view_assignment_details.html', assignmentsArray = clean_assignments_array, admin = True)
+		uploads_info = app.files.models.get_all_uploads_from_assignment_id(assignment_id)
+		return render_template('assignments/view_assignment_details.html', uploads_info = uploads_info)
 	abort (403)
 
 
