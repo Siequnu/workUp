@@ -6,7 +6,7 @@ import uuid, datetime
 
 # SQL for DB operations
 from flask_login import current_user
-from app.models import User, Upload, Download
+from app.models import User, Upload, Download, Assignment, Comment
 
 
 def get_all_uploads_from_assignment_id (assignment_id):	
@@ -17,12 +17,18 @@ def get_all_uploads_from_assignment_id (assignment_id):
 
 
 def getAllUploadsWithFilenameAndUsername ():
-		return Upload.getAllUploadsWithFilenameAndUsername()
+	return Upload.getAllUploadsWithFilenameAndUsername()
 	
 
 def get_all_uploads_count():
-		return Upload.query.count()
+	return Upload.query.count()
 
+def add_teacher_comment_to_upload (form_contents, upload_id):
+	comment = Comment(comment = form_contents, user_id = current_user.id,
+					  fileid = upload_id, pending = False, assignment_id = Upload.query.get(upload_id).assignment_id)
+	db.session.add(comment)
+	db.session.commit()
+	return True
 
 def getUploadCountFromCurrentUserId ():
 	conditionsArray = []
@@ -31,6 +37,11 @@ def getUploadCountFromCurrentUserId ():
 	numberOfUploads = models.selectFromDb(['id'], 'upload', conditionsArray, count)
 	return numberOfUploads[0][0]
 
+def get_peer_review_form_from_upload_id (upload_id):
+	info = db.session.query(
+		Upload, Assignment).join(
+		Assignment, Upload.assignment_id == Assignment.id).filter(Upload.id == upload_id).first()
+	return info[1].peer_review_form
 
 def getPostInfoFromUserId (userId):
 	conditions = []
