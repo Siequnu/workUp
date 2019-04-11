@@ -45,7 +45,8 @@ def get_peer_review_form_from_upload_id (upload_id):
 
 # Get all post info and comment count for a user
 def get_post_info_from_user_id (user_id):	
-	return db.session.query(Upload, func.count(Comment.id)).join(Comment, Upload.id==Comment.fileid).group_by(Upload.filename).filter(Upload.user_id==user_id).all()
+	return db.session.query(Upload, func.count(Comment.id)).join(
+		Comment, Upload.id==Comment.fileid).group_by(Upload.filename).filter(Upload.user_id==user_id).all()
 
 
 # Check filename and extension permissibility
@@ -54,7 +55,7 @@ def allowedFile(filename):
            filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
 
-def getFileExtension(filename):
+def get_file_extension(filename):
 	return filename.rsplit('.', 1)[1].lower()
 
 
@@ -68,33 +69,30 @@ def download_file(filename):
 	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 
+# Saves a file to uplaods folder, returns secure filename
+def save_file (file):
+	original_filename = secure_filename(file.filename)
+	random_filename = get_random_uuid_filename (original_filename)
+	file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], random_filename))
+	return random_filename
+
 # Save a file to uploads folder, and update DB
-def saveFile (file, assignmentId = False):
-	originalFilename = getSecureFilename(file.filename)
-	randomFilename = getRandomFilename (originalFilename)
-	file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], randomFilename))
+def save_assignment_file (file, assignment_id):
+	original_filename = secure_filename(file.filename)
+	random_filename = save_file (file)
 	
 	# Update SQL after file has saved
-	writeUploadEvent (originalFilename, randomFilename, userId = current_user.id, assignment_id = assignmentId)
+	upload = Upload(original_filename = original_filename, filename = random_filename, user_id = current_user.id, assignment_id = assignment_id)
+	db.session.add(upload)
+	db.session.commit()
 
 # Verify a filename is secure with werkzeug library
-def getSecureFilename(filename):
+def get_secure_filename(filename):
 	return secure_filename(filename)
 
 
 # Return randomised filename, keeping the original extension
-def getRandomFilename(originalFilename):
-	originalFileExtension = getFileExtension(str(originalFilename))
-	randomFilename = str(uuid.uuid4()) + '.' + originalFileExtension
-	return randomFilename
-
-
-# Write a file upload event to db
-def writeUploadEvent(originalFilename, randomFilename, userId, assignment_id = False):
-	# Update SQL after file has saved
-	if assignment_id:
-			upload = Upload(original_filename = originalFilename, filename = randomFilename, user_id = userId, assignment_id = assignment_id)
-	else:
-		upload = Upload(original_filename = originalFilename, filename = randomFilename, user_id = userId)
-	db.session.add(upload)
-	db.session.commit()
+def get_random_uuid_filename(original_filename):
+	original_file_extension = get_file_extension(str(original_filename))
+	random_filename = str(uuid.uuid4()) + '.' + original_file_extension
+	return random_filename

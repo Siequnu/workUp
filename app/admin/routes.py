@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, current_app, abort
+from flask import render_template, flash, redirect, url_for, request, current_app, abort, session
 from flask_login import current_user
 
 from app.admin.forms import TurmaCreationForm, AdminRegistrationForm
@@ -8,14 +8,12 @@ from app.models import Assignment, Upload, Comment, Turma, User
 import app.models
 import app.assignments
 
-
 # Login
 from flask_login import login_required
 
 # Blueprint
-from app.admin import bp
-	
-	
+from app.admin import bp, models
+
 # Admin page to set new class
 @bp.route("/create_class", methods=['GET', 'POST'])
 @login_required
@@ -33,6 +31,48 @@ def create_class():
 	abort(403)
 	
 
+# Admin page to set new class
+@bp.route("/batch_import_students", methods=['GET', 'POST'])
+@login_required
+def batch_import_students():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		form = app.admin.forms.BatchStudentImportForm()
+		if form.validate_on_submit():
+			if not form.excel_file.data.filename:
+				flash('No file uploaded. Please try again or contact your tutor.')
+				return redirect(request.url)
+			file = form.excel_file.data
+			if file and models.check_if_excel_spreadsheet(file.filename):
+				#models.save_excel_student_sheet(file)
+				#original_filename = models.get_secure_filename(file.filename)
+				session['student_info_array'] = models.process_student_excel_spreadsheet (file)
+				return redirect(url_for('admin.batch_import_students_preview', turma_id = form.target_course.data))
+			else:
+				flash('You can not upload this kind of file. You must upload an Excel (.xls) file.')
+				return redirect(url_for('admin.batch_import_students'))
+		return render_template('admin/batch_import_students.html', title='Batch import students', form=form)
+	abort(403)
+	
+
+
+# Admin page to set new class
+@bp.route("/batch_import_students_preview/<turma_id>", methods=['GET', 'POST'])
+@login_required
+def batch_import_students_preview(turma_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		return render_template('admin/batch_import_students_preview.html', turma_id = turma_id, student_info_array = session.get('student_info_array', {}), title='Batch import students preview')
+	abort(403)
+
+
+# Admin page to set new class
+@bp.route("/batch_import_students_process/<turma_id>", methods=['GET', 'POST'])
+@login_required
+def batch_import_students_process(turma_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		student_info_array = session.get('student_info_array', {})
+		models.add_users_from_excel_spreadsheet(student_info_array, turma_id)
+		return render_template('admin/batch_import_students_process.html', student_info_array = session.get('student_info_array', {}), title='Batch import students process')
+	abort(403)
 
 
 # Admin page to view classes

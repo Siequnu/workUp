@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField, RadioField, FormField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField, RadioField, FormField, TextAreaField, FileField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from flask_wtf.file import FileField, FileRequired
 
 from app.models import User, Turma
 	
@@ -11,6 +12,11 @@ class TurmaCreationForm(FlaskForm):
 	turmaTerm = StringField('Class term', validators=[DataRequired()])
 	turmaYear = StringField('Class year', validators=[DataRequired()])
 	submit = SubmitField('Create')
+	
+class BatchStudentImportForm(FlaskForm):
+	target_course = SelectField('Class ID', choices=Turma.getTurmaChoiceListForForm (), validators=[DataRequired()])
+	excel_file = FileField(validators=[FileRequired()], label='Excel File')
+	submit = SubmitField('Process...')
 	
 class AdminRegistrationForm(FlaskForm):
 	username = StringField('Admin Username', validators=[DataRequired()])

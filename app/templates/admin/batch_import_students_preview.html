@@ -1,0 +1,60 @@
+{% extends "header.html" %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block app_content %}
+<div class="container">
+<br>
+
+
+{% block body %}
+
+ <div class="container">
+
+ <div class="card bg-light mb-3"">
+  <div class="card-body">
+    <h1>Batch import students preview</h1>
+    <hr>
+     <p><a href="{{url_for('admin.batch_import_students_process', turma_id = turma_id)}}" class="btn btn-primary" role="button">Add users</a></p>
+    <br>     
+      <div class="table-responsive">
+            <table summary="User table" class="table table-bordered table-hover">
+           <thead>
+              <tr>
+              <th>Name</th>
+              <th>Student number</th>
+              <th>Email</th>
+        		  <th>Department</th>
+        		  <th>Section</th>
+        		  <th>Phone number</th>
+        		  <th>Actions</th>
+            </tr>
+          </thead>
+		  <tbody>
+			{% for student in student_info_array %}
+            <tr>
+              <td>{{student['name']}}</td>
+              <td>{{student['student_number']}}</td>
+              <td>{{student['email']}}</td>
+              <td>{{student['department']}}</td>
+              <td>{{student['section']}}</td>
+              <td>{{student['phone_number']}}</td>
+              <td>
+               <a href="#" class="btn btn-outline-primary btn-sm" role="button">Make admin</a>
+              </td>
+            </tr>
+          
+           {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+            </tr>
+          </tfoot>
+        </table>
+      </div><!--end of .table-responsive-->
+  </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+</div>
+{% endblock %}
