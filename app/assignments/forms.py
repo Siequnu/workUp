@@ -10,7 +10,6 @@ class AssignmentCreationForm(FlaskForm):
 	description = StringField('Assignment description', validators=[DataRequired()])
 	due_date = DateField('Due date:', validators=[DataRequired()])
 	target_course = SelectField('Class ID', choices=Turma.getTurmaChoiceListForForm (), validators=[DataRequired()])
-	#peer_review_necessary = RadioField ('Peer review necessary?', choices=[(True, 'Yes'),(False, 'No')], default=False, validators=[DataRequired()])
 	peer_review_necessary = BooleanField('Peer review necessary', default=True)
 	peer_review_form = StringField('Peer review form Class name', validators=[DataRequired()])
 	submit = SubmitField('Create')

@@ -1,0 +1,55 @@
+
+  {% extends "header.html" %}
+  
+  {% block app_content %}
+<div class="container">
+<br>
+  <div class="row">
+        <div class="col-md-8">
+			<h1>Admin file stats view</h1>
+		</div>
+  </div>
+
+<br />
+  <body>
+  <p>
+    The path to the upload folder is: {{template_packages['uploadFolderPath']}}
+  </p>
+  <p>
+    There are {{template_packages['uploadedPostCount']}} files in the uploads folder:
+  </p>
+ <div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table-responsive">
+        <table summary="Users have uploaded the following files:" class="table table-bordered table-hover">
+          <caption class="text-center">Users have uploaded the following files</a>:</caption>
+		  <thead>
+            <tr>
+              <th>Filename</th>
+              <th>User</th>
+              <th>Datetime</th>
+            </tr>
+          </thead>
+		  <tbody>
+			{% for file in template_packages['uploadedFiles'] %}
+            <tr>
+              <td>{{ file[0] }}</td>
+              <td>{{ file[1] }}</td>
+              <td>{{ file[2] }}</td>
+            </tr>
+           {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+            </tr>
+          </tfoot>
+        </table>
+      </div><!--end of .table-responsive-->
+    </div>
+  </div>
+</div>
+ </body>
+  
+    </div>
+{% endblock %}

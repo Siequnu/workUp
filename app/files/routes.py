@@ -128,8 +128,8 @@ def upload_file(assignment_id):
 			flash('The filename is blank. Please rename the file.')
 			return redirect(request.url)
 		if file and models.allowedFile(file.filename):
-			models.saveFile(file, assignment_id)
-			original_filename = models.getSecureFilename(file.filename)
+			models.save_assignment_file(file, assignment_id)
+			original_filename = models.get_secure_filename(file.filename)
 			flash('Your file ' + str(original_filename) + ' successfully uploaded')
 			return redirect(url_for('assignments.view_assignments'))
 		else:
