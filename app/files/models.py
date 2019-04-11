@@ -7,7 +7,7 @@ import uuid, datetime
 # SQL for DB operations
 from flask_login import current_user
 from app.models import User, Upload, Download, Assignment, Comment
-
+from sqlalchemy import func
 
 def get_all_uploads_from_assignment_id (assignment_id):	
 	return db.session.query(
@@ -43,30 +43,9 @@ def get_peer_review_form_from_upload_id (upload_id):
 		Assignment, Upload.assignment_id == Assignment.id).filter(Upload.id == upload_id).first()
 	return info[1].peer_review_form
 
-def getPostInfoFromUserId (userId):
-	conditions = []
-	conditions.append(str('user_id="' + str(userId) + '"'))
-	uploadInfo = models.selectFromDb (['id', 'filename', 'timestamp', 'original_filename'], 'upload', conditions)
-	cleanDict = {}
-	for info in uploadInfo:
-		# Get upload time
-		datetime = info[2] #2018-02-25 21:50:13.750276
-		splitDatetime = str.split(str(datetime)) #['2018-02-25', '21:50:13.750276']
-		date = splitDatetime[0]
-		timeSplit = str.split(splitDatetime[1], ':') #['21', '50', '13.750276']
-		uploadTime = str(timeSplit[0]) + ':' + str(timeSplit[1])
-		uploadDateAndtime = date + ' ' + uploadTime
-		
-		# Get completed comment count from file ID
-		fileId = models.selectFromDb(['id'], 'upload', [(str('filename="' + str(info[1]) + '"'))])
-		conditions = []
-		conditions.append(''.join(('fileid=', str(fileId[0][0]))))
-		conditions.append('pending=0')
-		peerReviewCount = models.selectFromDb(['id'], 'comment', conditions)
-		
-		# Add arrayed information to a new dictionary entry
-		cleanDict[str(info[3])] = [uploadDateAndtime, str(len(peerReviewCount)), str(info[0])]
-	return cleanDict
+# Get all post info and comment count for a user
+def get_post_info_from_user_id (user_id):	
+	return db.session.query(Upload, func.count(Comment.id)).join(Comment, Upload.id==Comment.fileid).group_by(Upload.filename).filter(Upload.user_id==user_id).all()
 
 
 # Check filename and extension permissibility

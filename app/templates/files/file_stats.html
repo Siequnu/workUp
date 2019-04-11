@@ -4,54 +4,7 @@
   {% block app_content %}
 <div class="container">
 <br>
-  {% if template_packages['admin']%}
-  <div class="row">
-        <div class="col-md-8">
-			<h1>Admin file stats view</h1>
-		</div>
-  </div>
-
-<br />
-  <body>
-  <p>
-    The path to the upload folder is: {{template_packages['uploadFolderPath']}}
-  </p>
-  <p>
-    There are {{template_packages['uploadedPostCount']}} files in the uploads folder:
-  </p>
- <div class="container">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="table-responsive">
-        <table summary="Users have uploaded the following files:" class="table table-bordered table-hover">
-          <caption class="text-center">Users have uploaded the following files</a>:</caption>
-		  <thead>
-            <tr>
-              <th>Filename</th>
-              <th>User</th>
-              <th>Datetime</th>
-            </tr>
-          </thead>
-		  <tbody>
-			{% for file in template_packages['uploadedFiles'] %}
-            <tr>
-              <td>{{ file[0] }}</td>
-              <td>{{ file[1] }}</td>
-              <td>{{ file[2] }}</td>
-            </tr>
-           {% endfor %}
-          </tbody>
-          <tfoot>
-            <tr>
-            </tr>
-          </tfoot>
-        </table>
-      </div><!--end of .table-responsive-->
-    </div>
-  </div>
-</div>
- </body>
-  {% else %}
+  
 	 <body>
 	<div class="row">
         <div class="col-md-12">
@@ -64,14 +17,14 @@
  <div class="container">
   <div class="card-deck">
   
-  {% for key, value in template_packages['cleanDict'].items() %}
+  {% for upload in all_post_info %}
   
   <div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">{{ key }}</div>
+  <div class="card-header">{{ upload[0].original_filename }}</div>
   <div class="card-body">
-    <h5 class="card-title">Peer reviews: {{value[1]}}</h5>
-    <p class="card-text">Date uploaded: {{value[0]}}</p>
-    <a href="{{url_for('files.view_comments', file_id = value[2])}}" class="btn btn-primary">View comments</a>
+    <h5 class="card-title">Peer reviews: {{upload[1]}}</h5>
+    <p class="card-text">Date uploaded: {{ upload[0].timestamp }}</p>
+    <a href="{{url_for('files.view_comments', file_id = upload[0].id)}}" class="btn btn-primary">View comments</a>
     
   </div>
 </div>
@@ -83,7 +36,6 @@
 </div>
 	
 </body>
-  {% endif %}
   
     </div>
 {% endblock %}

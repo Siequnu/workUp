@@ -30,11 +30,9 @@ def file_stats():
 		template_packages['uploadedPostCount'] = str(models.get_all_uploads_count())
 		template_packages['uploadFolderPath'] = current_app.config['UPLOAD_FOLDER']
 		template_packages['admin'] = True
-		return render_template('files/file_stats.html', template_packages = template_packages)
-	elif current_user.is_authenticated:
-		template_packages = {}
-		template_packages['cleanDict'] = models.getPostInfoFromUserId (current_user.id)
-		return render_template('files/file_stats.html', template_packages = template_packages)
+		return render_template('files/file_stats_admin.html', template_packages = template_packages)
+	elif current_user.is_authenticated:		
+		return render_template('files/file_stats.html', comment = Comment, all_post_info = models.get_post_info_from_user_id (current_user.id))
 	abort(403)
 
 
