@@ -21,13 +21,13 @@ def create_class():
 			db.session.add(newTurma)
 			db.session.commit()
 			flash('Class successfully created! You need to restart the flask app in order for this class to appear on the Assignment creation forms.')
-			return redirect(url_for('assignments.classAdmin'))
+			return redirect(url_for('assignments.class_admin'))
 		return render_template('assignments/create_class.html', title='Create new class', form=form)
 	abort(403)
 
 @bp.route("/classadmin")
 @login_required
-def classAdmin():
+def class_admin():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		classesArray = app.models.selectFromDb(['*'], 'turma')
 		return render_template('assignments/class_admin.html', title='Class admin', classesArray = classesArray)
@@ -35,11 +35,11 @@ def classAdmin():
 			
 @bp.route("/deleteclass/<turmaId>")
 @login_required
-def deleteClass(turmaId):
+def delete_class(turmaId):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		Turma.deleteTurmaFromId(turmaId)
 		flash('Class ' + str(turmaId) + ' has been deleted.')
-		return redirect(url_for('assignments.classAdmin'))		
+		return redirect(url_for('assignments.class_admin'))		
 	abort (403)
 ########################################
 
@@ -109,4 +109,59 @@ def delete_assignment(assignment_id):
 		flash('Assignment ' + str(assignment_id) + ', and all related uploaded files and comments have been deleted from the database. Download records have been kept.')
 		return redirect(url_for('assignments.view_assignments'))
 	abort (403)
+	
+	
+############# Peer review forms routes
+# Admin page to create new peer review form
+@bp.route("/addPeerReviewForm", methods=['GET', 'POST'])
+@login_required
+def addPeerReviewForm():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		# If first form is completed, dynamically generate second form
+		if request.form:
+			# Remove csrf_token, submit fields to leave only the completed boxes
+			formDict = request.form.to_dict()
+			del formDict['csrf_token']
+			del formDict['submit']
+			# Sort dictionary by keys
+			sortedDict = json.dumps(formDict, sort_keys=True)
+			# Dynamically generate new form for title/label information
+			for questionNumber, fieldName in sortedDict:
+				if fieldName == 'TextAreaField':
+					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
+				elif fieldName == 'BooleanField':
+					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
+				elif fieldName == 'StringField':
+					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
+				elif fieldName == 'RadioField':
+					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
+				FormModel.submit = SubmitField('Next step')
+				form = FormModel()
+			
+		else:
+			# Generate dynamic field names
+			numberOfFields = 10
+			i = 1
+			names = []
+			while i < numberOfFields:
+				names.append('Question ' + str(i))
+				i = i+1
+			questionTypes = [('StringField', 'StringField'), ('BooleanField', 'BooleanField'), ('RadioField', 'RadioField'), ('TextAreaField', 'TextAreaField')]
+			for name in names:
+				setattr(FormModel, name, RadioField(label=name, choices=questionTypes))
+			FormModel.submit = SubmitField('Next step')
+			form = FormModel()
+		
+		return render_template('assignments/addPeerReviewForm.html', title='Create new peer review form', form=form)
+	abort(403)
+
+# Admin page to view classes
+@bp.route("/peerReviewFormAdmin")
+@login_required
+def peerReviewFormAdmin():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+			classesArray = app.models.selectFromDb(['*'], 'turma')
+			return render_template('assignments/class_admin.html', title='Class admin', classesArray = classesArray)
+	abort (403)
+
 	
