@@ -39,9 +39,6 @@ def create_app(config_class=Config):
 	from app.assignments import bp as assignments_bp
 	workUpApp.register_blueprint(assignments_bp, url_prefix='/assignments')
 	
-	from app.admin import bp as admin_bp
-	workUpApp.register_blueprint(admin_bp, url_prefix='/admin')
-	
 	from app.main import bp as main_bp
 	workUpApp.register_blueprint(main_bp)
 	

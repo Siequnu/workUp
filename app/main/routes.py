@@ -118,5 +118,5 @@ def addPeerReviewForm():
 def peerReviewFormAdmin():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 			classesArray = app.models.selectFromDb(['*'], 'turma')
-			return render_template('admin/classAdmin.html', title='Class admin', classesArray = classesArray)
+			return render_template('assignments/classAdmin.html', title='Class admin', classesArray = classesArray)
 	abort (403)
