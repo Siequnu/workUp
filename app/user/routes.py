@@ -58,7 +58,7 @@ def register():
 		form = app.user.forms.RegistrationForm()
 		if form.validate_on_submit():
 			if form.signUpCode.data in current_app.config['SIGNUP_CODES']:
-				user = User(username=form.username.data, email=form.email.data, studentnumber=form.studentNumber.data, turma_id=form.turmaId.data)
+				user = User(username=form.username.data, email=form.email.data, student_number=form.studentNumber.data, turma_id=form.turmaId.data)
 				user.set_password(form.password.data)
 				db.session.add(user)
 				db.session.commit()

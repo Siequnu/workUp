@@ -25,7 +25,7 @@ def process_student_excel_spreadsheet (excel_data_file):
 
 def add_users_from_excel_spreadsheet (user_array, turma_id):
 	for student in user_array:
-		user = User(username=student['name'], email=student['email'], studentnumber=student['student_number'], turma_id=turma_id)
+		user = User(username=student['name'], email=student['email'], student_number=student['student_number'], turma_id=turma_id)
 		user.set_password(generate_word_password())
 		db.session.add(user)
 		db.session.commit()

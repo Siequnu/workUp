@@ -67,15 +67,13 @@ class Turma(db.Model):
 		result = db.engine.execute(sql)
 		return result
 
-	
-
 
 class User(UserMixin, db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(64), index=True, unique=True)
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
-	studentnumber = db.Column(db.String(12))
+	student_number = db.Column(db.String(12))
 	turma_id = db.Column(db.String(20))
 	last_seen = db.Column(db.DateTime, default=datetime.now)
 	registered = db.Column(db.DateTime, default=datetime.now)
@@ -200,7 +198,7 @@ class Comment(db.Model):
 	comment = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
 	user_id = db.Column(db.Integer)
-	fileid = db.Column(db.Integer)
+	file_id = db.Column(db.Integer)
 	pending = db.Column(db.Boolean)
 	assignment_id = db.Column(db.String(140))
 	
@@ -209,7 +207,7 @@ class Comment(db.Model):
 	
 	@staticmethod
 	def getPendingStatusFromUserIdAndAssignmentId (userId, assignmentId):
-		sql = text ('SELECT id, fileid FROM comment WHERE user_id=' + str(userId) + ' AND assignment_id=' + str(assignmentId) + ' AND pending=1')
+		sql = text ('SELECT id, file_id FROM comment WHERE user_id=' + str(userId) + ' AND assignment_id=' + str(assignmentId) + ' AND pending=1')
 		result = db.engine.execute(sql)
 		names = []
 		for row in result: names.append(row)
@@ -283,7 +281,7 @@ class PeerReviewForm(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(140))
 	description = db.Column(db.String(280))
-	serialisedFormData = db.Column(db.String(280))
+	serialised_form_data = db.Column(db.String(280))
 	created_by_id = db.Column(db.Integer)
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
 	
