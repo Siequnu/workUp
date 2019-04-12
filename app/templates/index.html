@@ -29,13 +29,13 @@
 	<br /><br />
 	<div class="card-deck">
 	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		<div class="card-header">Class admin
+		<div class="card-header">Student classes
 		</div>
     <div class="card-body">
-      <h5 class="card-title">Add or remove classes, and edit class information.</h5><hr>
-      <p><a class="btn btn-primary" href="{{url_for('assignments.class_admin')}}" role="button">Class admin</a></p>
-			<a class="btn btn-primary" href="{{url_for('assignments.create_class')}}" role="button">Create new class</a>
-			
+      <h5 class="card-title">Add or remove class information.</h5><hr>
+      
+			<p><a class="btn btn-primary" href="{{url_for('assignments.create_class')}}" role="button">Create new class</a></p>
+			<p><a class="btn btn-primary" href="{{url_for('assignments.class_admin')}}" role="button">Manage classes</a></p>
     </div>
   </div>
 	 
@@ -50,10 +50,10 @@
   </div>
 	 
 	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		<div class="card-header">Create assignment
+		<div class="card-header">Assignments
 		</div>
     <div class="card-body">
-      <h5 class="card-title">Create a new assignment</h5><hr>
+      <h5 class="card-title">Create and manage assignments</h5><hr>
 			<p><a class="btn btn-primary" href="{{url_for('assignments.create_assignment')}}" role="button">Create assignment</a></p>
 			<p><a class="btn btn-primary" href="{{url_for('assignments.view_assignments')}}" role="button">Manage assignments</a></p>
     </div>
@@ -63,12 +63,12 @@
 	<br /><br />
 	<div class="card-deck">
 	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		<div class="card-header">User admin
+		<div class="card-header">Users
 		</div>
     <div class="card-body">
       <h5 class="card-title">Manage users</h5><hr>
 			<p><a class="btn btn-primary" href="{{url_for('user.register_admin')}}" role="button">Create new admin</a></p>
-			<a class="btn btn-primary" href="{{url_for('user.manage_users')}}" role="button">Manage users</a>
+			<p><a class="btn btn-primary" href="{{url_for('user.manage_users')}}" role="button">Manage users</a></p>
 			<p><a class="btn btn-primary" href="{{url_for('user.batch_import_students')}}" role="button">Batch import students</a></p>
     </div>
   </div>
