@@ -25,7 +25,7 @@ def get_all_uploads_count():
 
 def add_teacher_comment_to_upload (form_contents, upload_id):
 	comment = Comment(comment = form_contents, user_id = current_user.id,
-					  fileid = upload_id, pending = False, assignment_id = Upload.query.get(upload_id).assignment_id)
+					  file_id = upload_id, pending = False, assignment_id = Upload.query.get(upload_id).assignment_id)
 	db.session.add(comment)
 	db.session.commit()
 	return True
@@ -46,7 +46,7 @@ def get_peer_review_form_from_upload_id (upload_id):
 # Get all post info and comment count for a user
 def get_post_info_from_user_id (user_id):	
 	return db.session.query(Upload, func.count(Comment.id)).join(
-		Comment, Upload.id==Comment.fileid).group_by(Upload.filename).filter(Upload.user_id==user_id).all()
+		Comment, Upload.id==Comment.file_id).group_by(Upload.filename).filter(Upload.user_id==user_id).all()
 
 
 # Check filename and extension permissibility

@@ -65,7 +65,7 @@ def download_random_file(assignment_id):
 	conditions = []
 	conditions.append (str('assignment_id="' + str(assignment_id) + '"'))
 	conditions.append (str('user_id="' + str(current_user.id) + '"'))
-	completed_comments_ids_and_file_id = app.models.selectFromDb(['id', 'fileid'], 'comment', conditions)
+	completed_comments_ids_and_file_id = app.models.selectFromDb(['id', 'file_id'], 'comment', conditions)
 	
 	if completed_comments_ids_and_file_id == []:
 		files_not_from_user = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignment_id)
@@ -92,7 +92,7 @@ def download_random_file(assignment_id):
 	conditions = []
 	conditions.append (str('filename="' + str(filename) + '"'))
 	upload_id = app.models.selectFromDb(['id'], 'upload', conditions)
-	comment_pending = Comment(user_id = int(current_user.id), fileid = int(upload_id[0][0]), pending = True, assignment_id=assignment_id)
+	comment_pending = Comment(user_id = int(current_user.id), file_id = int(upload_id[0][0]), pending = True, assignment_id=assignment_id)
 	db.session.add(comment_pending)
 	db.session.commit()
 
@@ -156,7 +156,7 @@ def view_comments(file_id):
 			# Get comment Ids associated with this upload
 			conditions = []
 			conditions.append(''.join(('assignment_id=', str(assignment_id[0][0]))))
-			conditions.append(''.join(('fileid=', str(file_id))))
+			conditions.append(''.join(('file_id=', str(file_id))))
 			conditions.append('pending=0')
 			comment_ids = app.models.selectFromDb(['id'], 'comment', conditions)
 			clean_comment_ids = []
@@ -248,7 +248,7 @@ def view_peer_review(assignment_id = False, peer_review_number = False, comment_
 	if comment_id:
 		# Check if this peer review is intended for the user trying to view it
 		# What file was it made for
-		file_id = app.models.selectFromDb(['fileid'], 'comment', [str('id="' + str(comment_id) + '"')])
+		file_id = app.models.selectFromDb(['file_id'], 'comment', [str('id="' + str(comment_id) + '"')])
 		# Who owns that file
 		owner = app.models.selectFromDb(['user_id'], 'upload', [str('id="' + str(file_id[0][0]) + '"')])
 		# Is it the same person trying to view this comment?
