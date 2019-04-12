@@ -10,11 +10,11 @@ from app.models import User
 from app import db
 
 # Utility classes
-import app.email
+import app.email_model
 
 # Forms
 import app.main.forms
-from app.user import bp
+from app.user import bp, models, forms
 
 # Log-in page
 @bp.route('/login', methods=['GET', 'POST'])
@@ -47,7 +47,7 @@ def logout():
 	logout_user()
 	return redirect(url_for('main.index'))
 
-
+############## User registration, log-in/out, and management
 
 # Registration
 @bp.route('/register', methods=['GET', 'POST'])
@@ -65,10 +65,10 @@ def register():
 				
 				# Send the email confirmation link
 				subject = "Confirm your email"
-				token = app.email.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
+				token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
 				confirm_url = url_for('user.confirm_email', token=token, _external=True)
 				html = render_template('email/activate.html',confirm_url=confirm_url)
-				app.email.sendEmail (user.email, subject, html)
+				app.email_model.sendEmail (user.email, subject, html)
 				
 				flash('Congratulations, you are now a registered user! Please confirm your email.')
 				return redirect(url_for('user.login'))
@@ -80,13 +80,11 @@ def register():
 		flash("Sign up is currently closed.")
 		return redirect(url_for('main.index'))
 
-
-
 # Confirm email
 @bp.route('/confirm/<token>')
 def confirm_email(token):
 	try:
-		email = app.email.ts.loads(token, salt=current_app.config["TS_SALT"], max_age=86400)
+		email = app.email_model.ts.loads(token, salt=current_app.config["TS_SALT"], max_age=86400)
 	except:
 		abort(404)
 	user = User.query.filter_by(email=email).first_or_404()
@@ -96,8 +94,6 @@ def confirm_email(token):
 	flash('Your email has been confirmed. Please log-in now.')
 	return redirect(url_for('user.login'))
 
-
-
 # Reset password form
 @bp.route('/reset', methods=["GET", "POST"])
 def reset():
@@ -105,24 +101,22 @@ def reset():
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=form.email.data).first_or_404()
 		subject = "Password reset requested"
-		token = app.email.ts.dumps(user.email, salt=current_app.config["TS_RECOVER_SALT"])
+		token = app.email_model.ts.dumps(user.email, salt=current_app.config["TS_RECOVER_SALT"])
 
 		recover_url = url_for('user.reset_with_token', token=token, _external=True)
 		html = render_template('email/recover.html', recover_url=recover_url)
 		
-		app.email.sendEmail(user.email, subject, html)
+		app.email_model.sendEmail(user.email, subject, html)
 		flash('An email has been sent to your inbox with a link to recover your password.')
 		return redirect(url_for('main.index'))
 		
 	return render_template('user/reset.html', form=form)
 
-
-
 # Reset password with token
 @bp.route('/reset/<token>', methods=["GET", "POST"])
 def reset_with_token(token):
 	try:
-		email = app.email.ts.loads(token, salt=current_app.config['TS_RECOVER_SALT'], max_age=current_app.config['TS_MAX_AGE'])
+		email = app.email_model.ts.loads(token, salt=current_app.config['TS_RECOVER_SALT'], max_age=current_app.config['TS_MAX_AGE'])
 	except:
 		abort(404)
 	form = app.user.forms.PasswordForm()
@@ -135,6 +129,108 @@ def reset_with_token(token):
 	return render_template('user/reset_with_token.html', form=form, token=token)
 
 
+# Manage Users
+@bp.route('/manage_users')
+@login_required
+def manage_users():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		user_data = app.models.User.get_all_user_info()
+		return render_template('user/manage_users.html', title='Manage Users', user_data = user_data)
+	abort(403)
 	
 
+# Convert normal user into admin
+@bp.route('/give_admin_rights/<user_id>')
+@login_required
+def give_admin_rights(user_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		try:
+			# Make DB call to convert user into admin
+			app.models.User.give_admin_rights(user_id)
+			flash('User successfully made into administrator.')
+		except:
+			flash('An error occured when changing the user to an administrator.')
+		return redirect(url_for('user.manage_users'))
+	else:
+		abort(403)
+		
+# Remove admin rights from user
+@bp.route('/remove_admin_rights/<user_id>')
+@login_required
+def remove_admin_rights(user_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		try:	
+			app.models.User.remove_admin_rights(user_id)
+			flash('Administrator rights removed from the user.')
+		except:
+			flash('An error occured when changing the user to an administrator.')
+		return redirect(url_for('user.manage_users'))
+	else:
+		abort(403)
 
+
+# Admin Registration
+@bp.route('/register_admin', methods=['GET', 'POST'])
+@login_required
+def register_admin():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		form = forms.AdminRegistrationForm()
+		if form.validate_on_submit():
+			user = User(username=form.username.data, email=form.email.data, is_admin = True)
+			user.set_password(form.password.data)
+			db.session.add(user)
+			db.session.commit()
+			
+			# Send the email confirmation link
+			subject = "Confirm new admin user"
+			token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
+			confirm_url = url_for('user.confirm_email', token=token, _external=True)
+			html = render_template('email/activate.html',confirm_url=confirm_url)
+			app.email_model.sendEmail (user.email, subject, html)
+			
+			flash('Congratulations, you are now a registered admin! Please confirm your email.')
+			return redirect(url_for('user.login'))
+		return render_template('user/register_admin.html', title='Register Admin', form=form)
+	else:
+		abort(403)
+
+
+# Admin page to batch import and create users from an xls file
+@bp.route("/batch_import_students", methods=['GET', 'POST'])
+@login_required
+def batch_import_students():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		form = forms.BatchStudentImportForm()
+		if form.validate_on_submit():
+			if not form.excel_file.data.filename:
+				flash('No file uploaded. Please try again or contact your tutor.')
+				return redirect(request.url)
+			file = form.excel_file.data
+			if file and models.check_if_excel_spreadsheet(file.filename):
+				#models.save_excel_student_sheet(file)
+				#original_filename = models.get_secure_filename(file.filename)
+				session['student_info_array'] = models.process_student_excel_spreadsheet (file)
+				return redirect(url_for('user.batch_import_students_preview', turma_id = form.target_course.data))
+			else:
+				flash('You can not upload this kind of file. You must upload an Excel (.xls) file.')
+				return redirect(url_for('user.batch_import_students'))
+		return render_template('user/batch_import_students.html', title='Batch import students', form=form)
+	abort(403)
+
+# Admin page to preview batch import
+@bp.route("/batch_import_students_preview/<turma_id>")
+@login_required
+def batch_import_students_preview(turma_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		return render_template('user/batch_import_students_preview.html', turma_id = turma_id, student_info_array = session.get('student_info_array', {}), title='Batch import students preview')
+	abort(403)
+
+# Admin page to display after the import process
+@bp.route("/batch_import_students_process/<turma_id>")
+@login_required
+def batch_import_students_process(turma_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		student_info_array = session.get('student_info_array', {})
+		models.add_users_from_excel_spreadsheet(student_info_array, turma_id)
+		return render_template('user/batch_import_students_process.html', student_info_array = session.get('student_info_array', {}), title='Batch import students process')
+	abort(403)

@@ -2,10 +2,46 @@ from flask import render_template, flash, redirect, url_for, request, current_ap
 from flask_login import current_user, login_required
 
 from app.assignments import bp, models, forms
+from app.assignments.forms import TurmaCreationForm, AssignmentCreationForm
 from app.files import models
 from app.models import Assignment, Upload, Comment, Turma, User
 import app.models
+
 from app import db
+
+########## Student class (turma) methods
+@bp.route("/create_class", methods=['GET', 'POST'])
+@login_required
+def create_class():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		form = forms.TurmaCreationForm()
+		if form.validate_on_submit():
+			newTurma = Turma(turma_number=form.turmaNumber.data, turma_label=form.turmaLabel.data, turma_term=form.turmaTerm.data,
+							 turma_year = form.turmaYear.data)
+			db.session.add(newTurma)
+			db.session.commit()
+			flash('Class successfully created! You need to restart the flask app in order for this class to appear on the Assignment creation forms.')
+			return redirect(url_for('assignments.classAdmin'))
+		return render_template('assignments/create_class.html', title='Create new class', form=form)
+	abort(403)
+
+@bp.route("/classadmin")
+@login_required
+def classAdmin():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		classesArray = app.models.selectFromDb(['*'], 'turma')
+		return render_template('assignments/class_admin.html', title='Class admin', classesArray = classesArray)
+	abort (403)
+			
+@bp.route("/deleteclass/<turmaId>")
+@login_required
+def deleteClass(turmaId):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		Turma.deleteTurmaFromId(turmaId)
+		flash('Class ' + str(turmaId) + ' has been deleted.')
+		return redirect(url_for('assignments.classAdmin'))		
+	abort (403)
+########################################
 
 # View created assignments status
 @bp.route("/view_assignments")
