@@ -17,7 +17,7 @@ import os, datetime, json
 
 # Forms
 from app.main.forms import FormModel
-from app.forms_peer_review import *
+from app.assignments.forms_peer_review import *
 
 # Access file stats
 @bp.route("/file_stats")
