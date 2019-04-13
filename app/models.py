@@ -1,7 +1,7 @@
 from datetime import datetime
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from app import login
 from sqlalchemy import text, cast, String
 import json
@@ -52,6 +52,14 @@ class Turma(db.Model):
 	
 	def __repr__(self):
 		return '<Turma {}>'.format(self.turma_number)
+
+	@staticmethod
+	def new_turma_from_form (form):
+		new_turma = Turma(turma_number=form.turmaNumber.data, turma_label=form.turmaLabel.data,
+					turma_term=form.turmaTerm.data,
+					turma_year = form.turmaYear.data)
+		db.session.add(new_turma)
+		db.session.commit()
 
 	@staticmethod
 	def get_class_list_for_forms ():

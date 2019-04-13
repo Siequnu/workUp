@@ -1,12 +1,35 @@
 from app import db
 import app.models
 from app.models import Upload, Download, Assignment, User, Comment, AssignmentTaskFile
+from app.files import models
 import datetime, time
 from datetime import datetime, date
 from flask_login import current_user
 
 def get_all_assignments_info (): 
 	return db.session.query(Assignment, User).join(User, Assignment.created_by_id == User.id).all()
+
+
+def new_assignment_from_form (form):
+	if form.assignment_task_file.data is not None:
+		file = form.assignment_task_file.data
+		random_filename = app.files.models.save_file(file)
+		original_filename = app.files.models.get_secure_filename(file.filename)
+		assignment_task_file = AssignmentTaskFile (original_filename=original_filename,
+											   filename = random_filename,
+											   user_id = current_user.id)
+		db.session.add(assignment_task_file)
+		db.session.flush() # Access the assignment_task_file.id field from db
+		
+	assignment = Assignment(title=form.title.data, description=form.description.data, due_date=form.due_date.data,
+						target_turma_id=form.target_turma_id.data, created_by_id=current_user.id,
+						peer_review_necessary= form.peer_review_necessary.data,
+						peer_review_form=form.peer_review_form.data)
+	if form.assignment_task_file.data is not None:
+		assignment.assignment_task_file_id=assignment_task_file.id
+	
+	db.session.add(assignment)
+	db.session.commit()
 
 def delete_assignment_from_id (assignment_id):	
 	# Delete assignment_task_file, if it exists
