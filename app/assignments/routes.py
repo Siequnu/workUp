@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from app.assignments import bp, models, forms
 from app.assignments.forms import TurmaCreationForm, AssignmentCreationForm
 from app.files import models
-from app.models import Assignment, Upload, Comment, Turma, User
+from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile
 import app.models
 
 from app import db
@@ -53,14 +53,13 @@ def view_assignments():
 		return render_template('assignments/view_assignments.html', assignmentsArray = clean_assignments_array, admin = True)
 	elif current_user.is_authenticated:
 		# Get user class
-		turmaId = User.get_user_turma_from_user_id(current_user.id)
-		if (turmaId == False):
-			flash('You are not part of any class and can not see any assignments. Ask your tutor for help to join a class.')
-			return render_template('assignments/view_assignments.html') # User isn't part of any class - display no assignments
-		else:
+		if User.get_user_turma_from_user_id(current_user.id) is not None:
 			# Get assignments for this user
 			clean_assignments_array = app.assignments.models.get_user_assignment_info (current_user.id)
 			return render_template('assignments/view_assignments.html', assignmentsArray = clean_assignments_array)
+		else:
+			flash('You are not part of any class and can not see any assignments. Ask your tutor for help to join a class.')
+			return render_template('assignments/view_assignments.html') # User isn't part of any class - display no assignments
 	abort (403)
 
 
@@ -82,9 +81,29 @@ def create_assignment():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = app.assignments.forms.AssignmentCreationForm()
 		if form.validate_on_submit():
-			assignment = Assignment(title=form.title.data, description=form.description.data, due_date=form.due_date.data,
-								target_course=form.target_course.data, created_by_id=current_user.id,
-								peer_review_necessary= form.peer_review_necessary.data, peer_review_form=form.peer_review_form.data)
+			# Save assignment task file, if present
+			if form.assignment_task_file.data is not None:
+				file = form.assignment_task_file.data
+				random_filename = app.files.models.save_file(file)
+				original_filename = app.files.models.get_secure_filename(file.filename)
+				assignment_task_file = AssignmentTaskFile (original_filename=original_filename,
+													   filename = random_filename,
+													   user_id = current_user.id)
+				db.session.add(assignment_task_file)
+				db.session.flush() # Acess the assingment_task_file.id field from db
+			
+			if form.assignment_task_file.data is not None:
+				assignment = Assignment(title=form.title.data, description=form.description.data, due_date=form.due_date.data,
+								target_turma_id=form.target_turma_id.data, created_by_id=current_user.id,
+								peer_review_necessary= form.peer_review_necessary.data,
+								peer_review_form=form.peer_review_form.data,
+								assignment_task_file_id=assignment_task_file.id)
+			else:
+				assignment = Assignment(title=form.title.data, description=form.description.data, due_date=form.due_date.data,
+								target_turma_id=form.target_turma_id.data, created_by_id=current_user.id,
+								peer_review_necessary= form.peer_review_necessary.data,
+								peer_review_form=form.peer_review_form.data)
+			
 			db.session.add(assignment)
 			db.session.commit()
 			flash('Assignment successfully created!')
@@ -98,15 +117,10 @@ def create_assignment():
 @login_required
 def delete_assignment(assignment_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		# Delete the assignment
-		app.assignments.models.delete_assignment_from_id(assignment_id)
-		# Delete all uploads for this assignment
-		Upload.deleteAllUploadsFromAssignmentId(assignment_id)
-		# Download records are not deleted for future reference
-		# Delete all comments for those uploads
-		Comment.deleteCommentsFromAssignmentId(assignment_id)
-		
-		flash('Assignment ' + str(assignment_id) + ', and all related uploaded files and comments have been deleted from the database. Download records have been kept.')
+		if app.assignments.models.delete_assignment_from_id(assignment_id) == True:
+			flash('Assignment ' + str(assignment_id) + ', and all related uploaded files and comments have been deleted from the database. Download records have been kept.')
+		else:
+			flash('There was a problem deleting the assignment.')
 		return redirect(url_for('assignments.view_assignments'))
 	abort (403)
 	

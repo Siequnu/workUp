@@ -32,17 +32,15 @@ def index():
 		if app.models.is_admin(current_user.username):
 			return render_template('index.html', admin = True)
 		else:
-			# Get number of uploads
-			numberOfUploads = app.files.models.getUploadCountFromCurrentUserId()
-			# Get total assignments assigned to user's class
-			turmaId = User.get_user_turma_from_user_id (current_user.id)
-			if (turmaId == False):
+			number_of_uploads = app.files.models.getUploadCountFromCurrentUserId()
+			# Display help message if a student has signed up and is not part of a class
+			if User.get_user_turma_from_user_id (current_user.id) is None:
 				flash('You do not appear to be part of a class. Please contact your tutor for assistance.')
 				return render_template('index.html')
 			
-			assignmentUploadProgressBarPercentage = app.assignments.models.getAssignmentUploadProgressPercentage ()
-			peerReviewProgressBarPercentage = app.assignments.models.getPeerReviewProgressPercentage()
+			assignment_upload_progress_bar_percentage = app.assignments.models.get_assignment_upload_progress_bar_percentage ()
+			peer_review_progress_bar_percentage = app.assignments.models.get_peer_review_progress_bar_percentage()
 			
-			return render_template('index.html', numberOfUploads = numberOfUploads, assignmentUploadProgressBarPercentage = assignmentUploadProgressBarPercentage, peerReviewProgressBarPercentage = peerReviewProgressBarPercentage)
+			return render_template('index.html', numberOfUploads = number_of_uploads, assignmentUploadProgressBarPercentage = assignment_upload_progress_bar_percentage, peerReviewProgressBarPercentage = peer_review_progress_bar_percentage)
 	
 	return render_template('index.html')

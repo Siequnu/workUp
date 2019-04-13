@@ -15,10 +15,10 @@ class RegistrationForm(FlaskForm):
 	username = StringField('Username', validators=[DataRequired()])
 	email = StringField('Email', validators=[DataRequired(), Email()])
 	password = PasswordField('Password', validators=[DataRequired()])
-	studentNumber = StringField('Student number', validators=[DataRequired()])
+	student_number = StringField('Student number', validators=[DataRequired()])
 	
-	turmaNumberAndLabelList = Turma.getTurmaChoiceListForForm ()
-	turmaId = SelectField('Class', choices=turmaNumberAndLabelList, validators=[DataRequired()])
+	turma_id_and_label_list = Turma.get_class_list_for_forms ()
+	turma_id = SelectField('Class', choices=turma_id_and_label_list, validators=[DataRequired()])
 	
 	signUpCode = StringField('Sign-up code', validators=[DataRequired()])
 	submit = SubmitField('Register')
@@ -43,7 +43,7 @@ class PasswordForm(FlaskForm):
 		
 		
 class BatchStudentImportForm(FlaskForm):
-	target_course = SelectField('Class ID', choices=Turma.getTurmaChoiceListForForm (), validators=[DataRequired()])
+	target_course = SelectField('Class ID', choices=Turma.get_class_list_for_forms (), validators=[DataRequired()])
 	excel_file = FileField(validators=[FileRequired()], label='Excel File')
 	submit = SubmitField('Process...')
 	
