@@ -1,10 +1,8 @@
 from app import db, models
 from flask import send_from_directory, current_app
 from werkzeug import secure_filename
-import os
-import uuid, datetime
+import os, uuid, datetime
 
-# SQL for DB operations
 from flask_login import current_user
 from app.models import User, Upload, Download, Assignment, Comment
 from sqlalchemy import func
@@ -13,7 +11,6 @@ def get_all_uploads_from_assignment_id (assignment_id):
 	return db.session.query(
 		Upload, User).join(User).filter(
 		Upload.assignment_id == assignment_id).all()	
-
 
 def get_uploads_object ():
 	return Upload.query.all()
@@ -44,7 +41,7 @@ def get_post_info_from_user_id (user_id):
 
 
 # Check filename and extension permissibility
-def allowedFile(filename):
+def allowed_file_extension(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
@@ -52,16 +49,9 @@ def allowedFile(filename):
 def get_file_extension(filename):
 	return filename.rsplit('.', 1)[1].lower()
 
-
-# Return the number of files in the upload folder
-def getNumberOfFiles():
-	return (len (os.listdir(current_app.config['UPLOAD_FOLDER'])))
-
-
 # Send out specific file for download
 def download_file(filename):
 	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
-
 
 # Saves a file to uplaods folder, returns secure filename
 def save_file (file):
