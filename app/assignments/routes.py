@@ -25,20 +25,20 @@ def create_class():
 		return render_template('assignments/create_class.html', title='Create new class', form=form)
 	abort(403)
 
-@bp.route("/classadmin")
+@bp.route("/class_admin")
 @login_required
 def class_admin():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		classesArray = app.models.selectFromDb(['*'], 'turma')
-		return render_template('assignments/class_admin.html', title='Class admin', classesArray = classesArray)
+		classes_array = Turma.query.all()
+		return render_template('assignments/class_admin.html', title='Class admin', classes_array = classes_array)
 	abort (403)
 			
-@bp.route("/deleteclass/<turmaId>")
+@bp.route("/delete_class/<turma_id>")
 @login_required
-def delete_class(turmaId):
+def delete_class(turma_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		Turma.deleteTurmaFromId(turmaId)
-		flash('Class ' + str(turmaId) + ' has been deleted.')
+		Turma.delete_turma_from_id(turma_id)
+		flash('Class ' + str(turma_id) + ' has been deleted.')
 		return redirect(url_for('assignments.class_admin'))		
 	abort (403)
 ########################################

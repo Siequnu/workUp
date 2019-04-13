@@ -13,30 +13,33 @@
 <br />
   <body>
   <p>
-    The path to the upload folder is: {{template_packages['uploadFolderPath']}}
+    The path to the upload folder is: {{template_packages['upload_folder_path']}}
   </p>
   <p>
-    There are {{template_packages['uploadedPostCount']}} files in the uploads folder:
+    There are {{template_packages['total_upload_count']}} files in the uploads folder:
   </p>
  <div class="container">
   <div class="row">
     <div class="col-xs-12">
       <div class="table-responsive">
         <table summary="Users have uploaded the following files:" class="table table-bordered table-hover">
-          <caption class="text-center">Users have uploaded the following files</a>:</caption>
 		  <thead>
             <tr>
+              <th>ID</th>
               <th>Filename</th>
               <th>User</th>
               <th>Datetime</th>
+              <th>Assignment</th>
             </tr>
           </thead>
 		  <tbody>
-			{% for file in template_packages['uploadedFiles'] %}
+			{% for upload in template_packages['uploads_object'] %}
             <tr>
-              <td>{{ file[0] }}</td>
-              <td>{{ file[1] }}</td>
-              <td>{{ file[2] }}</td>
+              <td>{{ upload.id }}</td>
+              <td>{{ upload.original_filename }}</td>
+              <td>{{ upload.user_id }}</td>
+              <td>{{ upload.timestamp }}</td>
+              <td>{{ upload.assignment_id }}</td>
             </tr>
            {% endfor %}
           </tbody>

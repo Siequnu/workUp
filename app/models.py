@@ -58,11 +58,9 @@ class Turma(db.Model):
 		return db.session.query(cast(Turma.id, String(64)), Turma.turma_label).all()
 	
 	@staticmethod
-	def deleteTurmaFromId (turmaId):
-		sql = text ('DELETE FROM turma WHERE id=' + '"' + str(turmaId) + '"')
-		result = db.engine.execute(sql)
-		return result
-
+	def delete_turma_from_id (turma_id):
+		Turma.query.filter(Turma.id==turma_id).delete()
+		db.session.commit()
 
 class User(UserMixin, db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -175,7 +173,6 @@ class Upload(db.Model):
 	
 	
 class Download(db.Model):
-	
 	id = db.Column(db.Integer, primary_key=True)
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)

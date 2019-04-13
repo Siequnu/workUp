@@ -26,9 +26,9 @@ def file_stats():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		# Get total list of uploaded files from all users
 		template_packages = {}
-		template_packages['uploadedFiles'] = models.getAllUploadsWithFilenameAndUsername()
-		template_packages['uploadedPostCount'] = str(models.get_all_uploads_count())
-		template_packages['uploadFolderPath'] = current_app.config['UPLOAD_FOLDER']
+		template_packages['uploads_object'] = models.get_uploads_object()
+		template_packages['total_upload_count'] = str(models.get_all_uploads_count())
+		template_packages['upload_folder_path'] = current_app.config['UPLOAD_FOLDER']
 		template_packages['admin'] = True
 		return render_template('files/file_stats_admin.html', template_packages = template_packages)
 	elif current_user.is_authenticated:		
