@@ -52,6 +52,16 @@ class PeerReviewFormTwo (FlaskForm):
 	pointsToImproveField = TextAreaField(label=essayRequirementLabel, validators=[DataRequired()])
 	
 	submit = SubmitField('Submit')
+	
+class BlankPeerReviewForm (FlaskForm):
+	
+	essay_comment_label = 'Please write comments on this paper:'
+	essay_comment_field = TextAreaField(label=essay_comment_label)
+	
+	essay_grade_label = "Describe the form of the paper (structure, organisation, surface errors, etc...)"
+	essay_grade_field = StringField(label=essay_grade_label)
+	
+	submit = SubmitField('Submit')
 
 class FormModel (FlaskForm):
 	pass

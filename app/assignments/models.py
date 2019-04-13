@@ -1,127 +1,103 @@
 from app import db
 import app.models
-from app.models import Upload, Download, Assignment, User, Comment
+from app.models import Upload, Download, Assignment, User, Comment, AssignmentTaskFile
 import datetime
-from datetime import datetime
+from datetime import datetime, date
 import time
 from flask_login import current_user
+from sqlalchemy import text
 
 def get_all_assignments_info (): 
 	return db.session.query(
 		Assignment, User).join(
 		User, Assignment.created_by_id == User.id).all()
 
-def delete_assignment_from_id (assignment_id):
-	return Assignment.delete_assignment_from_id(assignment_id)
+def delete_assignment_from_id (assignment_id):	
+	# Delete assignment_task_file, if it exists
+	if db.session.query(Assignment.assignment_task_file_id).filter_by(id=assignment_id).scalar() is not None:
+		assignment_task_file_id = Assignment.query.get(assignment_id).assignment_task_file_id
+		AssignmentTaskFile.query.filter_by(id=assignment_task_file_id).delete()
+	# Delete assignment
+	Assignment.query.filter_by(id=assignment_id).delete()
+	# Delete all upload records for this assignment
+	assignment_uploads = Upload.query.filter_by(assignment_id=assignment_id).all()
+	if assignment_uploads is not None:
+		for upload in assignment_uploads:
+			db.session.delete(upload)
+	# Delete all comments for those uploads
+	comments = Comment.query.filter_by(assignment_id=assignment_id).all()
+	if comments is not None:
+		for comment in comments:
+			db.session.delete(comment)
+	db.session.commit()
+	# Download records are not deleted for future reference
+	return True
+
 
 def get_assignments_from_turma_id (turma_id):
-	conditions = []
-	conditions.append (str('target_course="' + str(turma_id) + '"'))
-	return app.models.selectFromDb(['*'], 'assignment', conditions)
+	return Assignment.query.filter_by(target_turma_id=turma_id).all()
 
-def getAssignmentDueDateFromId (assignmentId):
-	conditions = []
-	conditions.append (str('id="' + str(assignmentId) + '"'))
-	return app.models.selectFromDb(['due_date'], 'assignment', conditions)
-
-def checkIfAssignmentIsOver (assignmentId):
-	# Get due date from assignmentId
-	conditions = []
-	conditions.append (str('id="' + str(assignmentId) + '"'))
-	dueDate = app.models.selectFromDb(['due_date'], 'assignment', conditions)
+def check_if_assignment_is_over (assignment_id):
+	dueDate = Assignment.query.get(assignment_id).due_date
+	dueDatetime = datetime(dueDate.year, dueDate.month, dueDate.day)
 	# Format of date/time strings
 	dateFormat = "%Y-%m-%d"
 	# Create datetime objects from the strings
-	dueDate = datetime.strptime(dueDate[0][0], dateFormat)
 	now = datetime.strptime(time.strftime(dateFormat), dateFormat)
 	
-	if dueDate >= now:
-		# Assignment is still open
+	if dueDatetime >= now: # Assignment is still open
 		return False
-	else:
-		# Assignment closed
+	else: # Assignment closed
 		return True
 	
 def get_user_assignment_info (user_id):
 	turma_id = User.get_user_turma_from_user_id (user_id)
-	assignments = get_assignments_from_turma_id (turma_id)
+	assignments = get_assignments_from_turma_id (turma_id)	
 	clean_assignments_array = []
-	# Check if user has completed their assignments
 	for assignment in assignments:
-		clean_assignment = {} 
-		clean_assignment['assignmentId'] = assignment[0]
-		clean_assignment['assignmentTitle'] = assignment[1]
-		clean_assignment['assignmentDescription'] = assignment[2]
-		clean_assignment['assignmentDue'] = datetime.strptime(assignment[3], '%Y-%m-%d').date()
-		clean_assignment['peer_review_necessary'] = assignment[7]
-		clean_assignment['assignmentIsPastDeadline'] = checkIfAssignmentIsOver(assignment[0])
+		# Convert each SQL object into a  __dict__, then add extra keys for the template
+		assignment_dict = assignment.__dict__
+		assignment_dict['assignment_is_past_deadline'] = check_if_assignment_is_over(assignment_dict['id'])
 		
-		getSubmittedFileId = str(Assignment.getUsersUploadedAssignmentsFromAssignmentId(assignment[0], user_id)) # [(30,)]
-		if getSubmittedFileId != '[]': # If user has submitted an upload for this reception
-			cleanSubmittedFileId = getSubmittedFileId.replace ('(', '')
-			cleanSubmittedFileId = cleanSubmittedFileId.replace (',', '')
-			cleanSubmittedFileId = cleanSubmittedFileId.replace (')', '')
-			cleanSubmittedFileId = cleanSubmittedFileId.replace (']', '')
-			cleanSubmittedFileId = cleanSubmittedFileId.replace ('[', '')
-			uploadOriginalFilename = app.models.selectFromDb(['original_filename'], 'upload', [''.join(('id=', str(cleanSubmittedFileId)))])
-			clean_assignment['submittedFilename'] = uploadOriginalFilename[0][0]
+		# If user has submitted assignment, get original filename
+		if Upload.query.filter_by(assignment_id=assignment_dict['id']).filter_by(user_id=user_id).first() is not None:
+			assignment_dict['submitted_filename']= Upload.query.filter_by(
+				assignment_id=assignment_dict['id']).filter_by(user_id=user_id).first().original_filename
 			
 			# Check for uploaded or pending peer-reviews
 			# This can either be 0 pending and 0 complete, 0/1 pending and 1 complete, or 0 pending and 2 complete
-			completeCount = Comment.getCountCompleteCommentsFromUserIdAndAssignmentId (user_id, assignment[0])
-			clean_assignment['completePeerReviewCount'] = completeCount[0][0]
+			completeCount = Comment.getCountCompleteCommentsFromUserIdAndAssignmentId (user_id, assignment_dict['id'])
+			assignment_dict['complete_peer_review_count'] = completeCount[0][0]
 			
-		clean_assignments_array.append(clean_assignment)
+		clean_assignments_array.append(assignment_dict)
 	
 	return clean_assignments_array
 
-def getAssignmentUploadProgressPercentage ():
-	# Get turmaId for this user
-	turmaId = User.get_user_turma_from_user_id (current_user.id)
-	
-	# Get assignments due for this user
-	assignmentsInfo = get_assignments_from_turma_id(turmaId)
-	assignmentsForThisUser = []
-	for assignment in assignmentsInfo:
-		assignmentId = str(assignment[0])
-		assignmentsForThisUser.append(assignmentId)
+def get_assignment_upload_progress_bar_percentage ():
+	turma_id = User.get_user_turma_from_user_id (current_user.id)	
+	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).all()
 	
 	# Check if user has uploaded each assignment
-	completedAssignments = 0
-	for assignmentId in assignmentsForThisUser:
-		userUploadedAssignmentId = Assignment.getUsersUploadedAssignmentsFromAssignmentId (assignmentId, current_user.id)
-		if userUploadedAssignmentId:
-			completedAssignments += 1
-	
+	#!# This can be achieved in a single SQL Query using JOIN and COUNT?
+	completed_assignments = 0
+	for assignment in assignments_for_user:
+		if Upload.query.filter_by(assignment_id=assignment.id).filter_by(user_id=current_user.id).first() is not None:
+			completed_assignments += 1
 	# Set value of assignment upload progress bar
-	if (len(assignmentsForThisUser) != 0):
-		assignmentUploadProgressBarPercentage = int(float(completedAssignments)/float(len(assignmentsForThisUser)) * 100)
+	if (len(assignments_for_user) > 0):
+		return int(float(completed_assignments)/float(len(assignments_for_user)) * 100)
 	else:
-		assignmentUploadProgressBarPercentage = 100
+		return 100
 	
-	return assignmentUploadProgressBarPercentage
+def get_peer_review_progress_bar_percentage ():
+	turma_id = User.get_user_turma_from_user_id (current_user.id)
+	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).all()
 	
-def getPeerReviewProgressPercentage ():
-	# Get turmaId for this user
-	turmaId = User.get_user_turma_from_user_id (current_user.id)
+	total_peer_reviews_expected = (len(assignments_for_user)) * 2 # At two peer reviews per assignment
+	#!# What about non-peer review assignments? Cross check with needs_peer_review
+	total_completed_peer_reviews = len(Comment.query.filter_by(user_id=current_user.id).filter_by(pending=False).all())
 	
-	# Get assignments due for this user
-	assignmentsInfo = get_assignments_from_turma_id(turmaId)
-	assignmentsForThisUser = []
-	for assignment in assignmentsInfo:
-		assignmentId = str(assignment[0])
-		assignmentsForThisUser.append(assignmentId)
-	
-	totalNumberOfPeerReviewsExpected = (len(assignmentsForThisUser)) * 2 # At two peer reviews per assignment
-	conditions = []
-	conditions.append(''.join(('user_id=', str(current_user.id)))	)
-	conditions.append('pending=0')
-	commentIds = app.models.selectFromDb(['id'], 'comment', conditions)
-	totalNumberOfCompletedPeerReviews = (len(commentIds))
-	
-	if totalNumberOfPeerReviewsExpected != 0:
-		peerReviewProgressBarPercentage = int(float(totalNumberOfCompletedPeerReviews)/float(totalNumberOfPeerReviewsExpected) * 100)
+	if total_peer_reviews_expected > 0:
+		return int(float(total_completed_peer_reviews)/float(total_peer_reviews_expected) * 100)
 	else:
-		peerReviewProgressBarPercentage = 100
-		
-	return peerReviewProgressBarPercentage
+		return 100

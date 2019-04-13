@@ -3,7 +3,7 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
-from sqlalchemy import text
+from sqlalchemy import text, cast, String
 import json
 
 @login.user_loader
@@ -54,12 +54,8 @@ class Turma(db.Model):
 		return '<Turma {}>'.format(self.turma_number)
 
 	@staticmethod
-	def getTurmaChoiceListForForm ():
-		allTurmas = selectFromDb(['*'], 'turma')
-		turmaNumberAndLabelList = []
-		for turmaInfo in allTurmas:
-			turmaNumberAndLabelList.append((turmaInfo[1], turmaInfo[2]))
-		return turmaNumberAndLabelList
+	def get_class_list_for_forms ():
+		return db.session.query(cast(Turma.id, String(64)), Turma.turma_label).all()
 	
 	@staticmethod
 	def deleteTurmaFromId (turmaId):
@@ -74,7 +70,7 @@ class User(UserMixin, db.Model):
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
 	student_number = db.Column(db.String(12))
-	turma_id = db.Column(db.String(20))
+	turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
 	last_seen = db.Column(db.DateTime, default=datetime.now)
 	registered = db.Column(db.DateTime, default=datetime.now)
 	email_confirmed = db.Column(db.Boolean, default=False)
@@ -131,16 +127,20 @@ class User(UserMixin, db.Model):
 	
 	@staticmethod
 	def get_user_turma_from_user_id (user_id):
-		conditions = []
-		conditions.append (str('id="' + str(user_id) + '"'))
-		turma = selectFromDb(['turma_id'], 'user', conditions)
-		try:
-			return turma[0][0]
-		except:
-			return False
+		return User.query.get(user_id).turma_id
+	
+	
+class AssignmentTaskFile(db.Model):
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	original_filename = db.Column(db.String(140))
+	filename = db.Column(db.String(140))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	
+	def __repr__(self):
+		return '<Assignment Task File {}>'.format(self.filename)		
 
-	
-	
+
 
 class Upload(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -171,12 +171,6 @@ class Upload(db.Model):
 		filenames = []
 		for row in result: filenames.append(row[0])
 		return filenames
-	
-	@staticmethod
-	def deleteAllUploadsFromAssignmentId (assignmentId):
-		sql = text ('DELETE FROM upload WHERE assignment_id=' + '"' + str(assignmentId) + '"')
-		result = db.engine.execute(sql)
-		return result
 
 	
 	
@@ -195,12 +189,12 @@ class Download(db.Model):
 class Comment(db.Model):
 	
 	id = db.Column(db.Integer, primary_key=True)
-	comment = db.Column(db.String(140))
+	comment = db.Column(db.String(500))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
-	user_id = db.Column(db.Integer)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	file_id = db.Column(db.Integer)
 	pending = db.Column(db.Boolean)
-	assignment_id = db.Column(db.String(140))
+	assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
 	
 	def __repr__(self):
 		return '<Comment {}>'.format(self.comment)
@@ -227,12 +221,6 @@ class Comment(db.Model):
 		for row in result: names.append(row)
 		return names
 	
-	@staticmethod
-	def deleteCommentsFromAssignmentId (assignmentId):
-		sql = text ('DELETE FROM comment WHERE assignment_id=' + '"' + str(assignmentId) + '"')
-		result = db.engine.execute(sql)
-		return result
-	
 
 
 class Assignment(db.Model):
@@ -240,30 +228,15 @@ class Assignment(db.Model):
 	title = db.Column(db.String(140))
 	description = db.Column(db.String(280))
 	due_date = db.Column(db.Date)
-	created_by_id = db.Column(db.Integer)
-	target_course = db.Column(db.String(120))
+	created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	target_turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
 	peer_review_necessary = db.Column(db.Boolean, default=False)
-	peer_review_form = db.Column(db.String(120))
+	peer_review_form = db.Column(db.String(120)) # Should be peer_review_form_id, and db.ForeignKey
+	assignment_task_file_id = db.Column(db.Integer, db.ForeignKey('assignment_task_file.id'))
 	
 	def __repr__(self):
 		return '<Assignment {}>'.format(self.title)
-	
-	@staticmethod
-	def delete_assignment_from_id (assignment_id):
-		sql = text ('DELETE FROM assignment WHERE id=' + '"' + str(assignment_id) + '"')
-		result = db.engine.execute(sql)
-		return result
-
-	@staticmethod
-	def getUsersUploadedAssignmentsFromAssignmentId (assignmentId, userId):
-		sql = text ('SELECT upload.id FROM assignment INNER JOIN upload ON upload.assignment_id=assignment.id WHERE assignment.id=' + '"' + str(assignmentId) + '" AND user_id=' + str(userId))
-		result = db.engine.execute(sql)
-		if result == False:
-			return False
-		filename = []
-		for row in result: filename.append(row)
-		return filename
 	
 	@staticmethod
 	def getPeerReviewFormFromAssignmentId (assignmentId):
@@ -282,7 +255,7 @@ class PeerReviewForm(db.Model):
 	title = db.Column(db.String(140))
 	description = db.Column(db.String(280))
 	serialised_form_data = db.Column(db.String(280))
-	created_by_id = db.Column(db.Integer)
+	created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
 	
 	def __repr__(self):

@@ -105,8 +105,7 @@ def download_random_file(assignment_id):
 @bp.route("/download_file/<assignment_id>")
 @login_required
 def download_file(assignment_id = False):
-	assignment_is_over = app.assignments.models.checkIfAssignmentIsOver (assignment_id)
-	if assignment_is_over == True:
+	if app.assignments.models.check_if_assignment_is_over (assignment_id) == True:
 		return render_template('files/download_file.html', assignment_id = assignment_id)
 	else:
 		# If the assignment hasn't closed yet, flash message to wait until after deadline
