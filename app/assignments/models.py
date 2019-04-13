@@ -1,16 +1,12 @@
 from app import db
 import app.models
 from app.models import Upload, Download, Assignment, User, Comment, AssignmentTaskFile
-import datetime
+import datetime, time
 from datetime import datetime, date
-import time
 from flask_login import current_user
-from sqlalchemy import text
 
 def get_all_assignments_info (): 
-	return db.session.query(
-		Assignment, User).join(
-		User, Assignment.created_by_id == User.id).all()
+	return db.session.query(Assignment, User).join(User, Assignment.created_by_id == User.id).all()
 
 def delete_assignment_from_id (assignment_id):	
 	# Delete assignment_task_file, if it exists
@@ -38,14 +34,14 @@ def get_assignments_from_turma_id (turma_id):
 	return Assignment.query.filter_by(target_turma_id=turma_id).all()
 
 def check_if_assignment_is_over (assignment_id):
-	dueDate = Assignment.query.get(assignment_id).due_date
-	dueDatetime = datetime(dueDate.year, dueDate.month, dueDate.day)
+	due_date = Assignment.query.get(assignment_id).due_date
+	due_datetime = datetime(due_date.year, due_date.month, due_date.day)
 	# Format of date/time strings
-	dateFormat = "%Y-%m-%d"
+	date_format = "%Y-%m-%d"
 	# Create datetime objects from the strings
-	now = datetime.strptime(time.strftime(dateFormat), dateFormat)
+	now = datetime.strptime(time.strftime(date_format), date_format)
 	
-	if dueDatetime >= now: # Assignment is still open
+	if due_datetime >= now: # Assignment is still open
 		return False
 	else: # Assignment closed
 		return True
@@ -73,30 +69,28 @@ def get_user_assignment_info (user_id):
 	
 	return clean_assignments_array
 
-def get_assignment_upload_progress_bar_percentage ():
-	turma_id = User.get_user_turma_from_user_id (current_user.id)	
-	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).all()
+def get_received_peer_review_count (user_id):
+	return db.session.query(Comment).join(
+		Upload, Comment.file_id==Upload.id).filter(Upload.user_id==user_id).count()
+
+
+def get_assignment_upload_progress_bar_percentage (user_id):
+	turma_id = User.get_user_turma_from_user_id (user_id)	
+	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).count()
+	completed_assignments = db.session.query(Assignment).join(
+		Upload, Assignment.id==Upload.assignment_id).filter(Upload.user_id==2).count()
 	
-	# Check if user has uploaded each assignment
-	#!# This can be achieved in a single SQL Query using JOIN and COUNT?
-	completed_assignments = 0
-	for assignment in assignments_for_user:
-		if Upload.query.filter_by(assignment_id=assignment.id).filter_by(user_id=current_user.id).first() is not None:
-			completed_assignments += 1
-	# Set value of assignment upload progress bar
-	if (len(assignments_for_user) > 0):
-		return int(float(completed_assignments)/float(len(assignments_for_user)) * 100)
+	if assignments_for_user > 0:
+		return int(float(completed_assignments)/float(assignments_for_user) * 100)
 	else:
 		return 100
 	
-def get_peer_review_progress_bar_percentage ():
-	turma_id = User.get_user_turma_from_user_id (current_user.id)
-	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).all()
-	
-	total_peer_reviews_expected = (len(assignments_for_user)) * 2 # At two peer reviews per assignment
+def get_peer_review_progress_bar_percentage (user_id):
+	turma_id = User.get_user_turma_from_user_id (user_id)
+	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).count()
+	total_peer_reviews_expected = assignments_for_user * 2 # At two peer reviews per assignment
 	#!# What about non-peer review assignments? Cross check with needs_peer_review
-	total_completed_peer_reviews = len(Comment.query.filter_by(user_id=current_user.id).filter_by(pending=False).all())
-	
+	total_completed_peer_reviews = Comment.query.filter_by(user_id=user_id).filter_by(pending=False).count()
 	if total_peer_reviews_expected > 0:
 		return int(float(total_completed_peer_reviews)/float(total_peer_reviews_expected) * 100)
 	else:

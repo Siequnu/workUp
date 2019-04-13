@@ -30,12 +30,8 @@ def add_teacher_comment_to_upload (form_contents, upload_id):
 	db.session.commit()
 	return True
 
-def getUploadCountFromCurrentUserId ():
-	conditionsArray = []
-	conditionsArray.append (str('user_id="' + str(current_user.id) + '"'))
-	count = True
-	numberOfUploads = models.selectFromDb(['id'], 'upload', conditionsArray, count)
-	return numberOfUploads[0][0]
+def get_uploaded_file_count_from_user_id (user_id):
+	return Upload.query.filter_by(user_id=current_user.id).count()
 
 def get_peer_review_form_from_upload_id (upload_id):
 	info = db.session.query(
