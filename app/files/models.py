@@ -11,15 +11,13 @@ from sqlalchemy import func
 
 def get_all_uploads_from_assignment_id (assignment_id):	
 	return db.session.query(
-		Upload, User).join(
-		User).filter(
+		Upload, User).join(User).filter(
 		Upload.assignment_id == assignment_id).all()	
 
 
-def getAllUploadsWithFilenameAndUsername ():
-	return Upload.getAllUploadsWithFilenameAndUsername()
+def get_uploads_object ():
+	return Upload.query.all()
 	
-
 def get_all_uploads_count():
 	return Upload.query.count()
 
@@ -34,10 +32,10 @@ def get_uploaded_file_count_from_user_id (user_id):
 	return Upload.query.filter_by(user_id=current_user.id).count()
 
 def get_peer_review_form_from_upload_id (upload_id):
-	info = db.session.query(
-		Upload, Assignment).join(
-		Assignment, Upload.assignment_id == Assignment.id).filter(Upload.id == upload_id).first()
-	return info[1].peer_review_form
+	return db.session.query(
+		Assignment).join(
+		Upload,Assignment.id==Upload.assignment_id).filter(
+		Upload.id == upload_id).first().peer_review_form
 
 # Get all post info and comment count for a user
 def get_post_info_from_user_id (user_id):	
