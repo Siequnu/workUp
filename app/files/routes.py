@@ -179,11 +179,11 @@ def create_peer_review(assignment_id = False):
 			update_comment = Comment.updatePendingCommentWithComment(pending_comment_id, form_contents)
 		
 		# The database is now updated with the comment - check the total completed comments
-		completed_comments = Comment.getCountCompleteCommentsFromUserIdAndAssignmentId (current_user.id, assignment_id)
-		if completed_comments[0][0] == 1:
+		completed_comments = len(Comment.get_completed_peer_reviews_from_user_for_assignment (current_user.id, assignment_id))
+		if completed_comments == 1:
 			# This is the first peer review, submit
 			flash('Peer review 1 submitted succesfully!')
-		elif completed_comments[0][0] == 2:
+		elif completed_comments == 2:
 			# This is the second peer review, submit
 			flash('Peer review 2 submitted succesfully!')
 		return redirect(url_for('assignments.view_assignments'))

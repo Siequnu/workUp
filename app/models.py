@@ -221,15 +221,6 @@ class Comment(db.Model):
 	@staticmethod
 	def get_completed_peer_reviews_from_user_for_assignment (user_id, assignment_id):
 		return Comment.query.filter_by(user_id=user_id).filter_by(assignment_id=assignment_id).filter_by(pending=0).all()
-	
-	@staticmethod
-	def getCountCompleteCommentsFromUserIdAndAssignmentId (userId, assignmentId):
-		sql = text ("SELECT COUNT(id) FROM comment WHERE user_id='" + str(userId) + "' AND assignment_id='" + str(assignmentId) + "' AND pending=0")
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row)
-		return names
-	
 
 
 class Assignment(db.Model):
