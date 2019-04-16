@@ -152,14 +152,11 @@ def view_comments(file_id):
 	
 # Display an empty review feedback form
 @bp.route("/peer_review_form/<assignment_id>", methods=['GET', 'POST'])
-@bp.route("/peer_review_form", methods=['GET', 'POST'])
-@login_required
-def create_peer_review(assignment_id = False):
+
+def create_peer_review(assignment_id):
 	# Get the appropriate peer review form for the assignment via assignment ID
-	if assignment_id:
-		peer_review_form = Assignment.getPeerReviewFormFromAssignmentId(assignment_id)
-		peer_review_form_name = peer_review_form[0][0]	
-		form = eval(peer_review_form_name)()
+	peer_review_form_name = Assignment.query.get(assignment_id).peer_review_form
+	form = eval(peer_review_form_name)()
 	
 	if form.validate_on_submit():
 		# Serialise the form contents
