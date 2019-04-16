@@ -77,8 +77,8 @@ class User(UserMixin, db.Model):
 	password_hash = db.Column(db.String(128))
 	student_number = db.Column(db.String(12))
 	turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
-	last_seen = db.Column(db.DateTime, default=datetime.now)
-	registered = db.Column(db.DateTime, default=datetime.now)
+	last_seen = db.Column(db.DateTime, default=datetime.now())
+	registered = db.Column(db.DateTime, default=datetime.now())
 	email_confirmed = db.Column(db.Boolean, default=False)
 	is_admin = db.Column(db.Boolean, default=False)
 
@@ -140,7 +140,7 @@ class AssignmentTaskFile(db.Model):
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	original_filename = db.Column(db.String(140))
 	filename = db.Column(db.String(140))
-	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	
 	def __repr__(self):
@@ -152,7 +152,7 @@ class Upload(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	original_filename = db.Column(db.String(140))
 	filename = db.Column(db.String(140))
-	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
 	
@@ -183,7 +183,7 @@ class Upload(db.Model):
 class Download(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	filename = db.Column(db.String(140))
-	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	
 	def __repr__(self):
@@ -195,7 +195,7 @@ class Comment(db.Model):
 	
 	id = db.Column(db.Integer, primary_key=True)
 	comment = db.Column(db.String(500))
-	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	file_id = db.Column(db.Integer)
 	pending = db.Column(db.Boolean)
@@ -235,7 +235,7 @@ class Assignment(db.Model):
 	due_date = db.Column(db.Date)
 	created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	target_turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
-	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	peer_review_necessary = db.Column(db.Boolean, default=False)
 	peer_review_form = db.Column(db.String(120)) # Should be peer_review_form_id, and db.ForeignKey
 	assignment_task_file_id = db.Column(db.Integer, db.ForeignKey('assignment_task_file.id'))
@@ -261,7 +261,7 @@ class PeerReviewForm(db.Model):
 	description = db.Column(db.String(280))
 	serialised_form_data = db.Column(db.String(280))
 	created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-	timestamp = db.Column(db.DateTime, index=True, default=datetime.now)
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	
 	def __repr__(self):
 		return '<PeerReviewForm {}>'.format(self.title)

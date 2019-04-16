@@ -20,11 +20,11 @@
   {% for upload in all_post_info %}
   
   <div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">{{ upload[0].original_filename }}</div>
+  <div class="card-header">{{ upload.original_filename }}</div>
   <div class="card-body">
-    <h5 class="card-title">Peer reviews: {{upload[1]}}</h5>
-    <p class="card-text">Date uploaded: {{ upload[0].timestamp }}</p>
-    <a href="{{url_for('files.view_comments', file_id = upload[0].id)}}" class="btn btn-primary">View comments</a>
+    <h5 class="card-title">Peer reviews: {{ upload.number_of_comments }}</h5>
+    <p class="card-text">Uploaded: {{ upload.timestamp }}</p>
+    <a href="{{url_for('files.view_comments', file_id = upload.id)}}" class="btn btn-primary">View comments</a>
     
   </div>
 </div>

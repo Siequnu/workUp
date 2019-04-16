@@ -4,11 +4,12 @@ from app.models import Upload, Download, Assignment, User, Comment, AssignmentTa
 from app.files import models
 import datetime, time
 from datetime import datetime, date
+from dateutil import tz
 from flask_login import current_user
+import arrow
 
 def get_all_assignments_info (): 
 	return db.session.query(Assignment, User).join(User, Assignment.created_by_id == User.id).all()
-
 
 def new_assignment_from_form (form):
 	if form.assignment_task_file.data is not None:
@@ -51,7 +52,6 @@ def delete_assignment_from_id (assignment_id):
 	db.session.commit()
 	# Download records are not deleted for future reference
 	return True
-
 
 def get_assignments_from_turma_id (turma_id):
 	return Assignment.query.filter_by(target_turma_id=turma_id).all()
@@ -96,12 +96,20 @@ def get_received_peer_review_count (user_id):
 	return db.session.query(Comment).join(
 		Upload, Comment.file_id==Upload.id).filter(Upload.user_id==user_id).count()
 
+def last_uploaded_assignment_timestamp (user_id):
+	if Upload.query.filter_by(user_id=user_id).order_by(Upload.timestamp.desc()).first() is not None:
+		last_upload_timestamp = Upload.query.filter_by(user_id=user_id).order_by(Upload.timestamp.desc()).first().timestamp
+		return arrow.get(last_upload_timestamp, tz.gettz('Asia/Hong_Kong')).humanize()
+	else: return False
+
+def last_incoming_peer_review_timestamp (user_id):
+	return False	
 
 def get_assignment_upload_progress_bar_percentage (user_id):
 	turma_id = User.get_user_turma_from_user_id (user_id)	
 	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).count()
 	completed_assignments = db.session.query(Assignment).join(
-		Upload, Assignment.id==Upload.assignment_id).filter(Upload.user_id==2).count()
+		Upload, Assignment.id==Upload.assignment_id).filter(Upload.user_id==current_user.id).count()
 	
 	if assignments_for_user > 0:
 		return int(float(completed_assignments)/float(assignments_for_user) * 100)
