@@ -72,7 +72,6 @@ def check_if_assignment_is_over (assignment_id):
 def get_comment_author_id_from_comment (comment_id):
 	return Comment.query.get(comment_id).user_id
 
-	
 def get_user_assignment_info (user_id):
 	turma_id = User.get_user_turma_from_user_id (user_id)
 	assignments = get_assignments_from_turma_id (turma_id)	
