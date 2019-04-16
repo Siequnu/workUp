@@ -142,8 +142,7 @@ def upload_file(assignment_id):
 @bp.route("/comments/<file_id>")
 @login_required
 def view_comments(file_id):
-	#!# What about admin?
-	if current_user.id is models.get_file_owner_id (file_id):
+	if current_user.id is models.get_file_owner_id (file_id) or app.models.is_admin(current_user.username):
 		original_filename = models.get_upload_filename_from_upload_id (file_id)
 		comments = models.get_peer_reviews_from_upload_id (file_id)	
 		return render_template('files/view_comments.html', comments = comments, original_filename = original_filename)
@@ -151,8 +150,7 @@ def view_comments(file_id):
 		
 	
 # Display an empty review feedback form
-@bp.route("/peer_review_form/<assignment_id>", methods=['GET', 'POST'])
-
+@bp.route("/create_peer_review/<assignment_id>", methods=['GET', 'POST'])
 def create_peer_review(assignment_id):
 	# Get the appropriate peer review form for the assignment via assignment ID
 	peer_review_form_name = Assignment.query.get(assignment_id).peer_review_form
@@ -178,10 +176,8 @@ def create_peer_review(assignment_id):
 		# The database is now updated with the comment - check the total completed comments
 		completed_comments = len(Comment.get_completed_peer_reviews_from_user_for_assignment (current_user.id, assignment_id))
 		if completed_comments == 1:
-			# This is the first peer review, submit
 			flash('Peer review 1 submitted succesfully!')
 		elif completed_comments == 2:
-			# This is the second peer review, submit
 			flash('Peer review 2 submitted succesfully!')
 		return redirect(url_for('assignments.view_assignments'))
 	return render_template('files/peer_review_form.html', title='Submit a peer review', form=form)
