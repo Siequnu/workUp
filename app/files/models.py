@@ -7,6 +7,8 @@ from flask_login import current_user
 from app.models import User, Upload, Download, Assignment, Comment
 from sqlalchemy import func
 
+import arrow
+
 def get_all_uploads_from_assignment_id (assignment_id):	
 	return db.session.query(
 		Upload, User).join(User).filter(
@@ -36,9 +38,18 @@ def get_peer_review_form_from_upload_id (upload_id):
 
 # Get all post info and comment count for a user
 def get_post_info_from_user_id (user_id):	
-	return db.session.query(Upload, func.count(Comment.id)).join(
-		Comment, Upload.id==Comment.file_id).group_by(Upload.filename).filter(Upload.user_id==user_id).all()
+	upload_info = db.session.query(Upload).filter(Upload.user_id==user_id).all()
+	upload_array =[]
+	for upload in upload_info:
+		upload_dict = upload.__dict__ # Convert the SQL Alchemy object into dictionary
+		upload_dict['number_of_comments'] = get_received_peer_review_from_upload_id_count(upload_dict['id'])
+		formatted_datetime = arrow.get (upload_dict['timestamp'])
+		upload_dict['timestamp'] = formatted_datetime.format('YYYY-MM-DD HH:mm:ss')
+		upload_array.append(upload_dict)
+	return upload_array
 
+def get_received_peer_review_from_upload_id_count (upload_id):
+	return Comment.query.filter_by(file_id=upload_id).count()
 
 # Check filename and extension permissibility
 def allowed_file_extension(filename):
@@ -66,7 +77,8 @@ def save_assignment_file (file, assignment_id):
 	random_filename = save_file (file)
 	
 	# Update SQL after file has saved
-	upload = Upload(original_filename = original_filename, filename = random_filename, user_id = current_user.id, assignment_id = assignment_id)
+	upload = Upload(original_filename = original_filename, filename = random_filename,
+					user_id = current_user.id, assignment_id = assignment_id)
 	db.session.add(upload)
 	db.session.commit()
 

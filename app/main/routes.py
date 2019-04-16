@@ -39,10 +39,14 @@ def index():
 			
 			number_of_uploads = app.files.models.get_uploaded_file_count_from_user_id(current_user.id)
 			number_of_peer_reviews_on_own_uploads = app.assignments.models.get_received_peer_review_count (current_user.id)
+			last_upload_humanized_timestamp = app.assignments.models.last_uploaded_assignment_timestamp (current_user.id)
+			last_received_peer_review_humanized_timestamp = app.assignments.models.last_incoming_peer_review_timestamp (current_user.id)
 			upload_progress_percentage = app.assignments.models.get_assignment_upload_progress_bar_percentage (current_user.id)
 			peer_review_progress_percentage = app.assignments.models.get_peer_review_progress_bar_percentage(current_user.id)
 			return render_template('index.html', number_of_uploads = number_of_uploads, upload_progress_percentage = upload_progress_percentage,
 								   peer_review_progress_percentage = peer_review_progress_percentage,
-								   number_of_peer_reviews_on_own_uploads = number_of_peer_reviews_on_own_uploads)
+								   number_of_peer_reviews_on_own_uploads = number_of_peer_reviews_on_own_uploads,
+								   last_upload_humanized_timestamp = last_upload_humanized_timestamp,
+								   last_received_peer_review_humanized_timestamp = last_received_peer_review_humanized_timestamp)
 	
 	return render_template('index.html')

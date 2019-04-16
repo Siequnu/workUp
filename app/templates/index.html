@@ -89,7 +89,9 @@
     <div class="card-body">
       
       <h5 class="card-title">You have uploaded {{number_of_uploads}} assignments.</h5>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      {% if last_upload_humanized_timestamp != False %}
+			<p class="card-text"><small class="text-muted">Last uploaded {{last_upload_humanized_timestamp}}</small></p>
+			{% endif %}
     </div>
   </div>
 	 
@@ -99,7 +101,9 @@
     <div class="card-body">
       
       <h5 class="card-title">Your essays have been reviewed {{number_of_peer_reviews_on_own_uploads}} times.</h5>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        {% if last_received_peer_review_humanized_timestamp != False %}
+			<p class="card-text"><small class="text-muted">Last reviewed {{last_received_peer_review_humanized_timestamp}}</small></p>
+			{% endif %}
     </div>
   </div>
 </div>

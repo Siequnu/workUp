@@ -112,7 +112,7 @@ def download_file(assignment_id = False):
 		flash ("The assignment hasn't closed yet. Please wait until the deadline is over, then try again to download an assignment to review.")
 		return redirect (url_for('assignments.view_assignments'))
 
-	
+
 # Student form to upload a file to an assignment
 @bp.route('/upload/<assignment_id>',methods=['GET', 'POST'])
 @login_required
