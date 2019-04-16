@@ -105,7 +105,12 @@ def last_uploaded_assignment_timestamp (user_id):
 	else: return False
 
 def last_incoming_peer_review_timestamp (user_id):
-	return False	
+	if db.session.query(Comment).join(Upload,Comment.file_id==Upload.id).filter(
+		Upload.user_id==user_id).order_by(Comment.timestamp.desc()).first() is not None:
+		latest_incoming_peer_review = db.session.query(Comment).join(Upload,Comment.file_id==Upload.id).filter(
+			Upload.user_id==user_id).order_by(Comment.timestamp.desc()).first().timestamp
+		return arrow.get(latest_incoming_peer_review, tz.gettz('Asia/Hong_Kong')).humanize() 
+	else: return False	
 
 def get_assignment_upload_progress_bar_percentage (user_id):
 	turma_id = User.get_user_turma_from_user_id (user_id)	
