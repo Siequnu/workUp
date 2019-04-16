@@ -218,10 +218,10 @@ def create_teacher_review(upload_id):
 # Let a receiver or author view a completed peer review
 @bp.route("/view_peer_review/<comment_id>")
 @login_required
-def view_peer_review(assignment_id = False, peer_review_number = False, comment_id = False):
+def view_peer_review(comment_id):
 	if current_user.id is models.get_file_owner_id (
 		Comment.query.get(comment_id).file_id) or current_user.id is app.assignments.models.get_comment_author_id_from_comment(
-		current_user.id):
+		comment_id):
 	
 		peer_review_form_name = db.session.query(Assignment).join(
 			Comment, Assignment.id==Comment.assignment_id).filter(
@@ -230,7 +230,7 @@ def view_peer_review(assignment_id = False, peer_review_number = False, comment_
 		unpacked_comments = json.loads(Comment.query.get(comment_id).comment)
 		
 		if current_user.id is app.assignments.models.get_comment_author_id_from_comment(
-		current_user.id):
+		comment_id):
 			flash('You can not edit this peer review as it has already been submitted.')
 			
 		# Import the form class
