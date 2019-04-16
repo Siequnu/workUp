@@ -80,7 +80,7 @@
         <div class="card-body">
          
       <h5>{{assignment['title']}}</h5>
-          <h6 class="card-title">Due date: {{assignment['due_date']}}</h6>
+          <h6 class="card-title">Due {{assignment['humanized_due_date']}} ({{assignment['due_date']}})</h6>
           <p class="card-text">{{assignment['description']}}</p>
         </div>
         <div class="card-footer">
