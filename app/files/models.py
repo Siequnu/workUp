@@ -1,13 +1,11 @@
 from app import db, models
 from flask import send_from_directory, current_app
 from werkzeug import secure_filename
-import os, uuid, datetime
+import os, uuid, datetime, arrow
 
 from flask_login import current_user
 from app.models import User, Upload, Download, Assignment, Comment
 from sqlalchemy import func
-
-import arrow
 
 def get_all_uploads_from_assignment_id (assignment_id):	
 	return db.session.query(
@@ -36,6 +34,15 @@ def get_peer_review_form_from_upload_id (upload_id):
 		Upload,Assignment.id==Upload.assignment_id).filter(
 		Upload.id == upload_id).first().peer_review_form
 
+def get_file_owner_id (file_id):
+	return Upload.query.get(file_id).user_id
+
+def get_peer_reviews_from_upload_id (upload_id):
+	return Comment.query.filter_by(file_id=upload_id).filter_by(pending=False).all()
+
+def get_upload_filename_from_upload_id (upload_id):
+	return Upload.query.get(upload_id).original_filename
+
 # Get all post info and comment count for a user
 def get_post_info_from_user_id (user_id):	
 	upload_info = db.session.query(Upload).filter(Upload.user_id==user_id).all()
@@ -55,7 +62,6 @@ def get_received_peer_review_from_upload_id_count (upload_id):
 def allowed_file_extension(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
-
 
 def get_file_extension(filename):
 	return filename.rsplit('.', 1)[1].lower()
@@ -85,7 +91,6 @@ def save_assignment_file (file, assignment_id):
 # Verify a filename is secure with werkzeug library
 def get_secure_filename(filename):
 	return secure_filename(filename)
-
 
 # Return randomised filename, keeping the original extension
 def get_random_uuid_filename(original_filename):
