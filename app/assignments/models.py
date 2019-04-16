@@ -79,7 +79,6 @@ def get_user_assignment_info (user_id):
 		
 		assignment_dict['assignment_is_past_deadline'] = check_if_assignment_is_over(assignment_dict['id'])
 		assignment_dict['humanized_due_date'] = arrow.get(assignment_dict['due_date']).humanize()
-		print (assignment_dict)
 		# If user has submitted assignment, get original filename
 		if Upload.query.filter_by(assignment_id=assignment_dict['id']).filter_by(user_id=user_id).first() is not None:
 			assignment_dict['submitted_filename']= Upload.query.filter_by(
