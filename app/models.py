@@ -237,18 +237,6 @@ class Assignment(db.Model):
 	
 	def __repr__(self):
 		return '<Assignment {}>'.format(self.title)
-	
-	@staticmethod
-	def getPeerReviewFormFromAssignmentId (assignmentId):
-		sql = text ('SELECT peer_review_form FROM assignment WHERE assignment.id=' + '"' + str(assignmentId) + '"')
-		result = db.engine.execute(sql)
-		if result == False:
-			return False
-		filename = []
-		for row in result: filename.append(row)
-		return filename
-	
-
 
 class PeerReviewForm(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
