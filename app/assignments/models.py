@@ -68,6 +68,10 @@ def check_if_assignment_is_over (assignment_id):
 		return False
 	else: # Assignment closed
 		return True
+
+def get_comment_author_id_from_comment (comment_id):
+	return Comment.query.get(comment_id).user_id
+
 	
 def get_user_assignment_info (user_id):
 	turma_id = User.get_user_turma_from_user_id (user_id)
@@ -86,8 +90,9 @@ def get_user_assignment_info (user_id):
 			
 			# Check for uploaded or pending peer-reviews
 			# This can either be 0 pending and 0 complete, 0/1 pending and 1 complete, or 0 pending and 2 complete
-			completeCount = Comment.getCountCompleteCommentsFromUserIdAndAssignmentId (user_id, assignment_dict['id'])
-			assignment_dict['complete_peer_review_count'] = completeCount[0][0]
+			completed_peer_reviews = Comment.get_completed_peer_reviews_from_user_for_assignment (user_id, assignment_dict['id'])
+			assignment_dict['complete_peer_review_count'] = len(completed_peer_reviews)
+			assignment_dict['completed_peer_review_objects'] = completed_peer_reviews
 			
 		clean_assignments_array.append(assignment_dict)
 	
