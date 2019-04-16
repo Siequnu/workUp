@@ -138,41 +138,18 @@ def upload_file(assignment_id):
 		return render_template('files/upload_file.html')
 
 	
-	
 
-# View peer review comments
 @bp.route("/comments/<file_id>")
 @login_required
 def view_comments(file_id):
-	# Make sure that only the AUTHOR can check comments on their file!
-	#!# What about admin
-	user_id = app.models.selectFromDb(['user_id'], 'upload', [''.join(('id=', str(file_id)))])
-	if user_id != []: # The upload exists	
-		if user_id[0][0] == current_user.id:
-			# Get assignment ID from upload ID
-			assignment_id = app.models.selectFromDb(['assignment_id'], 'upload', [''.join(('id=', str(file_id)))])
-			
-			# Get comment Ids associated with this upload
-			conditions = []
-			conditions.append(''.join(('assignment_id=', str(assignment_id[0][0]))))
-			conditions.append(''.join(('file_id=', str(file_id))))
-			conditions.append('pending=0')
-			comment_ids = app.models.selectFromDb(['id'], 'comment', conditions)
-			clean_comment_ids = []
-			for row in comment_ids:
-				for id in row:
-					clean_comment_ids.append(id)
-					
-			# Get assignment original filename
-			upload = app.models.selectFromDb(['original_filename'], 'upload', [''.join(('id=', str(file_id)))])
-			upload_title = upload[0][0]
-			
-			return render_template('files/view_comments.html', clean_comment_ids = clean_comment_ids, upload_title = upload_title)
+	#!# What about admin?
+	if current_user.id is models.get_file_owner_id (file_id):
+		original_filename = models.get_upload_filename_from_upload_id (file_id)
+		comments = models.get_peer_reviews_from_upload_id (file_id)	
+		return render_template('files/view_comments.html', comments = comments, original_filename = original_filename)
 	abort (403)
+		
 	
-	
-	
-
 # Display an empty review feedback form
 @bp.route("/peer_review_form/<assignment_id>", methods=['GET', 'POST'])
 @bp.route("/peer_review_form", methods=['GET', 'POST'])

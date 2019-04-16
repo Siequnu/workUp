@@ -14,16 +14,16 @@
       <div class="card-body">
          <h1>View comments</h1>
 
-         {{upload_title}}
+         {{original_filename}}
          <hr>
          <br>
-         {% if clean_comment_ids|length == 0 %}
+         {% if comments|length == 0 %}
            <p><em>No peer reviews have been submitted for this work.<br /><br />
          Check back later.</em></p>
          {% else %}
-         {% for id in clean_comment_ids %}
+         {% for comment in comments %}
              <p>
-           <td><a href="{{url_for('files.view_peer_review', comment_id=id)}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review</a></td>
+           <td><a href="{{url_for('files.view_peer_review', comment_id=comment.id)}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review</a></td>
            </p>
          {% endfor %}
        {% endif %}
