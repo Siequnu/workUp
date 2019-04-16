@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, current_app, send_file
+from flask import render_template, flash, redirect, url_for, request, current_app, send_file, abort
 from flask_login import current_user
 
 # Login
@@ -215,49 +215,30 @@ def create_teacher_review(upload_id):
 	return render_template('files/peer_review_form.html', title='Submit a teacher review', form=form)
 
 
-# View a completed and populated peer review form
-# This accepts both the user's own peer reviews, and other users' reviews
-@bp.route("/view_peer_review_from_assignment/<assignment_id>/<peer_review_number>", methods=['GET', 'POST'])
-@bp.route("/view_peer_comment/<comment_id>", methods=['GET', 'POST'])
+# Let a receiver or author view a completed peer review
+@bp.route("/view_peer_review/<comment_id>")
 @login_required
 def view_peer_review(assignment_id = False, peer_review_number = False, comment_id = False):
-	if comment_id:
-		# Check if this peer review is intended for the user trying to view it
-		# What file was it made for
-		file_id = app.models.selectFromDb(['file_id'], 'comment', [str('id="' + str(comment_id) + '"')])
-		# Who owns that file
-		owner = app.models.selectFromDb(['user_id'], 'upload', [str('id="' + str(file_id[0][0]) + '"')])
-		# Is it the same person trying to view this comment?
-		if current_user.id is not owner[0][0]:
-			abort (403)
-		
-		# Get assignment ID from comment ID
-		assignment_id = app.models.selectFromDb(['assignment_id'],'comment',[(str('id="'+str(comment_id)+'"'))])
-		# Get the form from the assignmentId
-		peer_review_form_name = app.models.selectFromDb(['peer_review_form'],'assignment',[(str('id="'+str(assignment_id[0][0])+'"'))])
-		
-		# Get the comment content from ID
-		comment = app.models.selectFromDb(['comment'],'comment',[(str('id="'+str(comment_id)+'"'))])
-		unpacked_comments = json.loads(comment[0][0])
-	else:
-		# Get the form from the assignmentId	
-		peer_review_form_name = app.models.selectFromDb(['peer_review_form'],'assignment',[(str('id="'+str(assignment_id)+'"'))])
-		# Get the first or second peer review - these will be in created order in the DB
-		conditions = []
-		conditions.append (str('assignment_id="' + str(assignment_id) + '"'))
-		conditions.append (str('user_id="' + str(current_user.id) + '"'))
-		comments = app.models.selectFromDb(['comment'],'comment',conditions)
-		if int(peer_review_number) == 1:
-			unpacked_comments = json.loads(comments[0][0])
-		elif int(peer_review_number) == 2:
-			unpacked_comments = json.loads(comments[1][0])
-		flash('You can not edit this peer review as it has already been submitted.')
+	if current_user.id is models.get_file_owner_id (
+		Comment.query.get(comment_id).file_id) or current_user.id is app.assignments.models.get_comment_author_id_from_comment(
+		current_user.id):
 	
-	# Import the form class
-	form_class = getattr(app.forms_peer_review, str(peer_review_form_name[0][0]))
-	# Populate the form
-	form = form_class(**unpacked_comments)
-	# Delete submit button
-	del form.submit
-	
-	return render_template('files/peer_review_form.html', title='View a peer review', form=form)
+		peer_review_form_name = db.session.query(Assignment).join(
+			Comment, Assignment.id==Comment.assignment_id).filter(
+			Comment.id==comment_id).first().peer_review_form
+		
+		unpacked_comments = json.loads(Comment.query.get(comment_id).comment)
+		
+		if current_user.id is app.assignments.models.get_comment_author_id_from_comment(
+		current_user.id):
+			flash('You can not edit this peer review as it has already been submitted.')
+			
+		# Import the form class
+		form_class = getattr(app.assignments.forms_peer_review, peer_review_form_name)
+		# Populate the form
+		form = form_class(**unpacked_comments)
+		# Delete submit button
+		del form.submit
+		
+		return render_template('files/peer_review_form.html', title='View a peer review', form=form)
+	else: abort (403)
