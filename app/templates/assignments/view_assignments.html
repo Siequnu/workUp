@@ -95,11 +95,11 @@
                                <a href="#" class="btn btn-default btn-sm disabled" role="button" disabled="true">Submit Review 2</a>
                      
                          {% elif assignment['complete_peer_review_count'] == 1 %}
-                            <a href="{{url_for('files.view_peer_review', comment_id=assignment['completed_peer_review_objects'][0].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
+                            <a href="{{url_for('assignments.view_peer_review', comment_id=assignment['completed_peer_review_objects'][0].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
                            <a href="{{url_for('files.download_file', assignment_id = assignment['id'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 2</a>
                          {% elif assignment['complete_peer_review_count'] == 2 %}
-                         <a href="{{url_for('files.view_peer_review', comment_id=assignment['completed_peer_review_objects'][0].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
-                         <a href="{{url_for('files.view_peer_review', comment_id=assignment['completed_peer_review_objects'][1].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 2</a>
+                         <a href="{{url_for('assignments.view_peer_review', comment_id=assignment['completed_peer_review_objects'][0].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
+                         <a href="{{url_for('assignments.view_peer_review', comment_id=assignment['completed_peer_review_objects'][1].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 2</a>
                          {% endif %}
                      {% else %}
                       <a href="" class="btn btn-info btn-lg btn-sm disabled " role="button" aria-disabled="true">This assignment will not be peer-reviewed</a>

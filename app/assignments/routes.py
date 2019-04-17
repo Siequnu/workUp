@@ -3,9 +3,18 @@ from flask_login import current_user, login_required
 
 from app.assignments import bp, models, forms
 from app.assignments.forms import TurmaCreationForm, AssignmentCreationForm
+
 from app.files import models
 from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile
 import app.models
+
+from app import db
+
+import json
+
+# Forms
+from app.main.forms import FormModel
+from app.assignments.forms_peer_review import *
 
 ########## Student class (turma) methods
 @bp.route("/create_class", methods=['GET', 'POST'])
@@ -91,7 +100,81 @@ def delete_assignment(assignment_id):
 		flash('Assignment ' + str(assignment_id) + ' successfully deleted!')
 		return redirect(url_for('assignments.view_assignments'))
 	abort (403)
+
+############# User peer review routes
+# Display an empty review feedback form
+@bp.route("/create_peer_review/<assignment_id>", methods=['GET', 'POST'])
+def create_peer_review(assignment_id):
+	# Get the appropriate peer review form for the assignment via assignment ID
+	peer_review_form_name = Assignment.query.get(assignment_id).peer_review_form
+	form = eval(peer_review_form_name)()
+	if form.validate_on_submit():
+		# Submit form
+		if app.assignments.models.new_peer_review_from_form (form, assignment_id):
+			# The database is now updated with the comment - check the total completed comments
+			completed_comments = len(Comment.get_completed_peer_reviews_from_user_for_assignment (current_user.id, assignment_id))
+			if completed_comments == 1:
+				flash('Peer review 1 submitted succesfully!')
+			elif completed_comments == 2:
+				flash('Peer review 2 submitted succesfully!')
+			return redirect(url_for('assignments.view_assignments'))
+		else: # The user tried to submit a review without a pending review
+			flash('You need to download an assignment before you submit a peer review!')
+			return redirect(url_for('assignments.view_assignments'))
+	return render_template('files/peer_review_form.html', title='Submit a peer review', form=form)
+
+# Display an empty review feedback form
+@bp.route("/create_teacher_review/<upload_id>", methods=['GET', 'POST'])
+@login_required
+def create_teacher_review(upload_id):
+	# Get the appropriate peer review form
+	peer_review_form = app.assignments.models.get_peer_review_form_from_upload_id (upload_id)
+	form = eval(peer_review_form)()
 	
+	if form.validate_on_submit():
+		# Serialise the form contents
+		form_fields = {}
+		for field_title, field_contents in form.data.items():
+			form_fields[field_title] = field_contents
+		# Clean the csrf_token and submit fields
+		del form_fields['csrf_token']
+		del form_fields['submit']
+		form_contents = json.dumps(form_fields)
+		
+		update_comment = app.assignments.models.add_teacher_comment_to_upload(form_contents, upload_id)
+		
+		flash('Teacher review submitted succesfully!')
+		return redirect(url_for('assignments.view_assignments'))
+	return render_template('files/peer_review_form.html', title='Submit a teacher review', form=form)
+
+
+# Let a receiver or author view a completed peer review
+@bp.route("/view_peer_review/<comment_id>")
+@login_required
+def view_peer_review(comment_id):
+	if current_user.id is models.get_file_owner_id (
+		Comment.query.get(comment_id).file_id) or current_user.id is app.assignments.models.get_comment_author_id_from_comment(
+		comment_id):
+	
+		peer_review_form_name = db.session.query(Assignment).join(
+			Comment, Assignment.id==Comment.assignment_id).filter(
+			Comment.id==comment_id).first().peer_review_form
+		
+		unpacked_comments = json.loads(Comment.query.get(comment_id).comment)
+		
+		if current_user.id is app.assignments.models.get_comment_author_id_from_comment(
+		comment_id):
+			flash('You can not edit this peer review as it has already been submitted.')
+			
+		# Import the form class
+		form_class = getattr(app.assignments.forms_peer_review, peer_review_form_name)
+		# Populate the form
+		form = form_class(**unpacked_comments)
+		# Delete submit button
+		del form.submit
+		
+		return render_template('files/peer_review_form.html', title='View a peer review', form=form)
+	else: abort (403)
 	
 ############# Peer review forms routes
 # Admin page to create new peer review form

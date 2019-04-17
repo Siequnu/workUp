@@ -39,7 +39,7 @@
          <td>{{user.username}}</td>
          <td>{{user.student_number}}</td>
             <td>
-              <a href="{{url_for('files.create_teacher_review', upload_id = upload.id)}}">  <img src='/static/edit.svg' alt="View Details" width="25" heigth="25%"></a>
+              <a href="{{url_for('assignments.create_teacher_review', upload_id = upload.id)}}">  <img src='/static/edit.svg' alt="View Details" width="25" heigth="25%"></a>
             </td>
             </tr>
            {% endfor %}
