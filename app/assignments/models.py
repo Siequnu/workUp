@@ -6,10 +6,73 @@ import datetime, time
 from datetime import datetime, date
 from dateutil import tz
 from flask_login import current_user
-import arrow
+import arrow, json
 
 def get_all_assignments_info (): 
 	return db.session.query(Assignment, User).join(User, Assignment.created_by_id == User.id).all()
+
+def get_user_assignment_info (user_id):
+	turma_id = User.get_user_turma_from_user_id (user_id)
+	assignments = get_assignments_from_turma_id (turma_id)	
+	clean_assignments_array = []
+	for assignment in assignments:
+		# Convert each SQL object into a  __dict__, then add extra keys for the template
+		assignment_dict = assignment.__dict__
+		
+		assignment_dict['assignment_is_past_deadline'] = check_if_assignment_is_over(assignment_dict['id'])
+		assignment_dict['humanized_due_date'] = arrow.get(assignment_dict['due_date']).humanize()
+		# If user has submitted assignment, get original filename
+		if Upload.query.filter_by(assignment_id=assignment_dict['id']).filter_by(user_id=user_id).first() is not None:
+			assignment_dict['submitted_filename']= Upload.query.filter_by(
+				assignment_id=assignment_dict['id']).filter_by(user_id=user_id).first().original_filename
+			
+			# Check for uploaded or pending peer-reviews
+			# This can either be 0 pending and 0 complete, 0/1 pending and 1 complete, or 0 pending and 2 complete
+			completed_peer_reviews = Comment.get_completed_peer_reviews_from_user_for_assignment (user_id, assignment_dict['id'])
+			assignment_dict['complete_peer_review_count'] = len(completed_peer_reviews)
+			assignment_dict['completed_peer_review_objects'] = completed_peer_reviews
+			
+		clean_assignments_array.append(assignment_dict)
+	
+	return clean_assignments_array
+
+def get_peer_review_form_from_upload_id (upload_id):
+	return db.session.query(
+		Assignment).join(
+		Upload,Assignment.id==Upload.assignment_id).filter(
+		Upload.id == upload_id).first().peer_review_form
+
+def get_received_peer_review_count (user_id):
+	return db.session.query(Comment).join(
+		Upload, Comment.file_id==Upload.id).filter(Upload.user_id==user_id).count()
+
+def get_assignment_upload_progress_bar_percentage (user_id):
+	turma_id = User.get_user_turma_from_user_id (user_id)	
+	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).count()
+	completed_assignments = db.session.query(Assignment).join(
+		Upload, Assignment.id==Upload.assignment_id).filter(Upload.user_id==current_user.id).count()
+	
+	if assignments_for_user > 0:
+		return int(float(completed_assignments)/float(assignments_for_user) * 100)
+	else:
+		return 100
+	
+def get_peer_review_progress_bar_percentage (user_id):
+	turma_id = User.get_user_turma_from_user_id (user_id)
+	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).count()
+	total_peer_reviews_expected = assignments_for_user * 2 # At two peer reviews per assignment
+	#!# What about non-peer review assignments? Cross check with needs_peer_review
+	total_completed_peer_reviews = Comment.query.filter_by(user_id=user_id).filter_by(pending=False).count()
+	if total_peer_reviews_expected > 0:
+		return int(float(total_completed_peer_reviews)/float(total_peer_reviews_expected) * 100)
+	else:
+		return 100
+	
+def get_comment_author_id_from_comment (comment_id):
+	return Comment.query.get(comment_id).user_id
+
+def get_assignments_from_turma_id (turma_id):
+	return Assignment.query.filter_by(target_turma_id=turma_id).all()
 
 def new_assignment_from_form (form):
 	if form.assignment_task_file.data is not None:
@@ -53,8 +116,34 @@ def delete_assignment_from_id (assignment_id):
 	# Download records are not deleted for future reference
 	return True
 
-def get_assignments_from_turma_id (turma_id):
-	return Assignment.query.filter_by(target_turma_id=turma_id).all()
+def add_teacher_comment_to_upload (form_contents, upload_id):
+	comment = Comment(comment = form_contents, user_id = current_user.id,
+					  file_id = upload_id, pending = False, assignment_id = Upload.query.get(upload_id).assignment_id)
+	db.session.add(comment)
+	db.session.commit()
+	return True
+
+def new_peer_review_from_form (form, assignment_id):
+	# Serialise the form contents
+	form_fields = {}
+	for field_title, field_contents in form.data.items():
+		form_fields[field_title] = field_contents
+	# Clean the csrf_token and submit fields
+	del form_fields['csrf_token']
+	del form_fields['submit']
+	form_contents = json.dumps(form_fields)
+	
+	# Check if user has any previous downloads with pending peer reviews
+	pending_assignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignment_id)
+	if len(pending_assignments) > 0:
+		# User has a pending peer review - update the empty comment field with the contents of this form and remove pending status
+		# If there is no pending status - user has not yet downloaded a file, so don't accept the review
+		pending_comment_id = pending_assignments[0][0]
+		update_comment = Comment.update_pending_comment_with_contents(pending_comment_id, form_contents)
+		return True
+	else:
+		return False
+		
 
 def check_if_assignment_is_over (assignment_id):
 	due_date = Assignment.query.get(assignment_id).due_date
@@ -68,38 +157,6 @@ def check_if_assignment_is_over (assignment_id):
 		return False
 	else: # Assignment closed
 		return True
-
-def get_comment_author_id_from_comment (comment_id):
-	return Comment.query.get(comment_id).user_id
-
-def get_user_assignment_info (user_id):
-	turma_id = User.get_user_turma_from_user_id (user_id)
-	assignments = get_assignments_from_turma_id (turma_id)	
-	clean_assignments_array = []
-	for assignment in assignments:
-		# Convert each SQL object into a  __dict__, then add extra keys for the template
-		assignment_dict = assignment.__dict__
-		
-		assignment_dict['assignment_is_past_deadline'] = check_if_assignment_is_over(assignment_dict['id'])
-		assignment_dict['humanized_due_date'] = arrow.get(assignment_dict['due_date']).humanize()
-		# If user has submitted assignment, get original filename
-		if Upload.query.filter_by(assignment_id=assignment_dict['id']).filter_by(user_id=user_id).first() is not None:
-			assignment_dict['submitted_filename']= Upload.query.filter_by(
-				assignment_id=assignment_dict['id']).filter_by(user_id=user_id).first().original_filename
-			
-			# Check for uploaded or pending peer-reviews
-			# This can either be 0 pending and 0 complete, 0/1 pending and 1 complete, or 0 pending and 2 complete
-			completed_peer_reviews = Comment.get_completed_peer_reviews_from_user_for_assignment (user_id, assignment_dict['id'])
-			assignment_dict['complete_peer_review_count'] = len(completed_peer_reviews)
-			assignment_dict['completed_peer_review_objects'] = completed_peer_reviews
-			
-		clean_assignments_array.append(assignment_dict)
-	
-	return clean_assignments_array
-
-def get_received_peer_review_count (user_id):
-	return db.session.query(Comment).join(
-		Upload, Comment.file_id==Upload.id).filter(Upload.user_id==user_id).count()
 
 def last_uploaded_assignment_timestamp (user_id):
 	if Upload.query.filter_by(user_id=user_id).order_by(Upload.timestamp.desc()).first() is not None:
@@ -115,24 +172,3 @@ def last_incoming_peer_review_timestamp (user_id):
 		return arrow.get(latest_incoming_peer_review, tz.gettz('Asia/Hong_Kong')).humanize() 
 	else: return False	
 
-def get_assignment_upload_progress_bar_percentage (user_id):
-	turma_id = User.get_user_turma_from_user_id (user_id)	
-	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).count()
-	completed_assignments = db.session.query(Assignment).join(
-		Upload, Assignment.id==Upload.assignment_id).filter(Upload.user_id==current_user.id).count()
-	
-	if assignments_for_user > 0:
-		return int(float(completed_assignments)/float(assignments_for_user) * 100)
-	else:
-		return 100
-	
-def get_peer_review_progress_bar_percentage (user_id):
-	turma_id = User.get_user_turma_from_user_id (user_id)
-	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).count()
-	total_peer_reviews_expected = assignments_for_user * 2 # At two peer reviews per assignment
-	#!# What about non-peer review assignments? Cross check with needs_peer_review
-	total_completed_peer_reviews = Comment.query.filter_by(user_id=user_id).filter_by(pending=False).count()
-	if total_peer_reviews_expected > 0:
-		return int(float(total_completed_peer_reviews)/float(total_peer_reviews_expected) * 100)
-	else:
-		return 100

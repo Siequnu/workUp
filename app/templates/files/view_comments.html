@@ -23,7 +23,7 @@
          {% else %}
          {% for comment in comments %}
              <p>
-           <td><a href="{{url_for('files.view_peer_review', comment_id=comment.id)}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review</a></td>
+           <td><a href="{{url_for('assignments.view_peer_review', comment_id=comment.id)}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review</a></td>
            </p>
          {% endfor %}
        {% endif %}
