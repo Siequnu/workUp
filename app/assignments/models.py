@@ -84,16 +84,17 @@ def new_assignment_from_form (form):
 											   user_id = current_user.id)
 		db.session.add(assignment_task_file)
 		db.session.flush() # Access the assignment_task_file.id field from db
-		
-	assignment = Assignment(title=form.title.data, description=form.description.data, due_date=form.due_date.data,
-						target_turma_id=form.target_turma_id.data, created_by_id=current_user.id,
+	
+	for turma_id in form.target_turma_id.data:
+		assignment = Assignment(title=form.title.data, description=form.description.data, due_date=form.due_date.data,
+						target_turma_id=turma_id, created_by_id=current_user.id,
 						peer_review_necessary= form.peer_review_necessary.data,
 						peer_review_form=form.peer_review_form.data)
-	if form.assignment_task_file.data is not None:
-		assignment.assignment_task_file_id=assignment_task_file.id
+		if form.assignment_task_file.data is not None:
+			assignment.assignment_task_file_id=assignment_task_file.id
 	
-	db.session.add(assignment)
-	db.session.commit()
+		db.session.add(assignment)
+		db.session.commit()
 
 def delete_assignment_from_id (assignment_id):	
 	# Delete assignment_task_file, if it exists
