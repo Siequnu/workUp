@@ -89,10 +89,9 @@ def download_random_file(assignment_id):
 	db.session.commit()
 	
 	# Update comments table with pending commment
-	conditions = []
-	conditions.append (str('filename="' + str(filename) + '"'))
-	upload_id = app.models.selectFromDb(['id'], 'upload', conditions)
-	comment_pending = Comment(user_id = int(current_user.id), file_id = int(upload_id[0][0]), pending = True, assignment_id=assignment_id)
+	upload_id = Upload.query.filter_by(filename=filename).first().id
+	comment_pending = Comment(user_id = int(current_user.id), file_id = int(upload_id),
+							  pending = True, assignment_id=assignment_id)
 	db.session.add(comment_pending)
 	db.session.commit()
 
@@ -171,7 +170,7 @@ def create_peer_review(assignment_id):
 		if len(pending_assignments) > 0:
 			# User has a pending peer review - update the empty comment field with the contents of this form and remove pending status
 			pending_comment_id = pending_assignments[0][0]
-			update_comment = Comment.updatePendingCommentWithComment(pending_comment_id, form_contents)
+			update_comment = Comment.update_pending_comment_with_contents(pending_comment_id, form_contents)
 		
 		# The database is now updated with the comment - check the total completed comments
 		completed_comments = len(Comment.get_completed_peer_reviews_from_user_for_assignment (current_user.id, assignment_id))
