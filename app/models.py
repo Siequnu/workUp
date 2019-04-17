@@ -213,10 +213,11 @@ class Comment(db.Model):
 		return names
 	
 	@staticmethod
-	def updatePendingCommentWithComment (commentId, peerReviewContents):
-		sql = text ("UPDATE comment SET pending=0, comment='" + str(peerReviewContents) + "' WHERE id='" + str(commentId) + "'")
-		result = db.engine.execute(sql)
-		return result
+	def update_pending_comment_with_contents (comment_id, peer_review_contents):
+		comment_object= Comment.query.get(comment_id)
+		comment_object.comment = peer_review_contents
+		comment_object.pending = False
+		db.session.commit()
 	
 	@staticmethod
 	def get_completed_peer_reviews_from_user_for_assignment (user_id, assignment_id):
