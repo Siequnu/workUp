@@ -36,14 +36,14 @@
             </tr>
           </thead>
 		  <tbody>
-			{% for assignment, user in assignmentsArray %}
+			{% for assignment, user, turma in assignmentsArray %}
             <tr>
               <td>{{assignment.id}}</td>
               <td>{{assignment.title}}</td>
               <td>{{assignment.description}}</td>
 			  <td>{{assignment.due_date}}</td>
 			  <td>{{user.username}}</td>
-              <td>{{assignment.target_course}}</td>
+              <td>{{turma.turma_label}}</td>
               <td>{{assignment.timestamp}}</td>
               <td>{{assignment.peer_review_necessary}}</td>
 			  <td>{{assignment.peer_review_form}}</td>

@@ -1,6 +1,6 @@
 from app import db
 import app.models
-from app.models import Upload, Download, Assignment, User, Comment, AssignmentTaskFile
+from app.models import Upload, Download, Assignment, User, Comment, AssignmentTaskFile, Turma
 from app.files import models
 import datetime, time
 from datetime import datetime, date
@@ -9,7 +9,9 @@ from flask_login import current_user
 import arrow, json
 
 def get_all_assignments_info (): 
-	return db.session.query(Assignment, User).join(User, Assignment.created_by_id == User.id).all()
+	return db.session.query(Assignment, User, Turma).join(
+		User, Assignment.created_by_id == User.id).join(
+		Turma, Assignment.target_turma_id==Turma.id).all()
 
 def get_user_assignment_info (user_id):
 	turma_id = User.get_user_turma_from_user_id (user_id)
