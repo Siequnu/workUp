@@ -13,7 +13,9 @@ def get_all_uploads_from_assignment_id (assignment_id):
 		Upload.assignment_id == assignment_id).all()	
 
 def get_uploads_object ():
-	return Upload.query.all()
+	return db.session.query(Upload, User, Assignment).join(
+		User, Upload.user_id==User.id).join(
+		Assignment, Upload.assignment_id==Assignment.id).all()
 	
 def get_all_uploads_count():
 	return Upload.query.count()
@@ -52,8 +54,18 @@ def get_file_extension(filename):
 	return filename.rsplit('.', 1)[1].lower()
 
 # Send out specific file for download
-def download_file(filename):
-	return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
+def download_file(filename, rename = False):
+	download = Download(filename = filename, user_id = current_user.id)
+	db.session.add(download)
+	db.session.commit()
+	
+	if rename == False:
+		return send_from_directory(directory = current_app.config['UPLOAD_FOLDER'],
+								   filename = filename, as_attachment = True)
+	elif rename == True:
+		original_filename = Upload.query.filter_by(filename=filename).first().original_filename
+		return send_from_directory(filename=filename, directory=current_app.config['UPLOAD_FOLDER'],
+								   as_attachment = True, attachment_filename = original_filename)
 
 # Saves a file to uplaods folder, returns secure filename
 def save_file (file):

@@ -14,7 +14,9 @@
   <div class="card-body">
     <h1>Manage users</h1>
     <hr>
+    <a href="{{url_for('user.register_admin')}}" <button class="btn btn-primary"><i class="fa fa-plus-circle"></i> Create new admin</button></a>
     <br>
+    
   </div>
   </div>
       
@@ -25,7 +27,7 @@
               <th>ID</th>
               <th>Username</th>
               <th>Email</th>
-        		  <th>Turma Id</th>
+        		  <th>Class</th>
         		  <th>Last seen</th>
         		  <th>Registered</th>
         		  <th>Email Confirmed</th>
@@ -40,8 +42,8 @@
               <td>{{user.username}}</td>
               <td>{{user.email}}</td>
               <td>{{user.turma_id}}</td>
-              <td>{{user.last_seen}}</td>
-              <td>{{user.registered}}</td>
+              <td>{{user.last_seen.strftime('%d %b %H:%M:%S')}}</td>
+              <td>{{user.registered.strftime('%d %b %H:%M:%S')}}</td>
               <td>{{user.email_confirmed}}</td>
               <td>{{user.is_admin}}</td>
               <td>

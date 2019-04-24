@@ -7,14 +7,18 @@
 <br>
   {% if admin %}
   <div class="row">
-        <div class="col-md-8">
+       
+        <div class="card bg-light mb-3" style="max-width: 40rem;">
+  <div class="card-body">
+        
         	<h1>Admin assignments view</h1>
          <hr>
+         <a href="{{url_for('assignments.create_assignment')}}" <button class="btn btn-primary"><i class="fa fa-plus-circle"></i> Create assignment</button></a>
         </div>
     </div>
   <br />
    <div class="container">
-     <p><a class="btn btn-primary" href="{{url_for('assignments.create_assignment')}}" role="button">Create assignment</a></p>
+     
      <br>
       <br>
       <div class="row">
