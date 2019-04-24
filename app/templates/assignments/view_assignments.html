@@ -26,11 +26,11 @@
               <th>ID</th>
               <th>Title</th>
               <th>Description</th>
-        		  <th>Due date</th>
-        		  <th>Created by</th>
+        		  <th>Due</th>
+        		  <th>Created</th>
         		  <th>For class</th>
-        		  <th>Creation time</th>
-            <th>Peer Review Necessary</th>
+        		  <th>Created</th>
+            <th>Review</th>
         		  <th>Peer review form</th>
         		  <th>Actions</th>
             </tr>
@@ -44,12 +44,16 @@
 			  <td>{{assignment.due_date}}</td>
 			  <td>{{user.username}}</td>
               <td>{{turma.turma_label}}</td>
-              <td>{{assignment.timestamp}}</td>
-              <td>{{assignment.peer_review_necessary}}</td>
+              <td>{{assignment.timestamp.strftime('%Y-%m-%d %H:%M')}}</td>
+              {% if assignment.peer_review_necessary == True %}
+              <td><img src='/static/check-circle.svg' alt="True" width="30%" heigth="30%"></td>
+              {% else %}
+              <td><img src='/static/times-circle.svg' alt="False" width="40%" heigth="40%"></td>
+              {% endif %}
 			  <td>{{assignment.peer_review_form}}</td>
 			  <td>
-      <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment.id)}}">  <img src='/static/trash-alt.svg' alt="Delete Assignment" width="25" heigth="25%"></a>
-      <a href="{{url_for('assignments.view_assignment_details', assignment_id = assignment.id)}}">  <img src='/static/edit.svg' alt="View Details" width="25" heigth="25%"></a>
+      <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment.id)}}">  <img src='/static/trash-alt.svg' alt="Delete Assignment" width="33%" heigth="33%"></a>
+      <a href="{{url_for('assignments.view_assignment_details', assignment_id = assignment.id)}}">  <img src='/static/check-circle.svg' alt="View Details" width="40%" heigth="40%"></a>
       
      </td>
             </tr>
