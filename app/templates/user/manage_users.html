@@ -31,7 +31,7 @@
         		  <th>Last seen</th>
         		  <th>Registered</th>
         		  <th>Email Confirmed</th>
-        		  <th>Is Admin</th>
+        		  <th>Admin</th>
         		  <th>Actions</th>
             </tr>
           </thead>
@@ -44,8 +44,20 @@
               <td>{{user.turma_id}}</td>
               <td>{{user.last_seen.strftime('%d %b %H:%M:%S')}}</td>
               <td>{{user.registered.strftime('%d %b %H:%M:%S')}}</td>
-              <td>{{user.email_confirmed}}</td>
-              <td>{{user.is_admin}}</td>
+              {% if user.email_confirmed==True %}
+               <td><button class="btn btn-sm btn-secondary"><i class="fa fa-check-circle"></i></button></td>
+              {% else %}
+               <td><button class="btn btn-sm btn-warning"><i class="fa fa-times-circle"></i></button></td>
+              {% endif %}
+
+              {% if user.is_admin==True %}
+               <td><button class="btn btn-sm btn-secondary"><i class="fa fa-check-circle"></i></button></td>
+              {% else %}
+               <td><button class="btn btn-sm btn-warning"><i class="fa fa-times-circle"></i></button></td>
+              {% endif %}
+             
+             
+              
               <td>
                <a href="{{url_for('user.give_admin_rights', user_id = user.id)}}" class="btn btn-outline-primary btn-sm" role="button">Make admin</a>
                <p></p>
