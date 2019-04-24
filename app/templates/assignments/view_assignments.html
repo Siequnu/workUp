@@ -117,7 +117,8 @@
                     {% if assignment['assignment_is_past_deadline'] %}
                       <a href="#" class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true">Assignment overdue.</a>
                     {% else %}
-                        <a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Upload your assignment</a>
+                        <a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}" <button class="btn btn-sm btn-primary"><i class="fa fa-file-upload"></i> Upload your assignment </button></a>
+                        
                     {% endif %}
               
             {% endif %}
