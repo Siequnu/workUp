@@ -345,6 +345,9 @@ a:focus, a:hover, a:active {
 
 .btn {
   border-width: 2px;
+  word-wrap: break-word;
+  word-break: normal;
+  white-space: normal !important;
 }
 
 .bg-primary {
