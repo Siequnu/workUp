@@ -15,7 +15,7 @@
   <div class="card-body">
     <h1>Class admin</h1>
     <hr>
-    <a class="btn btn-primary" href="{{url_for('assignments.create_class')}}" role="button">Create new class</a>
+    <a href="{{url_for('assignments.create_class')}}" <button class="btn btn-primary"><i class="fa fa-plus-circle"></i>  Create new class </button></a>
   </div>
   </div>
   
@@ -45,7 +45,9 @@
               <td>{{class.turma_label}}</td>
 			  <td>{{class.turma_term}}</td>
 			  <td>{{class.turma_year}}</td>
-			  <td><a href="{{url_for('assignments.delete_class', turma_id=class.id)}}">Delete</a></td>
+			  <td>
+          <p><a href="{{url_for('assignments.delete_class', turma_id=class.id)}}" <button class="btn btn-sm btn-warning"><i class="fa fa-trash-alt"></i> Delete</button></a></p>
+        </td>
             </tr>
            {% endfor %}
           </tbody>

@@ -35,11 +35,12 @@
             <tr>
               <td>{{upload.id}}</td>
               <td>{{upload.original_filename}}</td>
-               <td>{{upload.timestamp}}</td>
+               <td>{{upload.timestamp.strftime('%d %b %H:%M:%S')}}</td>
          <td>{{user.username}}</td>
          <td>{{user.student_number}}</td>
             <td>
-              <a href="{{url_for('assignments.create_teacher_review', upload_id = upload.id)}}">  <img src='/static/edit.svg' alt="View Details" width="25" heigth="25%"></a>
+              <p><a href="{{url_for('files.download', file_id = upload.id, rename=True)}}" <button class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Download </button></a></p>
+              <p><a href="{{url_for('assignments.create_teacher_review', upload_id = upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-highlighter"></i> Grade </button></a></p>
             </td>
             </tr>
            {% endfor %}

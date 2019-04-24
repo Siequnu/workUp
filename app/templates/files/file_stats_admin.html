@@ -30,16 +30,18 @@
               <th>User</th>
               <th>Datetime</th>
               <th>Assignment</th>
+              <th>Actions</th>
             </tr>
           </thead>
 		  <tbody>
-			{% for upload in template_packages['uploads_object'] %}
+			{% for upload, user, assignment in template_packages['uploads_object'] %}
             <tr>
               <td>{{ upload.id }}</td>
               <td>{{ upload.original_filename }}</td>
-              <td>{{ upload.user_id }}</td>
-              <td>{{ upload.timestamp }}</td>
-              <td>{{ upload.assignment_id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ upload.timestamp.strftime('%m-%d %H:%M:%S')}}</td>
+              <td>{{ assignment.title }}</td>
+              <td><a href="{{url_for('files.download', file_id = upload.id, rename=True)}}" class="btn btn-primary btn-sm">Download</a></td>
             </tr>
            {% endfor %}
           </tbody>

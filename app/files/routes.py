@@ -27,6 +27,7 @@ def file_stats():
 		# Get total list of uploaded files from all users
 		template_packages = {}
 		template_packages['uploads_object'] = models.get_uploads_object()
+		print (template_packages['uploads_object'])
 		template_packages['total_upload_count'] = str(models.get_all_uploads_count())
 		template_packages['upload_folder_path'] = current_app.config['UPLOAD_FOLDER']
 		template_packages['admin'] = True
@@ -49,16 +50,17 @@ def download_random_file(assignment_id):
 		already_downloaded_and_pending_review_file_id = pending_assignments[0][1]
 		flash('You have a peer review that you have not yet completed. You have redownloaded the same file.')
 		# Get filename of the upload from Id
-		conditions = []
-		conditions.append(str('id="' + str(already_downloaded_and_pending_review_file_id) + '"'))
-		filename_to_download = app.models.selectFromDb(['filename'], 'upload', conditions)		
-		file_path = os.path.join (current_app.config['UPLOAD_FOLDER'], filename_to_download[0][0])
+		filename = Upload.query.get(already_downloaded_and_pending_review_file_id).filename
+		#conditions = []
+		#conditions.append(str('id="' + str(already_downloaded_and_pending_review_file_id) + '"'))
+		#filename_to_download = app.models.selectFromDb(['filename'], 'upload', conditions)		
+		#file_path = os.path.join (current_app.config['UPLOAD_FOLDER'], filename_to_download[0][0])
 		# Send SQL data to database
-		download = Download(filename=filename_to_download[0][0], user_id = current_user.id)
-		db.session.add(download)
-		db.session.commit()
-		
-		return send_file(file_path, as_attachment=True)
+		#download = Download(filename=filename_to_download[0][0], user_id = current_user.id)
+		#db.session.add(download)
+		#db.session.commit()
+		return models.download_file(filename)
+		#return send_file(file_path, as_attachment=True)
 	
 	# Make sure not to give the same file to the same peer reviewer twice
 	# Get list of files the user has already submitted reviews for
@@ -110,6 +112,15 @@ def download_file(assignment_id = False):
 		# If the assignment hasn't closed yet, flash message to wait until after deadline
 		flash ("The assignment hasn't finished yet. Please wait until the deadline is over, then try again to download an assignment to review.")
 		return redirect (url_for('assignments.view_assignments'))
+
+
+# Download any file from ID
+@bp.route("/download/<file_id>")
+@login_required
+def download (file_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		filename = Upload.query.get(file_id).filename
+		return models.download_file(filename, rename=True)
 
 
 # Student form to upload a file to an assignment
