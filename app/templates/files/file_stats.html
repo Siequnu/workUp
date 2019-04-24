@@ -19,13 +19,18 @@
   
   {% for upload in all_post_info %}
   
-  <div class="card bg-light mb-3" style="max-width: 18rem;">
-  <div class="card-header">{{ upload.original_filename }}</div>
+  <div class="card bg-light mb-3"">
+  <div class="card-header">
+  
+  <a href="" <button class="btn btn-secondary btn-lg btn-sm disabled"><i class="fa fa-file-alt"></i> {{ upload.original_filename }} </button></a> 
+  
+  </div>
   <div class="card-body">
     <h5 class="card-title">Peer reviews: {{ upload.number_of_comments }}</h5>
-    <p class="card-text">Uploaded: {{ upload.timestamp }}</p>
-    <a href="{{url_for('files.view_comments', file_id = upload.id)}}" class="btn btn-primary">View comments</a>
+    <em><p class="card-text">Uploaded: {{ upload.timestamp }}</p></em>
     
+  </div>
+  <div class="card-footer"><a href="{{url_for('files.view_comments', file_id = upload.id)}}" class="btn btn-primary"><i class="fa fa-comment-dots"></i> View comments</a>
   </div>
 </div>
   {% endfor %}
