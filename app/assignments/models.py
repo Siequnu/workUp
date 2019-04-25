@@ -1,6 +1,6 @@
 from app import db
 import app.models
-from app.models import Upload, Download, Assignment, User, Comment, AssignmentTaskFile, Turma
+from app.models import Upload, Download, Assignment, User, Comment, AssignmentTaskFile, Turma, Enrollment
 from app.files import models
 import datetime, time
 from datetime import datetime, date
@@ -12,6 +12,12 @@ def get_all_assignments_info ():
 	return db.session.query(Assignment, User, Turma).join(
 		User, Assignment.created_by_id == User.id).join(
 		Turma, Assignment.target_turma_id==Turma.id).all()
+
+def get_user_enrollment_from_id (user_id):
+	return db.session.query(Enrollment, User, Turma).join(
+		User, Enrollment.user_id==User.id).join(
+		Turma, Enrollment.turma_id == Turma.id).filter(
+		Enrollment.user_id==user_id).all()
 
 def get_user_assignment_info (user_id):
 	turma_id = User.get_user_turma_from_user_id (user_id)

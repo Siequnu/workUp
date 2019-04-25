@@ -14,7 +14,6 @@
 	create, track and grade class assignments.</p>
   <a class="btn btn-primary btn-lg" href="{{url_for('user.register')}}" role="button">Student registration</a>
 	</div>	
-
 	<hr>
 	<br /><br />
 	</div>
@@ -84,33 +83,48 @@
 				 </div>
 	 <hr>
 	<br /><br />
-<div class="card-deck">
-	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		<div class="card-header"><i class="fa fa-user"> Your info</i>
-		</div>
-    <div class="card-body">
-      
-      <h5 class="card-title">You have uploaded {{number_of_uploads}} assignments.</h5>
-      {% if last_upload_humanized_timestamp != False %}
-			<p class="card-text"><small class="text-muted"> Last uploaded {{last_upload_humanized_timestamp}}</small></p>
-			{% endif %}
-    </div>
-  </div>
-	 
-	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		<div class="card-header"><i class="fa fa-comment-dots"> Peer reviews</i> 
-		</div>
-    <div class="card-body">
-      
-      <h5 class="card-title">Your essays have been reviewed {{number_of_peer_reviews_on_own_uploads}} times.</h5>
-        {% if last_received_peer_review_humanized_timestamp != False %}
-			<p class="card-text"><small class="text-muted"> Last reviewed {{last_received_peer_review_humanized_timestamp}}</small></p>
-			{% endif %}
-    </div>
-  </div>
-</div>
+	
 
-	<br />
+
+
+
+	
+	<div class="card">
+  <div class="card-header">
+    <h4><i class="fa fa-calendar-alt"></i> Upcoming assignments</h4>
+  </div>
+  <div class="card-body">
+     
+		 {% for assignment in assignments_info %} 
+		 {% if assignment['submitted_filename'] %}
+		 
+		 {% else %}
+		 
+		 <div class="container">
+		<div class="row">
+			<div class="col-2 text-center">
+				<h1 class="display-4"><span class="badge badge-secondary">{{assignment['due_date'].strftime('%d')}}</span></h1>
+				<h2>{{assignment['due_date'].strftime('%b')|upper}}</h2>
+			</div>
+			<div class="col-10">
+				<h3 class="text-uppercase"><strong>{{assignment['title']}}</strong></h3>
+				<ul class="list-inline">
+				    <li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i>due on {{assignment['due_date'].strftime('%A')}}, {{assignment['humanized_due_date']}}</li>
+	
+					<a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}" <button class="btn btn-sm btn-warning"><i class="fa fa-file-upload"></i> Upload your assignment </button></a>
+				</ul>
+				<p><em>{{assignment['description']}}</p></em>
+			</div>
+		</div>
+	</div>
+	<hr>
+	{% endif %}
+		 {% endfor %}
+		 
+    </div>
+  </div>
+	
+	<br>
 	<div class="card-deck">
 	<div class="card">
   <div class="card-header">
@@ -149,7 +163,43 @@
 </div>
 		 </div>
 	
+	
+	
+	
 	</div>
+	<br>
+		
+<div class="card-deck">
+	 <div class="card bg-light mb-2" style="max-width: 20rem;">
+		
+		<div class="card-header">
+			 <h4><i class="fa fa-user"></i> Your info</h4>
+		
+		</div>
+    <div class="card-body">
+      
+      <h5 class="card-title">You have uploaded {{number_of_uploads}} assignments.</h5>
+      {% if last_upload_humanized_timestamp != False %}
+			<p class="card-text"><small class="text-muted"> Last uploaded {{last_upload_humanized_timestamp}}</small></p>
+			{% endif %}
+    </div>
+  </div>
+	 
+	 <div class="card bg-light mb-2" style="max-width: 20rem;">
+		<div class="card-header">
+			<h4><i class="fa fa-comment-dots"></i> Peer reviews</h4>
+		</div>
+    <div class="card-body">
+      
+      <h5 class="card-title">Your essays have been reviewed {{number_of_peer_reviews_on_own_uploads}} times.</h5>
+        {% if last_received_peer_review_humanized_timestamp != False %}
+			<p class="card-text"><small class="text-muted"> Last reviewed {{last_received_peer_review_humanized_timestamp}}</small></p>
+			{% endif %}
+    </div>
+  </div>
+</div>
+	
 	</div>
+	
 {% endif %}				
 {% endblock %}

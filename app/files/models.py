@@ -3,9 +3,36 @@ from flask import send_from_directory, current_app
 from werkzeug import secure_filename
 import os, uuid, datetime, arrow
 
+import app.files
+
 from flask_login import current_user
-from app.models import User, Upload, Download, Assignment, Comment
+from app.models import User, Upload, Download, Assignment, Comment, LibraryUpload, ClassLibraryFile, Enrollment, Turma
 from sqlalchemy import func
+
+def new_library_upload_from_form (form):
+	file = form.library_upload_file.data
+	random_filename = app.files.models.save_file(file)
+	original_filename = app.files.models.get_secure_filename(file.filename)
+	library_upload = LibraryUpload (original_filename=original_filename,
+											   filename = random_filename,
+											   title = form.title.data,
+											   description = form.description.data,
+											   user_id = current_user.id)
+	db.session.add(library_upload)
+	db.session.flush() # Needed to access the library_upload.id in the next step
+	
+	for turma_id in form.target_turma_id.data:
+		new_class_library_file = ClassLibraryFile(library_upload_id = library_upload.id, turma_id = turma_id)
+		db.session.add(new_class_library_file)
+		db.session.commit()
+
+def get_user_library_books_from_id (user_id):
+	return db.session.query(Enrollment, User, Turma, ClassLibraryFile, LibraryUpload).join(
+		User, Enrollment.user_id==User.id).join(
+		Turma, Enrollment.turma_id == Turma.id).join(
+		ClassLibraryFile, Enrollment.turma_id==ClassLibraryFile.turma_id).join(
+		LibraryUpload, ClassLibraryFile.library_upload_id==LibraryUpload.id).filter(
+		Enrollment.user_id==user_id).all()
 
 def get_all_uploads_from_assignment_id (assignment_id):	
 	return db.session.query(

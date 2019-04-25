@@ -9,7 +9,7 @@ from app import db
 import app.assignments.models
 
 from app.files import bp
-from app.files import models
+from app.files import models, forms
 from app.models import Comment, Download, Upload, Assignment
 
 from random import randint
@@ -157,4 +157,29 @@ def view_comments(file_id):
 		comments = models.get_peer_reviews_from_upload_id (file_id)	
 		return render_template('files/view_comments.html', comments = comments, original_filename = original_filename)
 	abort (403)
+	
+	
+@bp.route("/class_library/")
+@login_required
+def class_library():
+	if app.models.is_admin(current_user.username):
+		return render_template('files/class_library.html', admin = True)
+	else:
+		library = app.files.models.get_user_library_books_from_id (current_user.id)
+		enrollment = app.assignments.models.get_user_enrollment_from_id(current_user.id)
+		return render_template('files/class_library.html', library = library, enrollment = enrollment)
+	abort (403)
+	
 
+# Admin form to upload a library file
+@bp.route('/class_library/upload/',methods=['GET', 'POST'])
+@login_required
+def upload_library_file():
+	if app.models.is_admin(current_user.username):	
+		form = forms.LibraryUploadForm()
+		if form.validate_on_submit():
+			app.files.models.new_library_upload_from_form(form)
+			flash('New file successfully added to the library!')
+			return redirect(url_for('files.class_library'))
+		return render_template('files/upload_library_file.html', title='Upload library file', form=form)
+	abort (403)

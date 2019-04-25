@@ -43,6 +43,28 @@ def selectFromDb (columnsArray, fromTable, conditionsArray = False, count = Fals
 	for row in result: names.append(row)
 	return names
 
+
+
+class ClassLibraryFile (db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
+	library_upload_id = db.Column(db.Integer, db.ForeignKey('library_upload.id'))
+	
+	def __repr__(self):
+		return '<Class Library File {}>'.format(self.id)
+
+class LibraryUpload (db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	original_filename = db.Column(db.String(140))
+	filename = db.Column(db.String(140))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	title = db.Column(db.String(140))
+	description = db.Column(db.String(260))
+
+	def __repr__(self):
+		return '<Library Upload {}>'.format(self.original_filename)
+
 class Turma(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	turma_number = db.Column(db.String(140), index=True)
@@ -69,6 +91,16 @@ class Turma(db.Model):
 	def delete_turma_from_id (turma_id):
 		Turma.query.filter(Turma.id==turma_id).delete()
 		db.session.commit()
+	
+	
+class Enrollment (db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
+	
+	def __repr__(self):
+		return '<Enrollment {}>'.format(self.id)
+	
 
 class User(UserMixin, db.Model):
 	id = db.Column(db.Integer, primary_key=True)
