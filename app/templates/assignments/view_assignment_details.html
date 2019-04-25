@@ -6,12 +6,30 @@
 <div class="container">
 <br>
  
-  <div class="row">
-        <div class="col-md-8">
+  <div class="container">
+        <div class="col text-left">
         	<h1>View Assignment Details</h1>
          <hr>
-        </div>
+        </div>        
+  <br>
+  <div class="row text-center">
+	        <div class="col">
+	        <div class="counter">
+      <i class="fa fa-file-upload fa-2x"></i>
+      <h2 class="timer count-title count-number">123</h2>
+       <p class="count-text ">Uploaded assignments</p>
     </div>
+	        </div>
+              <div class="col">
+               <div class="counter">
+      <i class="fa fa-bomb fa-2x"></i>
+      <h2 class="timer count-title count-number">123</h2>
+      <p class="count-text ">Uncomplete assignments</p>
+    </div>
+              </div>  
+  
+  </div>
+  
   <br />
    <div class="container">
      <br>
@@ -22,25 +40,23 @@
             <table summary="Student uploads for this task" class="table table-bordered table-hover">
         	  <thead>
               <tr>
-              <th>ID</th>
+              <th>Student #</th>
+              <th>Username</th>
               <th>Filename</th>
               <th>Timestamp</th>
-        		  <th>Username</th>
-        		  <th>Student #</th>
         		  <th>Actions</th>
             </tr>
           </thead>
 		  <tbody>
 			{% for upload, user in uploads_info %}
             <tr>
-              <td>{{upload.id}}</td>
+               <td>{{user.student_number}}</td>
+               <td>{{user.username}}</td>
               <td>{{upload.original_filename}}</td>
                <td>{{upload.timestamp.strftime('%d %b %H:%M:%S')}}</td>
-         <td>{{user.username}}</td>
-         <td>{{user.student_number}}</td>
             <td>
-              <p><a href="{{url_for('files.download', file_id = upload.id, rename=True)}}" <button class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Download </button></a></p>
-              <p><a href="{{url_for('assignments.create_teacher_review', upload_id = upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-highlighter"></i> Grade </button></a></p>
+              <a href="{{url_for('files.download', file_id = upload.id, rename=True)}}" <button class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Download </button></a>
+              <a href="{{url_for('assignments.create_teacher_review', upload_id = upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-highlighter"></i> Grade </button></a>
             </td>
             </tr>
            {% endfor %}

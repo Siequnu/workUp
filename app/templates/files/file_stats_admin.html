@@ -7,17 +7,38 @@
   <div class="row">
         <div class="col-md-8">
 			<h1>Admin file stats view</h1>
+   <hr>
 		</div>
   </div>
 
 <br />
   <body>
-  <p>
-    The path to the upload folder is: {{template_packages['upload_folder_path']}}
-  </p>
-  <p>
-    There are {{template_packages['total_upload_count']}} files in the uploads folder:
-  </p>
+   
+   
+   <div class="container">
+             
+  <div class="row text-center">
+	        <div class="col">
+	        <div class="counter">
+      <i class="fa fa-file-upload fa-2x"></i>
+      <h2 class="timer count-title count-number">{{template_packages['total_upload_count']}}</h2>
+       <p class="count-text ">Total uploads</p>
+    </div>
+	        </div>
+              <div class="col">
+               <div class="counter">
+      <i class="fa fa-folder fa-2x"></i>
+      <h2 class="timer count-title count-number">Uploads folder</h2>
+      <p class="count-text ">{{template_packages['upload_folder_path']}}</p>
+    </div>
+              </div>  
+  
+  </div>
+ 
+ <br>
+ <hr>
+  
+ 
  <div class="container">
   <div class="row">
     <div class="col-xs-12">
@@ -25,10 +46,9 @@
         <table summary="Users have uploaded the following files:" class="table table-bordered table-hover">
 		  <thead>
             <tr>
-              <th>ID</th>
               <th>Filename</th>
               <th>User</th>
-              <th>Datetime</th>
+              <th>Uploaded</th>
               <th>Assignment</th>
               <th>Actions</th>
             </tr>
@@ -36,12 +56,11 @@
 		  <tbody>
 			{% for upload, user, assignment in template_packages['uploads_object'] %}
             <tr>
-              <td>{{ upload.id }}</td>
               <td>{{ upload.original_filename }}</td>
               <td>{{ user.username }}</td>
-              <td>{{ upload.timestamp.strftime('%m-%d %H:%M:%S')}}</td>
+              <td>{{ upload.timestamp.strftime('%b-%d %H:%M:%S')}}</td>
               <td>{{ assignment.title }}</td>
-              <td><a href="{{url_for('files.download', file_id = upload.id, rename=True)}}" class="btn btn-primary btn-sm">Download</a></td>
+              <td><a href="{{url_for('files.download', file_id = upload.id, rename=True)}}" class="btn btn-primary btn-sm"><i class="fa fa-file-download"></i>Download</a></td>
             </tr>
            {% endfor %}
           </tbody>
