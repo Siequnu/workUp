@@ -19,6 +19,9 @@ def get_user_enrollment_from_id (user_id):
 		Turma, Enrollment.turma_id == Turma.id).filter(
 		Enrollment.user_id==user_id).all()
 
+def get_all_class_info():
+	return Turma.query.all()
+
 def get_user_assignment_info (user_id):
 	turma_id = User.get_user_turma_from_user_id (user_id)
 	assignments = get_assignments_from_turma_id (turma_id)	

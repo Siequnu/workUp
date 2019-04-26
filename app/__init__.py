@@ -42,10 +42,13 @@ def create_app(config_class=Config):
 	from app.main import bp as main_bp
 	workUpApp.register_blueprint(main_bp)
 	
-	# Create a logs folder if non-existant
-	uploadFolderPath = os.path.join(workUpApp.config['APP_ROOT'], 'uploads')
-	if not os.path.exists(os.path.join(uploadFolderPath)):
-		os.mkdir(uploadFolderPath)
+	# Create an uploads folder if non-existant
+	if not os.path.exists(os.path.join(workUpApp.config['UPLOAD_FOLDER'])):
+		os.mkdir(workUpApp.config['UPLOAD_FOLDER'])
+		
+	# Create a thumbnails folder if non-existant
+	if not os.path.exists(os.path.join(workUpApp.config['THUMBNAIL_FOLDER'])):
+		os.mkdir(workUpApp.config['THUMBNAIL_FOLDER'])
 	
 	# Log errors to local log
 	if not workUpApp.debug and not workUpApp.testing:
