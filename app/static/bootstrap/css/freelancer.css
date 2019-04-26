@@ -5,7 +5,6 @@
  */
 
 
-
 .library_card {
   display: block; 
     margin-bottom: 20px;
@@ -31,6 +30,7 @@
   height: 200px;
   object-fit:cover; 
   transition: all .25s ease;
+  object-position: 50% 5%;
 } 
 .library_card-content {
   padding:15px;

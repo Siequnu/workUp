@@ -25,7 +25,7 @@
 	        <div class="counter">
       <i class="fa fa-archive fa-2x"></i>
       <h2 class="timer count-title count-number">{{library|length}}</h2>
-       <p class="count-text ">Files</p>
+       <p class="count-text ">Library files</p>
     </div>
 	        </div>
               <div class="col">
@@ -51,7 +51,7 @@
   </div>    
 
 <br><br>
-<a href="{{url_for('files.upload_library_file')}}" <button class="btn btn-primary"><i class="fa fa-file-upload"></i> Upload new library file </button></a>
+<a href="{{url_for('files.upload_library_file')}}" <button class="btn btn-secondary"><i class="fa fa-file-upload"></i> Upload new library file </button></a>
 
 </div>
 <br></br>
@@ -87,9 +87,9 @@
            
                     <div class="col-xs-12 col-sm-4">
                       <div class="library_card">
-                            <a class="img-library_card" href="#">
-                              <img src="/static/thumbnails/{{thumbnail_filename[0]}}.jpeg"/>
-                            </a>
+                            <div class="img-library_card">
+                             <img src="/static/thumbnails/{{thumbnail_filename[0]}}.jpeg"/>
+                            </div>
                       <div class="library_card-content">
                                 <h4 class="library_card-title">
                                       {{library_upload.title}}
@@ -99,9 +99,10 @@
                                 </p>
                             </div>
                             <div class="library_card-read-more">
-                                <a href="{{url_for('files.download_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-download"></i> Download</button></a>
-                             <a href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id, turma_id = class_library_file.turma_id)}}" <button class="btn btn-sm btn-warning"><i class="fa fa-folder-minus"></i> Delete for this class</button></a>
-                           <a href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> Delete for all classes</button></a>   
+                                <p><a href="{{url_for('files.download_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-fw fa-download"></i> Download</button></a></p>
+                             <hr>
+                             <p><a href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id, turma_id = class_library_file.turma_id)}}" <button class="btn btn-sm btn-warning"><i class="fa fa-fw fa-folder-minus"></i> Delete for this class</button></a></p>
+                           <p><a href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-danger"><i class="fa fa-fw fa-trash-alt"></i> Delete for all classes</button></a>   </p>
                             </div>
                       </div>
                     </div>
@@ -148,9 +149,9 @@
            
                     <div class="col-xs-12 col-sm-4">
                       <div class="library_card">
-                            <a class="img-library_card" href="#">
+                            <div class="img-library_card">
                               <img src="/static/thumbnails/{{thumbnail_filename[0]}}.jpeg"/>
-                            </a>
+                            </div>
                       <div class="library_card-content">
                                 <h4 class="library_card-title">
                                       {{library_library_upload.title}}
