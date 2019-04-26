@@ -30,7 +30,9 @@ def lab():
 def index():
 	if current_user.is_authenticated:
 		if app.models.is_admin(current_user.username):
-			return render_template('index.html', admin = True)
+			student_count = app.user.models.get_total_user_count()
+			classes = app.assignments.models.get_all_class_info()
+			return render_template('index.html', admin = True, student_count = student_count, classes=classes)
 		else:
 			# Display help message if a student has signed up and is not part of a class
 			if User.get_user_turma_from_user_id (current_user.id) is None:

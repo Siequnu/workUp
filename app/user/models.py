@@ -6,6 +6,10 @@ from flask_login import current_user
 import secrets, string, time, datetime, xlrd
 from flask import url_for, render_template, redirect, session, flash, request, abort, current_app
 
+def get_total_user_count ():
+	# Remove admins?
+	return len(User.query.all())
+
 def process_student_excel_spreadsheet (excel_data_file):
 	# Get a list of names, student numbers, and email addresses
 	excel_workbook = xlrd.open_workbook(file_contents=excel_data_file.read())
