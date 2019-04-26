@@ -9,6 +9,8 @@ from flask_login import current_user
 from app.models import User, Upload, Download, Assignment, Comment, LibraryUpload, ClassLibraryFile, Enrollment, Turma
 from sqlalchemy import func
 
+from wand.image import Image
+
 def new_library_upload_from_form (form):
 	file = form.library_upload_file.data
 	random_filename = app.files.models.save_file(file)
@@ -21,10 +23,49 @@ def new_library_upload_from_form (form):
 	db.session.add(library_upload)
 	db.session.flush() # Needed to access the library_upload.id in the next step
 	
+	# Generate thumbnail
+	get_thumbnail (library_upload.filename)
+	
 	for turma_id in form.target_turma_id.data:
 		new_class_library_file = ClassLibraryFile(library_upload_id = library_upload.id, turma_id = turma_id)
 		db.session.add(new_class_library_file)
 		db.session.commit()
+		
+	
+# Generate thumbnails
+def get_thumbnail (filename):
+	thumbnail_filename = filename[:-4] + '.jpeg'
+	thumbnail_filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], thumbnail_filename))
+	if os.path.exists(thumbnail_filepath):
+		return thumbnail_filepath
+	else:
+		filepath = (os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+		with(Image(filename=filepath, resolution=120)) as source: 
+			images = source.sequence
+			thumbnail_filename = filename[:-4] + '.jpeg'
+			thumbnail_filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], thumbnail_filename))
+			Image(images[0]).save(filename=thumbnail_filepath)
+			return thumbnail_filepath
+
+def get_all_library_books ():
+	return db.session.query(ClassLibraryFile, LibraryUpload).join(
+		LibraryUpload, ClassLibraryFile.library_upload_id==LibraryUpload.id).all(
+	)
+
+def delete_library_upload_from_id (library_upload_id, turma_id = False):
+	if turma_id == False:
+		# Delete book from every class, and delete upload
+		LibraryUpload.query.filter_by(id=library_upload_id).delete()
+		if db.session.query(ClassLibraryFile).filter_by(library_upload_id=library_upload_id).all() is not None:
+			class_library_files = db.session.query(ClassLibraryFile).filter_by(library_upload_id=library_upload_id).all()
+			for library_file in class_library_files:
+				ClassLibraryFile.query.filter_by(id=library_file.id).delete()
+	else: # Only delete the class link.
+		#!# If this is the last class link, delete the file itself?
+		ClassLibraryFile.query.filter_by(turma_id=turma_id).filter_by(library_upload_id=library_upload_id).delete()
+	db.session.commit()
+	return
+		
 
 def get_user_library_books_from_id (user_id):
 	return db.session.query(Enrollment, User, Turma, ClassLibraryFile, LibraryUpload).join(

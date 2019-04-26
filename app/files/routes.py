@@ -159,11 +159,15 @@ def view_comments(file_id):
 	abort (403)
 	
 	
+
+	
 @bp.route("/class_library/")
 @login_required
 def class_library():
 	if app.models.is_admin(current_user.username):
-		return render_template('files/class_library.html', admin = True)
+		classes = app.assignments.models.get_all_class_info()
+		library = app.files.models.get_all_library_books ()
+		return render_template('files/class_library.html', admin = True, classes = classes, library = library)
 	else:
 		library = app.files.models.get_user_library_books_from_id (current_user.id)
 		enrollment = app.assignments.models.get_user_enrollment_from_id(current_user.id)
@@ -182,4 +186,16 @@ def upload_library_file():
 			flash('New file successfully added to the library!')
 			return redirect(url_for('files.class_library'))
 		return render_template('files/upload_library_file.html', title='Upload library file', form=form)
+	abort (403)
+	
+
+# Admin form to upload a library file
+@bp.route('/class_library/delete/<library_upload_id>')
+@bp.route('/class_library/delete/<library_upload_id>/<turma_id>')
+@login_required
+def delete_library_file(library_upload_id, turma_id = False):
+	if app.models.is_admin(current_user.username):	
+		app.files.models.delete_library_upload_from_id(library_upload_id, turma_id)
+		flash('File deleted from the library!')
+		return redirect(url_for('files.class_library'))
 	abort (403)

@@ -60,7 +60,7 @@
               <td>{{ user.username }}</td>
               <td>{{ upload.timestamp.strftime('%b-%d %H:%M:%S')}}</td>
               <td>{{ assignment.title }}</td>
-              <td><a href="{{url_for('files.download', file_id = upload.id, rename=True)}}" class="btn btn-primary btn-sm"><i class="fa fa-file-download"></i>Download</a></td>
+              <td><a href="{{url_for('files.download', file_id = upload.id, rename=True)}}" class="btn btn-primary btn-sm"><i class="fa fa-file-download"></i> Download</a></td>
             </tr>
            {% endfor %}
           </tbody>
