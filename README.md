@@ -180,6 +180,10 @@ before the "for" loop:
 ```
 
 ## Usage screenshots
+* The student home page allows for quick access to vital information.
+
+![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/student_home.png)
+
 * Teachers can create assignments targeted at one or more classes. All the uploads for this assignment will be distributed randomly among colleagues for peer-review.
 
 ![Create assignment](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/create_assignment.png)
