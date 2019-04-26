@@ -52,6 +52,15 @@ class ClassLibraryFile (db.Model):
 	
 	def __repr__(self):
 		return '<Class Library File {}>'.format(self.id)
+	
+class LibraryDownload(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	library_upload_id = db.Column(db.Integer, db.ForeignKey('library_upload.id'))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	
+	def __repr__(self):
+		return '<Download {}>'.format(self.filename)
 
 class LibraryUpload (db.Model):
 	id = db.Column(db.Integer, primary_key=True)

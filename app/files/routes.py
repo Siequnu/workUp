@@ -161,13 +161,17 @@ def view_comments(file_id):
 	
 
 	
-@bp.route("/class_library/")
+@bp.route("/library/")
 @login_required
 def class_library():
 	if app.models.is_admin(current_user.username):
 		classes = app.assignments.models.get_all_class_info()
 		library = app.files.models.get_all_library_books ()
-		return render_template('files/class_library.html', admin = True, classes = classes, library = library)
+		total_library_downloads = app.files.models.get_total_library_downloads_count ()
+		student_count = app.user.models.get_total_user_count()
+		return render_template('files/class_library.html', admin = True, classes = classes, library = library,
+							   total_library_downloads = total_library_downloads,
+							   student_count = student_count)
 	else:
 		library = app.files.models.get_user_library_books_from_id (current_user.id)
 		enrollment = app.assignments.models.get_user_enrollment_from_id(current_user.id)
@@ -175,8 +179,17 @@ def class_library():
 	abort (403)
 	
 
+# Route to download a library file
+@bp.route('/library/download/<library_upload_id>')
+@login_required
+def download_library_file(library_upload_id):
+	# Check if the user is part of this file's class
+	if app.models.is_admin(current_user.username):	
+		return app.files.models.download_library_file (library_upload_id)
+	abort (403)
+
 # Admin form to upload a library file
-@bp.route('/class_library/upload/',methods=['GET', 'POST'])
+@bp.route('/library/upload/',methods=['GET', 'POST'])
 @login_required
 def upload_library_file():
 	if app.models.is_admin(current_user.username):	
@@ -189,9 +202,9 @@ def upload_library_file():
 	abort (403)
 	
 
-# Admin form to upload a library file
-@bp.route('/class_library/delete/<library_upload_id>')
-@bp.route('/class_library/delete/<library_upload_id>/<turma_id>')
+# Admin form to delete a library file
+@bp.route('/library/delete/<library_upload_id>')
+@bp.route('/library/delete/<library_upload_id>/<turma_id>')
 @login_required
 def delete_library_file(library_upload_id, turma_id = False):
 	if app.models.is_admin(current_user.username):	

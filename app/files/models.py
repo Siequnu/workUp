@@ -6,7 +6,7 @@ import os, uuid, datetime, arrow
 import app.files
 
 from flask_login import current_user
-from app.models import User, Upload, Download, Assignment, Comment, LibraryUpload, ClassLibraryFile, Enrollment, Turma
+from app.models import User, Upload, Download, Assignment, Comment, LibraryUpload, ClassLibraryFile, Enrollment, Turma, LibraryDownload
 from sqlalchemy import func
 
 from wand.image import Image
@@ -134,6 +134,21 @@ def download_file(filename, rename = False):
 		original_filename = Upload.query.filter_by(filename=filename).first().original_filename
 		return send_from_directory(filename=filename, directory=current_app.config['UPLOAD_FOLDER'],
 								   as_attachment = True, attachment_filename = original_filename)
+
+def get_total_library_downloads_count ():
+	return len(LibraryDownload.query.all())
+
+def download_library_file (library_upload_id):
+	download = LibraryDownload(library_upload_id = library_upload_id, user_id = current_user.id)
+	db.session.add(download)
+	db.session.commit()
+	
+	filename = LibraryUpload.query.get(library_upload_id).filename
+	original_filename = LibraryUpload.query.get(library_upload_id).original_filename
+	
+	return send_from_directory(filename=filename, directory=current_app.config['UPLOAD_FOLDER'],
+								   as_attachment = True, attachment_filename = original_filename)
+
 
 # Saves a file to uplaods folder, returns secure filename
 def save_file (file):

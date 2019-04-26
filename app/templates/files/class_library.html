@@ -23,29 +23,29 @@
 		<div class="row text-center">
 	        <div class="col">
 	        <div class="counter">
-      <i class="fa fa-code fa-2x"></i>
-      <h2 class="timer count-title count-number">123</h2>
-       <p class="count-text ">Our Customer</p>
+      <i class="fa fa-archive fa-2x"></i>
+      <h2 class="timer count-title count-number">{{library|length}}</h2>
+       <p class="count-text ">Files</p>
     </div>
 	        </div>
               <div class="col">
                <div class="counter">
-      <i class="fa fa-coffee fa-2x"></i>
-      <h2 class="timer count-title count-number">123</h2>
-      <p class="count-text ">Happy Clients</p>
+      <i class="fa fa-file-download fa-2x"></i>
+      <h2 class="timer count-title count-number">{{total_library_downloads}}</h2>
+      <p class="count-text ">Downloads</p>
     </div>
               </div>
               <div class="col">
                   <div class="counter">
-      <i class="fa fa-times-circle fa-2x"></i>
-      <h2 class="timer count-title count-number">123</h2>
-      <p class="count-text ">Project Complete</p>
+      <i class="fa fa-university fa-2x"></i>
+      <h2 class="timer count-title count-number">{{classes|length}}</h2>
+      <p class="count-text ">Classes</p>
     </div></div>
               <div class="col">
               <div class="counter">
-      <i class="fa fa-bug fa-2x"></i>
-      <h2 class="timer count-title count-number">123</h2>
-      <p class="count-text ">Coffee With Clients</p>
+      <i class="fa fa-user-graduate fa-2x"></i>
+      <h2 class="timer count-title count-number">{{student_count}}</h2>
+      <p class="count-text ">Students</p>
     </div>
       </div>
   </div>    
@@ -99,7 +99,7 @@
                                 </p>
                             </div>
                             <div class="library_card-read-more">
-                                <a href="#" <button class="btn btn-sm btn-secondary"><i class="fa fa-download"></i> Download</button></a>
+                                <a href="{{url_for('files.download_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-download"></i> Download</button></a>
                              <a href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id, turma_id = class_library_file.turma_id)}}" <button class="btn btn-sm btn-warning"><i class="fa fa-folder-minus"></i> Delete for this class</button></a>
                            <a href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> Delete for all classes</button></a>   
                             </div>
@@ -160,7 +160,8 @@
                                 </p>
                             </div>
                             <div class="library_card-read-more">
-                                <a href="#" <button class="btn btn-sm btn-secondary"><i class="fa fa-download"></i> Download</button></a>
+                                
+                                <a href="{{url_for('files.download_library_file', library_upload_id = library_library_upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-download"></i> Download</button></a>
                             </div>
                       </div>
                     </div>
