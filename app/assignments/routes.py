@@ -62,7 +62,7 @@ def view_assignments():
 			clean_assignments_array = app.assignments.models.get_user_assignment_info (current_user.id)
 			return render_template('assignments/view_assignments.html', assignmentsArray = clean_assignments_array)
 		else:
-			flash('You are not part of any class and can not see any assignments. Ask your tutor for help to join a class.')
+			flash('You are not part of any class and can not see any assignments. Ask your tutor for help to join a class.', 'error')
 			return render_template('assignments/view_assignments.html') # User isn't part of any class - display no assignments
 	abort (403)
 

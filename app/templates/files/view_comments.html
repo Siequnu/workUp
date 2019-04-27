@@ -13,13 +13,18 @@
     <div class="card bg-light mb-3" style="max-width: 25rem;">
       <div class="card-body">
          <h1>View comments</h1>
-
-         {{original_filename}}
+        <br>
+         {{upload_object.original_filename}}
          <hr>
-         <br>
+         
+         {% set thumbnail_filename = upload_object.filename.split('.') %}
+         <div class="img-library_card">
+					 <img src="/static/thumbnails/{{thumbnail_filename[0]}}.jpeg"/>
+					</div>
+         <hr>
          {% if comments|length == 0 %}
            <p><em>No peer reviews have been submitted for this work.<br /><br />
-         Check back later.</em></p>
+         Please check back later.</em></p>
          {% else %}
          {% for comment in comments %}
              <p>

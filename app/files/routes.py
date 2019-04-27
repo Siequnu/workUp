@@ -153,9 +153,10 @@ def upload_file(assignment_id):
 @login_required
 def view_comments(file_id):
 	if current_user.id is models.get_file_owner_id (file_id) or app.models.is_admin(current_user.username):
-		original_filename = models.get_upload_filename_from_upload_id (file_id)
-		comments = models.get_peer_reviews_from_upload_id (file_id)	
-		return render_template('files/view_comments.html', comments = comments, original_filename = original_filename)
+		upload_object = models.get_upload_object (file_id)
+		comments = models.get_peer_reviews_from_upload_id (file_id)
+		
+		return render_template('files/view_comments.html', comments = comments, upload_object = upload_object)
 	abort (403)
 	
 	
