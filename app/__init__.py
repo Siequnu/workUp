@@ -24,7 +24,7 @@ def create_app(config_class=Config):
 	
 	login.init_app(workUpApp)
 	bootstrap = Bootstrap(workUpApp)
-	sslify = SSLify(workUpApp)
+	#sslify = SSLify(workUpApp)
 	
 	# Import templates
 	from app.errors import bp as errors_bp
