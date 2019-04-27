@@ -7,40 +7,48 @@
   
 	 <body>
 	<div class="row">
-        <div class="col-md-12">
-			<h1>Uploaded files</h1>
-    
+		<div class="col-md-12">
+			<h1>My uploads</h1>
+	
 		</div>
   </div>
  <hr>
-    <br></br>
- <div class="container">
-  <div class="card-deck">
-  
-  {% for upload in all_post_info %}
-  
-  <div class="card bg-light mb-3"">
-  <div class="card-header">
-  
-  <a href="" <button class="btn btn-secondary btn-lg btn-sm disabled"><i class="fa fa-file-alt"></i> {{ upload.original_filename }} </button></a> 
-  
+  <div class="container">
+   <div class="row">
+ {% for upload in all_post_info|reverse %}
+ 
+   {% set thumbnail_filename = upload.filename.split('.') %}
+   <div class="col-xs-12 col-sm-4">
+			 <div class="library_card">
+					<div class="img-library_card">
+					 <img src="/static/thumbnails/{{thumbnail_filename[0]}}.jpeg"/>
+					</div>
+			  <div class="library_card-content">
+						<h4 class="library_card-title">
+							 {{ upload.number_of_comments }} comments
+						</h4>
+						
+							<h6>{{upload.original_filename|truncate(27)}}</h6>
+      <em>{{upload.timestamp}}</em>
+      
+					</div>
+					<div class="library_card-read-more">
+						<a href="{{url_for('files.view_comments', file_id = upload.id)}}" class="btn btn-primary"><i class="fa fa-comment-dots"></i> View comments</a>
+					</div>
+			  </div>
+			</div>
+ 
+{% endfor %}
+ 
   </div>
-  <div class="card-body">
-    <h5 class="card-title">Peer reviews: {{ upload.number_of_comments }}</h5>
-    <em><p class="card-text">Uploaded: {{ upload.timestamp }}</p></em>
-    
   </div>
-  <div class="card-footer"><a href="{{url_for('files.view_comments', file_id = upload.id)}}" class="btn btn-primary"><i class="fa fa-comment-dots"></i> View comments</a>
-  </div>
-</div>
-  {% endfor %}
   
-  </div>
-    </div>
+  
+	<br></br>
   </div>
 </div>
 	
 </body>
   
-    </div>
+	</div>
 {% endblock %}
