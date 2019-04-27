@@ -1,6 +1,5 @@
 from flask import Flask
 from config import Config
-from flask_sslify import SSLify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -24,7 +23,6 @@ def create_app(config_class=Config):
 	
 	login.init_app(workUpApp)
 	bootstrap = Bootstrap(workUpApp)
-	#sslify = SSLify(workUpApp)
 	
 	# Import templates
 	from app.errors import bp as errors_bp

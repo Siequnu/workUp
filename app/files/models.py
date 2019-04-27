@@ -162,6 +162,8 @@ def save_assignment_file (file, assignment_id):
 	original_filename = secure_filename(file.filename)
 	random_filename = save_file (file)
 	
+	get_thumbnail (random_filename)
+	
 	# Update SQL after file has saved
 	upload = Upload(original_filename = original_filename, filename = random_filename,
 					user_id = current_user.id, assignment_id = assignment_id)
