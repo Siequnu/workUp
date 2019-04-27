@@ -3,7 +3,7 @@ import app.models, app.email_model
 from app.models import Upload, Download, Assignment, User, Comment
 from datetime import datetime
 from flask_login import current_user
-import secrets, string, time, datetime, xlrd
+import string, time, datetime, xlrd
 from flask import url_for, render_template, redirect, session, flash, request, abort, current_app
 
 def get_total_user_count ():
@@ -54,7 +54,7 @@ def roll_dice (number_of_dice = 5):
 		
 		# Roll the dice x number_of_times
 		for d in range(number_of_dice):
-			dice_roll = dice_roll + str(secrets.choice(list(range(6))))
+			dice_roll = dice_roll + str(random.choice(list(range(6))))
 			
 		# Check the combination connects to a word in the list
 		word = add_to_word_list (dice_roll)
