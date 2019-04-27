@@ -96,9 +96,7 @@
 								<h4 class="library_card-title">
 									  {{library_upload.title}}
 								</h4>
-								<p class="">
 									{{library_upload.description}}
-								</p>
 							</div>
 							<div class="library_card-read-more">
 								<p><a href="{{url_for('files.download_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-fw fa-download"></i> Download</button></a></p>
@@ -118,7 +116,7 @@
 </div>
 {% else %}
 
-<br></br>
+
 <div class="container">
   <ul class="nav nav-tabs" id="myTab" role="tablist">
   {% for enrollment, user, turma in enrollment %}
@@ -158,9 +156,7 @@
 								<h4 class="library_card-title">
 									  {{library_library_upload.title}}
 								</h4>
-								<p class="">
 									{{library_library_upload.description}}
-								</p>
 							</div>
 							<div class="library_card-read-more">
 								
