@@ -97,8 +97,8 @@ def get_file_owner_id (file_id):
 def get_peer_reviews_from_upload_id (upload_id):
 	return Comment.query.filter_by(file_id=upload_id).filter_by(pending=False).all()
 
-def get_upload_filename_from_upload_id (upload_id):
-	return Upload.query.get(upload_id).original_filename
+def get_upload_object (upload_id):
+	return Upload.query.get(upload_id)
 
 def get_post_info_from_user_id (user_id):	
 	upload_info = db.session.query(Upload).filter(Upload.user_id==user_id).all()
