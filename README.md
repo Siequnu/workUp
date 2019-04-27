@@ -39,145 +39,199 @@ given to students.
 
 ## Deployment
 
-* This git can be cloned onto a deployment server. A suggested location is `/var/www/`.
+* Update the server
+
 ```sh
-$ cd /var/www
+sudo apt-get update && sudo apt-get upgrade
+sudo apt install screen
+```
+
+* Change from root user to newly created ubuntu account
+```sh
+$ adduser --gecos "" ubuntu
+$ usermod -aG sudo ubuntu
+$ su ubuntu
+```
+
+* Passwordless login.
+
+On local machine check contents of directory ~.ssh as follows:
+```sh
+$ ls ~/.ssh
+id_rsa  id_rsa.pub
+```
+The directory should show id_rsa and ir_rsa.pub. If not, you can create the files by running $ ssh-keygen.
+You now need to configure your public key as an authorized host in your server.
+On the terminal that you opened on your own computer, print your public key to the screen:
+
+```sh
+$ cat ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjw....F8Xv4f/0+7WT miguel@miguelspc
+```
+
+This is going to be a very long sequence of characters, possibly spanning multiple lines. You need to copy this data to the clipboard, and then switch back to the terminal on your remote server, where you will issue these commands to store the public key:
+
+```sh
+$ mkdir ~/.ssh
+$ echo <paste-your-key-here> >> ~/.ssh/authorized_keys
+$ chmod 600 ~/.ssh/authorized_keys
+```
+
+Check this is working with the following command. No password should be needed.
+```sh
+$ ssh ubuntu@<server-ip-address>
+```
+
+* Securing the server. Edit `/etc/ssh/sshd_config` and change
+```
+PermitRootLogin no
+PasswordAuthentication no
+```
+
+Then restart ssh with `sudo service ssh restart`
+
+* Installing a firewall
+```sh
+$ sudo apt-get install -y ufw
+$ sudo ufw allow ssh
+$ sudo ufw allow http
+$ sudo ufw allow 443/tcp
+$ sudo ufw --force enable
+$ sudo ufw status
+```
+
+* Install base dependencies
+```sh
+$ sudo apt-get -y update
+$ sudo apt-get -y install python3 python3-venv python3-dev supervisor nginx git 
+```
+
+* Install extra dependencies. Gunicorn is used to run flask, libmagickwand-dev is used to process thumbnails.
+```sh
+$ sudo apt-get -y install gunicorn libmagickwand-dev
+```
+
+* Installing the source code
+```sh
+$ cd ~
 $ git clone https://github.com/Siequnu/workUp.git
+$ cd workUp
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+$ pip install gunicorn
 ```
 
-* `config.py.sample` should be cp to `config.py` and the administration sign-up codes filled in.
-
-* Install and enable mod_wsgi:
-```sh
-$ sudo apt-get install libapache2-mod-wsgi python-dev
-$ sudo a2enmod wsgi 
+* Create a .env file with environmental variables. Generate a UUID with `python3 -c "import uuid; print(uuid.uuid4().hex)"`
 ```
-
-* a workUp.wsgi file should be created in `/PATH_TO_WORKUP_ROOT/workUp`. Adjust the **PATH_WORK_WORKUP_ROOT** variable in `sys.path.insert`
-and add a secret `application.secret_key`.
-
-```sh
-#!/usr/bin/python
-import sys
-import logging
-logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0,"/PATH_TO_WORKUP_ROOT/workUp/")
-
-from app import workUpApp as application
-application.secret_key = *************
+SECRET_KEY=52cb883e323b48d78a0a36e8e951ba4a
 ```
-
-* in `/etc/apache2/sites-available` create a file called `workUp.conf` based on the template below. Customise the
-**SERVER_WEB_NAME**, **SERVER_ADMIN_EMAIL**, **PATH_TO_WORKUP_ROOT**, **SERVER_NAME**,
- and **SERVER_NAME** variables. Leave **SERVER_NAME** and **REQUEST_URI** unmodified in
- `RewriteCond` and `RewriteRule`
 
 ```sh
-<VirtualHost *:80>
-                ServerName SERVER_WEB_NAME
-                ServerAdmin SERVER_ADMIN_EMAIL
-                WSGIScriptAlias / /PATH_TO_WORKUP_ROOT/workUp/workUp.wsgi
-                <Directory /PATH_TO_WORKUP_ROOT/workUp/app/>
-                        Order allow,deny
-                        Allow from all
-                </Directory>
-                Alias /static /PATH_TO_WORKUP_ROOT/app/static
-                <Directory /PATH_TO_WORKUP_ROOT/app/static/>
-                        Order allow,deny
-                        Allow from all
-                </Directory>
-                ErrorLog /PATH_TO_WORKUP_ROOT/logs/error.log
-                LogLevel warn
-                CustomLog /PATH_TO_WORKUP_ROOT/logs/access.log combined
-RewriteEngine on
-RewriteCond %{SERVER_NAME} = SERVER_WEB_NAME
-RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
-</VirtualHost>
+$ echo "export FLASK_APP=workup.py" >> ~/.profile
 ```
 
-* Enable the virtual host with the following command:
+* Setup local config by copying the sample file and renaming it to `config.py`
+
+* Setup database with
+```sh
+$ flask db init
+$ flask db migrate
+$ flask db upgrade
+```
+
+This should run without any errors. Create an admin in the new database
+```sh
+$ python3 create_admin
+```
+
+* The program should now be able to run via the following command.
+The last two variables are the name of the .py script
+that runs the program, and the name of the app folder.
+```
+$ /home/ubuntu/workUp/venv/bin/gunicorn -b localhost:8000 -w 4 workup:app
+```
+
+* The supervisor utility uses configuration files that tell it what programs to monitor and how to restart them when necessary. Configuration files must be stored in /etc/supervisor/conf.d. Here is a configuration file for Microblog, which I'm going to call microblog.conf:
+Create and edit a file at /etc/supervisor/conf.d/workup.conf with the configuration details
+```
+[program:workup]
+command=/home/ubuntu/workUp/venv/bin/gunicorn -b localhost:8000 -w 4 workup:app
+directory=/home/ubuntu/workUp
+user=ubuntu
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+```
 
 ```sh
-$ sudo a2ensite workUp
+$ sudo supervisorctl reload
 ```
+
+* Get the status of the app via `sudo supervisorctl status workup`
+
+* Setup nginx. The workup application server powered by gunicorn is now running privately port 8000.
+We now need to expose ports 80 and 443.
+
+* Create a self-signed ssl cert
+```sh
+$ mkdir certs
+$ openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
+  -keyout certs/key.pem -out certs/cert.pem
+ ```
+
+* Nginx installs a test site in this location that I don't really need, so I'm going to start by removing it:
+
+```sh
+$ sudo rm /etc/nginx/sites-enabled/default
+```
+
+* Add the following config in `/etc/nginx/sites-enabled/workup/:
+```
+server {
+    # listen on port 80 (http)
+    listen 80;
+    server_name _;
+    location / {
+        # redirect any requests to the same URL but on https
+        return 301 https://$host$request_uri;
+    }
+}
+server {
+    # listen on port 443 (https)
+    listen 443 ssl;
+    server_name _;
+
+    # location of the self-signed SSL certificate
+    ssl_certificate /home/ubuntu/workUp/certs/cert.pem;
+    ssl_certificate_key /home/ubuntu/workUp/certs/key.pem;
+
+    # write access and error logs to /var/log
+    access_log /var/log/workup_access.log;
+    error_log /var/log/workup_error.log;
+
+    location / {
+        # forward application requests to the gunicorn server
+        proxy_pass http://localhost:8000;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /static {
+        # handle static files directly, without forwarding to the application
+        alias /home/ubuntu/workUp/app/static;
+        expires 30d;
+    }
+}
+```
+
+* Reload the config with ```sudo service nginx reload``` to enable it.
 
 * SSL certification can be obtained for free using the [Certbot ACME client](https://certbot.eff.org)
 
-* pip is used to install Flask. If pip is not installed, install it on Ubuntu through apt-get.
-This can be installed globally rather than in a virtualenv to facilitate setup.
-Install the complete requirements list from requirements.txt
-
-```sh
-$ sudo apt-get install python-pip 
-$ sudo pip install Flask 
-$ pip install -r /path/to/requirements.txt
-```
-
-* The initial database should be generated by using `flask db init`, `flask db migrate` and finally `flask db commit` to generate tables from the `models.py` page.
-
-* After set-up, restart Apache using `sudo service apache2 restart`
-
-## Deployment notes
-
-* If using **libapache2-mod-wsgi** (`wsgi_mod`) with apache ensure that **WSGIPassAuthorization** is set to `On` in the `.htaccess` file
-
-* Setup server specific config in `config.py`
-
-* Ensure `/static/uploads/` folder is readable by apache:
-
-```sh
-$ sudo chown -R www-data static/uploads
-```
-
-
-## Dependencies
-
-The following third-party libraries are used:
-
-`Flask`: common package to write Python web apps;
-
-`flask_httpauth`: authentication handler
-
-`flask-wtf`: handling web forms
-
-`flask-login`: log-in and session manager
-
-`flask-sqlalchemy`: database backend
-
-`flask-migrate`: update databases on deployment servers
-
-`flask-bootstrap`: css theme
-
-`flask-sslify`: maintain and force secure connections
-
-## Deployment notes
-
-There is a bug in the **Flask-wtf** library, whereby Flask wtf form radio-button labels do not render.
-
-This issue is discussed at length [on Stackoverflow](https://stackoverflow.com/questions/27705968/flask-wtform-radiofield-label-does-not-render)
-
-
->It might be intended by the author of "quick_form" macro, or more likely he/she missed a
->line of code to render out the label of RadioField, as the same is done for other types of fields.
-
-The proposed solution is:
-
-> To hack it, locate the file `bootstrap/wtf.html`, where macro `quick_form` is defined.
-> Add this line:
-
-```sh
-{{field.label(class="control-label")|safe}}
-
-before the "for" loop:
-
-{% for item in field -%}
-  <div class="radio">
-    <label>
-      {{item|safe}} {{item.label.text|safe}}
-    </label>
-  </div>
-{% endfor %}
-```
 
 ## Usage screenshots
 * The student home page allows for quick access to vital information.
