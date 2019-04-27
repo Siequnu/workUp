@@ -27,7 +27,6 @@ def file_stats():
 		# Get total list of uploaded files from all users
 		template_packages = {}
 		template_packages['uploads_object'] = models.get_uploads_object()
-		print (template_packages['uploads_object'])
 		template_packages['total_upload_count'] = str(models.get_all_uploads_count())
 		template_packages['upload_folder_path'] = current_app.config['UPLOAD_FOLDER']
 		template_packages['admin'] = True

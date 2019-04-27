@@ -2,6 +2,7 @@ from app import db, models
 from flask import send_from_directory, current_app
 from werkzeug import secure_filename
 import os, uuid, datetime, arrow
+from dateutil import tz
 
 import app.files
 
@@ -106,8 +107,7 @@ def get_post_info_from_user_id (user_id):
 	for upload in upload_info:
 		upload_dict = upload.__dict__ # Convert the SQL Alchemy object into dictionary
 		upload_dict['number_of_comments'] = get_received_peer_review_from_upload_id_count(upload_dict['id'])
-		formatted_datetime = arrow.get (upload_dict['timestamp'])
-		upload_dict['timestamp'] = formatted_datetime.format('YYYY-MM-DD HH:mm:ss')
+		upload_dict['humanized_timestamp'] = arrow.get(upload_dict['timestamp'], tz.gettz('Asia/Hong_Kong')).humanize()
 		upload_array.append(upload_dict)
 	return upload_array
 
