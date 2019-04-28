@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField, RadioField, FormField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField, RadioField, FormField, TextAreaField, SelectMultipleField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from flask_wtf.file import FileField, FileRequired
 from app.models import User, Turma
@@ -11,6 +11,14 @@ class LoginForm(FlaskForm):
 	remember_me = BooleanField('Remember me')
 	submit = SubmitField('Sign In')
 
+class EditUserForm (FlaskForm):
+	username = StringField('Username', validators=[DataRequired()])
+	email = StringField('Email', validators=[DataRequired(), Email()])
+	student_number = StringField('Student number', validators=[DataRequired()])
+	turma_id_and_label_list = Turma.get_class_list_for_forms ()
+	turma_id = SelectMultipleField('Class', choices=turma_id_and_label_list, validators=[DataRequired()])
+	submit = SubmitField('Edit user')
+
 class RegistrationForm(FlaskForm):
 	username = StringField('Username', validators=[DataRequired()])
 	email = StringField('Email', validators=[DataRequired(), Email()])
@@ -18,7 +26,7 @@ class RegistrationForm(FlaskForm):
 	student_number = StringField('Student number', validators=[DataRequired()])
 	
 	turma_id_and_label_list = Turma.get_class_list_for_forms ()
-	turma_id = SelectField('Class', choices=turma_id_and_label_list, validators=[DataRequired()])
+	turma_id = SelectMultipleField('Class', choices=turma_id_and_label_list, validators=[DataRequired()])
 	
 	signUpCode = StringField('Sign-up code', validators=[DataRequired()])
 	submit = SubmitField('Register')

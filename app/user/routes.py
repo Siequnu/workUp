@@ -133,14 +133,15 @@ def reset_with_token(token):
 def edit_user(user_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		user = User.query.get(user_id)
-		form = app.user.forms.RegistrationForm(obj=user)
-		del form.signUpCode
-		del form.password
+		form = app.user.forms.EditUserForm(obj=user)
 		if form.validate_on_submit():
-			form.populate_obj(user)
-			db.session.add(user)
+			user.username = form.username.data
+			user.email = form.email.data
+			user.student_number = form.student_number.data
+			for turma_id in form.turma_id.data:
+				app.assignments.models.enroll_user_in_class(user.id, turma_id)
+			
 			db.session.commit()
-				
 			flash('User edited successfully.')
 			return redirect(url_for('user.manage_students'))
 		return render_template('user/register.html', title='Edit user', form=form)

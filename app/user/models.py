@@ -21,7 +21,7 @@ def get_all_student_info ():
 
 def get_all_admin_info():
 	return User.query.filter(User.is_admin==True).all()
-		
+	
 
 def process_student_excel_spreadsheet (excel_data_file):
 	# Get a list of names, student numbers, and email addresses
