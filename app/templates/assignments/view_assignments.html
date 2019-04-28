@@ -8,15 +8,14 @@
   {% if admin %}
   <div class="row">
        
-        <div class="card bg-light mb-3" style="max-width: 40rem;">
-  <div class="card-body">
-        
-        	<h1>Class assignments</h1>
-         <hr>
-         <a href="{{url_for('assignments.create_assignment')}}" <button class="btn btn-primary"><i class="fa fa-plus-circle"></i> Create assignment</button></a>
-        </div>
+        <div class="col-md-8">
+			<h1>Class assignments</h1>
+   <hr>
+		</div>   
     </div>
-  <br />
+   <a href="{{url_for('assignments.create_assignment')}}" <button class="btn btn-secondary"><i class="fa fa-plus-circle"></i> Create assignment</button></a>
+  <br>
+  <br>
    <div class="container">
 
   
@@ -53,11 +52,9 @@
               
 			  <td>{{assignment.peer_review_form}}</td>
 			  <td>
-      
-       <a href="{{url_for('assignments.view_assignment_details', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-primary"><i class="fa fa-folder-open"></i> View uploads </button></a>
-       <a href="{{url_for('assignments.edit_assignment', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit </button></a>
-       <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> Delete </button></a>
-      
+       <a href="{{url_for('assignments.view_assignment_details', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-primary btn-block"><i class="fa fa-folder-open"></i> View uploads </button></a>
+       <a href="{{url_for('assignments.edit_assignment', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-warning btn-block"><i class="fa fa-edit"></i> Edit </button></a>
+       <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-danger btn-block"><i class="fa fa-trash-alt"></i> Delete </button></a>  
      </td>
             </tr>
            {% endfor %}
