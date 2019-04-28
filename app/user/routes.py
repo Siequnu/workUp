@@ -138,6 +138,7 @@ def edit_user(user_id):
 			user.username = form.username.data
 			user.email = form.email.data
 			user.student_number = form.student_number.data
+			app.assignments.models.reset_user_enrollment(user.id)
 			for turma_id in form.turma_id.data:
 				app.assignments.models.enroll_user_in_class(user.id, turma_id)
 			

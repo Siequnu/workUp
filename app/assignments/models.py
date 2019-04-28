@@ -22,8 +22,13 @@ def get_user_enrollment_from_id (user_id):
 def get_all_class_info():
 	return Turma.query.all()
 
+def reset_user_enrollment (user_id):
+	if Enrollment.query.filter(Enrollment.user_id==user_id).first() is not None:
+		Enrollment.query.filter(Enrollment.user_id==user_id).delete()
+		db.session.commit()
+
 def enroll_user_in_class (user_id, turma_id):
-	print (user_id, turma_id)
+	
 	if Enrollment.query.filter(Enrollment.user_id==user_id).filter(Enrollment.turma_id==turma_id).first() is None:
 		new_enrollment = Enrollment(user_id = user_id, turma_id = turma_id)
 		db.session.add(new_enrollment)
