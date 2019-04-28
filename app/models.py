@@ -86,9 +86,9 @@ class Turma(db.Model):
 
 	@staticmethod
 	def new_turma_from_form (form):
-		new_turma = Turma(turma_number=form.turmaNumber.data, turma_label=form.turmaLabel.data,
-					turma_term=form.turmaTerm.data,
-					turma_year = form.turmaYear.data)
+		new_turma = Turma(turma_number=form.turma_number.data, turma_label=form.turma_label.data,
+					turma_term=form.turma_term.data,
+					turma_year = form.turma_year.data)
 		db.session.add(new_turma)
 		db.session.commit()
 

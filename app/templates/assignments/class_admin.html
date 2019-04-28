@@ -46,7 +46,8 @@
 			  <td>{{class.turma_term}}</td>
 			  <td>{{class.turma_year}}</td>
 			  <td>
-          <p><a href="{{url_for('assignments.delete_class', turma_id=class.id)}}" <button class="btn btn-sm btn-warning"><i class="fa fa-trash-alt"></i> Delete</button></a></p>
+          <a href="{{url_for('assignments.edit_class', turma_id=class.id)}}" <button class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</button></a>
+          <a href="{{url_for('assignments.delete_class', turma_id=class.id)}}" <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> Delete</button></a>
         </td>
             </tr>
            {% endfor %}
