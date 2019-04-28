@@ -17,7 +17,7 @@ from app.main.forms import FormModel
 from app.assignments.forms_peer_review import *
 
 ########## Student class (turma) methods
-@bp.route("/create_class", methods=['GET', 'POST'])
+@bp.route("/class/create", methods=['GET', 'POST'])
 @login_required
 def create_class():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
@@ -26,10 +26,26 @@ def create_class():
 			Turma.new_turma_from_form (form)
 			flash('Class successfully created! You need to restart the flask app in order for this class to appear on the Assignment creation forms.')
 			return redirect(url_for('assignments.class_admin'))
-		return render_template('assignments/create_class.html', title='Create new class', form=form)
+		return render_template('assignments/class_form.html', title='Create new class', form=form)
+	abort(403)
+	
+	
+@bp.route("/class/edit/<turma_id>", methods=['GET', 'POST'])
+@login_required
+def edit_class(turma_id):	
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		turma = Turma.query.get(turma_id)
+		form = TurmaCreationForm(obj=turma)
+		if form.validate_on_submit():
+			form.populate_obj(turma)
+			db.session.add(turma)
+			db.session.commit()
+			flash('Class edited successfully!')
+			return redirect(url_for('assignments.class_admin'))
+		return render_template('assignments/class_form.html', title='Edit class', form=form)
 	abort(403)
 
-@bp.route("/class_admin")
+@bp.route("/class/admin")
 @login_required
 def class_admin():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
@@ -37,7 +53,7 @@ def class_admin():
 		return render_template('assignments/class_admin.html', title='Class admin', classes_array = classes_array)
 	abort (403)
 			
-@bp.route("/delete_class/<turma_id>")
+@bp.route("/class/delete/<turma_id>")
 @login_required
 def delete_class(turma_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
@@ -48,7 +64,7 @@ def delete_class(turma_id):
 ########################################
 
 # View created assignments status
-@bp.route("/view_assignments")
+@bp.route("/view/")
 @login_required
 def view_assignments():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
@@ -68,7 +84,7 @@ def view_assignments():
 
 
 # View created assignments status
-@bp.route("/view_assignment_details/<assignment_id>")
+@bp.route("/view/<assignment_id>")
 @login_required
 def view_assignment_details(assignment_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
@@ -78,7 +94,7 @@ def view_assignment_details(assignment_id):
 
 
 # Admin page to set new assignment
-@bp.route("/create_assignment", methods=['GET', 'POST'])
+@bp.route("/create", methods=['GET', 'POST'])
 @login_required
 def create_assignment():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
@@ -87,12 +103,29 @@ def create_assignment():
 			app.assignments.models.new_assignment_from_form(form)
 			flash('Assignment successfully created!')
 			return redirect(url_for('assignments.view_assignments'))
-		return render_template('assignments/create_assignment.html', title='Create Assignment', form=form)
+		return render_template('assignments/assignment_form.html', title='Create Assignment', form=form)
+	abort(403)
+	
+# Admin page to edit assignments
+@bp.route("/edit/<assignment_id>", methods=['GET', 'POST'])
+@login_required
+def edit_assignment(assignment_id):	
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		assignment = Assignment.query.get(assignment_id)
+		form = AssignmentCreationForm(obj=assignment)
+		del form.target_turma_id, form.assignment_task_file
+		if form.validate_on_submit():
+			form.populate_obj(assignment)
+			db.session.add(assignment)
+			db.session.commit()
+			flash('Assignment successfully edited!')
+			return redirect(url_for('assignments.view_assignments'))
+		return render_template('assignments/assignment_form.html', title='Edit Assignment', form=form)
 	abort(403)
 	
 
 # Delete all user uploads and comments associated with this assignment
-@bp.route("/delete_assignment/<assignment_id>")
+@bp.route("/delete/<assignment_id>")
 @login_required
 def delete_assignment(assignment_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):

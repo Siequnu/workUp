@@ -2,8 +2,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, DateField, BooleanField, FormField, TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from flask_wtf.file import FileField, FileRequired
-from app.models import User, Turma
-	
+from app.models import User, Turma, Assignment
+from app import db
+
+
 	
 class AssignmentCreationForm(FlaskForm):
 	title = StringField('Assignment title', validators=[DataRequired()])
@@ -17,10 +19,10 @@ class AssignmentCreationForm(FlaskForm):
 	submit = SubmitField('Create')
 	
 class TurmaCreationForm(FlaskForm):
-	turmaNumber = StringField('Class number', validators=[DataRequired()])
-	turmaLabel = StringField('Class label', validators=[DataRequired()])
-	turmaTerm = StringField('Class term', validators=[DataRequired()])
-	turmaYear = StringField('Class year', validators=[DataRequired()])
+	turma_number = StringField('Class number', validators=[DataRequired()])
+	turma_label = StringField('Class label', validators=[DataRequired()])
+	turma_term = StringField('Class term', validators=[DataRequired()])
+	turma_year = StringField('Class year', validators=[DataRequired()])
 	submit = SubmitField('Create')
 
 		
