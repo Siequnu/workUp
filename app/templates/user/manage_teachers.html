@@ -1,0 +1,74 @@
+{% extends "header.html" %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block app_content %}
+<div class="container">
+<br>
+
+
+{% block body %}
+
+ <div class="container">
+
+ <div class="row">
+   <div class="col-md-8">
+    <h1>{{title}}</h1>
+    <hr>
+    <a href="{{url_for('user.register_admin')}}" <button class="btn btn-primary"><i class="fa fa-plus-circle"></i> Create new teacher</button></a>
+    <br>
+    <br>
+  </div>
+  </div>
+      
+      <div class="table-responsive">
+            <table summary="User table" class="table table-bordered table-hover">
+           <thead>
+              <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Email</th>
+        		  <th>Last seen</th>
+        		  <th>Registered</th>
+        		  <th>Email Confirmed</th>
+        		  <th>Actions</th>
+            </tr>
+          </thead>
+		  <tbody>
+			{% for user in teacher_info %}
+            <tr>
+              <td>{{user.id}}</td>
+              <td>{{user.username}}</td>
+              <td>{{user.email}}</td>
+              <td>{{user.last_seen.strftime('%d %b %H:%M:%S')}}</td>
+              <td>{{user.registered.strftime('%d %b %H:%M:%S')}}</td>
+              {% if user.email_confirmed==True %}
+               <td><button class="btn btn-sm btn-secondary"><i class="fa fa-check-circle"></i></button></td>
+              {% else %}
+               <td><button class="btn btn-sm btn-warning"><i class="fa fa-times-circle"></i></button></td>
+              {% endif %}
+              <td>
+               <p><a href="{{url_for('user.edit_user', user_id = user.id)}}" class="btn btn-block btn-primary btn-sm" role="button"><i class="fa fa-user-edit"></i> Edit user</a></p>
+               
+                {% if user.is_admin==True %}
+               <a href="{{url_for('user.remove_admin_rights', user_id = user.id)}}" class="btn btn-block btn-danger btn-sm" role="button"><i class="fa fa-user-slash"></i> Remove admin</a>
+              {% else %}
+               <a href="{{url_for('user.give_admin_rights', user_id = user.id)}}" class="btn btn-block btn-warning btn-sm" role="button"><i class="fa fa-user-tie"></i> Add admin</a>
+              {% endif %}
+              </td>
+            </tr>
+           {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+            </tr>
+          </tfoot>
+        </table>
+      </div><!--end of .table-responsive-->
+      
+ 
+ 
+</div>
+</div>
+{% endblock %}
+</div>
+{% endblock %}
