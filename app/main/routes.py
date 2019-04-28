@@ -11,7 +11,7 @@ db.session.commit()
 
 from app.main import bp
 import app.assignments.models
-
+import app.user
 
 @bp.before_request
 def before_request():
