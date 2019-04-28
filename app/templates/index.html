@@ -22,7 +22,7 @@
 	<div class="container">
 	<div class="row">
         
-			<h1>Hi, Administrator {{ current_user.username }}!</h1>
+			<h1>Hi, Professor {{ current_user.username }}!</h1>
 				
     </div>
 	
@@ -68,8 +68,8 @@
     <div class="card-body">
       <h5 class="card-title">Add or remove class information.</h5><hr>
       
-			<p><a class="btn btn-secondary btn-block" href="{{url_for('assignments.create_class')}}" role="button">Create new class</a></p>
-			<p><a class="btn btn-secondary btn-block" href="{{url_for('assignments.class_admin')}}" role="button">Manage classes</a></p>
+			<p><a class="btn btn-secondary" href="{{url_for('assignments.create_class')}}" role="button"><i class="fa fa-plus-circle"></i> Create new class</a></p>
+			<p><a class="btn btn-secondary" href="{{url_for('assignments.class_admin')}}" role="button"><i class="fa fa-chalkboard-teacher"></i> Manage classes</a></p>
     </div>
   </div>
 	 
@@ -79,8 +79,8 @@
 		</div>
     <div class="card-body">
       <h5 class="card-title">Add or remove peer review forms.</h5><hr>
-      <p><a class="btn btn-secondary btn-block" href="{{url_for('assignments.add_peer_review_form')}}" role="button">New peer review form</a></p>
-			<a class="btn btn-secondary btn-block" href="{{url_for('assignments.peer_review_form_admin')}}" role="button">Manage peer review forms</a>
+      <p><a class="btn btn-secondary" href="{{url_for('assignments.add_peer_review_form')}}" role="button"><i class="fa fa-file"></i> New peer review form</a></p>
+			<a class="btn btn-secondary" href="{{url_for('assignments.peer_review_form_admin')}}" role="button"><i class="fa fa-file-signature"></i> Manage peer review forms</a>
     </div>
   </div>
 	 
@@ -90,8 +90,8 @@
 		</div>
     <div class="card-body">
       <h5 class="card-title">Create and manage assignments</h5><hr>
-			<p><a class="btn btn-secondary btn-block" href="{{url_for('assignments.create_assignment')}}" role="button">Create assignment</a></p>
-			<p><a class="btn btn-secondary btn-block" href="{{url_for('assignments.view_assignments')}}" role="button">Manage assignments</a></p>
+			<p><a class="btn btn-secondary" href="{{url_for('assignments.create_assignment')}}" role="button"><i class="fa fa-calendar-plus"></i> Create assignment</a></p>
+			<p><a class="btn btn-secondary" href="{{url_for('assignments.view_assignments')}}" role="button"><i class="fa fa-tasks"></i> Manage assignments</a></p>
     </div>
   </div>	 
 </div>
@@ -100,15 +100,27 @@
 	<div class="card-deck">
 	 <div class="card bg-light mb-2" style="max-width: 20rem;">
 		<div class="card-header">
-			<h5><i class="fa fa-users"></i> Users</h5>
+			<h5><i class="fa fa-users"></i> Students</h5>
 		</div>
     <div class="card-body">
-      <h5 class="card-title">Manage users</h5><hr>
-			<p><a class="btn btn-secondary btn-block" href="{{url_for('user.register_admin')}}" role="button">Create new admin</a></p>
-			<p><a class="btn btn-secondary btn-block" href="{{url_for('user.manage_users')}}" role="button">Manage users</a></p>
-			<p><a class="btn btn-secondary btn-block" href="{{url_for('user.batch_import_students')}}" role="button">Batch import students</a></p>
+      <h5 class="card-title">Manage students</h5><hr>
+						<p><a class="btn btn-secondary" href="{{url_for('user.manage_students')}}" role="button"><i class="fa fa-users-cog"></i> Manage students</a></p>
+			<p><a class="btn btn-secondary" href="{{url_for('user.batch_import_students')}}" role="button"><i class="fa fa-file-import"></i> Batch import students</a></p>
     </div>
   </div>
+	 
+	 <div class="card bg-light mb-2" style="max-width: 20rem;">
+		<div class="card-header">
+			<h5><i class="fa fa-user-graduate"></i> Teachers</h5>
+		</div>
+    <div class="card-body">
+      <h5 class="card-title">Manage teachers</h5><hr>
+			<p><a class="btn btn-secondary" href="{{url_for('user.register_admin')}}" role="button"><i class="fa fa-user-plus"></i> Create new teacher</a></p>
+			<p><a class="btn btn-secondary" href="{{url_for('user.manage_teachers')}}" role="button"><i class="fa fa-user-graduate"></i> Manage teachers</a></p>
+			
+    </div>
+  </div>
+	 
 	</div>
 {% else %}
 		<div class="container">

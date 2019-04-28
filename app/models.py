@@ -133,19 +133,8 @@ class User(UserMixin, db.Model):
 		return check_password_hash(self.password_hash, password)
 
 	@staticmethod
-	def checkEmailConfirmationStatus (user):
-		sql = text('SELECT email_confirmed FROM user WHERE username ="' + str(user) + '"')
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row)
-		if names[0][0] == 1:
-			return True
-		else:
-			return False
-		
-	@staticmethod
-	def get_all_user_info ():
-		return User.query.all()
+	def user_email_is_confirmed (username):
+		return User.query.filter(username==username).first().email_confirmed
 	
 	@staticmethod
 	def give_admin_rights(user_id):

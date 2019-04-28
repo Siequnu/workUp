@@ -10,13 +10,12 @@
 
  <div class="container">
 
- <div class="card bg-light mb-3" style="max-width: 25rem;">
-  <div class="card-body">
-    <h1>Manage users</h1>
+ <div class="row">
+   <div class="col-md-8">
+    <h1>{{title}}</h1>
     <hr>
-    <a href="{{url_for('user.register_admin')}}" <button class="btn btn-primary"><i class="fa fa-plus-circle"></i> Create new admin</button></a>
-    <br>
-    
+    <a href="{{url_for('main.index')}}" <button class="btn btn-primary"><i class="fa fa-chevron-left"></i> Back</button></a>
+    <br><br>
   </div>
   </div>
       
@@ -24,10 +23,10 @@
             <table summary="User table" class="table table-bordered table-hover">
            <thead>
               <tr>
-              <th>ID</th>
+              <th>Number</th>
               <th>Username</th>
               <th>Email</th>
-        		  <th>Class</th>
+        		  <th>Enrollment</th>
         		  <th>Last seen</th>
         		  <th>Registered</th>
         		  <th>Email Confirmed</th>
@@ -36,12 +35,12 @@
             </tr>
           </thead>
 		  <tbody>
-			{% for user in user_data %}
+			{% for user, enrollment_info in student_info %}
             <tr>
-              <td>{{user.id}}</td>
+              <td>{{user.student_number}}</td>
               <td>{{user.username}}</td>
               <td>{{user.email}}</td>
-              <td>{{user.turma_id}}</td>
+              <td>{{enrollment_info}}</td>
               <td>{{user.last_seen.strftime('%d %b %H:%M:%S')}}</td>
               <td>{{user.registered.strftime('%d %b %H:%M:%S')}}</td>
               {% if user.email_confirmed==True %}
@@ -59,12 +58,12 @@
              
               
               <td>
-               <p><a href="{{url_for('user.edit_user', user_id = user.id)}}" class="btn btn-outline-primary btn-sm" role="button"><i class="fa fa-user-edit"></i> Edit user</a></p>
+               <p><a href="{{url_for('user.edit_user', user_id = user.id)}}" class="btn btn-primary btn-sm" role="button"><i class="fa fa-user-edit"></i> Edit user</a></p>
                
                 {% if user.is_admin==True %}
-               <a href="{{url_for('user.remove_admin_rights', user_id = user.id)}}" class="btn btn-outline-danger btn-sm" role="button"><i class="fa fa-user-slash"></i> Remove admin</a>
+               <a href="{{url_for('user.remove_admin_rights', user_id = user.id)}}" class="btn btn-danger btn-sm" role="button"><i class="fa fa-user-slash"></i> Remove admin</a>
               {% else %}
-               <a href="{{url_for('user.give_admin_rights', user_id = user.id)}}" class="btn btn-outline-warning btn-sm" role="button"><i class="fa fa-user-tie"></i> Add admin</a>
+               <a href="{{url_for('user.give_admin_rights', user_id = user.id)}}" class="btn btn-warning btn-sm" role="button"><i class="fa fa-user-tie"></i> Add admin</a>
               {% endif %}
               </td>
             </tr>

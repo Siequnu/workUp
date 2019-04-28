@@ -28,7 +28,7 @@ def login():
 			flash('Invalid username or password')
 			return redirect(url_for('user.login'))
 		# Check for email validation
-		if User.checkEmailConfirmationStatus(user.username) == False:
+		if User.user_email_is_confirmed(user.username) == False:
 			flash('Please confirm your email.')
 			return redirect(url_for('user.login'))
 		
@@ -142,16 +142,25 @@ def edit_user(user_id):
 			db.session.commit()
 				
 			flash('User edited successfully.')
-			return redirect(url_for('user.manage_users'))
+			return redirect(url_for('user.manage_students'))
 		return render_template('user/register.html', title='Edit user', form=form)
 
 # Manage Users
-@bp.route('/manage_users')
+@bp.route('/students/manage')
 @login_required
-def manage_users():
+def manage_students():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		user_data = app.models.User.get_all_user_info()
-		return render_template('user/manage_users.html', title='Manage Users', user_data = user_data)
+		student_info = app.user.models.get_all_student_info()
+		return render_template('user/manage_students.html', title='Manage students', student_info = student_info)
+	abort(403)
+	
+# Manage Users
+@bp.route('/teachers/manage')
+@login_required
+def manage_teachers():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		teacher_info = app.user.models.get_all_admin_info()
+		return render_template('user/manage_teachers.html', title='Manage teachers', teacher_info = teacher_info)
 	abort(403)
 	
 
@@ -166,7 +175,7 @@ def give_admin_rights(user_id):
 			flash('User successfully made into administrator.')
 		except:
 			flash('An error occured when changing the user to an administrator.')
-		return redirect(url_for('user.manage_users'))
+		return redirect(url_for('user.manage_students'))
 	else:
 		abort(403)
 		
@@ -180,7 +189,7 @@ def remove_admin_rights(user_id):
 			flash('Administrator rights removed from the user.')
 		except:
 			flash('An error occured when changing the user to an administrator.')
-		return redirect(url_for('user.manage_users'))
+		return redirect(url_for('user.manage_students'))
 	else:
 		abort(403)
 

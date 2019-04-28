@@ -1,14 +1,27 @@
 from app import db
 import app.models, app.email_model
-from app.models import Upload, Download, Assignment, User, Comment
+from app.models import Upload, Download, Assignment, User, Comment, Enrollment, Turma
 from datetime import datetime
 from flask_login import current_user
 import string, time, datetime, xlrd
 from flask import url_for, render_template, redirect, session, flash, request, abort, current_app
 
+from sqlalchemy import func
+
 def get_total_user_count ():
 	# Remove admins?
 	return len(User.query.all())
+
+def get_all_student_info ():
+	return db.session.query(User, func.group_concat(
+		Turma.turma_label, ", ")).join(
+		Enrollment, User.id == Enrollment.user_id).join(
+		Turma, Enrollment.turma_id == Turma.id).group_by(
+		User.student_number).all()
+
+def get_all_admin_info():
+	return User.query.filter(User.is_admin==True).all()
+		
 
 def process_student_excel_spreadsheet (excel_data_file):
 	# Get a list of names, student numbers, and email addresses
@@ -35,7 +48,7 @@ def add_users_from_excel_spreadsheet (user_array, turma_id):
 		db.session.commit()
 		'''
 		# Email student email with password and asking to confirm email.
-		subject = "Renmin WorkUp: Confirm your email"
+		subject = "Renmin workUp: confirm your email"
 		token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
 		confirm_url = url_for('user.confirm_email', token=token, _external=True)
 		html = render_template('email/activate.html',confirm_url=confirm_url)
