@@ -22,6 +22,13 @@ def get_user_enrollment_from_id (user_id):
 def get_all_class_info():
 	return Turma.query.all()
 
+def get_class_enrollment_from_class_id (class_id):
+	return db.session.query(
+		Enrollment, Turma, User).join(
+		Turma, Enrollment.turma_id==Turma.id).join(
+		User, Enrollment.user_id==User.id).filter(
+		Enrollment.turma_id == class_id).all()
+
 def get_user_assignment_info (user_id):
 	turma_id = User.get_user_turma_from_user_id (user_id)
 	assignments = get_assignments_from_turma_id (turma_id)	

@@ -5,7 +5,7 @@ from app.assignments import bp, models, forms
 from app.assignments.forms import TurmaCreationForm, AssignmentCreationForm
 
 from app.files import models
-from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile
+from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile, Enrollment
 import app.models
 
 from app import db
@@ -52,7 +52,28 @@ def class_admin():
 		classes_array = Turma.query.all()
 		return render_template('assignments/class_admin.html', title='Class admin', classes_array = classes_array)
 	abort (403)
+	
+	
+@bp.route("/class/enrollment/<class_id>")
+@login_required
+def manage_enrollment(class_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		class_enrollment = app.assignments.models.get_class_enrollment_from_class_id(class_id)
+		return render_template('assignments/class_enrollment.html', title='Class enrollment', class_enrollment = class_enrollment)
+	abort (403)
 			
+			
+@bp.route("/class/enrollment/remove/<enrollment_id>")
+@login_required
+def remove_enrollment(enrollment_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		class_id = Enrollment.query.get(enrollment_id).turma_id
+		Enrollment.query.filter(Enrollment.id==enrollment_id).delete()
+		db.session.commit()
+		flash('Student removed from class!')
+		return redirect(url_for('assignments.manage_enrollment', class_id = class_id))
+	abort (403)
+
 @bp.route("/class/delete/<turma_id>")
 @login_required
 def delete_class(turma_id):
