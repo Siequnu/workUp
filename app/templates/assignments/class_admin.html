@@ -9,10 +9,9 @@
 
 
 {% block body %}
-<div class="container">
-  
-   <div class="card bg-light mb-3" style="max-width: 25rem;">
-  <div class="card-body">
+
+   <div class="row">
+   <div class="col-md-8">
     <h1>Class admin</h1>
     <hr>
     <a href="{{url_for('assignments.create_class')}}" <button class="btn btn-primary"><i class="fa fa-plus-circle"></i>  Create new class </button></a>
@@ -46,8 +45,8 @@
 			  <td>{{class.turma_term}}</td>
 			  <td>{{class.turma_year}}</td>
 			  <td>
-          <a href="{{url_for('assignments.edit_class', turma_id=class.id)}}" <button class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Edit</button></a>
-          <a href="{{url_for('assignments.delete_class', turma_id=class.id)}}" <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> Delete</button></a>
+          <a href="{{url_for('assignments.edit_class', turma_id=class.id)}}" <button class="btn btn-sm btn-warning bln-block"><i class="fa fa-edit"></i> Edit</button></a>
+          <a href="{{url_for('assignments.delete_class', turma_id=class.id)}}" <button class="btn btn-sm btn-danger bln-block"><i class="fa fa-trash-alt"></i> Delete</button></a>
         </td>
             </tr>
            {% endfor %}

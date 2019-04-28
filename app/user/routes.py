@@ -64,7 +64,7 @@ def register():
 				db.session.commit()
 				
 				# Send the email confirmation link
-				subject = "Confirm your email"
+				subject = "workUp - confirm your email"
 				token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
 				confirm_url = url_for('user.confirm_email', token=token, _external=True)
 				html = render_template('email/activate.html',confirm_url=confirm_url)
@@ -128,6 +128,22 @@ def reset_with_token(token):
 		return redirect(url_for('user.login'))
 	return render_template('user/reset_with_token.html', form=form, token=token)
 
+
+@bp.route('/edit/<user_id>', methods=['GET', 'POST'])
+def edit_user(user_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		user = User.query.get(user_id)
+		form = app.user.forms.RegistrationForm(obj=user)
+		del form.signUpCode
+		del form.password
+		if form.validate_on_submit():
+			form.populate_obj(user)
+			db.session.add(user)
+			db.session.commit()
+				
+			flash('User edited successfully.')
+			return redirect(url_for('user.manage_users'))
+		return render_template('user/register.html', title='Edit user', form=form)
 
 # Manage Users
 @bp.route('/manage_users')
