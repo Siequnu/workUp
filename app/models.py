@@ -183,26 +183,6 @@ class Upload(db.Model):
 	def __repr__(self):
 		return '<Upload {}>'.format(self.filename)		
 	
-	@staticmethod
-	def getAllUploadsWithFilenameAndUsername ():
-		sql = text('SELECT upload.original_filename, user.username, upload.timestamp FROM upload INNER JOIN user ON user.id=upload.user_id;')
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row)
-		return names
-	
-	@staticmethod
-	def getPossibleDownloadsNotFromUserForThisAssignment (userId, assignmentId, previousDownloadFileId = False):
-		if previousDownloadFileId:
-			sql = text ('SELECT filename FROM upload WHERE user_id!=' + str(userId) + ' AND assignment_id=' + str(assignmentId) + ' AND id!=' + str(previousDownloadFileId))
-		else:
-			sql = text ('SELECT filename FROM upload WHERE user_id!=' + str(userId) + ' AND assignment_id=' + str(assignmentId))
-		result = db.engine.execute(sql)
-		filenames = []
-		for row in result: filenames.append(row[0])
-		return filenames
-
-	
 	
 class Download(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
@@ -226,7 +206,7 @@ class Comment(db.Model):
 	assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
 	
 	def __repr__(self):
-		return '<Comment {}>'.format(self.comment)
+		return '<Comment {}>'.format(self.id)
 	
 	@staticmethod
 	def getPendingStatusFromUserIdAndAssignmentId (userId, assignmentId):

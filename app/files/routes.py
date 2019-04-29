@@ -5,15 +5,15 @@ from flask_login import current_user
 from flask_login import login_required
 from app import db
 
-# Models
 import app.assignments.models
 
 from app.files import bp
 from app.files import models, forms
 from app.models import Comment, Download, Upload, Assignment, Turma
 
-from random import randint
+import random
 import os, datetime, json
+
 
 # Forms
 from app.main.forms import FormModel
@@ -43,45 +43,34 @@ def file_stats():
 def download_random_file(assignment_id):
 	# Check if user has any previous downloads with pending peer reviews
 	pending_assignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignment_id)
-	print (pending_assignments) # (2, 1) if first assignment, or [] if none left?
-	if len(pending_assignments) > 0:
+	
+	if len(pending_assignments) > 0: # Returns (comment.id, comment.file_id)
 		# User has a pending assignment, send them the same file as before
 		already_downloaded_and_pending_review_file_id = pending_assignments[0][1]
 		flash('You have a peer review that you have not yet completed. You have redownloaded the same file.')
-		# Get filename of the upload from Id
 		filename = Upload.query.get(already_downloaded_and_pending_review_file_id).filename
-		#conditions = []
-		#conditions.append(str('id="' + str(already_downloaded_and_pending_review_file_id) + '"'))
-		#filename_to_download = app.models.selectFromDb(['filename'], 'upload', conditions)		
-		#file_path = os.path.join (current_app.config['UPLOAD_FOLDER'], filename_to_download[0][0])
-		# Send SQL data to database
-		#download = Download(filename=filename_to_download[0][0], user_id = current_user.id)
-		#db.session.add(download)
-		#db.session.commit()
 		return models.download_file(filename)
-		#return send_file(file_path, as_attachment=True)
 	
 	# Make sure not to give the same file to the same peer reviewer twice
-	# Get list of files the user has already submitted reviews for
-	conditions = []
-	conditions.append (str('assignment_id="' + str(assignment_id) + '"'))
-	conditions.append (str('user_id="' + str(current_user.id) + '"'))
-	completed_comments_ids_and_file_id = app.models.selectFromDb(['id', 'file_id'], 'comment', conditions)
+	completed_comment = Comment.query.filter(
+		Comment.assignment_id==assignment_id).filter(
+		Comment.user_id==current_user.id).first()
 	
-	if completed_comments_ids_and_file_id == []:
-		files_not_from_user = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignment_id)
-		
+	if completed_comment is None:
+		uploads_not_from_user = Upload.query.filter(
+			Upload.user_id != current_user.id).filter(
+			Upload.assignment_id == assignment_id).all()
 	else:
-		# Get an array of filenames not belonging to current user
-		previous_download_file_id = completed_comments_ids_and_file_id[0][0]
-		files_not_from_user = Upload.getPossibleDownloadsNotFromUserForThisAssignment (current_user.id, assignment_id, previous_download_file_id)
+		uploads_not_from_user = Upload.query.filter(
+			Upload.user_id != current_user.id).filter(
+			Upload.assignment_id == assignment_id).filter(
+			Upload.id != completed_comment.file_id).all()
 	
-	number_of_files = len(files_not_from_user)
-	if number_of_files == 0:
-		flash('There are no files currently available for download. Please check back soon.')
+	if len(uploads_not_from_user) == 0:
+		flash('There are no files currently available for download. Please check back later.')
 		return redirect(url_for('assignments.view_assignments'))
-	random_number = (randint(0,(number_of_files-1)))
-	filename = files_not_from_user[random_number]
+	
+	filename = random.choice(uploads_not_from_user).filename
 	random_file = os.path.join (current_app.config['UPLOAD_FOLDER'], filename)
 	
 	# Send SQL data to database
