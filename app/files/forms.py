@@ -9,7 +9,7 @@ class LibraryUploadForm(FlaskForm):
 	library_upload_file = FileField(label='File:')
 	title = StringField('Library upload title:', validators=[DataRequired()])
 	description = StringField('Description:', validators=[DataRequired()])
-	target_turma_id = SelectMultipleField('Target classes:', choices=Turma.get_class_list_for_forms (), validators=[DataRequired()])	
+	target_turmas = SelectMultipleField('For classes', coerce=int, validators=[DataRequired()])
 	submit = SubmitField('Upload new file')
 	
 

@@ -117,7 +117,6 @@ class User(UserMixin, db.Model):
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
 	student_number = db.Column(db.String(12))
-	turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
 	last_seen = db.Column(db.DateTime, default=datetime.now())
 	registered = db.Column(db.DateTime, default=datetime.now())
 	email_confirmed = db.Column(db.Boolean, default=False)

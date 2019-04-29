@@ -10,7 +10,7 @@ import app.assignments.models
 
 from app.files import bp
 from app.files import models, forms
-from app.models import Comment, Download, Upload, Assignment
+from app.models import Comment, Download, Upload, Assignment, Turma
 
 from random import randint
 import os, datetime, json
@@ -194,6 +194,7 @@ def download_library_file(library_upload_id):
 def upload_library_file():
 	if app.models.is_admin(current_user.username):	
 		form = forms.LibraryUploadForm()
+		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
 			app.files.models.new_library_upload_from_form(form)
 			flash('New file successfully added to the library!')

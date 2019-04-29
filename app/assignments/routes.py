@@ -24,7 +24,7 @@ def create_class():
 		form = forms.TurmaCreationForm()
 		if form.validate_on_submit():
 			Turma.new_turma_from_form (form)
-			flash('Class successfully created! You need to restart the flask app in order for this class to appear on the Assignment creation forms.')
+			flash('Class successfully created!')
 			return redirect(url_for('assignments.class_admin'))
 		return render_template('assignments/class_form.html', title='Create new class', form=form)
 	abort(403)
@@ -120,6 +120,7 @@ def view_assignment_details(assignment_id):
 def create_assignment():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = app.assignments.forms.AssignmentCreationForm()
+		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
 			app.assignments.models.new_assignment_from_form(form)
 			flash('Assignment successfully created!')
@@ -134,7 +135,7 @@ def edit_assignment(assignment_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		assignment = Assignment.query.get(assignment_id)
 		form = AssignmentCreationForm(obj=assignment)
-		del form.target_turma_id, form.assignment_task_file
+		del form.target_turmas, form.assignment_task_file
 		if form.validate_on_submit():
 			form.populate_obj(assignment)
 			db.session.add(assignment)

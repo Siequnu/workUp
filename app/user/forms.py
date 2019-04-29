@@ -15,8 +15,7 @@ class EditUserForm (FlaskForm):
 	username = StringField('Username', validators=[DataRequired()])
 	email = StringField('Email', validators=[DataRequired(), Email()])
 	student_number = StringField('Student number', validators=[DataRequired()])
-	turma_id_and_label_list = Turma.get_class_list_for_forms ()
-	turma_id = SelectMultipleField('Class', choices=turma_id_and_label_list, validators=[DataRequired()])
+	target_turmas = SelectMultipleField('For classes', coerce=int, validators=[DataRequired()])
 	submit = SubmitField('Edit user')
 
 class RegistrationForm(FlaskForm):
@@ -24,10 +23,7 @@ class RegistrationForm(FlaskForm):
 	email = StringField('Email', validators=[DataRequired(), Email()])
 	password = PasswordField('Password', validators=[DataRequired()])
 	student_number = StringField('Student number', validators=[DataRequired()])
-	
-	turma_id_and_label_list = Turma.get_class_list_for_forms ()
-	turma_id = SelectMultipleField('Class', choices=turma_id_and_label_list, validators=[DataRequired()])
-	
+	target_turmas = SelectMultipleField('For classes', coerce=int, validators=[DataRequired()])
 	signUpCode = StringField('Sign-up code', validators=[DataRequired()])
 	submit = SubmitField('Register')
 
@@ -51,7 +47,7 @@ class PasswordForm(FlaskForm):
 		
 		
 class BatchStudentImportForm(FlaskForm):
-	target_course = SelectField('Class ID', choices=Turma.get_class_list_for_forms (), validators=[DataRequired()])
+	target_turmas = SelectMultipleField('For classes', coerce=int, validators=[DataRequired()])
 	excel_file = FileField(validators=[FileRequired()], label='Excel File')
 	submit = SubmitField('Process...')
 	
