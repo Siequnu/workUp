@@ -11,7 +11,7 @@ class AssignmentCreationForm(FlaskForm):
 	title = StringField('Assignment title', validators=[DataRequired()])
 	description = StringField('Assignment description', validators=[DataRequired()])
 	due_date = DateField('Due date:', validators=[DataRequired()])
-	target_turma_id = SelectMultipleField('Class ID', choices=Turma.get_class_list_for_forms (), validators=[DataRequired()])
+	target_turmas = SelectMultipleField('For classes', coerce=int, validators=[DataRequired()])
 	peer_review_necessary = BooleanField('Peer review necessary', default=True)
 	# Should be a SelectField, with default to BlankPeerReview
 	peer_review_form = StringField('Peer review form Class name', validators=[DataRequired()])

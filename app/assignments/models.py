@@ -125,7 +125,7 @@ def new_assignment_from_form (form):
 		db.session.add(assignment_task_file)
 		db.session.flush() # Access the assignment_task_file.id field from db
 	
-	for turma_id in form.target_turma_id.data:
+	for turma_id in form.target_turmas.data:
 		assignment = Assignment(title=form.title.data, description=form.description.data, due_date=form.due_date.data,
 						target_turma_id=turma_id, created_by_id=current_user.id,
 						peer_review_necessary= form.peer_review_necessary.data,

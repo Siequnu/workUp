@@ -27,7 +27,7 @@ def new_library_upload_from_form (form):
 	# Generate thumbnail
 	get_thumbnail (library_upload.filename)
 	
-	for turma_id in form.target_turma_id.data:
+	for turma_id in form.target_turmas.data:
 		new_class_library_file = ClassLibraryFile(library_upload_id = library_upload.id, turma_id = turma_id)
 		db.session.add(new_class_library_file)
 		db.session.commit()

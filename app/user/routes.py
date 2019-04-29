@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
 
 # Register
-from app.models import User
+from app.models import User, Turma
 from app import db
 
 # Utility classes
@@ -56,13 +56,14 @@ def register():
 		return redirect(url_for('main.index'))
 	if current_app.config['REGISTRATION_IS_OPEN'] == True:
 		form = app.user.forms.RegistrationForm()
+		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
 			if form.signUpCode.data in current_app.config['SIGNUP_CODES']:
 				user = User(username=form.username.data, email=form.email.data, student_number=form.student_number.data)
 				user.set_password(form.password.data)
 				db.session.add(user)
 				db.session.flush() # Access the new user.id field in the next step
-				for turma_id in form.turma_id.data:
+				for turma_id in form.target_turmas.data:
 					app.assignments.models.enroll_user_in_class(user.id, turma_id)
 				db.session.commit()
 				
@@ -137,12 +138,13 @@ def edit_user(user_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		user = User.query.get(user_id)
 		form = app.user.forms.EditUserForm(obj=user)
+		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
 			user.username = form.username.data
 			user.email = form.email.data
 			user.student_number = form.student_number.data
 			app.assignments.models.reset_user_enrollment(user.id)
-			for turma_id in form.turma_id.data:
+			for turma_id in form.target_turmas.data:
 				app.assignments.models.enroll_user_in_class(user.id, turma_id)
 			
 			db.session.commit()
@@ -231,6 +233,7 @@ def register_admin():
 def batch_import_students():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = forms.BatchStudentImportForm()
+		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
 			if not form.excel_file.data.filename:
 				flash('No file uploaded. Please try again or contact your tutor.')
