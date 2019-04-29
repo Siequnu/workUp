@@ -12,7 +12,11 @@ def load_user(id):
 
 def is_admin (username):
 	# Returns True if user is admin, False if not
-	return username in User.get_admin_users_list() 
+	try:
+		return User.query.filter(User.username==username).one_or_none().is_admin
+	except:
+		return False
+	
 
 def selectFromDb (columnsArray, fromTable, conditionsArray = False, count = False):
 	# Assemble SQL query from input variables
@@ -92,10 +96,7 @@ class Turma(db.Model):
 		db.session.add(new_turma)
 		db.session.commit()
 
-	@staticmethod
-	def get_class_list_for_forms ():
-		return db.session.query(cast(Turma.id, String(64)), Turma.turma_label).all()
-	
+
 	@staticmethod
 	def delete_turma_from_id (turma_id):
 		Turma.query.filter(Turma.id==turma_id).delete()
@@ -146,19 +147,6 @@ class User(UserMixin, db.Model):
 		sql = text ("UPDATE user SET is_admin=0 WHERE id='" + str(user_id) + "'")
 		result = db.engine.execute(sql)
 		return result
-		
-		
-	@staticmethod
-	def get_admin_users_list ():
-		sql = text('SELECT username FROM user WHERE is_admin ="' + str(1) + '"')
-		result = db.engine.execute(sql)
-		# Unpack results from sql object
-		usernames = []
-		for row in result: usernames.append(row)
-		# Clean results from tuple to array
-		clean_usernames = []
-		for username_tuple in usernames: clean_usernames.append(username_tuple[0])
-		return clean_usernames
 	
 class AssignmentTaskFile(db.Model):
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
