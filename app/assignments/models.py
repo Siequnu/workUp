@@ -28,7 +28,6 @@ def reset_user_enrollment (user_id):
 		db.session.commit()
 
 def enroll_user_in_class (user_id, turma_id):
-	
 	if Enrollment.query.filter(Enrollment.user_id==user_id).filter(Enrollment.turma_id==turma_id).first() is None:
 		new_enrollment = Enrollment(user_id = user_id, turma_id = turma_id)
 		db.session.add(new_enrollment)
@@ -42,8 +41,16 @@ def get_class_enrollment_from_class_id (class_id):
 		Enrollment.turma_id == class_id).all()
 
 def get_user_assignment_info (user_id):
-	turma_id = User.get_user_turma_from_user_id (user_id)
-	assignments = get_assignments_from_turma_id (turma_id)	
+	# Get user enrollment, then fetch and compile assignments for each class
+	turma_ids = db.session.query(
+		User, Enrollment).join(
+		Enrollment, User.id == Enrollment.user_id).filter(
+		User.id==user_id).all()
+	assignments = []
+	for user, enrollment in turma_ids:
+		assignments_array = get_assignments_from_turma_id (enrollment.turma_id)
+		for assignment in assignments_array:
+			assignments.append (assignment)
 	clean_assignments_array = []
 	for assignment in assignments:
 		# Convert each SQL object into a  __dict__, then add extra keys for the template
@@ -63,7 +70,6 @@ def get_user_assignment_info (user_id):
 			assignment_dict['completed_peer_review_objects'] = completed_peer_reviews
 			
 		clean_assignments_array.append(assignment_dict)
-	
 	return clean_assignments_array
 
 def get_peer_review_form_from_upload_id (upload_id):
@@ -77,19 +83,23 @@ def get_received_peer_review_count (user_id):
 		Upload, Comment.file_id==Upload.id).filter(Upload.user_id==user_id).count()
 
 def get_assignment_upload_progress_bar_percentage (user_id):
-	turma_id = User.get_user_turma_from_user_id (user_id)	
-	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).count()
+	assignments_for_user = len(db.session.query(Assignment, Enrollment).join(
+		Enrollment, Assignment.target_turma_id == Enrollment.turma_id).filter(
+		Enrollment.user_id == user_id).all())
+
 	completed_assignments = db.session.query(Assignment).join(
 		Upload, Assignment.id==Upload.assignment_id).filter(Upload.user_id==current_user.id).count()
-	
+	print (assignments_for_user, completed_assignments)
 	if assignments_for_user > 0:
 		return int(float(completed_assignments)/float(assignments_for_user) * 100)
 	else:
 		return 100
 	
 def get_peer_review_progress_bar_percentage (user_id):
-	turma_id = User.get_user_turma_from_user_id (user_id)
-	assignments_for_user = Assignment.query.filter_by(target_turma_id=turma_id).count()
+	assignments_for_user = len(db.session.query(Assignment, Enrollment).join(
+		Enrollment, Assignment.target_turma_id == Enrollment.turma_id).filter(
+		Enrollment.user_id == user_id).all())
+	
 	total_peer_reviews_expected = assignments_for_user * 2 # At two peer reviews per assignment
 	#!# What about non-peer review assignments? Cross check with needs_peer_review
 	total_completed_peer_reviews = Comment.query.filter_by(user_id=user_id).filter_by(pending=False).count()

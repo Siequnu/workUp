@@ -52,7 +52,7 @@ def add_users_from_excel_spreadsheet (user_array, turma_id):
 		token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
 		confirm_url = url_for('user.confirm_email', token=token, _external=True)
 		html = render_template('email/activate.html',confirm_url=confirm_url)
-		app.email_model.sendEmail (user.email, subject, html)
+		app.email_model.send_email (user.email, subject, html)
 		'''
 	return True
 		

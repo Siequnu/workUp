@@ -3,7 +3,7 @@ from random import randint
 import os, datetime, json
 
 from flask_login import current_user, login_required
-from app.models import Turma, Upload, Comment, Assignment, Download, User
+from app.models import Turma, Upload, Comment, Assignment, Download, User, Enrollment
 from app import db
 
 db.create_all()
@@ -35,7 +35,7 @@ def index():
 			return render_template('index.html', admin = True, student_count = student_count, classes=classes)
 		else:
 			# Display help message if a student has signed up and is not part of a class
-			if User.get_user_turma_from_user_id (current_user.id) is None:
+			if Enrollment.query.filter(Enrollment.user_id==current_user.id).first() is None:
 				flash('You do not appear to be part of a class. Please contact your tutor for assistance.')
 				return render_template('index.html')
 			
