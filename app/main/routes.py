@@ -3,7 +3,7 @@ from random import randint
 import os, datetime, json
 
 from flask_login import current_user, login_required
-from app.models import Turma, Upload, Comment, Assignment, Download, User, Enrollment
+from app.models import Turma, Upload, Comment, Assignment, Download, User, Enrollment, ClassLibraryFile, Assignment
 from app import db
 
 db.create_all()
@@ -30,9 +30,11 @@ def lab():
 def index():
 	if current_user.is_authenticated:
 		if app.models.is_admin(current_user.username):
-			student_count = app.user.models.get_total_user_count()
-			classes = app.assignments.models.get_all_class_info()
-			return render_template('index.html', admin = True, student_count = student_count, classes=classes)
+			return render_template('index.html', admin = True,
+								   student_count = app.user.models.get_total_user_count(),
+								   classes=app.assignments.models.get_all_class_info(),
+								   library= ClassLibraryFile.query.all(),
+								   assignments = Assignment.query.all())
 		else:
 			# Display help message if a student has signed up and is not part of a class
 			if Enrollment.query.filter(Enrollment.user_id==current_user.id).first() is None:
