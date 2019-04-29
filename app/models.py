@@ -138,15 +138,16 @@ class User(UserMixin, db.Model):
 	
 	@staticmethod
 	def give_admin_rights(user_id):
-		sql = text ("UPDATE user SET is_admin=1 WHERE id='" + str(user_id) + "'")
-		result = db.engine.execute(sql)
-		return result
+		user = User.query.get(user_id)
+		user.is_admin = True
+		db.session.commit()
 	
 	@staticmethod
 	def remove_admin_rights(user_id):
-		sql = text ("UPDATE user SET is_admin=0 WHERE id='" + str(user_id) + "'")
-		result = db.engine.execute(sql)
-		return result
+		if user_id != '1': # Can't remove original admin
+			user = User.query.get(user_id)
+			user.is_admin = False
+			db.session.commit()
 	
 class AssignmentTaskFile(db.Model):
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
