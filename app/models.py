@@ -161,11 +161,6 @@ class User(UserMixin, db.Model):
 		for username_tuple in usernames: clean_usernames.append(username_tuple[0])
 		return clean_usernames
 	
-	@staticmethod
-	def get_user_turma_from_user_id (user_id):
-		return User.query.get(user_id).turma_id
-	
-	
 class AssignmentTaskFile(db.Model):
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	original_filename = db.Column(db.String(140))

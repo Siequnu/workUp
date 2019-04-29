@@ -94,7 +94,7 @@ def view_assignments():
 		return render_template('assignments/view_assignments.html', assignmentsArray = clean_assignments_array, admin = True)
 	elif current_user.is_authenticated:
 		# Get user class
-		if User.get_user_turma_from_user_id(current_user.id) is not None:
+		if Enrollment.query.filter(Enrollment.user_id==current_user.id).first() is not None:
 			# Get assignments for this user
 			clean_assignments_array = app.assignments.models.get_user_assignment_info (current_user.id)
 			return render_template('assignments/view_assignments.html', assignmentsArray = clean_assignments_array)

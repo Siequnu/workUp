@@ -6,7 +6,7 @@ import email.message
 
 ts = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
 
-def sendEmail (to, subject, text):
+def send_email (to, subject, text):
 	msg = email.message.Message()
 	
 	msg['From'] = current_app.config['SMTP_FROM_ADDRESS']

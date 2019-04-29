@@ -52,15 +52,18 @@ def logout():
 # Registration
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
-	if current_user.is_authenticated:
+	if current_user.is_authenticated and app.models.is_admin(current_user.username) is not True:
 		return redirect(url_for('main.index'))
 	if current_app.config['REGISTRATION_IS_OPEN'] == True:
 		form = app.user.forms.RegistrationForm()
 		if form.validate_on_submit():
 			if form.signUpCode.data in current_app.config['SIGNUP_CODES']:
-				user = User(username=form.username.data, email=form.email.data, student_number=form.student_number.data, turma_id=form.turma_id.data)
+				user = User(username=form.username.data, email=form.email.data, student_number=form.student_number.data)
 				user.set_password(form.password.data)
 				db.session.add(user)
+				db.session.flush() # Access the new user.id field in the next step
+				for turma_id in form.turma_id.data:
+					app.assignments.models.enroll_user_in_class(user.id, turma_id)
 				db.session.commit()
 				
 				# Send the email confirmation link
@@ -68,7 +71,7 @@ def register():
 				token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
 				confirm_url = url_for('user.confirm_email', token=token, _external=True)
 				html = render_template('email/activate.html',confirm_url=confirm_url)
-				app.email_model.sendEmail (user.email, subject, html)
+				app.email_model.send_email (user.email, subject, html)
 				
 				flash('Congratulations, you are now a registered user! Please confirm your email.')
 				return redirect(url_for('user.login'))
@@ -106,7 +109,7 @@ def reset():
 		recover_url = url_for('user.reset_with_token', token=token, _external=True)
 		html = render_template('email/recover.html', recover_url=recover_url)
 		
-		app.email_model.sendEmail(user.email, subject, html)
+		app.email_model.send_email(user.email, subject, html)
 		flash('An email has been sent to your inbox with a link to recover your password.')
 		return redirect(url_for('main.index'))
 		
@@ -213,7 +216,7 @@ def register_admin():
 			token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
 			confirm_url = url_for('user.confirm_email', token=token, _external=True)
 			html = render_template('email/activate.html',confirm_url=confirm_url)
-			app.email_model.sendEmail (user.email, subject, html)
+			app.email_model.send_email (user.email, subject, html)
 			
 			flash('Congratulations, you are now a registered admin! Please confirm your email.')
 			return redirect(url_for('user.login'))
