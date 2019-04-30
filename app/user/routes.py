@@ -16,6 +16,8 @@ import app.email_model
 import app.main.forms
 from app.user import bp, models, forms
 
+from app import executor
+
 # Log-in page
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -72,7 +74,7 @@ def register():
 				token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
 				confirm_url = url_for('user.confirm_email', token=token, _external=True)
 				html = render_template('email/activate.html',confirm_url=confirm_url)
-				app.email_model.send_email (user.email, subject, html)
+				executor.submit(app.email_model.send_email, user.email, subject, html)
 				
 				flash('Congratulations, you are now a registered user! Please confirm your email.')
 				return redirect(url_for('user.login'))
@@ -110,7 +112,7 @@ def reset():
 		recover_url = url_for('user.reset_with_token', token=token, _external=True)
 		html = render_template('email/recover.html', recover_url=recover_url)
 		
-		app.email_model.send_email(user.email, subject, html)
+		executor.submit(app.email_model.send_email, user.email, subject, html)
 		flash('An email has been sent to your inbox with a link to recover your password.')
 		return redirect(url_for('main.index'))
 		
@@ -218,7 +220,7 @@ def register_admin():
 			token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
 			confirm_url = url_for('user.confirm_email', token=token, _external=True)
 			html = render_template('email/activate.html',confirm_url=confirm_url)
-			app.email_model.send_email (user.email, subject, html)
+			executor.submit(app.email_model.send_email, user.email, subject, html)
 			
 			flash('Congratulations, you are now a registered admin! Please confirm your email.')
 			return redirect(url_for('user.login'))

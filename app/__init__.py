@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap #This loads bootstrap-flask
 from flask_mail import Mail
+from flask_executor import Executor
 import logging, os
 from logging.handlers import RotatingFileHandler
 
@@ -14,20 +15,20 @@ login = LoginManager()
 login.login_view = 'user.login'
 bootstrap = Bootstrap()
 mail = Mail()
+executor = Executor()
 
 def create_app(config_class=Config):
 	workup_app = Flask(__name__)
 	workup_app.config.from_object(config_class)
-	db.init_app(workup_app)
-
 	
+	db.init_app(workup_app)
 	migrate.init_app(workup_app, db)
 	workup_app.app_context().push()
 	
 	login.init_app(workup_app)
 	bootstrap = Bootstrap(workup_app)
-	
 	mail.init_app(workup_app)
+	executor.init_app(workup_app)
 	
 	# Import templates
 	from app.errors import bp as errors_bp
