@@ -50,7 +50,8 @@ def selectFromDb (columnsArray, fromTable, conditionsArray = False, count = Fals
 
 
 class ClassLibraryFile (db.Model):
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
 	turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
 	library_upload_id = db.Column(db.Integer, db.ForeignKey('library_upload.id'))
 	
@@ -58,7 +59,8 @@ class ClassLibraryFile (db.Model):
 		return '<Class Library File {}>'.format(self.id)
 	
 class LibraryDownload(db.Model):
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
 	library_upload_id = db.Column(db.Integer, db.ForeignKey('library_upload.id'))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -67,7 +69,8 @@ class LibraryDownload(db.Model):
 		return '<Download {}>'.format(self.filename)
 
 class LibraryUpload (db.Model):
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
 	original_filename = db.Column(db.String(140))
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
@@ -79,6 +82,7 @@ class LibraryUpload (db.Model):
 		return '<Library Upload {}>'.format(self.original_filename)
 
 class Turma(db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
 	id = db.Column(db.Integer, primary_key=True, index = True)
 	turma_number = db.Column(db.String(140))
 	turma_label = db.Column(db.String(280))
@@ -107,7 +111,8 @@ class Turma(db.Model):
 	
 	
 class Enrollment (db.Model):
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
 	
@@ -116,7 +121,8 @@ class Enrollment (db.Model):
 	
 
 class User(UserMixin, db.Model):
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(64), index=True, unique=True)
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
@@ -153,7 +159,8 @@ class User(UserMixin, db.Model):
 			db.session.commit()
 	
 class AssignmentTaskFile(db.Model):
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
 	original_filename = db.Column(db.String(140))
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
@@ -165,7 +172,8 @@ class AssignmentTaskFile(db.Model):
 
 
 class Upload(db.Model):
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
 	original_filename = db.Column(db.String(140))
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
@@ -177,7 +185,8 @@ class Upload(db.Model):
 	
 	
 class Download(db.Model):
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -188,8 +197,8 @@ class Download(db.Model):
 
 
 class Comment(db.Model):
-	
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
 	comment = db.Column(db.String(500))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -221,7 +230,8 @@ class Comment(db.Model):
 
 
 class Assignment(db.Model):
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(140))
 	description = db.Column(db.String(280))
 	due_date = db.Column(db.Date)
@@ -236,7 +246,8 @@ class Assignment(db.Model):
 		return '<Assignment {}>'.format(self.title)
 
 class PeerReviewForm(db.Model):
-	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(140))
 	description = db.Column(db.String(280))
 	serialised_form_data = db.Column(db.String(280))
