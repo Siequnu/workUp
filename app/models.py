@@ -102,6 +102,7 @@ class Turma(db.Model):
 		Turma.query.filter(Turma.id==turma_id).delete()
 		Assignment.query.filter(Assignment.target_turma_id==turma_id).delete()
 		ClassLibraryFile.query.filter(ClassLibraryFile.turma_id==turma_id).delete()
+		Enrollment.query.filter(Enrollment.turma_id==turma_id).delete()
 		db.session.commit()
 	
 	
