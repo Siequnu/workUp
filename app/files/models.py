@@ -11,6 +11,8 @@ import os, uuid, arrow
 from wand.image import Image
 from dateutil import tz
 
+from app import executor
+
 def new_library_upload_from_form (form):
 	file = form.library_upload_file.data
 	random_filename = app.files.models.save_file(file)
@@ -24,7 +26,7 @@ def new_library_upload_from_form (form):
 	db.session.flush() # Needed to access the library_upload.id in the next step
 	
 	# Generate thumbnail
-	get_thumbnail (library_upload.filename)
+	executor.submit(get_thumbnail, library_upload.filename)
 	
 	for turma_id in form.target_turmas.data:
 		new_class_library_file = ClassLibraryFile(library_upload_id = library_upload.id, turma_id = turma_id)
@@ -161,7 +163,7 @@ def save_assignment_file (file, assignment_id):
 	original_filename = secure_filename(file.filename)
 	random_filename = save_file (file)
 	
-	get_thumbnail (random_filename)
+	executor.submit(get_thumbnail, random_filename)
 	
 	# Update SQL after file has saved
 	upload = Upload(original_filename = original_filename, filename = random_filename,
