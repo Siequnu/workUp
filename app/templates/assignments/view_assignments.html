@@ -7,141 +7,163 @@
 <br>
   {% if admin %}
   <div class="row">
-       
-        <div class="col-md-8">
+	   
+    <div class="col-md-8">
 			<h1>Class assignments</h1>
    <hr>
-		</div>   
-    </div>
+   </div>   
+	</div>
    <a href="{{url_for('assignments.create_assignment')}}" <button class="btn btn-secondary"><i class="fa fa-plus-circle"></i> Create assignment</button></a>
   <br>
   <br>
-   <div class="container">
+   
+	
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+   {% for class in classes %}
+   {% if loop.index <= 1 %}
+  <li class="nav-item">
+   <a class="nav-link active" id="{{class.id}}-tab" data-toggle="tab" href="#{{class.id}}" role="tab" aria-controls="{{class.id}}" aria-selected="true">{{class.turma_label}}</a>
+   </li>
+    {% else %}
+    <li class="nav-item">
+   <a class="nav-link" id="{{class.id}}-tab" data-toggle="tab" href="#{{class.id}}" role="tab" aria-controls="{{class.id}}" aria-selected="false">{{class.turma_label}}</a>
+   </li>
+   {% endif %}
+   {% endfor %}
+    </ul>
+	
+ <div class="tab-content" id="myTabContent">
+  {% for class in classes %}
+  {% if loop.index <= 1 %}
+   <div class="tab-pane fade show active" id="{{class.id}}" role="tabpanel" aria-labelledby="{{class.id}}-tab">
+  {% else %}
+   <div class="tab-pane fade" id="{{class.id}}" role="tabpanel" aria-labelledby="{{class.id}}-tab">
+  {% endif %}
+	  <br>
+   
+	  {% for assignment, user, turma, uploaded_assignments, uncomplete_assignments, assignment_task_filename in assignments_array %}
+		
+    {% if assignment.target_turma_id == class.id %}  
+					
+     
+     <div class="card bg-light mb-3">
+   <div class="card-body">
+		 
+		 <div class="container">
+		<div class="row">
+			<div class="col-2 text-center">
+				<h1 class="display-5"><span class="badge badge-secondary"><i class="fa fa-check "></i> {{uploaded_assignments|length}}</span></h1>
+				<h1 class="display-5"><span class="badge badge"><i class="fas fa-circle-notch fa-spin"></i> {{uncomplete_assignments}}</span></h1>
+			</div>
+			<div class="col-10">
+				<h3 class="text"><strong>{{assignment.title}}</strong></h3>
+				<ul class="list-inline">
+					<li class="list-inline-item"><i class="fa fa-calendar-check" aria-hidden="true"></i> due on {{assignment.due_date}}</li>
+     <li class="list-inline-item"><i class="fa fa-file" aria-hidden="true"></i> {{assignment.peer_review_form}}</li>
+     <li class="list-inline-item"><i class="fa fa-info-circle" aria-hidden="true"></i> {{ assignment_task_filename|default('') }}</li>
+				</ul>
+				<em>{{assignment.description}}</em>
+			</div>
+		</div>
+	</div>
+		
+		</div>
+		<div class="card-footer float-right">
+	    <a href="{{url_for('assignments.view_assignment_details', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-outline-primary "><i class="fa fa-folder-open"></i> View uploads </button></a>
+     <a href="{{url_for('assignments.edit_assignment', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-outline-warning"><i class="fa fa-edit"></i> Edit </button></a>
+	   <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-outline-danger float-right"><i class="fa fa-trash-alt"></i> Delete </button></a>
+		  </div>
+		</div>
+		
+     
+     
+     
+     
+     
+	   {% endif %}
+	  {% endfor %}
+
+	</div>
+  {% endfor %}
+	
+ </div>
+ </div>
 
   
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="table-responsive">
-            <table summary="The following assignments have been made" class="table table-bordered table-hover">
-        	  <thead>
-              <tr>
-              <th>Class</th>
-              <th>Title</th>
-              <th>Description</th>
-        		  <th>Due</th>
-        		  
-            <th>Review</th>
-        		  <th>Peer review form</th>
-        		  <th>Actions</th>
-            </tr>
-          </thead>
-		  <tbody>
-			{% for assignment, user, turma in assignmentsArray %}
-            <tr>
-               <td>{{turma.turma_label}}</td>
-              <td>{{assignment.title}}</td>
-              <td>{{assignment.description}}</td>
-			  <td>{{assignment.due_date.strftime('%d %b')}}</td>
-             
-             
-             {% if assignment.peer_review_necessary == True %}
-               <td><button class="btn btn-sm btn-secondary"><i class="fa fa-check-circle"></i></button></td>
-              {% else %}
-               <td><button class="btn btn-sm btn-secondary"><i class="fa fa-times-circle"></i></button></td>
-              {% endif %}
-              
-			  <td>{{assignment.peer_review_form}}</td>
-			  <td>
-       <a href="{{url_for('assignments.view_assignment_details', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-primary btn-block"><i class="fa fa-folder-open"></i> View uploads </button></a>
-       <a href="{{url_for('assignments.edit_assignment', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-warning btn-block"><i class="fa fa-edit"></i> Edit </button></a>
-       <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment.id)}}" <button class="btn btn-sm btn-danger btn-block"><i class="fa fa-trash-alt"></i> Delete </button></a>  
-     </td>
-            </tr>
-           {% endfor %}
-          </tbody>
-          <tfoot>
-            <tr>
-            </tr>
-          </tfoot>
-        </table>
-      </div><!--end of .table-responsive-->
-    </div>
-  </div>
-</div>
    
    {% elif assignmentsArray %}
   
-    <div class="row">
-         <div class="col-md-3">
-      			<h1>Assignments</h1>
-    		</div>
-     </div>
+	<div class="row">
+		 <div class="col-md-3">
+				<h1>Assignments</h1>
+			</div>
+	 </div>
  
  <hr>          
   
-    {% for assignment in assignmentsArray %}
-        <div class="card bg-light mb-3">
-        <div class="card-body">
-         
-         <div class="container">
+	{% for assignment in assignmentsArray %}
+		<div class="card bg-light mb-3">
+		<div class="card-body">
+		 
+		 <div class="container">
 		<div class="row">
 			<div class="col-2 text-center">
 				<h1 class="display-4"><span class="badge badge-secondary">{{assignment['due_date'].strftime('%d')}}</span></h1>
 				<h2>{{assignment['due_date'].strftime('%b')|upper}}</h2>
 			</div>
 			<div class="col-10">
-				<h3 class="text-uppercase"><strong>{{assignment['title']}}</strong></h3>
+				<h3 class="text"><strong>{{assignment['title']}}</strong></h3>
 				<ul class="list-inline">
-				    <li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i>due on {{assignment['due_date'].strftime('%A')}}, {{assignment['humanized_due_date']}}</li>
+					<li class="list-inline-item"><i class="fa fa-calendar" aria-hidden="true"></i> due on {{assignment['due_date'].strftime('%A')}}, {{assignment['humanized_due_date']}}</li>
 				</ul>
-				<p><em>{{assignment['description']}}</p></em>
+				<em>{{assignment['description']}}</em>
 			</div>
 		</div>
 	</div>
-        
-        </div>
-        <div class="card-footer">
-                 {% if assignment['submitted_filename'] %}                   
-                        <a href="" <button class="btn btn-secondary btn-lg btn-sm disabled"><i class="fa fa-file-alt"></i> {{assignment['submitted_filename']}} </button></a>
-                     
-                     {% if assignment['peer_review_necessary'] == True %}                   
-                     
-                        {% if assignment['complete_peer_review_count'] == 0 %}
-                           
-                            <a href="{{url_for('files.download_file', assignment_id = assignment['id'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 1</a>
-                               <a href="#" class="btn btn-default btn-sm disabled" role="button" disabled="true">Submit Review 2</a>
-                     
-                         {% elif assignment['complete_peer_review_count'] == 1 %}
-                            <a href="{{url_for('assignments.view_peer_review', comment_id=assignment['completed_peer_review_objects'][0].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
-                           <a href="{{url_for('files.download_file', assignment_id = assignment['id'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 2</a>
-                         {% elif assignment['complete_peer_review_count'] == 2 %}
-                         <a href="{{url_for('assignments.view_peer_review', comment_id=assignment['completed_peer_review_objects'][0].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
-                         <a href="{{url_for('assignments.view_peer_review', comment_id=assignment['completed_peer_review_objects'][1].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 2</a>
-                         {% endif %}
-                     {% else %}
-                      <a href="" class="btn btn-info btn-lg btn-sm disabled " role="button" aria-disabled="true">This assignment will not be peer-reviewed</a>
-                     
-                     {% endif %}
-                {% else %}
-                    {% if assignment['assignment_is_past_deadline'] %}
-                      <a href="#" class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true"><i class="fa fa-clock"></i> Assignment overdue.</a>
-                    {% else %}
-                        <a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}" <button class="btn btn-sm btn-warning"><i class="fa fa-file-upload"></i> Upload your assignment </button></a>
-                        
-                    {% endif %}
-              
-            {% endif %}
-      
-          </div>
-        </div>
-        
-        
-      
-        {% endfor %}
-        
-      
-      {% else %}
-      	You have no assignments at present.
-    	{% endif %}
+		
+		</div>
+		<div class="card-footer">
+				 {% if assignment['submitted_filename'] %}                   
+						<a href="" <button class="btn btn-secondary btn-lg btn-sm disabled"><i class="fa fa-file-alt"></i> {{assignment['submitted_filename']}} </button></a>
+					 
+					 {% if assignment['peer_review_necessary'] == True %}                   
+					 
+						{% if assignment['complete_peer_review_count'] == 0 %}
+						   
+							<a href="{{url_for('files.download_file', assignment_id = assignment['id'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 1</a>
+							   <a href="#" class="btn btn-default btn-sm disabled" role="button" disabled="true">Submit Review 2</a>
+					 
+						 {% elif assignment['complete_peer_review_count'] == 1 %}
+							<a href="{{url_for('assignments.view_peer_review', comment_id=assignment['completed_peer_review_objects'][0].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
+						   <a href="{{url_for('files.download_file', assignment_id = assignment['id'])}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">Submit Review 2</a>
+						 {% elif assignment['complete_peer_review_count'] == 2 %}
+						 <a href="{{url_for('assignments.view_peer_review', comment_id=assignment['completed_peer_review_objects'][0].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 1</a>
+						 <a href="{{url_for('assignments.view_peer_review', comment_id=assignment['completed_peer_review_objects'][1].id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View Review 2</a>
+						 {% endif %}
+					 {% else %}
+					  <a href="" class="btn btn-info btn-lg btn-sm disabled " role="button" aria-disabled="true">This assignment will not be peer-reviewed</a>
+					 
+					 {% endif %}
+				{% else %}
+					{% if assignment['assignment_is_past_deadline'] %}
+					  <a href="#" class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true"><i class="fa fa-clock"></i> Assignment overdue.</a>
+					{% else %}
+						<a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}" <button class="btn btn-sm btn-warning"><i class="fa fa-file-upload"></i> Upload your assignment </button></a>
+						
+					{% endif %}
+			  
+			{% endif %}
+	  
+		  </div>
+		</div>
+		
+		
+	  
+		{% endfor %}
+		
+	  
+	  {% else %}
+		You have no assignments at present.
+		{% endif %}
   </div>
 {% endblock %}

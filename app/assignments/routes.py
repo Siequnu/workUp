@@ -90,7 +90,11 @@ def view_assignments():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		# Get admin view with all assignments
 		clean_assignments_array = app.assignments.models.get_all_assignments_info()
-		return render_template('assignments/view_assignments.html', assignmentsArray = clean_assignments_array, admin = True)
+		classes = app.assignments.models.get_all_class_info()
+		return render_template('assignments/view_assignments.html',
+							   assignments_array = clean_assignments_array,
+							   admin = True,
+							   classes=classes)
 	elif current_user.is_authenticated:
 		# Get user class
 		if Enrollment.query.filter(Enrollment.user_id==current_user.id).first() is not None:
