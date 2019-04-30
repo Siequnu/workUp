@@ -3,7 +3,8 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap #This loads bootstrap-flask
+from flask_mail import Mail
 import logging, os
 from logging.handlers import RotatingFileHandler
 
@@ -12,57 +13,64 @@ migrate = Migrate()
 login = LoginManager()
 login.login_view = 'user.login'
 bootstrap = Bootstrap()
+mail = Mail()
 
 def create_app(config_class=Config):
-	workUpApp = Flask(__name__)
-	workUpApp.config.from_object(config_class)
-	db.init_app(workUpApp)
+	workup_app = Flask(__name__)
+	workup_app.config.from_object(config_class)
+	db.init_app(workup_app)
+
 	
-	migrate.init_app(workUpApp, db)
-	workUpApp.app_context().push()
+	migrate.init_app(workup_app, db)
+	workup_app.app_context().push()
 	
-	login.init_app(workUpApp)
-	bootstrap = Bootstrap(workUpApp)
+	login.init_app(workup_app)
+	bootstrap = Bootstrap(workup_app)
+	
+	mail.init_app(workup_app)
 	
 	# Import templates
 	from app.errors import bp as errors_bp
-	workUpApp.register_blueprint(errors_bp)
+	workup_app.register_blueprint(errors_bp)
 
 	from app.user import bp as user_bp
-	workUpApp.register_blueprint(user_bp, url_prefix='/user')
+	workup_app.register_blueprint(user_bp, url_prefix='/user')
 	
 	from app.files import bp as files_bp
-	workUpApp.register_blueprint(files_bp, url_prefix='/files')
+	workup_app.register_blueprint(files_bp, url_prefix='/files')
 	
 	from app.assignments import bp as assignments_bp
-	workUpApp.register_blueprint(assignments_bp, url_prefix='/assignments')
+	workup_app.register_blueprint(assignments_bp, url_prefix='/assignments')
 	
 	from app.main import bp as main_bp
-	workUpApp.register_blueprint(main_bp)
+	workup_app.register_blueprint(main_bp)
 	
 	# Create an uploads folder if non-existant
-	if not os.path.exists(os.path.join(workUpApp.config['UPLOAD_FOLDER'])):
-		os.mkdir(workUpApp.config['UPLOAD_FOLDER'])
+	if not os.path.exists(os.path.join(workup_app.config['UPLOAD_FOLDER'])):
+		os.mkdir(workup_app.config['UPLOAD_FOLDER'])
 		
 	# Create a thumbnails folder if non-existant
-	if not os.path.exists(os.path.join(workUpApp.config['THUMBNAIL_FOLDER'])):
-		os.mkdir(workUpApp.config['THUMBNAIL_FOLDER'])
+	if not os.path.exists(os.path.join(workup_app.config['THUMBNAIL_FOLDER'])):
+		os.mkdir(workup_app.config['THUMBNAIL_FOLDER'])
 	
 	# Log errors to local log
-	if not workUpApp.debug and not workUpApp.testing:
-		logsPath = os.path.join(workUpApp.config['APP_ROOT'], 'logs')
+	if not workup_app.debug and not workup_app.testing:
+		logsPath = os.path.join(workup_app.config['APP_ROOT'], 'logs')
 		if not os.path.exists(os.path.join(logsPath)):
 			os.mkdir(logsPath)
-		file_handler = RotatingFileHandler(os.path.join(logsPath, 'workUpApp.log'), maxBytes=10240, backupCount=10)
+		file_handler = RotatingFileHandler(os.path.join(logsPath, 'workup_app.log'), maxBytes=10240, backupCount=10)
 		file_handler.setFormatter(logging.Formatter(
 			'%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
 		file_handler.setLevel(logging.INFO)
-		workUpApp.logger.addHandler(file_handler)
+		workup_app.logger.addHandler(file_handler)
 		
-		workUpApp.logger.setLevel(logging.INFO)
-		workUpApp.logger.info('workUpApp startup')
+		workup_app.logger.setLevel(logging.INFO)
+		workup_app.logger.info('WorkUp App startup')
+	
+	db.create_all()
+	db.session.commit()
 		
-	return workUpApp
+	return workup_app
 
 # Import other classes
 from app import models

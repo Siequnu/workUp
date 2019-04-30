@@ -1,17 +1,14 @@
-from flask import render_template, request, send_file, redirect, url_for, send_from_directory, flash, abort, current_app
-from random import randint
-import os, datetime, json
-
+from flask import render_template, flash, current_app
 from flask_login import current_user, login_required
-from app.models import Turma, Upload, Comment, Assignment, Download, User, Enrollment, ClassLibraryFile, Assignment
-from app import db
 
-db.create_all()
-db.session.commit()
+import datetime
 
-from app.main import bp
+from app.models import Assignment, Enrollment, ClassLibraryFile, Assignment
 import app.assignments.models
+from app import db
+from app.main import bp
 import app.user
+import app.email_model
 
 @bp.before_request
 def before_request():
