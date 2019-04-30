@@ -5,7 +5,7 @@ from flask_login import login_required
 import app.assignments.models
 from app import db
 from app.files import bp, models, forms
-from app.models import Comment, Download, Upload, Turma
+from app.models import Comment, Download, Upload, Turma, ClassLibraryFile, Enrollment
 
 import random
 
@@ -163,7 +163,10 @@ def class_library():
 @login_required
 def download_library_file(library_upload_id):
 	# Check if the user is part of this file's class
-	if app.models.is_admin(current_user.username):	
+	if app.models.is_admin(current_user.username) or db.session.query(ClassLibraryFile).join(
+		Enrollment, ClassLibraryFile.turma_id == Enrollment.turma_id).filter(
+		Enrollment.user_id == current_user.id).filter(
+		ClassLibraryFile.library_upload_id == library_upload_id).first() is not None:
 		return app.files.models.download_library_file (library_upload_id)
 	abort (403)
 
