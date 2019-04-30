@@ -144,7 +144,7 @@ class User(UserMixin, db.Model):
 	
 	@staticmethod
 	def remove_admin_rights(user_id):
-		if user_id != '1': # Can't remove original admin
+		if int(user_id) != 1: # Can't remove original admin
 			user = User.query.get(user_id)
 			user.is_admin = False
 			db.session.commit()
