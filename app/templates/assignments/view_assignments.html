@@ -51,9 +51,8 @@
 		 
 		 <div class="container">
 		<div class="row">
-			<div class="col-2 text-center">
-				<h1 class="display-5"><span class="badge badge-secondary"><i class="fa fa-check "></i> {{uploaded_assignments|length}}</span></h1>
-				<h1 class="display-5"><span class="badge badge"><i class="fas fa-circle-notch fa-spin"></i> {{uncomplete_assignments}}</span></h1>
+			<div class="col-2 align-self-center">
+				<h2 class="display-5"><span class="badge badge-secondary"><i class="fa fa-check "></i> {{uploaded_assignments|length}} / {{uncomplete_assignments}}</span></h2>
 			</div>
 			<div class="col-10">
 				<h3 class="text"><strong>{{assignment.title}}</strong></h3>
