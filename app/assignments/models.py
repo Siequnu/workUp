@@ -10,9 +10,38 @@ from dateutil import tz
 import arrow, json, time
 
 def get_all_assignments_info (): 
-	return db.session.query(Assignment, User, Turma).join(
+	assignments_array = []
+	for assignment, user, turma in db.session.query(Assignment, User, Turma).join(
 		User, Assignment.created_by_id == User.id).join(
-		Turma, Assignment.target_turma_id==Turma.id).all()
+		Turma, Assignment.target_turma_id==Turma.id).all():
+		students_in_class = Enrollment.query.filter(Enrollment.turma_id == turma.id).all()
+		completed_assignments = Upload.query.filter(Upload.assignment_id == assignment.id).all()
+		uncomplete_assignments = len(students_in_class) - len(completed_assignments)
+		if assignment.assignment_task_file_id is not None:
+			assignment_task_filename = AssignmentTaskFile.query.get(assignment.assignment_task_file_id).original_filename
+		else:
+			assignment_task_filename = False
+		assignment_dict = assignment, user, turma, completed_assignments, uncomplete_assignments, assignment_task_filename
+		assignments_array.append (assignment_dict)
+	return assignments_array
+
+def object_to_dict(obj, found=None):
+    if found is None:
+        found = set()
+    mapper = class_mapper(obj.__class__)
+    columns = [column.key for column in mapper.columns]
+    get_key_value = lambda c: (c, getattr(obj, c).isoformat()) if isinstance(getattr(obj, c), datetime) else (c, getattr(obj, c))
+    out = dict(map(get_key_value, columns))
+    for name, relation in mapper.relationships.items():
+        if relation not in found:
+            found.add(relation)
+            related_obj = getattr(obj, name)
+            if related_obj is not None:
+                if relation.uselist:
+                    out[name] = [object_to_dict(child, found) for child in related_obj]
+                else:
+                    out[name] = object_to_dict(related_obj, found)
+    return out
 
 def get_user_enrollment_from_id (user_id):
 	return db.session.query(Enrollment, User, Turma).join(
