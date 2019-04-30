@@ -1,12 +1,13 @@
-from app import db
+from flask_login import current_user
+
 import app.models
+from app import db
 from app.models import Upload, Download, Assignment, User, Comment, AssignmentTaskFile, Turma, Enrollment
 from app.files import models
-import datetime, time
+
 from datetime import datetime, date
 from dateutil import tz
-from flask_login import current_user
-import arrow, json
+import arrow, json, time
 
 def get_all_assignments_info (): 
 	return db.session.query(Assignment, User, Turma).join(

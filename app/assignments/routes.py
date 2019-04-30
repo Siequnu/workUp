@@ -12,7 +12,6 @@ from app import db
 
 import json
 
-# Forms
 from app.main.forms import FormModel
 from app.assignments.forms_peer_review import *
 
