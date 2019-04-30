@@ -50,7 +50,7 @@ def selectFromDb (columnsArray, fromTable, conditionsArray = False, count = Fals
 
 
 class ClassLibraryFile (db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
 	library_upload_id = db.Column(db.Integer, db.ForeignKey('library_upload.id'))
 	
@@ -58,7 +58,7 @@ class ClassLibraryFile (db.Model):
 		return '<Class Library File {}>'.format(self.id)
 	
 class LibraryDownload(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	library_upload_id = db.Column(db.Integer, db.ForeignKey('library_upload.id'))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -67,7 +67,7 @@ class LibraryDownload(db.Model):
 		return '<Download {}>'.format(self.filename)
 
 class LibraryUpload (db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	original_filename = db.Column(db.String(140))
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
@@ -79,8 +79,8 @@ class LibraryUpload (db.Model):
 		return '<Library Upload {}>'.format(self.original_filename)
 
 class Turma(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	turma_number = db.Column(db.String(140), index=True)
+	id = db.Column(db.Integer, primary_key=True, index = True)
+	turma_number = db.Column(db.String(140))
 	turma_label = db.Column(db.String(280))
 	turma_term = db.Column(db.String(140))
 	turma_year = db.Column(db.Integer)
@@ -100,11 +100,13 @@ class Turma(db.Model):
 	@staticmethod
 	def delete_turma_from_id (turma_id):
 		Turma.query.filter(Turma.id==turma_id).delete()
+		Assignment.query.filter(Assignment.target_turma_id==turma_id).delete()
+		ClassLibraryFile.query.filter(ClassLibraryFile.turma_id==turma_id).delete()
 		db.session.commit()
 	
 	
 class Enrollment (db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
 	
@@ -113,7 +115,7 @@ class Enrollment (db.Model):
 	
 
 class User(UserMixin, db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	username = db.Column(db.String(64), index=True, unique=True)
 	email = db.Column(db.String(120), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
@@ -162,7 +164,7 @@ class AssignmentTaskFile(db.Model):
 
 
 class Upload(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	original_filename = db.Column(db.String(140))
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
@@ -174,7 +176,7 @@ class Upload(db.Model):
 	
 	
 class Download(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -186,7 +188,7 @@ class Download(db.Model):
 
 class Comment(db.Model):
 	
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	comment = db.Column(db.String(500))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -218,7 +220,7 @@ class Comment(db.Model):
 
 
 class Assignment(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	title = db.Column(db.String(140))
 	description = db.Column(db.String(280))
 	due_date = db.Column(db.Date)
@@ -233,7 +235,7 @@ class Assignment(db.Model):
 		return '<Assignment {}>'.format(self.title)
 
 class PeerReviewForm(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	title = db.Column(db.String(140))
 	description = db.Column(db.String(280))
 	serialised_form_data = db.Column(db.String(280))
