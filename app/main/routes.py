@@ -8,7 +8,6 @@ import app.assignments.models
 from app import db
 from app.main import bp
 import app.user
-import app.email_model
 
 @bp.before_request
 def before_request():

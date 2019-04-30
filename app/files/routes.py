@@ -1,23 +1,13 @@
 from flask import render_template, flash, redirect, url_for, request, current_app, send_file, abort
 from flask_login import current_user
-
-# Login
 from flask_login import login_required
-from app import db
 
 import app.assignments.models
-
-from app.files import bp
-from app.files import models, forms
-from app.models import Comment, Download, Upload, Assignment, Turma
+from app import db
+from app.files import bp, models, forms
+from app.models import Comment, Download, Upload, Turma
 
 import random
-import os, datetime, json
-
-
-# Forms
-from app.main.forms import FormModel
-from app.assignments.forms_peer_review import *
 
 # Access file stats
 @bp.route("/file_stats")

@@ -1,16 +1,15 @@
-from app import db, models
 from flask import send_from_directory, current_app
-from werkzeug import secure_filename
-import os, uuid, datetime, arrow
-from dateutil import tz
+from flask_login import current_user
 
+from app import db
+from app.models import User, Upload, Download, Assignment, Comment, LibraryUpload, ClassLibraryFile, Enrollment, Turma, LibraryDownload
 import app.files
 
-from flask_login import current_user
-from app.models import User, Upload, Download, Assignment, Comment, LibraryUpload, ClassLibraryFile, Enrollment, Turma, LibraryDownload
-from sqlalchemy import func
+from werkzeug import secure_filename
 
+import os, uuid, arrow
 from wand.image import Image
+from dateutil import tz
 
 def new_library_upload_from_form (form):
 	file = form.library_upload_file.data
