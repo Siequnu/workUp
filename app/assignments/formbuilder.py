@@ -82,10 +82,17 @@ class formLoader:
 
 		return html
 	
-	def get_element_data (self, id):
+	def get_text_element_data (self, id):
 		if self.data_array is not False:
 			if id in self.data_array:
 				return self.data_array[id]		
+		return ''
+	
+	def get_select_multiple_checked_choice (self, id, choice):
+		if self.data_array is not False:
+			if id in self.data_array:
+				if self.data_array[id] == choice:
+					return 'checked'
 		return ''
 	
 	def element_single_line_text(self, field):
@@ -97,7 +104,7 @@ class formLoader:
 			
 		html = '''<div class="form-group">'''
 		html += self.make_label(id, field['title'], required)
-		html += '''<input type="text" name="{0}" id="{0}" value="{2}" class="form-control {1}">'''.format(id, required, self.get_element_data(id))
+		html += '''<input type="text" name="{0}" id="{0}" value="{2}" class="form-control {1}">'''.format(id, required, self.get_text_element_data(id))
 		html += '''</div>'''
 
 		return html
@@ -111,7 +118,9 @@ class formLoader:
 
 		html = '''<div class="form-group">'''
 		html += self.make_label(id, field['title'], required)
-		html += '''<input type="number" name="{0}" id="{0}" class="form-control {1}">'''.format(id, required)
+		html += '''<input type="number" name="{0}" value="{2}" id="{0}" class="form-control {1}">'''.format(id,
+																											required,
+																											self.get_text_element_data(id))
 		html += '''</div>'''
 
 		return html
@@ -125,7 +134,9 @@ class formLoader:
 
 		html = '''<div class="form-group">'''
 		html += self.make_label(id, field['title'], required)
-		html += '''<textarea id="{0}" name="{0}" value="{2}" class="form-control {1}" rows="3"></textarea>'''.format(id, required, self.get_element_data(id))
+		html += '''<textarea id="{0}" name="{0}" class="form-control {1}" rows="3">{2}</textarea>'''.format(id,
+																													 required,
+																													 self.get_text_element_data(id))
 		html += '''</div>'''
 
 		return html
@@ -141,14 +152,20 @@ class formLoader:
 		html += self.make_label(id, field['title'], required)
 
 		for i in range(len(field['choices'])):
-			checked = 'checked' if field['choices'][i]['checked'] else ''
+			field_name = "{0}_{1}".format(id, i)
+			print (field_name, field['choices'][i]['value'])
 
 			html += '''<div class="checkbox"><label>'''
-			html += '''<input type="checkbox" name="{0}_{1}" id="{0}-{1}" value="{2}" {3}>{4}'''.format(id, i, field['choices'][i]['value'], checked, field['choices'][i]['title'])
+			html += '''<input type="checkbox" name="{0}_{1}" id="{0}-{1}" value="{2}" {3}>{4}'''.format(id,
+																										i,
+																										field['choices'][i]['value'],
+																										self.get_select_multiple_checked_choice(field_name, field['choices'][i]['value']),
+																										field['choices'][i]['title'])
 			html += '''</label></div>'''
+			
 
 		html += '''</div>'''
-
+		
 		return html
 
 	def element_multiple_choice(self, field):
@@ -162,8 +179,8 @@ class formLoader:
 		html += self.make_label(id, field['title'], required)
 
 		for i in range(len(field['choices'])):
-			checked = 'checked' if field['choices'][i]['checked'] else ''
-
+			checked = self.get_select_multiple_checked_choice(id, field['choices'][i]['value'])
+			
 			html += '''<div class="radio"><label>'''
 			html += '''<input type="radio" name="{0}" id="{0}_{1}" value="{2}" {3}>{4}'''.format(id, i, field['choices'][i]['value'], checked, field['choices'][i]['title'])
 			html += '''</label></div>'''
@@ -184,7 +201,7 @@ class formLoader:
 		html += '''<select name="{0}" id="{0}" class="form-control {1}">'''.format(id, required)
 
 		for choice in field['choices']:
-			checked = 'selected' if choice['checked'] else ''
+			checked = self.get_select_multiple_checked_choice(id, field['choices'][i]['value'])
 			html += '''<option value="{0}" {1}>{2}</option>'''.format(choice['value'], checked, choice['title'])
 
 		html += '</select></div>'
