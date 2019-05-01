@@ -60,12 +60,12 @@
              
               
               <td>
-               <p><a href="{{url_for('user.edit_user', user_id = user.id)}}" class="btn btn-primary btn-sm" role="button"><i class="fa fa-user-edit"></i> Edit user</a></p>
+               <a href="{{url_for('user.edit_user', user_id = user.id)}}" class="btn btn-primary btn-sm btn-block" role="button"><i class="fa fa-user-edit"></i></a>
                
                 {% if user.is_admin==True %}
-               <a href="{{url_for('user.remove_admin_rights', user_id = user.id)}}" class="btn btn-danger btn-sm" role="button"><i class="fa fa-user-slash"></i> Remove admin</a>
+               <a href="{{url_for('user.remove_admin_rights', user_id = user.id)}}" class="btn btn-danger btn-sm btn-block" role="button"><i class="fa fa-user-slash"></i></a>
               {% else %}
-               <a href="{{url_for('user.give_admin_rights', user_id = user.id)}}" class="btn btn-warning btn-sm" role="button"><i class="fa fa-user-tie"></i> Add admin</a>
+               <a href="{{url_for('user.give_admin_rights', user_id = user.id)}}" class="btn btn-warning btn-sm btn-block" role="button"><i class="fa fa-user-tie"></i></a>
               {% endif %}
               </td>
             </tr>

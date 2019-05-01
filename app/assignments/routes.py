@@ -1,19 +1,16 @@
-from flask import render_template, flash, redirect, url_for, request, abort
+from flask import render_template, flash, redirect, url_for, request, abort, current_app
 from flask_login import current_user, login_required
 
 from app.assignments import bp, models, forms
 from app.assignments.forms import TurmaCreationForm, AssignmentCreationForm
 
 from app.files import models
-from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile, Enrollment
+from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile, Enrollment, PeerReviewForm
 import app.models
 
 from app import db
 
 import json
-
-from app.main.forms import FormModel
-from app.assignments.forms_peer_review import *
 
 ########## Student class (turma) methods
 @bp.route("/class/create", methods=['GET', 'POST'])
@@ -84,7 +81,7 @@ def delete_class(turma_id):
 ########################################
 
 # View created assignments status
-@bp.route("/view/")
+@bp.route("/view/", methods=['GET', 'POST'])
 @login_required
 def view_assignments():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
@@ -129,6 +126,7 @@ def view_assignment_details(assignment_id):
 def create_assignment():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = app.assignments.forms.AssignmentCreationForm()
+		form.peer_review_form.choices = [(peer_review_form.id, peer_review_form.title) for peer_review_form in PeerReviewForm.query.all()]
 		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
 			app.assignments.models.new_assignment_from_form(form)
@@ -144,6 +142,7 @@ def edit_assignment(assignment_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		assignment = Assignment.query.get(assignment_id)
 		form = AssignmentCreationForm(obj=assignment)
+		form.peer_review_form.choices = [(peer_review_form.id, peer_review_form.title) for peer_review_form in PeerReviewForm.query.all()]
 		del form.target_turmas, form.assignment_task_file
 		if form.validate_on_submit():
 			form.populate_obj(assignment)
@@ -167,14 +166,23 @@ def delete_assignment(assignment_id):
 
 ############# User peer review routes
 # Display an empty review feedback form
-@bp.route("/create_peer_review/<assignment_id>", methods=['GET', 'POST'])
+@bp.route("/review/<assignment_id>", methods=['GET', 'POST'])
 def create_peer_review(assignment_id):
-	# Get the appropriate peer review form for the assignment via assignment ID
-	peer_review_form_name = Assignment.query.get(assignment_id).peer_review_form
-	form = eval(peer_review_form_name)()
-	if form.validate_on_submit():
+	peer_review_form_id = Assignment.query.get(assignment_id).peer_review_form	
+	form_data = PeerReviewForm.query.get(peer_review_form_id).serialised_form_data
+
+	form_loader = app.assignments.formbuilder.formLoader(form_data, (url_for('assignments.submit_peer_review', assignment_id=assignment_id)))
+	render_form = form_loader.render_form()
+	print (render_form)
+	return render_template('assignments/form_builder_render.html', render_form=render_form)
+	
+
+@bp.route('/review/submit/<assignment_id>', methods=['POST'])
+def submit_peer_review(assignment_id):
+	if request.method == 'POST':
+		form_contents = json.dumps(request.form)
 		# Submit form
-		if app.assignments.models.new_peer_review_from_form (form, assignment_id):
+		if app.assignments.models.new_peer_review_from_form (form_contents, assignment_id):
 			# The database is now updated with the comment - check the total completed comments
 			completed_comments = len(Comment.get_completed_peer_reviews_from_user_for_assignment (current_user.id, assignment_id))
 			if completed_comments == 1:
@@ -185,7 +193,9 @@ def create_peer_review(assignment_id):
 		else: # The user tried to submit a review without a pending review
 			flash('You need to download an assignment before you submit a peer review!')
 			return redirect(url_for('assignments.view_assignments'))
-	return render_template('files/peer_review_form.html', title='Submit a peer review', form=form)
+	else:
+		return redirect(url_for('assignments.view_assignments'))
+		
 
 # Display an empty review feedback form
 @bp.route("/create_teacher_review/<upload_id>", methods=['GET', 'POST'])
@@ -220,68 +230,94 @@ def view_peer_review(comment_id):
 		Comment.query.get(comment_id).file_id) or current_user.id is app.assignments.models.get_comment_author_id_from_comment(
 		comment_id):
 	
-		peer_review_form_name = db.session.query(Assignment).join(
+		peer_review_form_id = db.session.query(Assignment).join(
 			Comment, Assignment.id==Comment.assignment_id).filter(
 			Comment.id==comment_id).first().peer_review_form
 		
-		unpacked_comments = json.loads(Comment.query.get(comment_id).comment)
+		form_contents = json.loads(Comment.query.get(comment_id).comment)
 		
 		if current_user.id is app.assignments.models.get_comment_author_id_from_comment(
 		comment_id):
 			flash('You can not edit this peer review as it has already been submitted.')
 			
-		# Import the form class
-		form_class = getattr(app.assignments.forms_peer_review, peer_review_form_name)
-		# Populate the form
-		form = form_class(**unpacked_comments)
-		# Delete submit button
-		del form.submit
+		form_data = PeerReviewForm.query.get(peer_review_form_id).serialised_form_data
+
+		form_loader = app.assignments.formbuilder.formLoader(form_data,
+															 (url_for('assignments.view_assignments')),
+															 submit_label = 'Return',
+															 data_array = form_contents)
+		render_form = form_loader.render_form()
+		return render_template('assignments/form_builder_render.html', render_form=render_form)
 		
 		return render_template('files/peer_review_form.html', title='View a peer review', form=form)
 	else: abort (403)
 	
 ############# Peer review forms routes
-# Admin page to create new peer review form
+import app.assignments.formbuilder
+import json
+from flask import session, Response, request
+
+@bp.route("/form/builder")
+def form_builder():
+	return render_template('assignments/form_builder_index.html')
+
+@bp.route('/form/save', methods=['POST'])
+def save():
+	if request.method == 'POST':
+		form_data = request.form.get('formData')
+		if form_data == 'None':
+			return 'Error processing request'
+		else:
+			json_string = r'''{}'''.format(form_data)
+			json_data = json.loads(json_string)
+			
+			peer_review_form = PeerReviewForm()
+			peer_review_form.title = json_data['title']
+			peer_review_form.description = json_data['description']
+			peer_review_form.serialised_form_data = json.dumps(json_data)
+			db.session.add(peer_review_form)
+			db.session.commit()
+		session['form_data'] = form_data
+		print(form_data)
+	return 'True'
+
+@bp.route('/form/render')
+@bp.route('/form/render/<form_id>')
+def render(form_id = False):
+	if form_id:
+		form_data = PeerReviewForm.query.get(form_id).serialised_form_data
+	elif not session['form_data']:
+		redirect(url_for('main.index'))
+	else:
+		form_data = session['form_data']
+		session['form_data'] = None
+
+	form_loader = app.assignments.formbuilder.formLoader(form_data, (url_for('assignments.submit')))
+	render_form = form_loader.render_form()
+	print (render_form)
+	return render_template('assignments/form_builder_render.html', render_form=render_form)
+
+@bp.route('/form/delete/<form_id>')
+def delete_peer_review_form(form_id):
+	#!# Check if form is in use by any assignments?
+	
+	PeerReviewForm.query.filter(PeerReviewForm.id == form_id).delete()
+	db.session.commit()
+	flash ('Form deleted successfully.')
+	return (redirect(url_for('assignments.peer_review_form_admin')))
+
+@bp.route('/form/builder/submit', methods=['POST'])
+def submit():
+	if request.method == 'POST':
+		form = json.dumps(request.form)
+
+		return form
+
 @bp.route("/add_peer_review_form", methods=['GET', 'POST'])
 @login_required
 def add_peer_review_form():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		# If first form is completed, dynamically generate second form
-		if request.form:
-			# Remove csrf_token, submit fields to leave only the completed boxes
-			formDict = request.form.to_dict()
-			del formDict['csrf_token']
-			del formDict['submit']
-			# Sort dictionary by keys
-			sortedDict = json.dumps(formDict, sort_keys=True)
-			# Dynamically generate new form for title/label information
-			for questionNumber, fieldName in sortedDict:
-				if fieldName == 'TextAreaField':
-					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
-				elif fieldName == 'BooleanField':
-					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
-				elif fieldName == 'StringField':
-					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
-				elif fieldName == 'RadioField':
-					setattr(FormModel, questionNumber, TextAreaField(label=name, validators=[DataRequired()]))
-				FormModel.submit = SubmitField('Next step')
-				form = FormModel()
-			
-		else:
-			# Generate dynamic field names
-			numberOfFields = 10
-			i = 1
-			names = []
-			while i < numberOfFields:
-				names.append('Question ' + str(i))
-				i = i+1
-			questionTypes = [('StringField', 'StringField'), ('BooleanField', 'BooleanField'), ('RadioField', 'RadioField'), ('TextAreaField', 'TextAreaField')]
-			for name in names:
-				setattr(FormModel, name, RadioField(label=name, choices=questionTypes))
-			FormModel.submit = SubmitField('Next step')
-			form = FormModel()
-		
-		return render_template('assignments/add_peer_review_form.html', title='Create new peer review form', form=form)
+		return (redirect(url_for('assignments.form_builder')))
 	abort(403)
 
 # Admin page to view classes
@@ -289,7 +325,8 @@ def add_peer_review_form():
 @login_required
 def peer_review_form_admin():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-			return redirect(url_for('main.index'))
+		peer_review_forms = PeerReviewForm.query.all()
+		return render_template('assignments/manage_peer_review_forms.html', peer_review_forms=peer_review_forms)
 	abort (403)
 
 	
