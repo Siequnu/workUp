@@ -153,8 +153,6 @@ class formLoader:
 
 		for i in range(len(field['choices'])):
 			field_name = "{0}_{1}".format(id, i)
-			print (field_name, field['choices'][i]['value'])
-
 			html += '''<div class="checkbox"><label>'''
 			html += '''<input type="checkbox" name="{0}_{1}" id="{0}-{1}" value="{2}" {3}>{4}'''.format(id,
 																										i,

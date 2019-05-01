@@ -210,8 +210,12 @@ class Comment(db.Model):
 		return '<Comment {}>'.format(self.id)
 	
 	@staticmethod
-	def getPendingStatusFromUserIdAndAssignmentId (userId, assignmentId):
-		sql = text ('SELECT id, file_id FROM comment WHERE user_id=' + str(userId) + ' AND assignment_id=' + str(assignmentId) + ' AND pending=1')
+	def get_pending_status_from_user_id_and_assignment_id (user_id, assignment_id):
+		return Comment.query.filter(
+			Comment.user_id == user_id).filter(
+			Comment.assignment_id == assignment_id).filter(
+			Comment.pending == True).first()
+		#sql = text ('SELECT id, file_id FROM comment WHERE user_id=' + str(userId) + ' AND assignment_id=' + str(assignmentId) + ' AND pending=1')
 		result = db.engine.execute(sql)
 		names = []
 		for row in result: names.append(row)
