@@ -13,8 +13,7 @@ class AssignmentCreationForm(FlaskForm):
 	due_date = DateField('Due date:', validators=[DataRequired()])
 	target_turmas = SelectMultipleField('For classes', coerce=int, validators=[DataRequired()])
 	peer_review_necessary = BooleanField('Peer review necessary', default=True)
-	# Should be a SelectField, with default to BlankPeerReview
-	peer_review_form = StringField('Peer review form Class name', validators=[DataRequired()])
+	peer_review_form = SelectField('Peer review form', coerce=int, validators=[DataRequired()])
 	assignment_task_file = FileField(label='Assignment Task File')
 	submit = SubmitField('Create')
 	

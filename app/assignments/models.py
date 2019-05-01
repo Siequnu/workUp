@@ -194,15 +194,15 @@ def add_teacher_comment_to_upload (form_contents, upload_id):
 	db.session.commit()
 	return True
 
-def new_peer_review_from_form (form, assignment_id):
+def new_peer_review_from_form (form_contents, assignment_id):
 	# Serialise the form contents
-	form_fields = {}
-	for field_title, field_contents in form.data.items():
-		form_fields[field_title] = field_contents
+	#form_fields = {}
+	#for field_title, field_contents in form.data.items():
+	#form_fields[field_title] = field_contents
 	# Clean the csrf_token and submit fields
-	del form_fields['csrf_token']
-	del form_fields['submit']
-	form_contents = json.dumps(form_fields)
+	#del form_fields['csrf_token']
+	#del form_fields['submit']
+	#form_contents = json.dumps(form_fields)
 	
 	# Check if user has any previous downloads with pending peer reviews
 	pending_assignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignment_id)

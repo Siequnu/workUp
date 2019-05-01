@@ -7,7 +7,7 @@ from app import db
 from app.files import bp, models, forms
 from app.models import Comment, Download, Upload, Turma, ClassLibraryFile, Enrollment
 
-import random
+import random, os
 
 # Access file stats
 @bp.route("/file_stats")
