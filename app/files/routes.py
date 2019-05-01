@@ -32,13 +32,11 @@ def file_stats():
 @login_required
 def download_random_file(assignment_id):
 	# Check if user has any previous downloads with pending peer reviews
-	pending_assignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignment_id)
-	
-	if len(pending_assignments) > 0: # Returns (comment.id, comment.file_id)
+	pending_comment = Comment.get_pending_status_from_user_id_and_assignment_id (current_user.id, assignment_id)
+	if pending_comment is not None: # Returns (comment.id, comment.file_id)
 		# User has a pending assignment, send them the same file as before
-		already_downloaded_and_pending_review_file_id = pending_assignments[0][1]
 		flash('You have a peer review that you have not yet completed. You have redownloaded the same file.')
-		filename = Upload.query.get(already_downloaded_and_pending_review_file_id).filename
+		filename = Upload.query.get(pending_comment.file_id).filename
 		return models.download_file(filename)
 	
 	# Make sure not to give the same file to the same peer reviewer twice

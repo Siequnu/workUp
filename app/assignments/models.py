@@ -119,7 +119,6 @@ def get_assignment_upload_progress_bar_percentage (user_id):
 
 	completed_assignments = db.session.query(Assignment).join(
 		Upload, Assignment.id==Upload.assignment_id).filter(Upload.user_id==current_user.id).count()
-	print (assignments_for_user, completed_assignments)
 	if assignments_for_user > 0:
 		return int(float(completed_assignments)/float(assignments_for_user) * 100)
 	else:
@@ -195,22 +194,12 @@ def add_teacher_comment_to_upload (form_contents, upload_id):
 	return True
 
 def new_peer_review_from_form (form_contents, assignment_id):
-	# Serialise the form contents
-	#form_fields = {}
-	#for field_title, field_contents in form.data.items():
-	#form_fields[field_title] = field_contents
-	# Clean the csrf_token and submit fields
-	#del form_fields['csrf_token']
-	#del form_fields['submit']
-	#form_contents = json.dumps(form_fields)
-	
 	# Check if user has any previous downloads with pending peer reviews
-	pending_assignments = Comment.getPendingStatusFromUserIdAndAssignmentId (current_user.id, assignment_id)
-	if len(pending_assignments) > 0:
+	pending_assignment = Comment.get_pending_status_from_user_id_and_assignment_id (current_user.id, assignment_id)
+	if pending_assignment is not None:
 		# User has a pending peer review - update the empty comment field with the contents of this form and remove pending status
 		# If there is no pending status - user has not yet downloaded a file, so don't accept the review
-		pending_comment_id = pending_assignments[0][0]
-		update_comment = Comment.update_pending_comment_with_contents(pending_comment_id, form_contents)
+		Comment.update_pending_comment_with_contents(pending_assignment.id, form_contents)
 		return True
 	else:
 		return False
@@ -219,7 +208,6 @@ def new_peer_review_from_form (form_contents, assignment_id):
 def check_if_assignment_is_over (assignment_id):
 	due_date = Assignment.query.get(assignment_id).due_date
 	due_datetime = datetime(due_date.year, due_date.month, due_date.day)
-	# Format of date/time strings
 	date_format = "%Y-%m-%d"
 	# Create datetime objects from the strings
 	now = datetime.strptime(time.strftime(date_format), date_format)
