@@ -1,10 +1,10 @@
-{% extends "header.html" %}
+<link rel="stylesheet" href="/static/errors/500.css">
 
-{% block app_content %}
-<div class="container">
-<br>
-    <h1>An unexpected error has occurred</h1>
-    <p>The administrator has been notified. Sorry for the inconvenience!</p>
-    <p><a href="{{ url_for('main.index') }}">Back</a></p>
+<div class="error-500" data-text="A server error has occured. We will be back soon!">
+    <spaguetti>
+    <fork></fork>
+    <meat></meat>
+    <pasta></pasta>
+    <plate></plate>
+  </spaguetti>
 </div>
-{% endblock %}
