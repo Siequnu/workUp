@@ -215,11 +215,6 @@ class Comment(db.Model):
 			Comment.user_id == user_id).filter(
 			Comment.assignment_id == assignment_id).filter(
 			Comment.pending == True).first()
-		#sql = text ('SELECT id, file_id FROM comment WHERE user_id=' + str(userId) + ' AND assignment_id=' + str(assignmentId) + ' AND pending=1')
-		result = db.engine.execute(sql)
-		names = []
-		for row in result: names.append(row)
-		return names
 	
 	@staticmethod
 	def update_pending_comment_with_contents (comment_id, peer_review_contents):
@@ -243,7 +238,7 @@ class Assignment(db.Model):
 	target_turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	peer_review_necessary = db.Column(db.Boolean, default=False)
-	peer_review_form = db.Column(db.String(120)) # Should be peer_review_form_id, and db.ForeignKey
+	peer_review_form_id = db.Column(db.Integer, db.ForeignKey('peer_review_form.id'))
 	assignment_task_file_id = db.Column(db.Integer, db.ForeignKey('assignment_task_file.id'))
 	
 	def __repr__(self):

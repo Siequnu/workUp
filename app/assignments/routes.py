@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, abort, current_app
+from flask import render_template, flash, redirect, url_for, request, abort, current_app, session
 from flask_login import current_user, login_required
 
 from app.assignments import bp, models, forms
@@ -84,6 +84,8 @@ def delete_class(turma_id):
 @bp.route("/view/", methods=['GET', 'POST'])
 @login_required
 def view_assignments():
+	if 'flash_message' in session:
+		flash (session.pop('flash_message'))
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		# Get admin view with all assignments
 		clean_assignments_array = app.assignments.models.get_all_assignments_info()
@@ -126,7 +128,7 @@ def view_assignment_details(assignment_id):
 def create_assignment():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = app.assignments.forms.AssignmentCreationForm()
-		form.peer_review_form.choices = [(peer_review_form.id, peer_review_form.title) for peer_review_form in PeerReviewForm.query.all()]
+		form.peer_review_form_id.choices = [(peer_review_form.id, peer_review_form.title) for peer_review_form in PeerReviewForm.query.all()]
 		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
 			app.assignments.models.new_assignment_from_form(form)
@@ -142,7 +144,7 @@ def edit_assignment(assignment_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		assignment = Assignment.query.get(assignment_id)
 		form = AssignmentCreationForm(obj=assignment)
-		form.peer_review_form.choices = [(peer_review_form.id, peer_review_form.title) for peer_review_form in PeerReviewForm.query.all()]
+		form.peer_review_form_id.choices = [(peer_review_form.id, peer_review_form.title) for peer_review_form in PeerReviewForm.query.all()]
 		del form.target_turmas, form.assignment_task_file
 		if form.validate_on_submit():
 			form.populate_obj(assignment)
@@ -168,7 +170,7 @@ def delete_assignment(assignment_id):
 # Display an empty review feedback form
 @bp.route("/review/<assignment_id>", methods=['GET', 'POST'])
 def create_peer_review(assignment_id):
-	peer_review_form_id = Assignment.query.get(assignment_id).peer_review_form	
+	peer_review_form_id = Assignment.query.get(assignment_id).peer_review_form_id	
 	form_data = PeerReviewForm.query.get(peer_review_form_id).serialised_form_data
 
 	form_loader = app.assignments.formbuilder.formLoader(form_data, (url_for('assignments.submit_peer_review', assignment_id=assignment_id)))
@@ -202,7 +204,7 @@ def submit_peer_review(assignment_id):
 @login_required
 def create_teacher_review(upload_id):
 	# Get the appropriate peer review form
-	peer_review_form = app.assignments.models.get_peer_review_form_from_upload_id (upload_id)
+	peer_review_form_id = app.assignments.models.get_peer_review_form_from_upload_id (upload_id)
 	form = eval(peer_review_form)()
 	
 	if form.validate_on_submit():
@@ -232,7 +234,7 @@ def view_peer_review(comment_id):
 	
 		peer_review_form_id = db.session.query(Assignment).join(
 			Comment, Assignment.id==Comment.assignment_id).filter(
-			Comment.id==comment_id).first().peer_review_form
+			Comment.id==comment_id).first().peer_review_form_id
 		
 		form_contents = json.loads(Comment.query.get(comment_id).comment)
 		

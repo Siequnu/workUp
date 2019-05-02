@@ -106,7 +106,7 @@ def get_peer_review_form_from_upload_id (upload_id):
 	return db.session.query(
 		Assignment).join(
 		Upload,Assignment.id==Upload.assignment_id).filter(
-		Upload.id == upload_id).first().peer_review_form
+		Upload.id == upload_id).first().peer_review_form_id
 
 def get_received_peer_review_count (user_id):
 	return db.session.query(Comment).join(
@@ -158,7 +158,7 @@ def new_assignment_from_form (form):
 		assignment = Assignment(title=form.title.data, description=form.description.data, due_date=form.due_date.data,
 						target_turma_id=turma_id, created_by_id=current_user.id,
 						peer_review_necessary= form.peer_review_necessary.data,
-						peer_review_form=form.peer_review_form.data)
+						peer_review_form_id=form.peer_review_form_id.data)
 		if form.assignment_task_file.data is not None:
 			assignment.assignment_task_file_id=assignment_task_file.id
 	
