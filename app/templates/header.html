@@ -1,101 +1,81 @@
 {{ bootstrap.load_css() }}
 
 <!-- Bootstrap core CSS -->
-	<link href="/static/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="/static/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-	<!-- Custom fonts for this template -->
-	<link href="/static/fontawesome-free-5.8.1-web/css/all.min.css" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-	
-	<!-- Custom styles for this template -->
-	<link href="/static/bootstrap/css/freelancer.css" rel="stylesheet">
+<!-- Custom fonts for this template -->
+<link href="/static/fontawesome-free-5.8.1-web/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+<!-- Custom styles for this template -->
+<link href="/static/bootstrap/css/freelancer.css" rel="stylesheet">
 
 <title>
-{% block title %}
-	{% if title %}{{ title }} - workUp{% else %}Peer-review work upload tool{% endif %}
-{% endblock %}
+    {% block title %} {% if title %}{{ title }} - workUp{% else %} workUp Online{% endif %} {% endblock %}
 </title>
 
 {% block navbar %}
 
 <!-- Navigation -->
-	<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav"> 
-		<button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			 
-			 <i class="fa fa-bars"></i>
-			
-		</button>
-		
-		
-		 <a class="navbar-brand" href="{{ url_for('main.index') }}">
-			<img src="/static/w_logo.png" width="40" height="40" class="d-inline-block align-middle" alt=""> workUp</a>
-  
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">     
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item mx-0 mx-lg-1">
-			  <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('main.index')}}">Home</a>
-			</li>
-			<li class="nav-item mx-0 mx-lg-1">
-			  <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('files.file_stats')}}">My uploads</a>
-			</li>
-			<li class="nav-item mx-0 mx-lg-1">
-			  <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('assignments.view_assignments')}}">Assignments</a>
-			</li>
-			<li class="nav-item mx-0 mx-lg-1">
-			  <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('files.class_library')}}">Library</a>
-			</li>
-				
-				
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-				   {% if current_user.is_anonymous %}
-					<li class="nav-item mx-0 mx-lg-1">
-						<a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('user.login')}}">Login</a>
-					</li>
-					{% else %}
-					<li class="nav-item mx-0 mx-lg-1">
-						<a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('user.logout')}}">Logout</a>
-					</li>
-					{% endif %}
-				</ul>
-		</div>
-	</nav>
-	<br><br>
-	<br></br>
-{% endblock %}
+<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+    <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa fa-bars"></i>
+    </button>
 
+    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+        <img src="/static/w_logo.png" width="40" height="40" class="d-inline-block align-middle" alt=""> workUp</a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('main.index')}}">Home</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('files.file_stats')}}">My uploads</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('assignments.view_assignments')}}">Assignments</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('files.class_library')}}">Library</a>
+            </li>
+
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_anonymous %}
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('user.login')}}">Login</a>
+            </li>
+            {% else %}
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('user.logout')}}">Logout</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<br></br>
+{% endblock %}
 
 {% block content %}
-		<br>
-		<div class="container">    
-		{% with messages = get_flashed_messages(with_categories=true) %}
-		{% if messages %}
-			{% for category, message in messages %}
-			<br><div class="alert alert-warning" role="alert">{{ message }}</div>
-			{% endfor %}
-		{% endif %}
-		{% endwith %}
-		</div>
-
-		{# application content needs to be provided in the app_content block #}
-		{% block app_content %}
-		
-		{% endblock %}
+<br>
+{{ toastr.include_jquery() }} {{ toastr.include_toastr_css() }} {{ toastr.message() }}
+{# application content needs to be provided in the app_content block #}
+{% block app_content %}
+{% endblock %}
 {% endblock %}
 
-<div class="container">    
-<footer class="text-center">
-		<br /><br />
-		{% block footer %}
-			<small> &copy; 2019    workUp - Renmin University | 中国人民大学. Written by Patrick Johansson</small>
-		{% endblock %}
-	</footer>
+
+{% block footer %}
+<div class="container">
+    <footer class="text-center">
+        <br />
+        <br />
+        <small> &copy; 2019    workUp Online - Renmin University | 中国人民大学. Written by Patrick Johansson</small>
+    </footer>
 </div>
-
-{% block scripts %}
-{{ bootstrap.load_js() }}
 {% endblock %}
-
-
+{% block scripts %} {{ bootstrap.load_js() }} {{ toastr.include_toastr_js() }} {% endblock %}
