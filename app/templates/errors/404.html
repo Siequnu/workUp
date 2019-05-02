@@ -1,9 +1,44 @@
 {% extends "header.html" %}
-
 {% block app_content %}
 <div class="container">
-<br>
-    <h1>File Not Found</h1>
-    <p><a href="{{ url_for('main.index') }}">Back</a></p>
+ 
+<!------ Include the above in your HEAD tag ---------->
+<link rel="stylesheet" href="/static/errors/404.css">
+
+<div class="error-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 ">
+                <div class="error-text">
+                    <h1 class="error">Oops!</h1>
+                    <br>
+                    <div class="im-sheep">
+                        <div class="top">
+                            <div class="body"></div>
+                            <div class="head">
+                                <div class="im-eye one"></div>
+                                <div class="im-eye two"></div>
+                                <div class="im-ear one"></div>
+                                <div class="im-ear two"></div>
+                            </div>
+                        </div>
+                        <div class="im-legs">
+                            <div class="im-leg"></div>
+                            <div class="im-leg"></div>
+                            <div class="im-leg"></div>
+                            <div class="im-leg"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <h4>This page could not be found!</h4>
+                    <br>
+                    <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Go to homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
 </div>
 {% endblock %}

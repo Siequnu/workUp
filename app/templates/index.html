@@ -1,299 +1,292 @@
-{% extends "header.html" %}
+{% extends "header.html" %} {% block app_content %}
+<br> {% if current_user.is_anonymous %}
+<div class="container">
+    <div class="jumbotron">
 
-{% block app_content %}
-<br>
-
-{% if current_user.is_anonymous %}	
-	<div class="container">
-	<div class="jumbotron">
-		
-  <h1 class="display-4 text-center">
+        <h1 class="display-4 text-center">
 			<i class="fa fa-user-graduate fa-2x"></i></h1>
-	<br>
-	<h1 class="display-4">workUp - Learning Management System</h1>
-  <p class="lead">workUp is a web app that helps teachers and students manage assignments.</p>
-  <hr class="my-4">
-  <p>It allows students to track assignments and receive randomised work for peer review. Teachers can
-	create, track and grade class assignments.</p>
-  <a class="btn btn-secondary btn-lg" href="{{url_for('user.register')}}" role="button">Student registration</a>
-	</div>	
-	<hr>
-	<br /><br />
-	</div>
-             
+        <br>
+        <h1 class="display-4">workUp - Learning Management System</h1>
+        <p class="lead">workUp is a web app that helps teachers and students manage assignments.</p>
+        <hr class="my-4">
+        <p>It allows students to track assignments and receive randomised work for peer review. Teachers can create, track and grade class assignments.</p>
+        <a class="btn btn-secondary btn-lg" href="{{url_for('user.register')}}" role="button">Student registration</a>
+    </div>
+    <hr>
+    <br />
+    <br />
+</div>
+
 {% elif admin %}
-	<div class="container">
-	<div class="row">
-        
-			<h1>Hi, Professor {{ current_user.username }}!</h1>
-				
-    </div>
-	
-	<hr>
-	
-	<div class="row text-center">
-	        <div class="col">
-	        <div class="counter">
-      <i class="fa fa-archive fa-2x"></i>
-      <h2 class="timer count-title count-number">{{library|length}}</h2>
-       <p class="count-text ">Library Files</p>
-    </div>
-	        </div>
-              <div class="col">
-               <div class="counter">
-      <i class="fa fa-user-graduate fa-2x"></i>
-      <h2 class="timer count-title count-number">{{student_count}}</h2>
-      <p class="count-text ">Students</p>
-    </div>
-              </div>
-              <div class="col">
-                  <div class="counter">
-      <i class="fa fa-university fa-2x"></i>
-      <h2 class="timer count-title count-number">{{classes|length}}</h2>
-      <p class="count-text ">Classes</p>
-    </div></div>
-              <div class="col">
-              <div class="counter">
-      <i class="fa fa-briefcase fa-2x"></i>
-      <h2 class="timer count-title count-number">{{assignments|length}}</h2>
-      <p class="count-text ">Assignments</p>
-    </div>
-      </div>
-  </div>
-	
-<br>
-	
-	<div class="card-deck">
-	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		<div class="card-header">
-			<h5><i class="fa fa-university"></i> Classes</h5>
-		</div>
-    <div class="card-body">
-      <h5 class="card-title">Add or remove class information.</h5><hr>
-      
-			<p><a class="btn btn-secondary" href="{{url_for('assignments.create_class')}}" role="button"><i class="fa fa-plus-circle"></i> Create new class</a></p>
-			<p><a class="btn btn-secondary" href="{{url_for('assignments.class_admin')}}" role="button"><i class="fa fa-chalkboard-teacher"></i> Manage classes</a></p>
-    </div>
-  </div>
-	 
-	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		<div class="card-header">
-			<h5><i class="fa fa-file-signature"></i> Peer review forms</h5>
-		</div>
-    <div class="card-body">
-      <h5 class="card-title">Add or remove peer review forms.</h5><hr>
-      <p><a class="btn btn-secondary" href="{{url_for('assignments.add_peer_review_form')}}" role="button"><i class="fa fa-file"></i> New peer review form</a></p>
-			<a class="btn btn-secondary" href="{{url_for('assignments.peer_review_form_admin')}}" role="button"><i class="fa fa-file-signature"></i> Manage peer review forms</a>
-    </div>
-  </div>
-	 
-	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		<div class="card-header">
-			<h5><i class="fa fa-file-upload"></i> Assignments</h5>
-		</div>
-    <div class="card-body">
-      <h5 class="card-title">Create and manage assignments</h5><hr>
-			<p><a class="btn btn-secondary" href="{{url_for('assignments.create_assignment')}}" role="button"><i class="fa fa-calendar-plus"></i> Create assignment</a></p>
-			<p><a class="btn btn-secondary" href="{{url_for('assignments.view_assignments')}}" role="button"><i class="fa fa-tasks"></i> Manage assignments</a></p>
-    </div>
-  </div>	 
-</div>
-	
-	<br>
-	<div class="card-deck">
-	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		<div class="card-header">
-			<h5><i class="fa fa-users"></i> Students</h5>
-		</div>
-    <div class="card-body">
-      <h5 class="card-title">Manage students</h5><hr>
-						<p><a class="btn btn-secondary" href="{{url_for('user.manage_students')}}" role="button"><i class="fa fa-users-cog"></i> Manage students</a></p>
-			<p><a class="btn btn-secondary" href="{{url_for('user.batch_import_students')}}" role="button"><i class="fa fa-file-import"></i> Batch import students</a></p>
-    </div>
-  </div>
-	 
-	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		<div class="card-header">
-			<h5><i class="fa fa-user-graduate"></i> Teachers</h5>
-		</div>
-    <div class="card-body">
-      <h5 class="card-title">Manage teachers</h5><hr>
-			<p><a class="btn btn-secondary" href="{{url_for('user.register_admin')}}" role="button"><i class="fa fa-user-plus"></i> Create new teacher</a></p>
-			<p><a class="btn btn-secondary" href="{{url_for('user.manage_teachers')}}" role="button"><i class="fa fa-user-graduate"></i> Manage teachers</a></p>
-			
-    </div>
-  </div>
-	 
-	</div>
-{% else %}
-		<div class="container">
-	<div class="row">
-         <div class="container"> 
-			<h1 class="text-warning">Hi, {{ current_user.username }}!</h1>
-	</div>
-				 </div>
-	 <hr>
+<div class="container">
+    <div class="row">
 
-	
-<div class="row text-center">
-	        <div class="col">
-	        <div class="counter">
-      <i class="fa fa-archive fa-2x"></i>
-      <h2 class="timer count-title count-number">12</h2>
-       <p class="count-text ">Library files</p>
-    </div>
-	        </div>
-              <div class="col">
-               <div class="counter">
-      <i class="fa fa-comments fa-2x"></i>
-      <h2 class="timer count-title count-number">23</h2>
-      <p class="count-text ">Reviews received</p>
-    </div>
-              </div>
-              <div class="col">
-                  <div class="counter">
-      <i class="fa fa-briefcase fa-2x"></i>
-      <h2 class="timer count-title count-number">{{peer_review_progress_percentage}}</h2>
-      <p class="count-text ">Assignments completed</p>
-    </div></div>
-              <div class="col">
-              <div class="counter">
-      <i class="fa fa-pen-alt fa-2x"></i>
-      <h2 class="timer count-title count-number">{{upload_progress_percentage}}</h2>
-      <p class="count-text ">Peer reviews written</p>
-    </div>
-      </div>
-							
-  </div>    
+        <h1>Hi, Professor {{ current_user.username }}!</h1>
 
+    </div>
 
+    <hr>
 
-<br>
+    <div class="row text-center">
+        <div class="col">
+            <div class="counter">
+                <i class="fa fa-archive fa-2x"></i>
+                <h2 class="timer count-title count-number">{{library|length}}</h2>
+                <p class="count-text ">Library Files</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="counter">
+                <i class="fa fa-user-graduate fa-2x"></i>
+                <h2 class="timer count-title count-number">{{student_count}}</h2>
+                <p class="count-text ">Students</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="counter">
+                <i class="fa fa-university fa-2x"></i>
+                <h2 class="timer count-title count-number">{{classes|length}}</h2>
+                <p class="count-text ">Classes</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="counter">
+                <i class="fa fa-briefcase fa-2x"></i>
+                <h2 class="timer count-title count-number">{{assignments|length}}</h2>
+                <p class="count-text ">Assignments</p>
+            </div>
+        </div>
+    </div>
 
-	
-	<div class="card">
-  <div class="card-header">
-    <h4><i class="fa fa-calendar-alt"></i> Upcoming assignments</h4>
-  </div>
-  <div class="card-body">
-     
-		 {% for assignment in assignments_info %} 
-		 {% if assignment['submitted_filename'] %}
-		 
-		 {% else %}
-		 
-		 <div class="container">
-		<div class="row">
-			<div class="col-2 text-center">
-				<h1 class="display-4"><span class="badge badge-secondary">{{assignment['due_date'].strftime('%d')}}</span></h1>
-				<h2>{{assignment['due_date'].strftime('%b')|upper}}</h2>
-			</div>
-			<div class="col-10">
-				<h3 class="text"><strong>{{assignment['title']}}</strong></h3>
-				<ul class="list-inline">
-				    <li class="list-inline-item"><i class="fa fa-calendar" aria-hidden="true"></i> due on {{assignment['due_date'].strftime('%A')}}, {{assignment['humanized_due_date']}}</li>
-	
-					<a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}" <button class="btn btn-sm btn-warning"><i class="fa fa-file-upload"></i> Upload your assignment </button></a>
-				</ul>
-				<em>{{assignment['description']}}</em>
-			</div>
-		</div>
-	</div>
-	<hr>
-	{% endif %}
-		 {% endfor %}
-		 
+    <br>
+
+    <div class="card-deck">
+        <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-university"></i> Classes</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Add or remove class information.</h5>
+                <hr>
+
+                <p><a class="btn btn-secondary" href="{{url_for('assignments.create_class')}}" role="button"><i class="fa fa-plus-circle"></i> Create new class</a></p>
+                <p><a class="btn btn-secondary" href="{{url_for('assignments.class_admin')}}" role="button"><i class="fa fa-chalkboard-teacher"></i> Manage classes</a></p>
+            </div>
+        </div>
+
+        <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-file-signature"></i> Peer review forms</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Add or remove peer review forms.</h5>
+                <hr>
+                <p><a class="btn btn-secondary" href="{{url_for('assignments.add_peer_review_form')}}" role="button"><i class="fa fa-file"></i> New peer review form</a></p>
+                <a class="btn btn-secondary" href="{{url_for('assignments.peer_review_form_admin')}}" role="button"><i class="fa fa-file-signature"></i> Manage peer review forms</a>
+            </div>
+        </div>
+
+        <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-file-upload"></i> Assignments</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Create and manage assignments</h5>
+                <hr>
+                <p><a class="btn btn-secondary" href="{{url_for('assignments.create_assignment')}}" role="button"><i class="fa fa-calendar-plus"></i> Create assignment</a></p>
+                <p><a class="btn btn-secondary" href="{{url_for('assignments.view_assignments')}}" role="button"><i class="fa fa-tasks"></i> Manage assignments</a></p>
+            </div>
+        </div>
     </div>
-  </div>
-	
-	<br>
-	<div class="card">
-  <div class="card-header">
-    <h4><i class="fa fa-book-open"></i> New library files</h4>
-  </div>
-  <div class="card-body">
-    
-		 
+
+    <br>
+    <div class="card-deck">
+        <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-users"></i> Students</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Manage students</h5>
+                <hr>
+                <p><a class="btn btn-secondary" href="{{url_for('user.manage_students')}}" role="button"><i class="fa fa-users-cog"></i> Manage students</a></p>
+                <p><a class="btn btn-secondary" href="{{url_for('user.batch_import_students')}}" role="button"><i class="fa fa-file-import"></i> Batch import students</a></p>
+            </div>
+        </div>
+
+        <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-user-graduate"></i> Teachers</h5>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Manage teachers</h5>
+                <hr>
+                <p><a class="btn btn-secondary" href="{{url_for('user.register_admin')}}" role="button"><i class="fa fa-user-plus"></i> Create new teacher</a></p>
+                <p><a class="btn btn-secondary" href="{{url_for('user.manage_teachers')}}" role="button"><i class="fa fa-user-graduate"></i> Manage teachers</a></p>
+
+            </div>
+        </div>
+
     </div>
-  </div>
-	
-	
-	<br>
-	<div class="card-deck">
-	<div class="card">
-  <div class="card-header">
-    <h4><i class="fa fa-file-upload"></i> Assignments completion</h4>
-  </div>
-  <div class="card-body">
-     <div class="progress">
-      {% if upload_progress_percentage==100 %}
-			<div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{upload_progress_percentage}}%" id='width'>
-				{{upload_progress_percentage}}%
-			{% else %}
-			<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{upload_progress_percentage}}%" id='width'>
-			  {{upload_progress_percentage}}%
-			{% endif %}
-      </div>
-    </div>
-  </div>
-</div>
-	
-	
-	<div class="card">
-  <div class="card-header">
-    <h4><i class="fa fa-comments"></i> Peer review completion</h4>
-  </div>
-  <div class="card-body">
-     <div class="progress">
-      {% if peer_review_progress_percentage==100 %}
-			<div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peer_review_progress_percentage}}%" id='width'>
-				{{peer_review_progress_percentage}}%
-			{% else %}
-			<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peer_review_progress_percentage}}%" id='width'>
-			  {{peer_review_progress_percentage}}%
-			{% endif %}
-      </div>
-    </div>
-</div>
-		 </div>
-	
-	
-	
-	
-	</div>
-	<br>
-		
-<div class="card-deck">
-	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		
-		<div class="card-header">
-			 <h4><i class="fa fa-user"></i> Your info</h4>
-		
-		</div>
-    <div class="card-body">
-      
-      <h5 class="card-title">You have uploaded {{number_of_uploads}} assignments.</h5>
-      {% if last_upload_humanized_timestamp != False %}
-			<p class="card-text"><small class="text-muted"> Last uploaded {{last_upload_humanized_timestamp}}</small></p>
-			{% endif %}
-    </div>
-  </div>
-	 
-	 <div class="card bg-light mb-2" style="max-width: 20rem;">
-		<div class="card-header">
-			<h4><i class="fa fa-comment-dots"></i> Peer reviews</h4>
-		</div>
-    <div class="card-body">
-      
-      <h5 class="card-title">Your essays have been reviewed {{number_of_peer_reviews_on_own_uploads}} times.</h5>
-        {% if last_received_peer_review_humanized_timestamp != False %}
-			<p class="card-text"><small class="text-muted"> Last reviewed {{last_received_peer_review_humanized_timestamp}}</small></p>
-			{% endif %}
-    </div>
-  </div>
-</div>
-	
-	</div>
-	
-{% endif %}				
-{% endblock %}
+    {% else %}
+    <div class="container">
+        <div class="row">
+            <div class="container">
+                <h1 class="text-warning">Hi, {{ current_user.username }}!</h1>
+            </div>
+        </div>
+        <hr>
+
+        <div class="row text-center">
+            <div class="col">
+                <div class="counter">
+                    <i class="fa fa-archive fa-2x"></i>
+                    <h2 class="timer count-title count-number">12</h2>
+                    <p class="count-text ">Library files</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="counter">
+                    <i class="fa fa-comments fa-2x"></i>
+                    <h2 class="timer count-title count-number">23</h2>
+                    <p class="count-text ">Reviews received</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="counter">
+                    <i class="fa fa-briefcase fa-2x"></i>
+                    <h2 class="timer count-title count-number">{{peer_review_progress_percentage}}</h2>
+                    <p class="count-text ">Assignments completed</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="counter">
+                    <i class="fa fa-pen-alt fa-2x"></i>
+                    <h2 class="timer count-title count-number">{{upload_progress_percentage}}</h2>
+                    <p class="count-text ">Peer reviews written</p>
+                </div>
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fa fa-calendar-alt"></i> Upcoming assignments</h4>
+            </div>
+            <div class="card-body">
+
+                {% for assignment in assignments_info %}
+								{% if assignment['submitted_filename'] %}
+								
+								{% else %}
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-2 text-center">
+                            <h1 class="display-4"><span class="badge badge-secondary">{{assignment['due_date'].strftime('%d')}}</span></h1>
+                            <h2>{{assignment['due_date'].strftime('%b')|upper}}</h2>
+                        </div>
+                        <div class="col-10">
+                            <h3 class="text"><strong>{{assignment['title']}}</strong></h3>
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><i class="fa fa-calendar" aria-hidden="true"></i> due on {{assignment['due_date'].strftime('%A')}}, {{assignment['humanized_due_date']}}</li>
+
+                                <a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}" <button class="btn btn-sm btn-warning"><i class="fa fa-file-upload"></i> Upload your assignment </button></a>
+                            </ul>
+                            <em>{{assignment['description']}}</em>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+								{% endif %}
+								{% endfor %}
+
+            </div>
+        </div>
+
+        <br>
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fa fa-book-open"></i> New library files</h4>
+            </div>
+            <div class="card-body">
+
+            </div>
+        </div>
+
+        <br>
+        <div class="card-deck">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fa fa-file-upload"></i> Assignments completion</h4>
+                </div>
+                <div class="card-body">
+                    <div class="progress">
+                        {% if upload_progress_percentage==100 %}
+                        <div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{upload_progress_percentage}}%" id='width'>
+                            {{upload_progress_percentage}}%
+												{% else %}
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{upload_progress_percentage}}%" id='width'>
+                                {{upload_progress_percentage}}%
+												{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fa fa-comments"></i> Peer review completion</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="progress">
+                            {% if peer_review_progress_percentage==100 %}
+                            <div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peer_review_progress_percentage}}%" id='width'>
+                                {{peer_review_progress_percentage}}%
+														{% else %}
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peer_review_progress_percentage}}%" id='width'>
+                                    {{peer_review_progress_percentage}}%
+														{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <br>
+
+                <div class="card-deck">
+                    <div class="card bg-light mb-2" style="max-width: 20rem;">
+
+                        <div class="card-header">
+                            <h4><i class="fa fa-user"></i> Your info</h4>
+
+                        </div>
+                        <div class="card-body">
+
+                            <h5 class="card-title">You have uploaded {{number_of_uploads}} assignments.</h5>
+														{% if last_upload_humanized_timestamp != False %}
+                            <p class="card-text"><small class="text-muted"> Last uploaded {{last_upload_humanized_timestamp}}</small></p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card bg-light mb-2" style="max-width: 20rem;">
+                        <div class="card-header">
+                            <h4><i class="fa fa-comment-dots"></i> Peer reviews</h4>
+                        </div>
+                        <div class="card-body">
+
+                            <h5 class="card-title">Your essays have been reviewed {{number_of_peer_reviews_on_own_uploads}} times.</h5>
+														{% if last_received_peer_review_humanized_timestamp != False %}
+                            <p class="card-text"><small class="text-muted"> Last reviewed {{last_received_peer_review_humanized_timestamp}}</small></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            {% endif %}
+						{% endblock %}
