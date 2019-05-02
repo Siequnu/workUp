@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, current_app, send_file, abort
+from flask import render_template, flash, redirect, url_for, request, current_app, send_file, abort, session
 from flask_login import current_user
 from flask_login import login_required
 
@@ -78,15 +78,14 @@ def download_random_file(assignment_id):
 
 
 # Download a file for peer review
-@bp.route("/download_file")
 @bp.route("/download_file/<assignment_id>")
 @login_required
-def download_file(assignment_id = False):
+def download_file(assignment_id):
 	if app.assignments.models.check_if_assignment_is_over (assignment_id) == True:
 		return render_template('files/download_file.html', assignment_id = assignment_id)
 	else:
 		# If the assignment hasn't closed yet, flash message to wait until after deadline
-		flash ("The assignment hasn't finished yet. Please wait until the deadline is over, then try again to download an assignment to review.")
+		session['flash_message'] = 'The assignment is not over. Please wait until the deadline is over, then try again to download an assignment to review.'
 		return redirect (url_for('assignments.view_assignments'))
 
 

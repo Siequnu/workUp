@@ -1,16 +1,12 @@
-
-  {% extends "header.html" %}
-  {% from 'bootstrap/form.html' import render_form %}
-  
-  {% block app_content %}
+ {% extends "header.html" %} {% from 'bootstrap/form.html' import render_form %} {% block app_content %}
 <div class="container">
-<br>
-  
-   <h1>Create new peer review form</h1>
+    <br>
+
+    <h1>Create new peer review form</h1>
     <div class="row">
         <div class="col-md-8">
             {{ render_form(form) }}
         </div>
-    </div>  
     </div>
+</div>
 {% endblock %}

@@ -1,8 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, SelectMultipleField, DateField, BooleanField, FormField, TextAreaField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms.validators import ValidationError, DataRequired
 from flask_wtf.file import FileField, FileRequired
-from app.models import User, Turma, Assignment
 from app import db
 
 
@@ -13,7 +12,7 @@ class AssignmentCreationForm(FlaskForm):
 	due_date = DateField('Due date:', validators=[DataRequired()])
 	target_turmas = SelectMultipleField('For classes', coerce=int, validators=[DataRequired()])
 	peer_review_necessary = BooleanField('Peer review necessary', default=True)
-	peer_review_form = SelectField('Peer review form', coerce=int, validators=[DataRequired()])
+	peer_review_form_id = SelectField('Peer review form', coerce=int, validators=[DataRequired()])
 	assignment_task_file = FileField(label='Assignment Task File')
 	submit = SubmitField('Create')
 	
