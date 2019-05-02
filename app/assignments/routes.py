@@ -20,7 +20,7 @@ def create_class():
 		form = forms.TurmaCreationForm()
 		if form.validate_on_submit():
 			Turma.new_turma_from_form (form)
-			flash('Class successfully created!')
+			flash('Class successfully created!', 'success')
 			return redirect(url_for('assignments.class_admin'))
 		return render_template('assignments/class_form.html', title='Create new class', form=form)
 	abort(403)
@@ -36,7 +36,7 @@ def edit_class(turma_id):
 			form.populate_obj(turma)
 			db.session.add(turma)
 			db.session.commit()
-			flash('Class edited successfully!')
+			flash('Class edited successfully!', 'success')
 			return redirect(url_for('assignments.class_admin'))
 		return render_template('assignments/class_form.html', title='Edit class', form=form)
 	abort(403)
@@ -66,7 +66,7 @@ def remove_enrollment(enrollment_id):
 		class_id = Enrollment.query.get(enrollment_id).turma_id
 		Enrollment.query.filter(Enrollment.id==enrollment_id).delete()
 		db.session.commit()
-		flash('Student removed from class!')
+		flash('Student removed from class!', 'success')
 		return redirect(url_for('assignments.manage_enrollment', class_id = class_id))
 	abort (403)
 
@@ -101,7 +101,7 @@ def view_assignments():
 			clean_assignments_array = app.assignments.models.get_user_assignment_info (current_user.id)
 			return render_template('assignments/view_assignments.html', assignmentsArray = clean_assignments_array)
 		else:
-			flash('You are not part of any class and can not see any assignments. Ask your tutor for help to join a class.', 'error')
+			flash('You are not part of any class and can not see any assignments. Ask your tutor for help to join a class.', 'warning')
 			return render_template('assignments/view_assignments.html') # User isn't part of any class - display no assignments
 	abort (403)
 
@@ -132,7 +132,7 @@ def create_assignment():
 		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
 			app.assignments.models.new_assignment_from_form(form)
-			flash('Assignment successfully created!')
+			flash('Assignment successfully created!', 'success')
 			return redirect(url_for('assignments.view_assignments'))
 		return render_template('assignments/assignment_form.html', title='Create Assignment', form=form)
 	abort(403)
@@ -172,11 +172,9 @@ def delete_assignment(assignment_id):
 def create_peer_review(assignment_id):
 	peer_review_form_id = Assignment.query.get(assignment_id).peer_review_form_id	
 	form_data = PeerReviewForm.query.get(peer_review_form_id).serialised_form_data
-
 	form_loader = app.assignments.formbuilder.formLoader(form_data, (url_for('assignments.submit_peer_review', assignment_id=assignment_id)))
 	render_form = form_loader.render_form()
-	print (render_form)
-	return render_template('assignments/form_builder_render.html', render_form=render_form)
+	return render_template('assignments/form_builder_render.html', title='Submit peer review', render_form=render_form)
 	
 
 @bp.route('/review/submit/<assignment_id>', methods=['POST'])
@@ -188,12 +186,12 @@ def submit_peer_review(assignment_id):
 			# The database is now updated with the comment - check the total completed comments
 			completed_comments = len(Comment.get_completed_peer_reviews_from_user_for_assignment (current_user.id, assignment_id))
 			if completed_comments == 1:
-				flash('Peer review 1 submitted succesfully!')
+				flash('Peer review 1 submitted succesfully!', 'success')
 			elif completed_comments == 2:
-				flash('Peer review 2 submitted succesfully!')
+				flash('Peer review 2 submitted succesfully!', 'success')
 			return redirect(url_for('assignments.view_assignments'))
 		else: # The user tried to submit a review without a pending review
-			flash('You need to download an assignment before you submit a peer review!')
+			flash('You need to download an assignment before you submit a peer review!', 'warning')
 			return redirect(url_for('assignments.view_assignments'))
 	else:
 		return redirect(url_for('assignments.view_assignments'))
@@ -203,25 +201,19 @@ def submit_peer_review(assignment_id):
 @bp.route("/create_teacher_review/<upload_id>", methods=['GET', 'POST'])
 @login_required
 def create_teacher_review(upload_id):
-	# Get the appropriate peer review form
-	peer_review_form_id = app.assignments.models.get_peer_review_form_from_upload_id (upload_id)
-	form = eval(peer_review_form)()
-	
-	if form.validate_on_submit():
-		# Serialise the form contents
-		form_fields = {}
-		for field_title, field_contents in form.data.items():
-			form_fields[field_title] = field_contents
-		# Clean the csrf_token and submit fields
-		del form_fields['csrf_token']
-		del form_fields['submit']
-		form_contents = json.dumps(form_fields)
-		
+	peer_review_form_id = Assignment.query.join(
+		Upload, Upload.assignment_id == Assignment.id).filter(
+		Upload.id == upload_id).first().peer_review_form_id
+	form_data = PeerReviewForm.query.get(peer_review_form_id).serialised_form_data
+	form_loader = app.assignments.formbuilder.formLoader(form_data, (url_for('assignments.create_teacher_review', upload_id=upload_id)))
+	render_form = form_loader.render_form()
+	if request.method == 'POST':
+		form_contents = json.dumps(request.form)
 		update_comment = app.assignments.models.add_teacher_comment_to_upload(form_contents, upload_id)
 		
-		flash('Teacher review submitted succesfully!')
+		flash('Teacher review submitted succesfully!', 'success')
 		return redirect(url_for('assignments.view_assignments'))
-	return render_template('files/peer_review_form.html', title='Submit a teacher review', form=form)
+	return render_template('files/peer_review_form.html', title='Submit a teacher review', form=render_form)
 
 
 # Let a receiver or author view a completed peer review
@@ -240,7 +232,7 @@ def view_peer_review(comment_id):
 		
 		if current_user.id is app.assignments.models.get_comment_author_id_from_comment(
 		comment_id):
-			flash('You can not edit this peer review as it has already been submitted.')
+			flash('You can not edit this peer review as it has already been submitted.', 'info')
 			
 		form_data = PeerReviewForm.query.get(peer_review_form_id).serialised_form_data
 
@@ -251,7 +243,7 @@ def view_peer_review(comment_id):
 		render_form = form_loader.render_form()
 		return render_template('assignments/form_builder_render.html', render_form=render_form)
 		
-		return render_template('files/peer_review_form.html', title='View a peer review', form=form)
+		return render_template('files/peer_review_form.html', title='View peer review', form=form)
 	else: abort (403)
 	
 ############# Peer review forms routes
@@ -305,7 +297,7 @@ def delete_peer_review_form(form_id):
 	
 	PeerReviewForm.query.filter(PeerReviewForm.id == form_id).delete()
 	db.session.commit()
-	flash ('Form deleted successfully.')
+	flash ('Form deleted successfully.', 'success')
 	return (redirect(url_for('assignments.peer_review_form_admin')))
 
 @bp.route('/form/builder/submit', methods=['POST'])

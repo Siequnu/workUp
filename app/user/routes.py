@@ -27,11 +27,11 @@ def login():
 	if form.validate_on_submit():
 		user = User.query.filter_by(username=form.username.data).first()
 		if user is None or not user.check_password(form.password.data):
-			flash('Invalid username or password')
+			flash('Invalid username or password', 'error')
 			return redirect(url_for('user.login'))
 		# Check for email validation
 		if User.user_email_is_confirmed(user.username) == False:
-			flash('Please confirm your email.')
+			flash('Please confirm your email.', 'warning')
 			return redirect(url_for('user.login'))
 		
 		login_user(user, remember=form.remember_me.data)
@@ -76,14 +76,14 @@ def register():
 				html = render_template('email/activate.html',confirm_url=confirm_url)
 				executor.submit(app.email_model.send_email, user.email, subject, html)
 				
-				flash('Congratulations, you are now a registered user! Please confirm your email.')
+				flash('Congratulations, you are now a registered user! Please confirm your email.', 'success')
 				return redirect(url_for('user.login'))
 			else:
-				flash("Please ask your tutor for sign-up instructions.")
+				flash('Please ask your tutor for sign-up instructions.', 'warning')
 				return redirect(url_for('user.login'))
 		return render_template('user/register.html', title='Register', form=form)
 	else:
-		flash("Sign up is currently closed.")
+		flash('Sign up is currently closed.', 'warning')
 		return redirect(url_for('main.index'))
 
 # Confirm email
@@ -97,7 +97,7 @@ def confirm_email(token):
 	user.email_confirmed = True
 	db.session.add(user)
 	db.session.commit()
-	flash('Your email has been confirmed. Please log-in now.')
+	flash('Your email has been confirmed. Please log-in now.', 'success')
 	return redirect(url_for('user.login'))
 
 # Reset password form
@@ -113,7 +113,7 @@ def reset():
 		html = render_template('email/recover.html', recover_url=recover_url)
 		
 		executor.submit(app.email_model.send_email, user.email, subject, html)
-		flash('An email has been sent to your inbox with a link to recover your password.')
+		flash('An email has been sent to your inbox with a link to recover your password.', 'info')
 		return redirect(url_for('main.index'))
 		
 	return render_template('user/reset.html', form=form)
@@ -130,7 +130,7 @@ def reset_with_token(token):
 		user = User.query.filter_by(email=email).first_or_404()
 		user.set_password(form.password.data)
 		db.session.commit()
-		flash('Your password has been changed. You can now log-in with your new password.')
+		flash('Your password has been changed. You can now log-in with your new password.', 'success')
 		return redirect(url_for('user.login'))
 	return render_template('user/reset_with_token.html', form=form, token=token)
 
@@ -150,7 +150,7 @@ def edit_user(user_id):
 				app.assignments.models.enroll_user_in_class(user.id, turma_id)
 			
 			db.session.commit()
-			flash('User edited successfully.')
+			flash('User edited successfully.', 'success')
 			return redirect(url_for('user.manage_students'))
 		return render_template('user/register.html', title='Edit user', form=form)
 
@@ -242,12 +242,10 @@ def batch_import_students():
 				return redirect(request.url)
 			file = form.excel_file.data
 			if file and models.check_if_excel_spreadsheet(file.filename):
-				#models.save_excel_student_sheet(file)
-				#original_filename = models.get_secure_filename(file.filename)
 				session['student_info_array'] = models.process_student_excel_spreadsheet (file)
 				return redirect(url_for('user.batch_import_students_preview', turma_id = form.target_course.data))
 			else:
-				flash('You can not upload this kind of file. You must upload an Excel (.xls) file.')
+				flash('You can not upload this kind of file. You must upload an Excel (.xls) file.', 'warning')
 				return redirect(url_for('user.batch_import_students'))
 		return render_template('user/batch_import_students.html', title='Batch import students', form=form)
 	abort(403)
