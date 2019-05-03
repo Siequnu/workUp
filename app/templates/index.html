@@ -135,6 +135,7 @@
 
     </div>
     {% else %}
+    <link rel="stylesheet" href="/static/errors/progress-circle.css">
     <div class="container">
         <div class="row">
             <div class="container">
@@ -145,6 +146,23 @@
 
         <div class="row text-center">
             <div class="col">
+                <div class="counter">
+                    <i class="fa fa-file-upload fa-2x"></i>
+                    <h2 class="timer count-title count-number">Assignments completed</h2>
+                    <div class="progress-circle progress-{{upload_progress_percentage}}"><span>{{upload_progress_percentage}}</span></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="counter">
+                    <i class="fa fa-comment-dots fa-2x"></i>
+                    <h2 class="timer count-title count-number">Peer reviews completed</h2>
+                     <div class="progress-circle progress-{{peer_review_progress_percentage}}"><span>{{peer_review_progress_percentage}}</span></div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row text-center">
+          <div class="col">
                 <div class="counter">
                     <i class="fa fa-archive fa-2x"></i>
                     <h2 class="timer count-title count-number">12</h2>
@@ -158,25 +176,9 @@
                     <p class="count-text ">Reviews received</p>
                 </div>
             </div>
-            <div class="col">
-                <div class="counter">
-                    <i class="fa fa-briefcase fa-2x"></i>
-                    <h2 class="timer count-title count-number">{{peer_review_progress_percentage}}</h2>
-                    <p class="count-text ">Assignments completed</p>
-                </div>
-            </div>
-            <div class="col">
-                <div class="counter">
-                    <i class="fa fa-pen-alt fa-2x"></i>
-                    <h2 class="timer count-title count-number">{{upload_progress_percentage}}</h2>
-                    <p class="count-text ">Peer reviews written</p>
-                </div>
-            </div>
-
         </div>
-
         <br>
-
+        {% if assignments_info|length > 0 %}
         <div class="card">
             <div class="card-header">
                 <h4><i class="fa fa-calendar-alt"></i> Upcoming assignments</h4>
@@ -184,9 +186,9 @@
             <div class="card-body">
 
                 {% for assignment in assignments_info %}
-								{% if assignment['submitted_filename'] %}
+				{% if assignment['submitted_filename'] %}
 								
-								{% else %}
+				{% else %}
 
                 <div class="container">
                     <div class="row">
@@ -205,66 +207,20 @@
                         </div>
                     </div>
                 </div>
+                {% if assignments_info|length > 1 %}
                 <hr>
-								{% endif %}
-								{% endfor %}
+                {% endif %}
+				{% endif %}
+				{% endfor %}
 
             </div>
         </div>
+        {% endif %}
 
-        <br>
-        <div class="card">
-            <div class="card-header">
-                <h4><i class="fa fa-book-open"></i> New library files</h4>
-            </div>
-            <div class="card-body">
-
-            </div>
-        </div>
-
-        <br>
-        <div class="card-deck">
-            <div class="card">
-                <div class="card-header">
-                    <h4><i class="fa fa-file-upload"></i> Assignments completion</h4>
-                </div>
-                <div class="card-body">
-                    <div class="progress">
-                        {% if upload_progress_percentage==100 %}
-                        <div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{upload_progress_percentage}}%" id='width'>
-                            {{upload_progress_percentage}}%
-												{% else %}
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{upload_progress_percentage}}%" id='width'>
-                                {{upload_progress_percentage}}%
-												{% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h4><i class="fa fa-comments"></i> Peer review completion</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="progress">
-                            {% if peer_review_progress_percentage==100 %}
-                            <div class="progress-bar progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peer_review_progress_percentage}}%" id='width'>
-                                {{peer_review_progress_percentage}}%
-														{% else %}
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{peer_review_progress_percentage}}%" id='width'>
-                                    {{peer_review_progress_percentage}}%
-														{% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
                 <br>
 
                 <div class="card-deck">
-                    <div class="card bg-light mb-2" style="max-width: 20rem;">
+                    <div class="card" style="max-width: 20rem;">
 
                         <div class="card-header">
                             <h4><i class="fa fa-user"></i> Your info</h4>
@@ -279,7 +235,7 @@
                         </div>
                     </div>
 
-                    <div class="card bg-light mb-2" style="max-width: 20rem;">
+                    <div class="card" style="max-width: 20rem;">
                         <div class="card-header">
                             <h4><i class="fa fa-comment-dots"></i> Peer reviews</h4>
                         </div>

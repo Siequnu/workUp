@@ -132,6 +132,34 @@
     </div>
 </div>
 
-{% endfor %} {% else %} You have no assignments at present. {% endif %}
+{% endfor %} {% else %}
+<link rel="stylesheet" href="/static/errors/cat.css">
+<div class="container">
+ <h2>Good news... </h2><h4>You have no assignments 👍</h4>
+</div>
+<div class="container-cat">
+  <div class="cloud">
+    <span class="c-one"></span>
+    <span class="c-two"></span>
+    <span class="c-three"></span>
+    <span class="c-four"></span>
+  </div>
+  
+  
+  <div class="rainbow">
+    <span class="r-one"></span>
+    <span class="r-two"></span>
+    <span class="r-three"></span>
+  </div>
+  
+  <div class="cat">
+    <span class="eyes left"></span>
+    <span class="eyes right"></span>
+    <span class="mouth"></span>
+  </div>
+  
+</div>
+
+{% endif %}
 </div>
 {% endblock %}

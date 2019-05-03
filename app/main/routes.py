@@ -30,7 +30,9 @@ def index():
 			# Display help message if a student has signed up and is not part of a class
 			if Enrollment.query.filter(Enrollment.user_id==current_user.id).first() is None:
 				flash('You do not appear to be part of a class. Please contact your tutor for assistance.', 'warning')
-				return render_template('index.html')			
+				return render_template('index.html')
+			# Check for new library files
+			flash ('New library files have been uploaded', 'info')
 			return render_template('index.html',
 							number_of_uploads = app.files.models.get_uploaded_file_count_from_user_id(current_user.id),
 							upload_progress_percentage = app.assignments.models.get_assignment_upload_progress_bar_percentage (current_user.id),
