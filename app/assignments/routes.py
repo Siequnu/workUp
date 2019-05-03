@@ -75,7 +75,7 @@ def remove_enrollment(enrollment_id):
 def delete_class(turma_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		Turma.delete_turma_from_id(turma_id)
-		flash('Class ' + str(turma_id) + ' has been deleted.')
+		flash('Class ' + str(turma_id) + ' has been deleted.', 'success')
 		return redirect(url_for('assignments.class_admin'))		
 	abort (403)
 ########################################
@@ -84,8 +84,6 @@ def delete_class(turma_id):
 @bp.route("/view/", methods=['GET', 'POST'])
 @login_required
 def view_assignments():
-	if 'flash_message' in session:
-		flash (session.pop('flash_message'))
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		# Get admin view with all assignments
 		clean_assignments_array = app.assignments.models.get_all_assignments_info()
@@ -150,7 +148,7 @@ def edit_assignment(assignment_id):
 			form.populate_obj(assignment)
 			db.session.add(assignment)
 			db.session.commit()
-			flash('Assignment successfully edited!')
+			flash('Assignment successfully edited!', 'success')
 			return redirect(url_for('assignments.view_assignments'))
 		return render_template('assignments/assignment_form.html', title='Edit Assignment', form=form)
 	abort(403)
@@ -162,7 +160,7 @@ def edit_assignment(assignment_id):
 def delete_assignment(assignment_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		app.assignments.models.delete_assignment_from_id(assignment_id)
-		flash('Assignment ' + str(assignment_id) + ' successfully deleted!')
+		flash('Assignment ' + str(assignment_id) + ' successfully deleted!', 'success')
 		return redirect(url_for('assignments.view_assignments'))
 	abort (403)
 
@@ -170,15 +168,6 @@ def delete_assignment(assignment_id):
 # Display an empty review feedback form
 @bp.route("/review/<assignment_id>", methods=['GET', 'POST'])
 def create_peer_review(assignment_id):
-	peer_review_form_id = Assignment.query.get(assignment_id).peer_review_form_id	
-	form_data = PeerReviewForm.query.get(peer_review_form_id).serialised_form_data
-	form_loader = app.assignments.formbuilder.formLoader(form_data, (url_for('assignments.submit_peer_review', assignment_id=assignment_id)))
-	render_form = form_loader.render_form()
-	return render_template('assignments/form_builder_render.html', title='Submit peer review', render_form=render_form)
-	
-
-@bp.route('/review/submit/<assignment_id>', methods=['POST'])
-def submit_peer_review(assignment_id):
 	if request.method == 'POST':
 		form_contents = json.dumps(request.form)
 		# Submit form
@@ -194,7 +183,11 @@ def submit_peer_review(assignment_id):
 			flash('You need to download an assignment before you submit a peer review!', 'warning')
 			return redirect(url_for('assignments.view_assignments'))
 	else:
-		return redirect(url_for('assignments.view_assignments'))
+		peer_review_form_id = Assignment.query.get(assignment_id).peer_review_form_id	
+		form_data = PeerReviewForm.query.get(peer_review_form_id).serialised_form_data
+		form_loader = app.assignments.formbuilder.formLoader(form_data, (url_for('assignments.create_peer_review', assignment_id=assignment_id)))
+		render_form = form_loader.render_form()
+		return render_template('assignments/form_builder_render.html', title='Submit peer review', render_form=render_form)
 		
 
 # Display an empty review feedback form
@@ -210,7 +203,6 @@ def create_teacher_review(upload_id):
 	if request.method == 'POST':
 		form_contents = json.dumps(request.form)
 		update_comment = app.assignments.models.add_teacher_comment_to_upload(form_contents, upload_id)
-		
 		flash('Teacher review submitted succesfully!', 'success')
 		return redirect(url_for('assignments.view_assignments'))
 	return render_template('files/peer_review_form.html', title='Submit a teacher review', form=render_form)

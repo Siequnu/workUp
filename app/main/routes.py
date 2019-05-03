@@ -1,4 +1,4 @@
-from flask import render_template, flash, current_app
+from flask import render_template, flash, current_app, session
 from flask_login import current_user, login_required
 
 import datetime
@@ -9,16 +9,11 @@ from app import db
 from app.main import bp
 import app.user
 
-@bp.before_request
+@current_app.before_request
 def before_request():
 	if current_user.is_authenticated:
 		current_user.last_seen = datetime.datetime.now()
 		db.session.commit()
-
-# Lab
-@bp.route('/lab', methods=['GET', 'POST'])
-def lab():
-	return render_template('lab.html')
 
 # Main entrance to the app
 @bp.route('/', methods=['GET', 'POST'])
@@ -34,7 +29,7 @@ def index():
 		else:
 			# Display help message if a student has signed up and is not part of a class
 			if Enrollment.query.filter(Enrollment.user_id==current_user.id).first() is None:
-				flash('You do not appear to be part of a class. Please contact your tutor for assistance.')
+				flash('You do not appear to be part of a class. Please contact your tutor for assistance.', 'warning')
 				return render_template('index.html')
 			
 			number_of_uploads = app.files.models.get_uploaded_file_count_from_user_id(current_user.id)
