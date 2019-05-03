@@ -8,6 +8,8 @@ from flask_bootstrap import Bootstrap #This loads bootstrap-flask
 from flask_mail import Mail
 from flask_executor import Executor
 from flask_toastr import Toastr
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 import logging, os
 from logging.handlers import RotatingFileHandler
@@ -20,6 +22,7 @@ bootstrap = Bootstrap()
 mail = Mail()
 executor = Executor()
 toastr = Toastr()
+limiter = Limiter(key_func=get_remote_address)
 
 def create_app(config_class=Config):
 	workup_app = Flask(__name__)
@@ -34,6 +37,7 @@ def create_app(config_class=Config):
 	mail.init_app(workup_app)
 	executor.init_app(workup_app)
 	toastr.init_app(workup_app)
+	limiter.init_app(workup_app)
 	
 	# Import templates
 	from app.errors import bp as errors_bp
