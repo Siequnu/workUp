@@ -20,6 +20,10 @@ class Config(object):
 	MAIL_PASSWORD = ''
 	MAIL_DEFAULT_SENDER = ''
 	
+	TOASTR_OPACITY = False
+	TOASTR_PROGRESS_BAR = 'false'
+	TOASTR_EXTENDED_TIMEOUT = 50
+	
 	TS_SALT = os.environ.get('SECRET_KEY') or os.urandom(12)
 	TS_RECOVER_SALT = os.environ.get('SECRET_KEY') or os.urandom(12)
 	TS_MAX_AGE = 86400
