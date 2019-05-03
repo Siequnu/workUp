@@ -1,0 +1,10 @@
+html,body {
+    height:100%;
+}
+body {
+    background:#66D3CD;
+}
+.container {
+  padding-top: 40px;
+  color: #FFFFFF;
+}
