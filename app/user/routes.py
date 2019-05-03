@@ -56,7 +56,7 @@ def logout():
 def register():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username) is not True:
 		return redirect(url_for('main.index'))
-	if current_app.config['REGISTRATION_IS_OPEN'] == True:
+	if current_app.config['REGISTRATION_IS_OPEN'] == True or current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = app.user.forms.RegistrationForm()
 		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
