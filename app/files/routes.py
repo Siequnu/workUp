@@ -85,7 +85,7 @@ def download_file(assignment_id):
 		return render_template('files/download_file.html', assignment_id = assignment_id)
 	else:
 		# If the assignment hasn't closed yet, flash message to wait until after deadline
-		session['flash_message'] = 'The assignment is not over. Please wait until the deadline is over, then try again to download an assignment to review.'
+		flash('The assignment is not over. Please wait until the deadline is over, then try again to download an assignment to review.')
 		return redirect (url_for('assignments.view_assignments'))
 
 
@@ -97,7 +97,6 @@ def download (file_id):
 		filename = Upload.query.get(file_id).filename
 		return models.download_file(filename, rename=True)
 
-
 # Student form to upload a file to an assignment
 @bp.route('/upload/<assignment_id>',methods=['GET', 'POST'])
 @login_required
@@ -105,19 +104,19 @@ def upload_file(assignment_id):
 	# If the form has been filled out and posted:
 	if request.method == 'POST':
 		if 'file' not in request.files:
-			flash('No file uploaded. Please try again or contact your tutor.')
+			flash('No file uploaded. Please try again or contact your tutor.', 'warning')
 			return redirect(request.url)
 		file = request.files['file']
 		if file.filename == '':
-			flash('The filename is blank. Please rename the file.')
+			flash('The filename is blank. Please rename the file.', 'warning')
 			return redirect(request.url)
 		if file and models.allowed_file_extension(file.filename):
 			models.save_assignment_file(file, assignment_id)
 			original_filename = models.get_secure_filename(file.filename)
-			flash('Your file ' + str(original_filename) + ' was submitted successfully.')
+			flash('Your file ' + str(original_filename) + ' was submitted successfully.', 'success')
 			return redirect(url_for('assignments.view_assignments'))
 		else:
-			flash('You can not upload this kind of file. Please use a iWork, Office or PDF document.')
+			flash('You can not upload this kind of file. Please use a iWork, Office or PDF document.', 'warning')
 			return redirect(url_for('assignments.view_assignments'))
 	else:
 		return render_template('files/upload_file.html')
@@ -176,7 +175,7 @@ def upload_library_file():
 		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
 			app.files.models.new_library_upload_from_form(form)
-			flash('New file successfully added to the library!')
+			flash('New file successfully added to the library!', 'success')
 			return redirect(url_for('files.class_library'))
 		return render_template('files/upload_library_file.html', title='Upload library file', form=form)
 	abort (403)
@@ -189,6 +188,6 @@ def upload_library_file():
 def delete_library_file(library_upload_id, turma_id = False):
 	if app.models.is_admin(current_user.username):	
 		app.files.models.delete_library_upload_from_id(library_upload_id, turma_id)
-		flash('File deleted from the library!')
+		flash('File deleted from the library!', 'success')
 		return redirect(url_for('files.class_library'))
 	abort (403)

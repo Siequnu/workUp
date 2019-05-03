@@ -181,9 +181,9 @@ def give_admin_rights(user_id):
 		try:
 			# Make DB call to convert user into admin
 			app.models.User.give_admin_rights(user_id)
-			flash('User successfully made into administrator.')
+			flash('User successfully made into administrator.', 'success')
 		except:
-			flash('An error occured when changing the user to an administrator.')
+			flash('An error occured when changing the user to an administrator.', 'error')
 		return redirect(url_for('user.manage_students'))
 	else:
 		abort(403)
@@ -195,9 +195,9 @@ def remove_admin_rights(user_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		try:	
 			app.models.User.remove_admin_rights(user_id)
-			flash('Administrator rights removed from the user.')
+			flash('Administrator rights removed from the user.', 'success')
 		except:
-			flash('An error occured when changing the user to an administrator.')
+			flash('An error occured when changing the user to an administrator.', 'error')
 		return redirect(url_for('user.manage_students'))
 	else:
 		abort(403)
@@ -222,7 +222,7 @@ def register_admin():
 			html = render_template('email/activate.html',confirm_url=confirm_url)
 			executor.submit(app.email_model.send_email, user.email, subject, html)
 			
-			flash('Congratulations, you are now a registered admin! Please confirm your email.')
+			flash('Congratulations, you are now a registered admin! Please confirm your email.', 'success')
 			return redirect(url_for('user.login'))
 		return render_template('user/register_admin.html', title='Register Admin', form=form)
 	else:
@@ -238,7 +238,7 @@ def batch_import_students():
 		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
 			if not form.excel_file.data.filename:
-				flash('No file uploaded. Please try again or contact your tutor.')
+				flash('No file uploaded. Please try again or contact your tutor.', 'warning')
 				return redirect(request.url)
 			file = form.excel_file.data
 			if file and models.check_if_excel_spreadsheet(file.filename):
