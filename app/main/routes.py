@@ -1,10 +1,11 @@
-from flask import render_template, flash, current_app, session
+from flask import render_template, flash, current_app, session, request
 from flask_login import current_user, login_required
 
 import datetime
 
 from app.models import Assignment, Enrollment, ClassLibraryFile, Assignment
 import app.assignments.models
+import app.files.models
 from app import db
 from app.main import bp
 import app.user
@@ -12,12 +13,14 @@ import app.user
 @current_app.before_request
 def before_request():
 	if current_user.is_authenticated:
+		if app.files.models.new_library_files_since_last_seen():
+			flash ('New library files have been uploaded', 'info')
 		current_user.last_seen = datetime.datetime.now()
 		db.session.commit()
 
 # Main entrance to the app
-@bp.route('/', methods=['GET', 'POST'])
-@bp.route('/index', methods=['GET', 'POST'])
+@bp.route('/')
+@bp.route('/index')
 def index():
 	if current_user.is_authenticated:
 		if app.models.is_admin(current_user.username):
@@ -31,8 +34,6 @@ def index():
 			if Enrollment.query.filter(Enrollment.user_id==current_user.id).first() is None:
 				flash('You do not appear to be part of a class. Please contact your tutor for assistance.', 'warning')
 				return render_template('index.html')
-			# Check for new library files
-			flash ('New library files have been uploaded', 'info')
 			return render_template('index.html',
 							number_of_uploads = app.files.models.get_uploaded_file_count_from_user_id(current_user.id),
 							upload_progress_percentage = app.assignments.models.get_assignment_upload_progress_bar_percentage (current_user.id),

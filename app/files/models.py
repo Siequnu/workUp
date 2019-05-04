@@ -13,6 +13,19 @@ from dateutil import tz
 
 from app import executor
 
+def new_library_files_since_last_seen ():
+	try:
+		last_book_upload_timestamp = db.session.query(Enrollment, User, ClassLibraryFile, LibraryUpload).join(
+		User, Enrollment.user_id==User.id).join(
+		ClassLibraryFile, Enrollment.turma_id==ClassLibraryFile.turma_id).join(
+		LibraryUpload, ClassLibraryFile.library_upload_id==LibraryUpload.id).filter(
+		Enrollment.user_id==current_user.id).order_by(LibraryUpload.timestamp.desc()).first().LibraryUpload.timestamp
+		
+		if User.query.get(current_user.id).last_seen < last_book_upload_timestamp: return True
+		else: return False
+	except:
+		return False
+	
 def new_library_upload_from_form (form):
 	file = form.library_upload_file.data
 	random_filename = app.files.models.save_file(file)
