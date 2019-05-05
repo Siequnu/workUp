@@ -36,6 +36,27 @@ although as students get more comfortable in providing feedback, progressively l
 given to students.
 ![Submit peer review](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/submit_peerreview.png)
 
+## Usage screenshots
+* The student home page allows for quick access to vital information.
+
+![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/student_home.png)
+
+* Teachers can create assignments targeted at one or more classes. All the uploads for this assignment will be distributed randomly among colleagues for peer-review.
+
+![Create assignment](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/create_assignment.png)
+
+* Students can quickly check their assignments. Peer reviews can only be uploaded once the student has completed their own assignment.
+
+![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/view_assignments.png)
+
+* Students can check how many of their colleagues have downloaded their work and submitted peer reviews.
+
+![File Stats](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/file_stats.png)
+
+* Teachers can create forms to guide the students through a peer review process. As the students get more comfortable with the peer review process, the teacher can edit the form
+to allow the students more freedom with the structure of their peer review.
+
+![Submit peer review](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/submit_peerreview.png)
 
 ## Deployment
 
@@ -142,21 +163,21 @@ $ flask db upgrade
 
 This should run without any errors. Create an admin in the new database
 ```sh
-$ python3 create_admin
+$ python create_admin
 ```
 
 * The program should now be able to run via the following command.
 The last two variables are the name of the .py script
 that runs the program, and the name of the app folder.
 ```
-$ /home/ubuntu/workUp/venv/bin/gunicorn -b localhost:8000 -w 4 workup:app
+$ /home/ubuntu/workUp/venv/bin/gunicorn -b localhost:8000 -w 1 workup:app
 ```
 
 * The supervisor utility uses configuration files that tell it what programs to monitor and how to restart them when necessary. Configuration files must be stored in /etc/supervisor/conf.d. Here is a configuration file for Microblog, which I'm going to call microblog.conf:
 Create and edit a file at /etc/supervisor/conf.d/workup.conf with the configuration details
 ```
 [program:workup]
-command=/home/ubuntu/workUp/venv/bin/gunicorn -b localhost:8000 -w 4 workup:app
+command=/home/ubuntu/workUp/venv/bin/gunicorn -b localhost:8000 -w 1 workup:app
 directory=/home/ubuntu/workUp
 user=ubuntu
 autostart=true
@@ -232,27 +253,11 @@ server {
 
 * SSL certification can be obtained for free using the [Certbot ACME client](https://certbot.eff.org)
 
+* Edit `/etc/ImageMagick-6/policy.xml` and change the rights for the pdf line to "read":
+```sh
+<policy domain="coder" rights="read" pattern="PDF" />
+```
 
-## Usage screenshots
-* The student home page allows for quick access to vital information.
 
-![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/student_home.png)
-
-* Teachers can create assignments targeted at one or more classes. All the uploads for this assignment will be distributed randomly among colleagues for peer-review.
-
-![Create assignment](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/create_assignment.png)
-
-* Students can quickly check their assignments. Peer reviews can only be uploaded once the student has completed their own assignment.
-
-![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/view_assignments.png)
-
-* Students can check how many of their colleagues have downloaded their work and submitted peer reviews.
-
-![File Stats](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/file_stats.png)
-
-* Teachers can create forms to guide the students through a peer review process. As the students get more comfortable with the peer review process, the teacher can edit the form
-to allow the students more freedom with the structure of their peer review.
-
-![Submit peer review](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/submit_peerreview.png)
 
 
