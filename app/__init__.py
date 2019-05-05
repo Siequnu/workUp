@@ -11,8 +11,6 @@ from flask_toastr import Toastr
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
-from flask_redis import Redis
-
 import logging, os
 from logging.handlers import RotatingFileHandler
 
@@ -20,6 +18,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'user.login'
+login.session_protection = "strong"
 bootstrap = Bootstrap()
 mail = Mail()
 executor = Executor()
