@@ -32,8 +32,7 @@ def login():
 		# Check for email validation
 		if User.user_email_is_confirmed(user.username) == False:
 			flash('Please confirm your email.', 'warning')
-			return redirect(url_for('user.login'))
-		
+			return redirect(url_for('user.login'))		
 		login_user(user, remember=form.remember_me.data)
 		next_page = request.args.get('next')
 		if not next_page or url_parse(next_page).netloc != '':

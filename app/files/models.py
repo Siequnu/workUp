@@ -58,7 +58,6 @@ def get_thumbnail (filename):
 		with(Image(filename=filepath, resolution=120)) as source: 
 			images = source.sequence
 			thumbnail_filename = filename[:-4] + '.jpeg'
-			thumbnail_filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], thumbnail_filename))
 			Image(images[0]).save(filename=thumbnail_filepath)
 			return thumbnail_filepath
 
