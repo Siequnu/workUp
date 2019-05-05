@@ -26,8 +26,6 @@ executor = Executor()
 toastr = Toastr()
 limiter = Limiter(key_func=get_remote_address)
 
-redis = Redis()
-
 def create_app(config_class=Config):
 	workup_app = Flask(__name__)
 	workup_app.config.from_object(config_class)
@@ -42,8 +40,6 @@ def create_app(config_class=Config):
 	executor.init_app(workup_app)
 	toastr.init_app(workup_app)
 	limiter.init_app(workup_app)
-	redis.init_app(workup_app)
-	
 	
 	# Import templates
 	from app.errors import bp as errors_bp
