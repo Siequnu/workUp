@@ -18,6 +18,7 @@ def before_request():
 		current_user.last_seen = datetime.datetime.now()
 		db.session.commit()
 
+
 # Main entrance to the app
 @bp.route('/')
 @bp.route('/index')
