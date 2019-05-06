@@ -47,6 +47,16 @@ def selectFromDb (columnsArray, fromTable, conditionsArray = False, count = Fals
 	for row in result: names.append(row)
 	return names
 
+class Sessions (db.Model):
+	id = db.Column(db.Integer(), primary_key = True)
+	session_id = db.Column(db.String(length=255))
+	data = db.Column( db.LargeBinary())
+	expiry = db.Column(db.DateTime(), nullable=True)
+	created_at = db.Column(db.DateTime(timezone=True), default=datetime.now())
+	updated_at = db.Column(db.DateTime(timezone=True), default=datetime.now())
+	
+	def __repr__(self):
+		return '<Session {}>'.format(self.id)
 
 
 class ClassLibraryFile (db.Model):
