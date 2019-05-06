@@ -10,7 +10,6 @@ from flask_executor import Executor
 from flask_toastr import Toastr
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_paranoid import Paranoid
 
 import logging, os
 from logging.handlers import RotatingFileHandler
@@ -25,8 +24,6 @@ mail = Mail()
 executor = Executor()
 toastr = Toastr()
 limiter = Limiter(key_func=get_remote_address)
-paranoid = Paranoid()
-paranoid.redirect_view = '/'
 
 def create_app(config_class=Config):
 	workup_app = Flask(__name__)
@@ -42,7 +39,6 @@ def create_app(config_class=Config):
 	executor.init_app(workup_app)
 	toastr.init_app(workup_app)
 	limiter.init_app(workup_app)
-	paranoid.init_app(workup_app)
 	
 	# Import templates
 	from app.errors import bp as errors_bp
