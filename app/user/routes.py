@@ -16,7 +16,7 @@ import app.email_model
 import app.main.forms
 from app.user import bp, models, forms
 
-from app import executor, limiter
+from app import executor
 
 # Log-in page
 @bp.route('/login', methods=['GET', 'POST'])
@@ -101,7 +101,6 @@ def confirm_email(token):
 
 # Reset password form
 @bp.route('/reset', methods=["GET", "POST"])
-@limiter.limit('3/hour')
 def reset():
 	form = app.user.forms.EmailForm()
 	if form.validate_on_submit():
