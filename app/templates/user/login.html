@@ -1,6 +1,6 @@
 {% extends "header.html" %}
 
-{% from 'bootstrap/form.html' import render_form %}
+{% from 'bootstrap/form.html' import render_form, render_field %}
 
 {% block app_content %}
 <div class="container">
@@ -12,8 +12,14 @@
     <h1>Login</h1>
     <hr>
     <br>
-      {{ render_form(form) }}
-      {{ form.csrf_token }}
+    <form method="post">
+     {{ form.csrf_token }}
+     {{ render_field(form.username) }}
+    {{ render_field(form.password) }}
+    {{ render_field(form.remember_me) }}
+    {{ render_field(form.submit) }}
+      
+     </form>
       <br>
   </div>
     <div class="card-footer">
