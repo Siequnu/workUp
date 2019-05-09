@@ -34,7 +34,7 @@
             <div class="tab-pane fade" id="{{class.id}}" role="tabpanel" aria-labelledby="{{class.id}}-tab">
         {% endif %}
                 <br>
-        {% for assignment, user, turma, uploaded_assignments, uncomplete_assignments, assignment_task_filename in assignments_array %}
+        {% for assignment, user, turma, uploaded_assignments, uncomplete_assignments, assignment_task_filename, peer_review_form_title in assignments_array %}
         {% if assignment.target_turma_id == class.id %}
 
                 <div class="card bg-light mb-3">
@@ -49,7 +49,10 @@
                                     <h3 class="text"><strong>{{assignment.title}}</strong></h3>
                                     <ul class="list-inline">
                                         <li class="list-inline-item"><i class="fa fa-calendar-check" aria-hidden="true"></i> due on {{assignment.due_date}}</li>
-                                        <li class="list-inline-item"><i class="fa fa-file" aria-hidden="true"></i> {{assignment.peer_review_form_id}}</li>
+                                        {% if peer_review_form_title %}
+                                        <li class="list-inline-item"><i class="fa fa-file" aria-hidden="true"></i> {{peer_review_form_title}}</li> 
+                                        {% endif %}
+                                       
                                         {% if assignment_task_filename %}
                                         <li class="list-inline-item"><i class="fa fa-info-circle" aria-hidden="true"></i> {{ assignment_task_filename}}</li>
                                         {% endif %}
@@ -98,6 +101,10 @@
                     <h3 class="text"><strong>{{assignment['title']}}</strong></h3>
                     <ul class="list-inline">
                         <li class="list-inline-item"><i class="fa fa-calendar" aria-hidden="true"></i> due on {{assignment['due_date'].strftime('%A')}}, {{assignment['humanized_due_date']}}</li>
+                      {% if assignment['assignment_task_filename'] %}
+                         <a href="{{url_for('files.download_assignment_file', assignment_id = assignment['id'])}}"><li class="list-inline-item"><i class="fa fa-info-circle" aria-hidden="true"></i> {{ assignment['assignment_task_filename']}}</li></a>
+                      {% endif %}
+                    
                     </ul>
                     <em>{{assignment['description']}}</em>
                 </div>

@@ -2,7 +2,7 @@ from flask_login import current_user
 
 import app.models
 from app import db
-from app.models import Upload, Download, Assignment, User, Comment, AssignmentTaskFile, Turma, Enrollment
+from app.models import Upload, Download, Assignment, User, Comment, AssignmentTaskFile, Turma, Enrollment, PeerReviewForm
 from app.files import models
 
 from datetime import datetime, date
@@ -17,31 +17,20 @@ def get_all_assignments_info ():
 		students_in_class = Enrollment.query.filter(Enrollment.turma_id == turma.id).all()
 		completed_assignments = Upload.query.filter(Upload.assignment_id == assignment.id).all()
 		uncomplete_assignments = len(students_in_class) - len(completed_assignments)
+		if assignment.peer_review_necessary == True:
+			peer_review_form_title = PeerReviewForm.query.get(assignment.peer_review_form_id).title
+		else:
+			peer_review_form_title = False
 		if assignment.assignment_task_file_id is not None:
-			assignment_task_filename = AssignmentTaskFile.query.get(assignment.assignment_task_file_id).original_filename
+			try:
+				assignment_task_filename = AssignmentTaskFile.query.get(assignment.assignment_task_file_id).original_filename
+			except:
+				assignment_task_filename = False
 		else:
 			assignment_task_filename = False
-		assignment_dict = assignment, user, turma, completed_assignments, uncomplete_assignments, assignment_task_filename
+		assignment_dict = assignment, user, turma, completed_assignments, uncomplete_assignments, assignment_task_filename, peer_review_form_title
 		assignments_array.append (assignment_dict)
 	return assignments_array
-
-def object_to_dict(obj, found=None):
-    if found is None:
-        found = set()
-    mapper = class_mapper(obj.__class__)
-    columns = [column.key for column in mapper.columns]
-    get_key_value = lambda c: (c, getattr(obj, c).isoformat()) if isinstance(getattr(obj, c), datetime) else (c, getattr(obj, c))
-    out = dict(map(get_key_value, columns))
-    for name, relation in mapper.relationships.items():
-        if relation not in found:
-            found.add(relation)
-            related_obj = getattr(obj, name)
-            if related_obj is not None:
-                if relation.uselist:
-                    out[name] = [object_to_dict(child, found) for child in related_obj]
-                else:
-                    out[name] = object_to_dict(related_obj, found)
-    return out
 
 def get_user_enrollment_from_id (user_id):
 	return db.session.query(Enrollment, User, Turma).join(
@@ -88,6 +77,12 @@ def get_user_assignment_info (user_id):
 		
 		assignment_dict['assignment_is_past_deadline'] = check_if_assignment_is_over(assignment_dict['id'])
 		assignment_dict['humanized_due_date'] = arrow.get(assignment_dict['due_date']).humanize()
+		
+		if assignment_dict['assignment_task_file_id'] is not None:
+			assignment_dict['assignment_task_filename'] = AssignmentTaskFile.query.get(assignment_dict['assignment_task_file_id']).original_filename
+		else:
+			assignment_dict['assignment_task_filename'] = False
+		
 		# If user has submitted assignment, get original filename
 		if Upload.query.filter_by(assignment_id=assignment_dict['id']).filter_by(user_id=user_id).first() is not None:
 			assignment_dict['submitted_filename']= Upload.query.filter_by(

@@ -5,7 +5,7 @@ from flask_login import login_required
 import app.assignments.models
 from app import db
 from app.files import bp, models, forms
-from app.models import Comment, Download, Upload, Turma, ClassLibraryFile, Enrollment
+from app.models import Comment, Download, Upload, Turma, ClassLibraryFile, Enrollment, Assignment
 
 import random, os
 
@@ -165,6 +165,20 @@ def download_library_file(library_upload_id):
 		Enrollment.user_id == current_user.id).filter(
 		ClassLibraryFile.library_upload_id == library_upload_id).first() is not None:
 		return app.files.models.download_library_file (library_upload_id)
+	abort (403)
+	
+
+# Route to download a library file
+@bp.route('/assignments/download/taskfile/<assignment_id>')
+@login_required
+def download_assignment_file(assignment_id):
+	# Check if the user is part of this file's class
+	if app.models.is_admin(current_user.username) or db.session.query(
+		Enrollment, Assignment).join(
+		Assignment, Enrollment.turma_id == Assignment.target_turma_id).filter(
+		Enrollment.user_id == current_user.id).filter(
+		Assignment.id == assignment_id).first() is not None:
+			return app.files.models.download_assignment_task_file (assignment_id)
 	abort (403)
 
 # Admin form to upload a library file
