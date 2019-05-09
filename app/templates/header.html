@@ -76,4 +76,8 @@
     </footer>
 </div>
 {% endblock %}
-{% block scripts %} {{ bootstrap.load_js() }} {{ toastr.include_toastr_js() }} {% endblock %}
+{% block scripts %}
+{{ bootstrap.load_js() }}
+{{ toastr.include_toastr_js() }}
+<script src="/static/js/searchable-table.js"></script>
+{% endblock %}

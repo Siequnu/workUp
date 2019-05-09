@@ -19,7 +19,8 @@
   </div>
   
 <br>
-
+<input id="myInput" type="text" placeholder="Search..">
+   <br><br>
    <div class="container">
 	
   <div class="row">
@@ -33,7 +34,7 @@
 			  <th>Actions</th>
             </tr>
           </thead>
-		  <tbody>
+		  <tbody id="searchableTable">
 			{% for enrollment, turma, user in class_enrollment %}
             <tr>
               <td>{{user.student_number}}</td>

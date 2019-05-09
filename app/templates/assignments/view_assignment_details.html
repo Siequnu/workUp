@@ -31,8 +31,15 @@
   </div>
   
   <br />
+  <input id="myInput" type="text" placeholder="Search..">
+  <br>
+  <br>
+  <div class="btn-group">
+								<button type="button" class="btn btn-success btn-filter" data-target="uploaded">Uploaded</button>
+								<button type="button" class="btn btn-warning btn-filter" data-target="not-uploaded">Not uploaded</button>
+								<button type="button" class="btn btn-default btn-filter" data-target="all">Todos</button>
+							</div>
    <div class="container">
-     <br>
       <br>
       <div class="row">
         <div class="col-xs-12">
@@ -47,9 +54,13 @@
         		  <th>Actions</th>
             </tr>
           </thead>
-		  <tbody>
+		  <tbody id="searchableTable">
 			{% for upload, user in uploads_info %}
-            <tr>
+            {% if upload.original_filename %}
+            <tr data-status="uploaded">
+            {% else %}
+            <tr data-status="not-uploaded">
+            {% endif %}
                <td>{{user.student_number}}</td>
                <td>{{user.username}}</td>
               <td>{{upload.original_filename}}</td>
@@ -71,4 +82,7 @@
   </div>
 </div>
   </div>
+  
+  
+ <script src="/static/js/sortable-table.js"></script> 
 {% endblock %}

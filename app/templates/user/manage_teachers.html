@@ -17,6 +17,8 @@
     <a href="{{url_for('user.register_admin')}}" <button class="btn btn-primary"><i class="fa fa-plus-circle"></i> Create new teacher</button></a>
     <br>
     <br>
+   <input id="myInput" type="text" placeholder="Search..">
+   <br><br>
   </div>
   </div>
       
@@ -33,7 +35,7 @@
         		  <th>Actions</th>
             </tr>
           </thead>
-		  <tbody>
+		  <tbody id="searchableTable">
 			{% for user in teacher_info %}
             <tr>
               <td>{{user.id}}</td>

@@ -19,7 +19,8 @@
   </div>
   
 <br>
-
+<input id="myInput" type="text" placeholder="Search..">
+   <br><br>
    <div class="container">
 	
   <div class="row">
@@ -36,7 +37,7 @@
 			  <th>Actions</th>
             </tr>
           </thead>
-		  <tbody>
+		  <tbody id="searchableTable">
 			{% for class in classes_array %}
             <tr>
               <td>{{class.id}}</td>
