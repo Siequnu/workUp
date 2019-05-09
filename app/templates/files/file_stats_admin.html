@@ -38,7 +38,9 @@
  <br>
  <hr>
   
- 
+ <input id="myInput" type="text" placeholder="Search..">
+ <br>
+<br>
  <div class="container">
   <div class="row">
     <div class="col-xs-12">
@@ -53,7 +55,7 @@
               <th>Actions</th>
             </tr>
           </thead>
-		  <tbody>
+		  <tbody id="searchableTable">
 			{% for upload, user, assignment in template_packages['uploads_object'] %}
             <tr>
               <td>{{ upload.original_filename }}</td>

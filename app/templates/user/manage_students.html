@@ -17,7 +17,9 @@
     <a href="{{url_for('main.index')}}" <button class="btn btn-secondary"><i class="fa fa-chevron-left"></i> Back</button></a>
     <br><br>
     <a href="{{url_for('user.register')}}"" <button class="btn btn-primary"><i class="fa fa-user-plus"></i> Register new student</button></a>
- <br><br> 
+ <br><br>
+ <input id="myInput" type="text" placeholder="Search..">
+ <br><br>
  </div>
   </div>
       
@@ -36,7 +38,7 @@
         		  <th>Actions</th>
             </tr>
           </thead>
-		  <tbody>
+		  <tbody id="searchableTable">
 			{% for user, enrollment_info in student_info %}
             <tr>
               <td>{{user.student_number}}</td>
