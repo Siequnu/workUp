@@ -108,6 +108,12 @@ def upload_file(assignment_id, user_id = False):
 	if user_id:
 		if not current_user.is_authenticated and app.models.is_admin(current_user.username):
 			abort (403)
+			
+	# If this assignment is over the deadline, and user is not admin, abort
+	if not app.models.is_admin(current_user.username):
+		if app.assignments.models.check_if_assignment_is_over(assignment_id):
+			abort(403)
+				
 	# If the form has been filled out and posted:
 	if request.method == 'POST':
 		if 'file' not in request.files:
