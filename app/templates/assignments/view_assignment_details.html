@@ -55,19 +55,27 @@
             </tr>
           </thead>
 		  <tbody id="searchableTable">
-			{% for upload, user in uploads_info %}
-            {% if upload.original_filename %}
+			{% for user in assignment_detail_info %}
+            {% if user['upload'] %}
             <tr data-status="uploaded">
             {% else %}
             <tr data-status="not-uploaded">
             {% endif %}
                <td>{{user.student_number}}</td>
                <td>{{user.username}}</td>
-              <td>{{upload.original_filename}}</td>
-               <td>{{upload.timestamp.strftime('%d %b %H:%M:%S')}}</td>
+              <td>{{user.upload.original_filename|default('')}}</td>
+               {% if user.upload.original_filename %}
+               <td>{{user.upload.timestamp.strftime('%d %b %H:%M:%S')}}</td>
+               {% else %}
+               <td></td>
+               {% endif %}
             <td>
-              <a href="{{url_for('files.download', file_id = upload.id, rename=True)}}" <button class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Download </button></a>
-              <a href="{{url_for('assignments.create_teacher_review', upload_id = upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-highlighter"></i> Grade </button></a>
+              {% if user.upload.original_filename %}
+              <a href="{{url_for('files.download', file_id = user.upload.id, rename=True)}}" <button class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Download </button></a>
+              <a href="{{url_for('assignments.create_teacher_review', upload_id = user.upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-highlighter"></i> Grade </button></a>
+              {% else %}
+              <a href="{{url_for('main.index')}}" <button class="btn btn-sm btn-block btn-success"><i class="fa fa-user-check"></i> Mark as submitted </button></a>
+              {% endif %}
             </td>
             </tr>
            {% endfor %}
