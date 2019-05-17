@@ -98,10 +98,16 @@ def download (file_id):
 		filename = Upload.query.get(file_id).filename
 		return models.download_file(filename, rename=True)
 
-# Student form to upload a file to an assignment
+# Student form to upload a file to an assignment.
+# An admin can override this with a student number, to submit work for them.
 @bp.route('/upload/<assignment_id>',methods=['GET', 'POST'])
+@bp.route('/upload/<assignment_id>/<user_id>',methods=['GET', 'POST'])
 @login_required
-def upload_file(assignment_id):
+def upload_file(assignment_id, user_id = False):
+	# Only admin can force submit for another student
+	if user_id:
+		if not current_user.is_authenticated and app.models.is_admin(current_user.username):
+			abort (403)
 	# If the form has been filled out and posted:
 	if request.method == 'POST':
 		if 'file' not in request.files:
@@ -112,7 +118,7 @@ def upload_file(assignment_id):
 			flash('The filename is blank. Please rename the file.', 'warning')
 			return redirect(request.url)
 		if file and models.allowed_file_extension(file.filename):
-			models.save_assignment_file(file, assignment_id)
+			models.save_assignment_file(file, assignment_id, user_id)
 			original_filename = models.get_secure_filename(file.filename)
 			flash('Your file ' + str(original_filename) + ' was submitted successfully.', 'success')
 			return redirect(url_for('assignments.view_assignments'))
