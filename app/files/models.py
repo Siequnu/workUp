@@ -49,12 +49,25 @@ def new_library_upload_from_form (form):
 	
 # Generate thumbnails
 def get_thumbnail (filename):
-	thumbnail_filename = filename[:-4] + '.jpeg'
+	thumbnail_filename = filename.rsplit('.', 1)[0] + '.jpeg'
 	thumbnail_filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], thumbnail_filename))
 	if os.path.exists(thumbnail_filepath):
 		return thumbnail_filepath
 	else:
-		filepath = (os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+		file_extension = get_file_extension(filename)
+		if file_extension == 'doc' or file_extension == 'docx' or file_extension == 'pages':
+			filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], 'file-word.pdf'))
+		elif file_extension == 'ppt' or file_extension == 'pptx' or file_extension == 'keynote':
+			filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], 'file-powerpoint.pdf'))
+		elif file_extension == 'jpeg' or file_extension == 'jpg':
+			filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], 'file-image.pdf'))
+		elif file_extension == 'zip' or file_extension == 'rar':
+			filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], 'file-archive.pdf'))
+		elif file_extension == 'pdf':
+			filepath = (os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+		else:
+			filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], 'file-blank.pdf'))
+		
 		with(Image(filename=filepath, resolution=120)) as source: 
 			images = source.sequence
 			thumbnail_filename = filename[:-4] + '.jpeg'
