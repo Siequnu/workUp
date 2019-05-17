@@ -28,9 +28,28 @@ def get_all_assignments_info ():
 				assignment_task_filename = False
 		else:
 			assignment_task_filename = False
-		assignment_dict = assignment, user, turma, completed_assignments, uncomplete_assignments, assignment_task_filename, peer_review_form_title
+		assignment_dict = assignment, user, turma, completed_assignments, uncomplete_assignments, assignment_task_filename, peer_review_form_title, students_in_class
 		assignments_array.append (assignment_dict)
 	return assignments_array
+
+# Returns array of all students in class with added assignment info if applicable
+def get_assignment_detail_info (assignment_id):
+	turma_id = Assignment.query.get(assignment_id).target_turma_id
+	students = db.session.query(User).join(
+		Enrollment, User.id == Enrollment.user_id).filter(
+		Enrollment.turma_id == turma_id).all()
+	assignment_detail_info = []
+	for student in students:
+		student_dict = student.__dict__
+		try:
+			student_dict['upload'] = db.session.query(Upload).filter(
+			Upload.user_id == student_dict['id']).filter(
+			Upload.assignment_id == assignment_id).first()
+		except:
+			pass
+		assignment_detail_info.append(student_dict)
+	return assignment_detail_info
+	
 
 def get_user_enrollment_from_id (user_id):
 	return db.session.query(Enrollment, User, Turma).join(

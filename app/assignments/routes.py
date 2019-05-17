@@ -9,7 +9,7 @@ from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskF
 import app.models
 
 from app import db
-
+from sqlalchemy import or_
 import json
 
 ########## Student class (turma) methods
@@ -112,10 +112,12 @@ def view_assignment_details(assignment_id):
 		assignment_turma = Assignment.query.get(assignment_id).target_turma_id
 		students_in_class = Enrollment.query.filter(Enrollment.turma_id == assignment_turma).all()
 		completed_assignments = Upload.query.filter(Upload.assignment_id == assignment_id).all()
+		assignment_detail_info = app.assignments.models.get_assignment_detail_info(assignment_id)
 		return render_template('assignments/view_assignment_details.html',
 							   uploads_info = app.files.models.get_all_uploads_from_assignment_id(assignment_id),
 							   completed_assignments = completed_assignments,
-							   uncomplete_assignments = len(students_in_class) - len(completed_assignments)
+							   uncomplete_assignments = len(students_in_class) - len(completed_assignments),
+							   assignment_detail_info = assignment_detail_info
 							   )
 	abort (403)
 
