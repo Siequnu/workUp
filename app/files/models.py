@@ -188,16 +188,22 @@ def save_file (file):
 	return random_filename
 
 # Save a file to uploads folder, and update DB
-def save_assignment_file (file, assignment_id):
+# Can also submit for another user, if user_id is supplied
+def save_assignment_file (file, assignment_id, user_id = False):
 	original_filename = secure_filename(file.filename)
 	random_filename = save_file (file)
 	
 	executor.submit(get_thumbnail, random_filename)
 	
 	# Update SQL after file has saved
-	upload = Upload(original_filename = original_filename, filename = random_filename,
-					user_id = current_user.id, assignment_id = assignment_id)
-	db.session.add(upload)
+	new_upload = Upload(original_filename = original_filename, filename = random_filename, assignment_id = assignment_id)
+	
+	if user_id:
+		new_upload.user_id = user_id
+	else:
+		new_upload.user_id = current_user.id
+		
+	db.session.add(new_upload)
 	db.session.commit()
 
 # Verify a filename is secure with werkzeug library
