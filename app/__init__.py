@@ -8,6 +8,7 @@ from flask_bootstrap import Bootstrap #This loads bootstrap-flask
 from flask_mail import Mail
 from flask_executor import Executor
 from flask_toastr import Toastr
+from flask_wtf.csrf import CSRFProtect
 
 import logging, os
 from logging.handlers import RotatingFileHandler
@@ -20,6 +21,7 @@ bootstrap = Bootstrap()
 mail = Mail()
 executor = Executor()
 toastr = Toastr()
+csrf = CSRFProtect()
 
 def create_app(config_class=Config):
 	workup_app = Flask(__name__)
@@ -28,6 +30,8 @@ def create_app(config_class=Config):
 	db.init_app(workup_app)
 	migrate.init_app(workup_app, db)
 	workup_app.app_context().push()
+	
+	csrf.init_app(workup_app)
 	
 	login.init_app(workup_app)
 	bootstrap = Bootstrap(workup_app)
