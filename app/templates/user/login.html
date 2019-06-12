@@ -1,6 +1,6 @@
 {% extends "header.html" %}
 
-{% from 'bootstrap/form.html' import render_form, render_field %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block app_content %}
 <div class="container">
@@ -13,17 +13,7 @@
     <hr>
     <br>
   <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
+        {{ wtf.quick_form(form) }}
     </form>
   
       <br>
