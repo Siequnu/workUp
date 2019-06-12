@@ -12,14 +12,20 @@
     <h1>Login</h1>
     <hr>
     <br>
-    <form method="post">
-     {{ form.csrf_token }}
-     {{ render_field(form.username) }}
-    {{ render_field(form.password) }}
-    {{ render_field(form.remember_me) }}
-    {{ render_field(form.submit) }}
-      
-     </form>
+  <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}
+        </p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p>{{ form.submit() }}</p>
+    </form>
+  
       <br>
   </div>
     <div class="card-footer">
