@@ -200,9 +200,9 @@
                             <h3 class="text"><strong>{{assignment['title']}}</strong></h3>
                             <ul class="list-inline">
                                 <li class="list-inline-item"><i class="fa fa-calendar" aria-hidden="true"></i> due on {{assignment['due_date'].strftime('%A')}}, {{assignment['humanized_due_date']}}</li>
-                    {% if assignment['assignment_task_filename'] %}
-                         <a href="{{url_for('files.download_assignment_file', assignment_id = assignment['id'])}}"><li class="list-inline-item"><i class="fa fa-info-circle" aria-hidden="true"></i> {{ assignment['assignment_task_filename']}}</li></a>
-                      {% endif %}
+                            {% if assignment['assignment_task_filename'] %}
+                             <a href="{{url_for('files.download_assignment_file', assignment_id = assignment['id'])}}"><li class="list-inline-item"><i class="fa fa-info-circle" aria-hidden="true"></i> {{ assignment['assignment_task_filename']}}</li></a>
+                            {% endif %}
                                 
                             </ul>
                             <ul class="list-inline">

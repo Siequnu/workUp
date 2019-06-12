@@ -57,7 +57,7 @@ def get_thumbnail (filename):
 		file_extension = get_file_extension(filename)
 		if file_extension == 'doc' or file_extension == 'docx' or file_extension == 'pages':
 			filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], 'file-word.pdf'))
-		elif file_extension == 'ppt' or file_extension == 'pptx' or file_extension == 'keynote':
+		elif file_extension == 'ppt' or file_extension == 'pptx' or file_extension == 'key':
 			filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], 'file-powerpoint.pdf'))
 		elif file_extension == 'jpeg' or file_extension == 'jpg':
 			filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], 'file-image.pdf'))
@@ -70,7 +70,6 @@ def get_thumbnail (filename):
 		
 		with(Image(filename=filepath, resolution=120)) as source: 
 			images = source.sequence
-			thumbnail_filename = filename[:-4] + '.jpeg'
 			Image(images[0]).save(filename=thumbnail_filepath)
 			return thumbnail_filepath
 
@@ -141,8 +140,7 @@ def get_received_peer_review_from_upload_id_count (upload_id):
 	return Comment.query.filter_by(file_id=upload_id).count()
 
 def allowed_file_extension(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
+		return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
 def get_file_extension(filename):
 	return filename.rsplit('.', 1)[1].lower()
