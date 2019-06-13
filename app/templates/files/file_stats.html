@@ -23,7 +23,7 @@
                         </div>
                         <div class="library_card-content">
                             <h4 class="library_card-title">
-                        {% if upload.number_of_comments > 1 %}
+                        {% if upload.number_of_comments > 2 or upload.number_of_comments == 0 %}
                         {{upload.number_of_comments}} comments
                         {% else %}
                         {{upload.number_of_comments}} comment
