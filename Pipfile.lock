@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "dbf741802a7cec49fa003641c00506ab20a37c71c9e0b535aba1413df9d9db81"
+            "sha256": "7ec5b932f3fd61e089e9e7ef9ab786e628a58e221110aaec2622a51216320bc5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -110,14 +110,10 @@
             "index": "pypi",
             "version": "==1.0.2"
         },
-        "flask-and-redis": {
-            "hashes": [
-                "sha256:4e6282089c4e3e23b54ee1b9deffc0b46cb085455aad4b41762ccde27935a3e5",
-                "sha256:7005ca42a8db76fe901023c15b7ecf1828974594b0e8f0ac7ecbef5941fe861a",
-                "sha256:e519f003f4ec02ed889ba791500c192d4ee4c768bcfa0af5951a77caa78e7d6b"
-            ],
-            "index": "pypi",
-            "version": "==1.0.0"
+        "flask-compress": {
+            "editable": true,
+            "git": "https://github.com/colour-science/flask-compress.git",
+            "ref": "f9cbb78d294bee800e7997ff31794928bd539165"
         },
         "flask-executor": {
             "hashes": [
@@ -170,30 +166,6 @@
             ],
             "index": "pypi",
             "version": "==1.4.0"
-        },
-        "flask-paranoid": {
-            "hashes": [
-                "sha256:7e73ea9c9eb550cac7dc13e1914db66a7073260439d05621bbbd6fb3dcc8a78c",
-                "sha256:a2ee9257642e0254f11578a4aa54a1a725167a641cfa0879330d477ec370c749"
-            ],
-            "index": "pypi",
-            "version": "==0.2.0"
-        },
-        "flask-session": {
-            "hashes": [
-                "sha256:a31c27e0c3287f00c825b3d9625aba585f4df4cccedb1e7dd5a69a215881a731",
-                "sha256:b9b32126bfc52c3169089f2ed9a40e34b589527bda48b633428e07d39d9c8792"
-            ],
-            "index": "pypi",
-            "version": "==0.3.1"
-        },
-        "flask-sessionstore": {
-            "hashes": [
-                "sha256:010de35ab9f0d9423c2f79c5131e00843c063f847c4ebee204cb034b98cb40f4",
-                "sha256:c4ff03d5abe3e5048cf3435c930eda090f54efe77cffa6201247cd63f6c7ee4b"
-            ],
-            "index": "pypi",
-            "version": "==0.4.5"
         },
         "flask-sqlalchemy": {
             "hashes": [
