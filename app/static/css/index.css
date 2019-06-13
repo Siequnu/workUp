@@ -2,7 +2,7 @@
 html,body {
     width: 100%;
     height: 100%;
-    background: #222222 url('/static/index-background-2.jpeg') no-repeat top center fixed;
+    background: #222222 url('/static/index-background.jpeg') no-repeat top center fixed;
     background-size: cover;
 }
 
