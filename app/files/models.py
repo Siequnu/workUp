@@ -69,7 +69,7 @@ def get_thumbnail (filename):
 		else:
 			filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], 'file-blank.pdf'))
 		
-		with(Image(filename=filepath, resolution=40)) as source: 
+		with(Image(filename=filepath, resolution=80)) as source: 
 			images = source.sequence
 			Image(images[0]).save(filename=thumbnail_filepath)
 			return thumbnail_filepath
