@@ -6,9 +6,13 @@ class Config(object):
 	SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(12)
 	MAX_CONTENT_LENGTH = 16 * 1024 * 1024
 	APP_ROOT = basedir
+	
 	THUMBNAIL_FOLDER = os.path.join(basedir, 'app/static/thumbnails/')
+	THUMBNAIL_RESOLUTION = 120
+	
 	UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
 	ALLOWED_EXTENSIONS = set(['pdf', 'doc', 'docx', 'pages'])
+	
 	SIGNUP_CODES = {''}
 	REGISTRATION_IS_OPEN = False
 	
