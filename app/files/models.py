@@ -10,6 +10,7 @@ from werkzeug import secure_filename
 import os, uuid, arrow
 from wand.image import Image
 from dateutil import tz
+from datetime import datetime
 
 from app import executor
 
@@ -207,7 +208,7 @@ def save_assignment_file (file, assignment_id, user_id = False):
 	executor.submit(get_thumbnail, random_filename)
 	
 	# Update SQL after file has saved
-	new_upload = Upload(original_filename = original_filename, filename = random_filename, assignment_id = assignment_id)
+	new_upload = Upload(original_filename = original_filename, filename = random_filename, assignment_id = assignment_id, timestamp = datetime.now())
 	
 	if user_id:
 		new_upload.user_id = user_id
