@@ -31,13 +31,17 @@
   </div>
   
   <br />
-  <input id="myInput" type="text" placeholder="Search..">
+ <input id="myInput" type="text" placeholder="Search..">
   <br>
   <br>
   <div class="btn-group">
 								<button type="button" class="btn btn-success btn-filter" data-target="uploaded">Uploaded</button>
 								<button type="button" class="btn btn-warning btn-filter" data-target="not-uploaded">Not uploaded</button>
 								<button type="button" class="btn btn-secondary btn-filter" data-target="all">All</button>
+							</div>
+
+  <div class="float-right">								
+        <a href="{{url_for('assignments.download_assignment_uploads', assignment_id = assignment_id)}}" <button class="btn btn-primary"><i class="fa fa-download"></i> Download all assignments</button></a>
 							</div>
    <div class="container">
       <br>

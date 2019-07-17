@@ -1,18 +1,14 @@
 from flask import render_template, redirect, url_for, session, flash, request, abort, current_app
 import datetime
 
-# Login
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
 
-# Register
 from app.models import User, Turma
 from app import db
 
-# Utility classes
 import app.email_model
 
-# Forms
 import app.main.forms
 from app.user import bp, models, forms
 
@@ -57,25 +53,36 @@ def register():
 		return redirect(url_for('main.index'))
 	if current_app.config['REGISTRATION_IS_OPEN'] == True or current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = app.user.forms.RegistrationForm()
+		
+		if current_user.is_authenticated and app.models.is_admin(current_user.username):
+			del form.password
+			del form.signUpCode
+			
 		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
-			if form.signUpCode.data in current_app.config['SIGNUP_CODES']:
+			if app.models.is_admin(current_user.username) or form.signUpCode.data in current_app.config['SIGNUP_CODES']:
 				user = User(username=form.username.data, email=form.email.data, student_number=form.student_number.data)
-				user.set_password(form.password.data)
+				if current_user.is_authenticated and app.models.is_admin(current_user.username) is not True:
+					user.set_password(form.password.data)
+					
 				db.session.add(user)
 				db.session.flush() # Access the new user.id field in the next step
 				for turma_id in form.target_turmas.data:
 					app.assignments.models.enroll_user_in_class(user.id, turma_id)
 				db.session.commit()
 				
-				# Send the email confirmation link
-				subject = "workUp - confirm your email"
+				subject = "WorkUp - your account is almost ready"
 				token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
-				confirm_url = url_for('user.confirm_email', token=token, _external=True)
-				html = render_template('email/activate.html',confirm_url=confirm_url)
+				if current_user.is_authenticated and app.models.is_admin(current_user.username):
+					# Send the email confirmation link, with link to set a password
+					recover_url = url_for('user.reset_with_token', token=token, _external=True)
+					html = render_template('email/set_password.html', recover_url=recover_url, username = form.username.data)		
+				else:
+					# Send the email confirmation link
+					confirm_url = url_for('user.confirm_email', token=token, _external=True)
+					html = render_template('email/activate.html',confirm_url=confirm_url)
+				flash('An email has been sent to the new user with further instructions.', 'success')
 				executor.submit(app.email_model.send_email, user.email, subject, html)
-				
-				flash('Congratulations, you are now a registered user! Please confirm your email.', 'success')
 				return redirect(url_for('user.login'))
 			else:
 				flash('Please ask your tutor for sign-up instructions.', 'warning')
@@ -94,7 +101,6 @@ def confirm_email(token):
 		abort(404)
 	user = User.query.filter_by(email=email).first_or_404()
 	user.email_confirmed = True
-	db.session.add(user)
 	db.session.commit()
 	flash('Your email has been confirmed. Please log-in now.', 'success')
 	return redirect(url_for('user.login'))
@@ -118,6 +124,7 @@ def reset():
 	return render_template('user/reset.html', form=form)
 
 # Reset password with token
+# This also confirms the email address
 @bp.route('/reset/<token>', methods=["GET", "POST"])
 def reset_with_token(token):
 	try:
@@ -127,6 +134,7 @@ def reset_with_token(token):
 	form = app.user.forms.PasswordForm()
 	if form.validate_on_submit():
 		user = User.query.filter_by(email=email).first_or_404()
+		user.email_confirmed = True
 		user.set_password(form.password.data)
 		db.session.commit()
 		flash('Your password has been changed. You can now log-in with your new password.', 'success')
@@ -159,7 +167,40 @@ def edit_user(user_id):
 def manage_students():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		student_info = app.user.models.get_all_student_info()
-		return render_template('user/manage_students.html', title='Manage students', student_info = student_info)
+		return render_template('user/manage_students.html',
+							   title='Manage students',
+							   student_info = student_info,
+							   sign_up_code = current_app.config['SIGNUP_CODES'],
+							   registration_is_open = current_app.config['REGISTRATION_IS_OPEN'])
+	abort(403)
+	
+# Toggle registration status
+@bp.route('/registration/toggle')
+@login_required
+def toggle_registration_status():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		current_app.config.update(
+			REGISTRATION_IS_OPEN = not current_app.config['REGISTRATION_IS_OPEN']
+		)
+		flash ('Registration status changed successfully')
+		return redirect(url_for('user.manage_students'))
+	
+	abort(403)
+	
+	
+# Change registration code
+@bp.route('/registration/code', methods=['GET', 'POST'])
+@login_required
+def change_registration_code():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		form = forms.RegistrationCodeChangeForm()
+		if form.validate_on_submit():
+			current_app.config.update(
+				SIGNUP_CODES = [form.registration_code.data]
+			)
+			flash ('Sign up code changed successfully to ' + form.registration_code.data)
+			return redirect(url_for('user.manage_students'))
+		return render_template('user/change_registration_code.html', title='Change registration code', form=form)
 	abort(403)
 	
 # Manage Users
@@ -202,31 +243,29 @@ def remove_admin_rights(user_id):
 		abort(403)
 
 
-# Admin Registration
+# Admin can register a new user
 @bp.route('/register_admin', methods=['GET', 'POST'])
 @login_required
 def register_admin():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = forms.AdminRegistrationForm()
 		if form.validate_on_submit():
-			user = User(username=form.username.data, email=form.email.data, is_admin = True)
-			user.set_password(form.password.data)
+			user = User(username=form.username.data, email=form.email.data, is_admin=True)
 			db.session.add(user)
 			db.session.commit()
 			
-			# Send the email confirmation link
-			subject = "Confirm new admin user"
+			# Send the email confirmation link, with link to set a password
+			subject = "WorkUp - your account is almost ready"
 			token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
-			confirm_url = url_for('user.confirm_email', token=token, _external=True)
-			html = render_template('email/activate.html',confirm_url=confirm_url)
+			recover_url = url_for('user.reset_with_token', token=token, _external=True)
+			html = render_template('email/set_password.html', recover_url=recover_url, username = form.username.data)		
 			executor.submit(app.email_model.send_email, user.email, subject, html)
 			
-			flash('Congratulations, you are now a registered admin! Please confirm your email.', 'success')
+			flash('An email has been sent to the new user with further instructions.', 'success')
 			return redirect(url_for('user.login'))
 		return render_template('user/register_admin.html', title='Register Admin', form=form)
 	else:
 		abort(403)
-
 
 # Admin page to batch import and create users from an xls file
 @bp.route("/batch_import_students", methods=['GET', 'POST'])

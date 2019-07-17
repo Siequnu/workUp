@@ -44,7 +44,10 @@ class EmailForm(FlaskForm):
 class PasswordForm(FlaskForm):
 	password = PasswordField('Password', validators=[DataRequired()])
 	submit = SubmitField('Reset password.')
-		
+	
+class RegistrationCodeChangeForm(FlaskForm):
+	registration_code = StringField('New registration code:', validators=[DataRequired()])
+	submit = SubmitField('Change code')	
 		
 class BatchStudentImportForm(FlaskForm):
 	target_turmas = SelectMultipleField('For classes', coerce=int, validators=[DataRequired()])
@@ -52,9 +55,8 @@ class BatchStudentImportForm(FlaskForm):
 	submit = SubmitField('Process...')
 	
 class AdminRegistrationForm(FlaskForm):
-	username = StringField('Admin Username', validators=[DataRequired()])
+	username = StringField('Username', validators=[DataRequired()])
 	email = StringField('Email', validators=[DataRequired(), Email()])
-	password = PasswordField('Password', validators=[DataRequired()])
 	submit = SubmitField('Register')
 
 	def validate_username(self, username):

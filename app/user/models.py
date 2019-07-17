@@ -48,7 +48,7 @@ def add_users_from_excel_spreadsheet (user_array, turma_id):
 		db.session.commit()
 		'''
 		# Email student email with password and asking to confirm email.
-		subject = "Renmin workUp: confirm your email"
+		subject = "Elm Online: confirm your email"
 		token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
 		confirm_url = url_for('user.confirm_email', token=token, _external=True)
 		html = render_template('email/activate.html',confirm_url=confirm_url)
