@@ -174,7 +174,7 @@ class Upload(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	original_filename = db.Column(db.String(140))
 	filename = db.Column(db.String(140))
-	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
+	timestamp = db.Column(db.DateTime, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
 	

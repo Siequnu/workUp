@@ -177,7 +177,7 @@ $ /home/ubuntu/workUp/venv/bin/gunicorn -b localhost:8000 -w 1 workup:app
 Create and edit a file at /etc/supervisor/conf.d/workup.conf with the configuration details
 ```
 [program:workup]
-command=/home/ubuntu/workUp/venv/bin/gunicorn -b localhost:8000 -w 1 workup:app
+command=/home/ubuntu/workUp/venv/bin/gunicorn -b localhost:8000 -w 3 -t 30 --preload workup:app
 directory=/home/ubuntu/workUp
 user=ubuntu
 autostart=true
@@ -208,7 +208,7 @@ $ openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
 $ sudo rm /etc/nginx/sites-enabled/default
 ```
 
-* Add the following config in `/etc/nginx/sites-enabled/workup/:
+* Add the following config in `/etc/nginx/sites-enabled/workup:
 ```
 server {
     # listen on port 80 (http)

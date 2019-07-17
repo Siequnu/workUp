@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, abort, current_app, session
+from flask import render_template, flash, redirect, url_for, request, abort, current_app, session, Response
 from flask_login import current_user, login_required
 
 from app.assignments import bp, models, forms
@@ -10,7 +10,11 @@ import app.models
 
 from app import db
 from sqlalchemy import or_
-import json
+import json, zipfile, zipstream, os
+from pathlib import Path
+
+import app.assignments.formbuilder
+
 
 ########## Student class (turma) methods
 @bp.route("/class/create", methods=['GET', 'POST'])
@@ -122,6 +126,28 @@ def view_assignment_details(assignment_id):
 							   )
 	abort (403)
 
+
+# Download all uploads of an assignments
+@bp.route("/download/<assignment_id>", methods=['GET'])
+@login_required
+def download_assignment_uploads(assignment_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):	
+		z = zipstream.ZipFile(mode='w', compression=zipstream.ZIP_DEFLATED)
+		p = Path(current_app.config['UPLOAD_FOLDER'])
+		for item in p.iterdir():
+			# Get correct list of items, rename to original name with student number as prefix
+			z.write(item)
+		# If no items in folder, flash a message and redirect
+		response = Response(z, mimetype='application/zip')
+		
+		assignment = Assignment.query.get(assignment_id)
+		class_label = Turma.query.get(assignment.target_turma_id).turma_label
+		filename = class_label + ' - ' + assignment.title + '.zip'
+		response.headers['Content-Disposition'] = 'attachment; filename={}'.format(filename)
+		return response		
+	abort (403)
+	
+	
 
 # Admin page to set new assignment
 @bp.route("/create", methods=['GET', 'POST'])
@@ -242,9 +268,7 @@ def view_peer_review(comment_id):
 	else: abort (403)
 	
 ############# Peer review forms routes
-import app.assignments.formbuilder
-import json
-from flask import session, Response, request
+
 
 @bp.route("/form/builder")
 def form_builder():
