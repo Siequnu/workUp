@@ -87,21 +87,12 @@
               {% endif %}
 
               {% if user.is_admin==True %}
-               <td><button class="btn btn-sm btn-secondary"><i class="fa fa-check-circle"></i></button></td>
+               <td><a href="{{url_for('user.remove_admin_rights', user_id = user.id)}}" class="btn btn-danger btn-sm btn-block" role="button"><i class="fa fa-user-slash"></i> Make student</a></td>
               {% else %}
-               <td><button class="btn btn-sm btn-warning"><i class="fa fa-times-circle"></i></button></td>
-              {% endif %}
-             
-             
-              
+               <td><a href="{{url_for('user.give_admin_rights', user_id = user.id)}}" class="btn btn-warning btn-sm btn-block" role="button"><i class="fa fa-user-tie"></i> Make teacher</a></td>
+              {% endif %}       
               <td>
-               <a href="{{url_for('user.edit_user', user_id = user.id)}}" class="btn btn-primary btn-sm btn-block" role="button"><i class="fa fa-user-edit"></i></a>
-               
-                {% if user.is_admin==True %}
-               <a href="{{url_for('user.remove_admin_rights', user_id = user.id)}}" class="btn btn-danger btn-sm btn-block" role="button"><i class="fa fa-user-slash"></i></a>
-              {% else %}
-               <a href="{{url_for('user.give_admin_rights', user_id = user.id)}}" class="btn btn-warning btn-sm btn-block" role="button"><i class="fa fa-user-tie"></i></a>
-              {% endif %}
+               <a href="{{url_for('user.edit_user', user_id = user.id)}}" class="btn btn-primary btn-sm btn-block" role="button"><i class="fa fa-user-edit"></i> Edit</a>           
               </td>
             </tr>
            {% endfor %}
@@ -144,21 +135,12 @@
               {% endif %}
 
               {% if user.is_admin==True %}
-               <td><button class="btn btn-sm btn-secondary"><i class="fa fa-check-circle"></i></button></td>
+               <td><a href="{{url_for('user.remove_admin_rights', user_id = user.id)}}" class="btn btn-danger btn-sm btn-block" role="button"><i class="fa fa-user-slash"></i> Make student</a></td>
               {% else %}
-               <td><button class="btn btn-sm btn-warning"><i class="fa fa-times-circle"></i></button></td>
-              {% endif %}
-             
-             
-              
+               <td><a href="{{url_for('user.give_admin_rights', user_id = user.id)}}" class="btn btn-warning btn-sm btn-block" role="button"><i class="fa fa-user-tie"></i> Make teacher</a></td>
+              {% endif %}       
               <td>
-               <a href="{{url_for('user.edit_user', user_id = user.id)}}" class="btn btn-primary btn-sm btn-block" role="button"><i class="fa fa-user-edit"></i></a>
-               
-                {% if user.is_admin==True %}
-               <a href="{{url_for('user.remove_admin_rights', user_id = user.id)}}" class="btn btn-danger btn-sm btn-block" role="button"><i class="fa fa-user-slash"></i></a>
-              {% else %}
-               <a href="{{url_for('user.give_admin_rights', user_id = user.id)}}" class="btn btn-warning btn-sm btn-block" role="button"><i class="fa fa-user-tie"></i></a>
-              {% endif %}
+               <a href="{{url_for('user.edit_user', user_id = user.id)}}" class="btn btn-primary btn-sm btn-block" role="button"><i class="fa fa-user-edit"></i> Edit</a>           
               </td>
             </tr>
            {% endfor %}
