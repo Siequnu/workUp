@@ -167,9 +167,11 @@ def edit_user(user_id):
 def manage_students():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		student_info = app.user.models.get_all_student_info()
+		non_enrolled_users = app.user.models.get_non_enrolled_user_info ()
 		return render_template('user/manage_students.html',
 							   title='Manage students',
 							   student_info = student_info,
+							   non_enrolled_users = non_enrolled_users,
 							   sign_up_code = current_app.config['SIGNUP_CODES'],
 							   registration_is_open = current_app.config['REGISTRATION_IS_OPEN'])
 	abort(403)
