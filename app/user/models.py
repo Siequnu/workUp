@@ -19,6 +19,22 @@ def get_all_student_info ():
 		Turma, Enrollment.turma_id == Turma.id).group_by(
 		User.student_number).all()
 
+def get_non_enrolled_user_info():
+	enrolled_student_info = get_all_student_info ()
+	enrolled_students_dict = []
+	for user, enrollment in enrolled_student_info:
+		enrolled_students_dict.append(user)
+		
+	all_user_info = User.query.all()
+	all_user_dict = []
+	for user in all_user_info:
+		all_user_dict.append (user)
+
+	# Subtract enrolled_students from all_users
+	non_enrolled_users = {user for user in all_user_dict if user not in enrolled_students_dict}
+	
+	return non_enrolled_users
+
 def get_all_admin_info():
 	return User.query.filter(User.is_admin==True).all()
 	

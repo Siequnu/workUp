@@ -258,6 +258,13 @@ server {
 <policy domain="coder" rights="read" pattern="PDF" />
 ```
 
+* To avoid Nginx: 413 – Request Entity Too Large Error, edit /etc/nginx/nginx.conf and add, under http {
+```sh
+client_max_body_size 200M;
+
+```
+Finally, restart nginx ```sudo service nginx restart```
+
 
 
 

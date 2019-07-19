@@ -39,13 +39,13 @@ def new_library_upload_from_form (form):
 	db.session.add(library_upload)
 	db.session.flush() # Needed to access the library_upload.id in the next step
 	
-	# Generate thumbnail
-	executor.submit(get_thumbnail, library_upload.filename)
-	
 	for turma_id in form.target_turmas.data:
 		new_class_library_file = ClassLibraryFile(library_upload_id = library_upload.id, turma_id = turma_id)
 		db.session.add(new_class_library_file)
 		db.session.commit()
+		
+	# Generate thumbnail
+	executor.submit(get_thumbnail, library_upload.filename)
 		
 	
 # Generate thumbnails
