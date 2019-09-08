@@ -218,3 +218,18 @@ def delete_library_file(library_upload_id, turma_id = False):
 		flash('File deleted from the library!', 'success')
 		return redirect(url_for('files.class_library'))
 	abort (403)
+
+	
+# Admin form to edit a library file
+@bp.route('/library/edit/<library_upload_id>', methods=['GET', 'POST'])
+@login_required
+def edit_library_file(library_upload_id):
+	if app.models.is_admin(current_user.username):
+		library_upload = LibraryUpload.query.get(library_upload_id)
+		form = forms.EditLibraryUploadForm(obj=library_upload)
+		if form.validate_on_submit():
+			app.files.models.edit_library_upload(library_upload_id, form)
+			flash('File edited successfully!', 'success')
+			return redirect(url_for('files.class_library'))
+		return render_template('files/edit_library_file.html', title='Edit library file', form=form)
+	abort (403)

@@ -46,7 +46,15 @@ def new_library_upload_from_form (form):
 		
 	# Generate thumbnail
 	executor.submit(get_thumbnail, library_upload.filename)
-		
+
+
+def edit_library_upload (library_upload_id, form):
+	library_upload = LibraryUpload.query.get(library_upload_id)
+	library_upload.title = form.title.data
+	library_upload.description = form.description.data
+								
+	db.session.commit()
+
 	
 # Generate thumbnails
 def get_thumbnail (filename):
