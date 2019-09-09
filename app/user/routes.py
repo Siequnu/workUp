@@ -63,7 +63,7 @@ def register():
 			if form.signUpCode.data in current_app.config['SIGNUP_CODES'] or current_user.is_authenticated and app.models.is_admin(current_user.username):
 				user = User(username=form.username.data, email=form.email.data, student_number=form.student_number.data)
 				if current_user.is_authenticated is not True:
-						user.set_password(form.password.data)
+					user.set_password(form.password.data)
 					
 				db.session.add(user)
 				db.session.flush() # Access the new user.id field in the next step
@@ -80,7 +80,7 @@ def register():
 				else:
 					# Send the email confirmation link
 					confirm_url = url_for('user.confirm_email', token=token, _external=True)
-					html = render_template('email/activate.html',confirm_url=confirm_url)
+					html = render_template('email/activate.html',confirm_url=confirm_url, username = form.username.data)
 				flash('An email has been sent to the new user with further instructions.', 'success')
 				executor.submit(app.email_model.send_email, user.email, subject, html)
 				return redirect(url_for('user.login'))
@@ -115,7 +115,7 @@ def reset():
 		token = app.email_model.ts.dumps(user.email, salt=current_app.config["TS_RECOVER_SALT"])
 
 		recover_url = url_for('user.reset_with_token', token=token, _external=True)
-		html = render_template('email/recover.html', recover_url=recover_url)
+		html = render_template('email/recover.html', recover_url=recover_url, username = user.username)
 		
 		executor.submit(app.email_model.send_email, user.email, subject, html)
 		flash('An email has been sent to your inbox with a link to recover your password.', 'info')
