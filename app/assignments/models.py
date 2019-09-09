@@ -139,12 +139,12 @@ def get_assignment_upload_progress_bar_percentage (user_id):
 		return 100
 	
 def get_peer_review_progress_bar_percentage (user_id):
-	assignments_for_user = len(db.session.query(Assignment, Enrollment).join(
+	peer_review_assignments_for_user = len(db.session.query(Assignment, Enrollment).join(
 		Enrollment, Assignment.target_turma_id == Enrollment.turma_id).filter(
-		Enrollment.user_id == user_id).all())
+		Enrollment.user_id == user_id).filter(Assignment.peer_review_necessary == True).all())
 	
-	total_peer_reviews_expected = assignments_for_user * 2 # At two peer reviews per assignment
-	#!# What about non-peer review assignments? Cross check with needs_peer_review
+	total_peer_reviews_expected = peer_review_assignments_for_user * 2 # At two peer reviews per assignment
+	
 	total_completed_peer_reviews = Comment.query.filter_by(user_id=user_id).filter_by(pending=False).count()
 	if total_peer_reviews_expected > 0:
 		return int(float(total_completed_peer_reviews)/float(total_peer_reviews_expected) * 100)
