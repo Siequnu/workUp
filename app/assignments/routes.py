@@ -184,13 +184,25 @@ def edit_assignment(assignment_id):
 	
 
 # Delete all user uploads and comments associated with this assignment
-@bp.route("/delete/<assignment_id>")
+@bp.route("/delete/<assignment_id>", methods=['GET', 'POST'])
 @login_required
 def delete_assignment(assignment_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		app.assignments.models.delete_assignment_from_id(assignment_id)
-		flash('Assignment ' + str(assignment_id) + ' successfully deleted!', 'success')
-		return redirect(url_for('assignments.view_assignments'))
+		form = app.user.forms.ConfirmationForm()
+		try: 
+			assignment = Assignment.query.get(assignment_id)
+		except:
+			flash ('Could not locate the assignment to be deleted.', 'error')
+			return redirect(url_for('assignments.view_assignments'))
+		confirmation_message = 'Are you sure you want to delete the following assignment: ' + assignment.title + "?"
+		if form.validate_on_submit():
+			app.assignments.models.delete_assignment_from_id(assignment_id)
+			flash('Assignment ' + str(assignment_id) + ' successfully deleted!', 'success')
+			return redirect(url_for('assignments.view_assignments'))
+		return render_template('confirmation_form.html',
+							   title='Delete assignment',
+							   confirmation_message = confirmation_message,
+							   form=form)
 	abort (403)
 
 ############# User peer review routes

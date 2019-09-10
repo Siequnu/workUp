@@ -24,3 +24,5 @@ class TurmaCreationForm(FlaskForm):
 	submit = SubmitField('Create')
 
 		
+class ConfirmationForm (FlaskForm):
+	submit = SubmitField('Confirm')
