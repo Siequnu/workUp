@@ -62,7 +62,7 @@ def register():
 			
 		form.target_turmas.choices = [(turma.id, turma.turma_label) for turma in Turma.query.all()]
 		if form.validate_on_submit():
-			if form.signUpCode.data in current_app.config['SIGNUP_CODES'] or current_user.is_authenticated and app.models.is_admin(current_user.username):
+			if form.signUpCode and form.signUpCode.data in current_app.config['SIGNUP_CODES'] or current_user.is_authenticated and app.models.is_admin(current_user.username):
 				user = User(username=form.username.data, email=form.email.data, student_number=form.student_number.data, registered = datetime.now())
 				if current_user.is_authenticated is not True:
 					user.set_password(form.password.data)
