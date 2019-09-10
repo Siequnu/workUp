@@ -162,6 +162,21 @@ def edit_user(user_id):
 			flash('User edited successfully.', 'success')
 			return redirect(url_for('user.manage_students'))
 		return render_template('user/register.html', title='Edit user', form=form)
+	
+@bp.route('/delete/<user_id>', methods=['GET', 'POST'])
+def delete_user(user_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		user = User.query.get(user_id)
+		form = app.user.forms.ConfirmationForm()
+		confirmation_message = 'Are you sure you want to delete ' + user.username + "'s account?"
+		if form.validate_on_submit():
+			app.models.User.delete_user(user_id)
+			flash('User deleted successfully.', 'success')
+			return redirect(url_for('user.manage_students'))
+		return render_template('user/confirmation_form.html',
+							   title='Delete user',
+							   confirmation_message = confirmation_message,
+							   form=form)
 
 # Manage Users
 @bp.route('/students/manage')

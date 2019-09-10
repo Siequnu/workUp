@@ -156,6 +156,16 @@ class User(UserMixin, db.Model):
 			user.is_admin = False
 			db.session.commit()
 	
+	@staticmethod
+	def delete_user (user_id):
+		if int(user_id) != 1: # Can't remove original admin			
+			user = User.query.get(user_id)
+			db.session.delete(user)
+			db.session.commit()
+			return True
+		else:
+			return False
+	
 class AssignmentTaskFile(db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
 	id = db.Column(db.Integer, primary_key=True)
