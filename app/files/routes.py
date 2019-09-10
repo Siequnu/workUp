@@ -220,6 +220,7 @@ def delete_library_file(library_upload_id, turma_id = False):
 	abort (403)
 
 	
+
 # Admin form to edit a library file
 @bp.route('/library/edit/<library_upload_id>', methods=['GET', 'POST'])
 @login_required
