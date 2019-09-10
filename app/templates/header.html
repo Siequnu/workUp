@@ -26,11 +26,15 @@
             <li class="nav-item mx-0 mx-lg-1">
                 <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('main.index')}}">Home</a>
             </li>
-            <li class="nav-item mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('files.file_stats')}}">My uploads</a>
-            </li>
-            <li class="nav-item mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('assignments.view_assignments')}}">Assignments</a>
+            <li class="nav-item dropdown mx-0 mx-lg-1">
+            <a class="nav-link py-3 px-0 px-lg-3 rounded dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Assignments
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{{url_for('assignments.view_assignments')}}">View assignments</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{url_for('files.file_stats')}}">My uploads</a>
+            </div>
             </li>
             <li class="nav-item mx-0 mx-lg-1">
                 <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('files.class_library')}}">Library</a>
