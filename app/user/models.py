@@ -54,6 +54,7 @@ def process_student_excel_spreadsheet (excel_data_file):
 		student['phone_number'] =  student_info_sheet.cell(row,5).value
 		student_info_dict.append(student)
 	return student_info_dict
+	
 
 def add_users_from_excel_spreadsheet (user_array, turma_id):
 	for student in user_array:
