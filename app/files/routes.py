@@ -5,7 +5,7 @@ from flask_login import login_required
 import app.assignments.models
 from app import db
 from app.files import bp, models, forms
-from app.models import Comment, Download, Upload, Turma, ClassLibraryFile, Enrollment, Assignment
+from app.models import Comment, Download, Upload, Turma, ClassLibraryFile, Enrollment, Assignment, LibraryUpload
 
 import random, os
 
