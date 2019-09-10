@@ -17,6 +17,9 @@ class EditUserForm (FlaskForm):
 	student_number = StringField('Student number', validators=[DataRequired()])
 	target_turmas = SelectMultipleField('For classes', coerce=int, validators=[DataRequired()])
 	submit = SubmitField('Edit user')
+	
+class ConfirmationForm (FlaskForm):
+	submit = SubmitField('Confirm')
 
 class RegistrationForm(FlaskForm):
 	username = StringField('Username', validators=[DataRequired()])
