@@ -189,8 +189,8 @@ class Upload(db.Model):
 	assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
 	
 	def __repr__(self):
-		return '<Upload {}>'.format(self.filename)		
-	
+		return '<Upload {}>'.format(self.filename)
+
 	
 class Download(db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
