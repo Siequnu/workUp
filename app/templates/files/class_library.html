@@ -94,6 +94,7 @@
                             <div class="library_card-read-more">
                                 <p><a href="{{url_for('files.download_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-fw fa-download"></i> Download</button></a></p>
                                 <hr>
+                                <p><a href="{{url_for('files.view_library_downloads', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-info"><i class="fa fa-fw fa-glasses"></i> View downloads</button></a></p>
                                 <p><a href="{{url_for('files.edit_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-primary"><i class="fa fa-fw fa-edit"></i> Edit details</button></a></p>
                                 <p><a href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id, turma_id = class_library_file.turma_id)}}" <button class="btn btn-sm btn-warning"><i class="fa fa-fw fa-folder-minus"></i> Delete for this class</button></a></p>
                                 <p><a href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-danger"><i class="fa fa-fw fa-trash-alt"></i> Delete for all classes</button></a> </p>

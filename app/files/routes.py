@@ -5,7 +5,7 @@ from flask_login import login_required
 import app.assignments.models
 from app import db
 from app.files import bp, models, forms
-from app.models import Comment, Download, Upload, Turma, ClassLibraryFile, Enrollment, Assignment, LibraryUpload
+from app.models import Comment, Download, Upload, Turma, ClassLibraryFile, Enrollment, Assignment, LibraryUpload, LibraryDownload, User
 
 import random, os
 
@@ -152,7 +152,7 @@ def view_comments(file_id):
 @bp.route("/library/")
 @login_required
 def class_library():
-	if app.models.is_admin(current_user.username):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		classes = app.assignments.models.get_all_class_info()
 		library = app.files.models.get_all_library_books ()
 		total_library_downloads = app.files.models.get_total_library_downloads_count ()
@@ -179,6 +179,19 @@ def download_library_file(library_upload_id):
 		return app.files.models.download_library_file (library_upload_id)
 	abort (403)
 	
+	
+# Route to download a library file
+@bp.route('/library/view/downloads/<library_upload_id>')
+@login_required
+def view_library_downloads(library_upload_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		library_upload = LibraryUpload.query.get(library_upload_id)
+		library_downloads = db.session.query(LibraryDownload, User).join(User, LibraryDownload.user_id == User.id).all()
+		return render_template('files/view_library_downloads.html',
+								title='View library downloads',
+								library_upload = library_upload,
+								library_downloads = library_downloads)
+	abort (403)
 
 # Route to download a library file
 @bp.route('/assignments/download/taskfile/<assignment_id>')

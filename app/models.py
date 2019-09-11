@@ -64,7 +64,7 @@ class LibraryDownload(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	
 	def __repr__(self):
-		return '<Download {}>'.format(self.filename)
+		return '<Download {}>'.format(self.id)
 
 class LibraryUpload (db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
