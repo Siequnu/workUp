@@ -29,7 +29,7 @@ def login():
 			return redirect(url_for('user.login'))
 		# Check for email validation
 		if User.user_email_is_confirmed(user.username) == False:
-			flash('Please confirm your email.', 'warning')
+			flash('Please click the confirmation link in the email that was sent to you.', 'warning')
 			return redirect(url_for('user.login'))		
 		login_user(user, remember=form.remember_me.data)
 		next_page = request.args.get('next')
