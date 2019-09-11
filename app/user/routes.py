@@ -78,12 +78,13 @@ def register():
 				if current_user.is_authenticated and app.models.is_admin(current_user.username):
 					# Send the email confirmation link, with link to set a password
 					recover_url = url_for('user.reset_with_token', token=token, _external=True)
-					html = render_template('email/set_password.html', recover_url=recover_url, username = form.username.data)		
+					html = render_template('email/set_password.html', recover_url=recover_url, username = form.username.data)
+					flash('An email has been sent to the new user with further instructions.', 'success')
 				else:
 					# Send the email confirmation link
 					confirm_url = url_for('user.confirm_email', token=token, _external=True)
 					html = render_template('email/activate.html',confirm_url=confirm_url, username = form.username.data)
-				flash('An email has been sent to the new user with further instructions.', 'success')
+					flash('An email has been sent to you with further instructions.', 'success')
 				executor.submit(app.email_model.send_email, user.email, subject, html)
 				return redirect(url_for('user.login'))
 			else:
