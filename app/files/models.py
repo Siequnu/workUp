@@ -4,7 +4,7 @@ from flask_login import current_user
 from app import db
 from app.models import User, Upload, Download, Assignment, Comment, LibraryUpload, ClassLibraryFile, Enrollment, Turma, LibraryDownload, AssignmentTaskFile
 import app.files
-
+import app.assignments 
 from werkzeug import secure_filename
 
 import os, uuid, arrow
