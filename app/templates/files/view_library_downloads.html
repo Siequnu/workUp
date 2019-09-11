@@ -1,0 +1,77 @@
+ {% extends "header.html" %} {% block app_content %}
+<div class="container">
+    <br>
+
+    <div class="container">
+        <div class="row">
+            <br/>
+
+            <div class="col-md-12">
+                <h1>{{title}}</h1>
+            <a href="{{url_for('files.class_library')}}" <button class="btn btn-primary"><i class="fa fa-chevron-left"></i> Back</button></a>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+</div>
+
+<div class="container">
+<div class="col-xs-12 col-sm-4">
+<div class="library_card">
+ <div class="img-library_card">
+  {% set thumbnail_filename = library_upload.filename.split('.') %}
+  <img src="/static/thumbnails/{{thumbnail_filename[0]}}.jpeg" />
+ </div>
+ <div class="library_card-content">
+  <h4 class="library_card-title">
+       {{library_upload.title}}
+ </h4> {{library_upload.description}}
+ </div>
+  <div class="library_card-read-more">
+  <p><a href="{{url_for('files.download_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-fw fa-download"></i> Download</button></a></p>
+  <hr>
+  <p><a href="{{url_for('files.edit_library_file', library_upload_id = library_upload.id)}}" <button class="btn btn-sm btn-primary"><i class="fa fa-fw fa-edit"></i> Edit details</button></a></p>
+  </div>
+</div>
+</div>
+
+
+<div class="container">
+	<br>
+<input id="myInput" type="text" placeholder="Search..">
+   <br><br>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="table">
+        <table summary="Library file downloads" class="table table-bordered table-hover">
+		  <thead>
+            <tr>
+              <th>User</th>
+              <th>Student number</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+		  <tbody id="searchableTable">
+			{% for download, user in library_downloads %}
+            <tr>
+              <td>{{user.username}}</td>
+              <td>{{user.student_number}}</td>
+              <td>{{download.timestamp.strftime('%d %b %H:%M:%S')}}</td>
+            </tr>
+           {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+            </tr>
+          </tfoot>
+        </table>
+      </div><!--end of .table-responsive-->
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+{% endblock %}
