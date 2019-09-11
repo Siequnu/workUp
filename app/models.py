@@ -141,7 +141,7 @@ class User(UserMixin, db.Model):
 
 	@staticmethod
 	def user_email_is_confirmed (username):
-		return User.query.filter(username==username).first().email_confirmed
+		return User.query.filter_by(username=username).first().email_confirmed
 	
 	@staticmethod
 	def give_admin_rights(user_id):
