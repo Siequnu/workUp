@@ -16,6 +16,8 @@ from datetime import datetime
 
 from app import executor
 
+from time import sleep
+
 # Log-in page
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -28,9 +30,9 @@ def login():
 			flash('Invalid username or password', 'error')
 			return redirect(url_for('user.login'))
 		# Check for email validation
-		if User.user_email_is_confirmed(user.username) == False:
-			flash('Please click the confirmation link in the email that was sent to you.', 'warning')
-			return redirect(url_for('user.login'))		
+		#if User.user_email_is_confirmed(user.username) == False:
+		#	flash('Please click the confirmation link in the email that was sent to you.', 'warning')
+		#	return redirect(url_for('user.login'))		
 		login_user(user, remember=form.remember_me.data)
 		next_page = request.args.get('next')
 		if not next_page or url_parse(next_page).netloc != '':
@@ -100,17 +102,31 @@ def register():
 		return redirect(url_for('main.index'))
 
 # Send new confirmation email
+@bp.route('/confirmation/bulk')
+def send_new_confirmation_email_to_all_unconfirmed_users():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		unconfirmed_users = User.query.filter_by(email_confirmed=False).all()
+		for user in unconfirmed_users:
+			send_new_confirmation_email(user.id)
+			sleep(1)
+		flash ('Sent a new confirmation email to ' + str(len(unconfirmed_users)) + ' users.')
+		return redirect(url_for('user.manage_students'))
+	abort (403)
+
+# Send new confirmation email
 @bp.route('/confirmation/<user_id>')
 def send_new_confirmation_email(user_id):
-	user = User.query.filter_by(id=user_id).first_or_404()
-	subject = "WorkUp - please confirm your email address"
-	token = app.email_model.ts.dumps(str(user.email), salt=current_app.config["TS_SALT"])
-	confirm_url = url_for('user.confirm_email', token=token, _external=True)
-	
-	html = render_template('email/activate.html',confirm_url=confirm_url, username = user.username)
-	executor.submit(app.email_model.send_email, user.email, subject, html)
-	flash('An new confirmation email has been sent to ' + user.username + ' with further instructions.', 'success')
-	return redirect(url_for('user.manage_students'))
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		user = User.query.filter_by(id=user_id).first_or_404()
+		subject = "WorkUp - please confirm your email address"
+		token = app.email_model.ts.dumps(str(user.email), salt=current_app.config["TS_SALT"])
+		confirm_url = url_for('user.confirm_email', token=token, _external=True)
+		
+		html = render_template('email/activate.html',confirm_url=confirm_url, username = user.username)
+		executor.submit(app.email_model.send_email, user.email, subject, html)
+		flash('A new confirmation email has been sent to ' + user.username + ' with further instructions.', 'success')
+		return redirect(url_for('user.manage_students'))
+	abort(403)
 
 # Confirm email
 @bp.route('/confirm/<token>')
