@@ -41,6 +41,7 @@ def login():
 	return render_template('user/login.html', title='Sign In', form=form)
 
 
+
 # Log-out page
 @bp.route('/logout')
 def logout():

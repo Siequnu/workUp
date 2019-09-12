@@ -133,18 +133,29 @@ def view_assignment_details(assignment_id):
 def download_assignment_uploads(assignment_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):	
 		z = zipstream.ZipFile(mode='w', compression=zipstream.ZIP_DEFLATED)
-		p = Path(current_app.config['UPLOAD_FOLDER'])
-		for item in p.iterdir():
-			# Get correct list of items, rename to original name with student number as prefix
-			z.write(item)
-		# If no items in folder, flash a message and redirect
-		response = Response(z, mimetype='application/zip')
 		
-		assignment = Assignment.query.get(assignment_id)
-		class_label = Turma.query.get(assignment.target_turma_id).turma_label
-		filename = class_label + ' - ' + assignment.title + '.zip'
-		response.headers['Content-Disposition'] = 'attachment; filename={}'.format(filename)
-		return response		
+		# Get list of uploads for this assignment filtered by class
+		uploads_and_users = db.session.query(Upload, User).join(
+			User, Upload.user_id==User.id).filter(
+				Upload.assignment_id==assignment_id).all()
+		
+		if len(uploads_and_users) < 1:
+			flash ('No files have been uploaded for this assignment yet.', 'warning')
+			return redirect(url_for('assignments.view_assignment_details', assignment_id=assignment_id))
+		else:
+			upload_folder = Path(current_app.config['UPLOAD_FOLDER'])
+			for upload, user in uploads_and_users:
+				filepath = os.path.join(upload_folder, upload.filename)
+				filename = user.student_number + ' - ' + user.username + '.' + app.files.models.get_file_extension(upload.original_filename)
+				z.write(filepath, arcname = filename)
+		
+			response = Response(z, mimetype='application/zip')
+			# Name the zip file with class and assignment names		
+			assignment = Assignment.query.get(assignment_id)
+			class_label = Turma.query.get(assignment.target_turma_id).turma_label
+			filename = class_label + ' - ' + assignment.title + '.zip'
+			response.headers['Content-Disposition'] = 'attachment; filename={}'.format(filename)
+			return response		
 	abort (403)
 	
 	
