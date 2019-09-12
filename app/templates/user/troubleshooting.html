@@ -1,0 +1,35 @@
+{% extends "header.html" %}
+
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block app_content %}
+<div class="container">
+<br>
+ <div class="container">
+
+ <div class="card bg-light mb-3" style="max-width: 50rem;">
+  <div class="card-body">
+    <h1>{{title}}</h1>
+    <hr>
+    <br>
+    <h3><i class="fa fa-envelope-open-text" aria-hidden="true"></i> Confirm your email</h3>
+    <br>
+    <p>You must confirm your email address before you can log-in.</p>
+    <p>An email was sent to you when you signed up. Click the confirmation link in that email.</p>
+    <p>Check the spam or junk folder (垃圾电邮), as the email might have gone there.</p>
+    <hr>
+    <h3><i class="fa fa-key" aria-hidden="true"></i> Reset your password</h3>
+    <br>
+    <p>If you did not receive an email, or the link has expired, reset your password.</p>
+    <p>An email will be sent to you with a link to reset your password. This will also confirm your email.</p>
+    <a href="{{ url_for('user.reset') }}" class="btn btn-outline-primary">Reset your password</a>
+    <hr>
+    <h3><i class="fa fa-chalkboard-teacher" aria-hidden="true"></i> Ask your tutor</h3>
+    <br>
+    <p>It is important that you access this website to submit your assignments.</p>
+    <p>If you have tried the steps above, and still can't access your account, talk to your teacher before next class.</p>    
+  </div>
+  </div>
+</div>
+</div>
+{% endblock %}

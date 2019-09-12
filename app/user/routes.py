@@ -39,7 +39,6 @@ def login():
 	return render_template('user/login.html', title='Sign In', form=form)
 
 
-
 # Log-out page
 @bp.route('/logout')
 def logout():
@@ -47,6 +46,11 @@ def logout():
 	return redirect(url_for('main.index'))
 
 ############## User registration, log-in/out, and management
+
+# Log-in help page
+@bp.route('/troubleshooting')
+def troubleshooting():
+	return render_template('user/troubleshooting.html', title='Having problems logging in?')
 
 # Registration
 @bp.route('/register', methods=['GET', 'POST'])
