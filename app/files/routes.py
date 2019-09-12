@@ -186,7 +186,9 @@ def download_library_file(library_upload_id):
 def view_library_downloads(library_upload_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		library_upload = LibraryUpload.query.get(library_upload_id)
-		library_downloads = db.session.query(LibraryDownload, User).join(User, LibraryDownload.user_id == User.id).all()
+		library_downloads = db.session.query(LibraryDownload, User).join(
+			User, LibraryDownload.user_id == User.id).filter(
+			LibraryDownload.library_upload_id==library_upload_id).all()
 		return render_template('files/view_library_downloads.html',
 								title='View library downloads',
 								library_upload = library_upload,
