@@ -83,7 +83,9 @@
               {% if user.email_confirmed==True %}
                <td><button class="btn btn-sm btn-secondary"><i class="fa fa-check-circle"></i></button></td>
               {% else %}
-               <td><button class="btn btn-sm btn-warning"><i class="fa fa-times-circle"></i></button></td>
+               <td>
+                <a href="{{url_for('user.send_new_confirmation_email', user_id = user.id)}}" class="btn btn-warning btn-sm btn-block" role="button"><i class="fa fa-user-times"></i> Send again</a>           
+               </td>
               {% endif %}
 
               {% if user.is_admin==True %}

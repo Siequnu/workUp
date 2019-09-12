@@ -99,6 +99,19 @@ def register():
 		flash('Sign up is currently closed.', 'warning')
 		return redirect(url_for('main.index'))
 
+# Send new confirmation email
+@bp.route('/confirmation/<user_id>')
+def send_new_confirmation_email(user_id):
+	user = User.query.filter_by(id=user_id).first_or_404()
+	subject = "WorkUp - please confirm your email address"
+	token = app.email_model.ts.dumps(str(user.email), salt=current_app.config["TS_SALT"])
+	confirm_url = url_for('user.confirm_email', token=token, _external=True)
+	
+	html = render_template('email/activate.html',confirm_url=confirm_url, username = user.username)
+	executor.submit(app.email_model.send_email, user.email, subject, html)
+	flash('An new confirmation email has been sent to ' + user.username + ' with further instructions.', 'success')
+	return redirect(url_for('user.manage_students'))
+
 # Confirm email
 @bp.route('/confirm/<token>')
 def confirm_email(token):
