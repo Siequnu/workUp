@@ -77,9 +77,13 @@ def get_thumbnail (filename):
 		else:
 			filepath = (os.path.join(current_app.config['THUMBNAIL_FOLDER'], 'file-blank.pdf'))
 		
+		
 		with(Image(filename=filepath, resolution=current_app.config['THUMBNAIL_RESOLUTION'])) as source: 
-			images = source.sequence
-			Image(images[0]).save(filename=thumbnail_filepath)
+			try:
+				images = source.sequence
+				Image(images[0]).save(filename=thumbnail_filepath)
+			finally:
+				images.destroy()
 			return thumbnail_filepath
 
 def get_all_library_books ():
@@ -110,10 +114,10 @@ def get_user_library_books_from_id (user_id):
 		LibraryUpload, ClassLibraryFile.library_upload_id==LibraryUpload.id).filter(
 		Enrollment.user_id==user_id).all()
 
-def get_all_uploads_from_assignment_id (assignment_id):	
+def get_all_uploads_from_assignment_id (assignment_id): 
 	return db.session.query(
 		Upload, User).join(User).filter(
-		Upload.assignment_id == assignment_id).all()	
+		Upload.assignment_id == assignment_id).all()    
 
 def get_uploads_object ():
 	return db.session.query(Upload, User, Assignment).join(
@@ -135,7 +139,7 @@ def get_peer_reviews_from_upload_id (upload_id):
 def get_upload_object (upload_id):
 	return Upload.query.get(upload_id)
 
-def get_post_info_from_user_id (user_id):	
+def get_post_info_from_user_id (user_id):   
 	upload_info = db.session.query(Upload).filter(Upload.user_id==user_id).all()
 	upload_array =[]
 	for upload in upload_info:
