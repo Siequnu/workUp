@@ -146,12 +146,12 @@
 
         <div class="row text-center">
             <div class="col">
-                <div class="counter">
+                <a href="{{url_for('assignments.view_assignments')}}"><div class="counter">
                     <i class="fa fa-file-upload fa-2x"></i>
                     <h2 class="timer count-title count-number">Assignments completed</h2>
                     <div class="progress-circle progress-{{upload_progress_percentage}}"><span>{{upload_progress_percentage}}</span></div>
                 </div>
-            </div>
+            </div></a>
             <div class="col">
                 <div class="counter">
                     <i class="fa fa-comment-dots fa-2x"></i>
@@ -231,7 +231,7 @@
                             <h4><i class="fa fa-user"></i> Your info</h4>
 
                         </div>
-                        <div class="card-body">
+                        <a href="{{url_for('files.file_stats')}}"><div class="card-body">
 
                             {% if number_of_uploads == 1 %}
                             <h5 class="card-title">You have uploaded {{number_of_uploads}} assignment.</h5>
@@ -241,7 +241,7 @@
 														{% if last_upload_humanized_timestamp != False %}
                             <p class="card-text"><small class="text-muted"> Last uploaded {{last_upload_humanized_timestamp}}</small></p>
                             {% endif %}
-                        </div>
+                        </div></a>
                     </div>
 
                     <div class="card" style="max-width: 20rem;">
