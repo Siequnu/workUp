@@ -77,6 +77,26 @@ def download_random_file(assignment_id):
 	return send_file(random_file, as_attachment=True)
 
 
+# Delete a file
+@bp.route("/delete/<upload_id>", methods=['GET', 'POST'])
+@login_required
+def delete_file(upload_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		try:
+			file = Upload.query.get(upload_id)
+		except:
+			return redirect(url_for('files.file_stats'))
+		form = app.user.forms.ConfirmationForm()
+		if form.validate_on_submit():
+			app.files.models.delete_upload(upload_id)
+			return redirect(url_for('files.file_stats'))
+		return render_template('confirmation_form.html',
+							   title = 'Delete file?',
+							   confirmation_message = 'Are you sure you want to delete ' + file.original_filename + '?',
+							   form = form)
+	abort (403)
+		
+
 
 # Download a file for peer review
 @bp.route("/download_file/<assignment_id>")

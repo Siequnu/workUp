@@ -54,6 +54,11 @@ def edit_library_upload (library_upload_id, form):
 	library_upload.description = form.description.data
 								
 	db.session.commit()
+	
+
+def delete_upload (upload_id):
+	Upload.query.filter_by(id = upload_id).delete()								
+	db.session.commit()
 
 	
 # Generate thumbnails
