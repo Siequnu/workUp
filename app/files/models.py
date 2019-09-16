@@ -84,12 +84,9 @@ def get_thumbnail (filename):
 		
 		
 		with(Image(filename=filepath, resolution=current_app.config['THUMBNAIL_RESOLUTION'])) as source: 
-			try:
-				images = source.sequence
-				Image(images[0]).save(filename=thumbnail_filepath)
-			finally:
-				images.destroy()
-			return thumbnail_filepath
+			images = source.sequence
+			Image(images[0]).save(filename=thumbnail_filepath)
+		return thumbnail_filepath
 
 def get_all_library_books ():
 	return db.session.query(ClassLibraryFile, LibraryUpload).join(
