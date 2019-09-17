@@ -259,6 +259,7 @@ def create_teacher_review(upload_id):
 		assignment_id = Upload.query.get(upload_id).assignment_id
 		assignment_info = Assignment.query.get(assignment_id)
 		user_info = User.query.get(Upload.query.get(upload_id).user_id)
+		class_info = Turma.query.get(assignment_info.target_turma_id)
 		
 		if request.method == 'POST':
 			form_contents = json.dumps(request.form)
@@ -269,6 +270,7 @@ def create_teacher_review(upload_id):
 								title='Submit a teacher review',
 								assignment_info = Assignment.query.get(assignment_id),
 								user_info = User.query.get(Upload.query.get(upload_id).user_id),
+								class_info = class_info,
 								form=render_form)
 	abort (403)
 
