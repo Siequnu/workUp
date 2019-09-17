@@ -120,7 +120,6 @@ def view_assignment_details(assignment_id):
 		completed_assignments = Upload.query.filter(Upload.assignment_id == assignment_id).all()
 		assignment_detail_info = app.assignments.models.get_assignment_detail_info(assignment_id)
 		return render_template('assignments/view_assignment_details.html',
-							   uploads_info = app.files.models.get_all_uploads_from_assignment_id(assignment_id),
 							   completed_assignments = completed_assignments,
 							   uncomplete_assignments = len(students_in_class) - len(completed_assignments),
 							   assignment_detail_info = assignment_detail_info,

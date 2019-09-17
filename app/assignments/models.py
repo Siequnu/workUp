@@ -37,7 +37,7 @@ def get_assignment_detail_info (assignment_id):
 	turma_id = Assignment.query.get(assignment_id).target_turma_id
 	students = db.session.query(User).join(
 		Enrollment, User.id == Enrollment.user_id).filter(
-		Enrollment.turma_id == turma_id).all()
+		Enrollment.turma_id == turma_id).order_by(User.student_number.asc()).all()
 	assignment_detail_info = []
 	for student in students:
 		student_dict = student.__dict__
