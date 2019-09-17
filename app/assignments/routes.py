@@ -247,18 +247,30 @@ def create_peer_review(assignment_id):
 @bp.route("/create_teacher_review/<upload_id>", methods=['GET', 'POST'])
 @login_required
 def create_teacher_review(upload_id):
-	peer_review_form_id = Assignment.query.join(
-		Upload, Upload.assignment_id == Assignment.id).filter(
-		Upload.id == upload_id).first().peer_review_form_id
-	form_data = PeerReviewForm.query.get(peer_review_form_id).serialised_form_data
-	form_loader = app.assignments.formbuilder.formLoader(form_data, (url_for('assignments.create_teacher_review', upload_id=upload_id)))
-	render_form = form_loader.render_form()
-	if request.method == 'POST':
-		form_contents = json.dumps(request.form)
-		update_comment = app.assignments.models.add_teacher_comment_to_upload(form_contents, upload_id)
-		flash('Teacher review submitted succesfully!', 'success')
-		return redirect(url_for('assignments.view_assignments'))
-	return render_template('files/peer_review_form.html', title='Submit a teacher review', form=render_form)
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		peer_review_form_id = Assignment.query.join(
+			Upload, Upload.assignment_id == Assignment.id).filter(
+			Upload.id == upload_id).first().peer_review_form_id
+		form_data = PeerReviewForm.query.get(peer_review_form_id).serialised_form_data
+		form_loader = app.assignments.formbuilder.formLoader(form_data, (url_for('assignments.create_teacher_review', upload_id=upload_id)))
+		render_form = form_loader.render_form()
+		
+		# Get assignment and user details
+		assignment_id = Upload.query.get(upload_id).assignment_id
+		assignment_info = Assignment.query.get(assignment_id)
+		user_info = User.query.get(Upload.query.get(upload_id).user_id)
+		
+		if request.method == 'POST':
+			form_contents = json.dumps(request.form)
+			update_comment = app.assignments.models.add_teacher_comment_to_upload(form_contents, upload_id)
+			flash('Teacher review submitted succesfully!', 'success')
+			return redirect(url_for('assignments.view_assignments'))
+		return render_template('files/peer_review_form.html',
+								title='Submit a teacher review',
+								assignment_info = Assignment.query.get(assignment_id),
+								user_info = User.query.get(Upload.query.get(upload_id).user_id),
+								form=render_form)
+	abort (403)
 
 
 # Let a receiver or author view a completed peer review

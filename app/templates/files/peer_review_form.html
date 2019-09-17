@@ -12,6 +12,14 @@
   <div class="card-body">
     <h1>{{title}}</h1>
     <hr>
+    {% if user_info %}
+    <h4>{{assignment_info.title}}</h4>
+     <h4>{{user_info.student_number}}</h4>
+    <h5>{{user_info.username}}</h5>
+    <hr>
+    {% endif %}
+    
+    
     <br>
      {{ form|safe }}
     <br>
