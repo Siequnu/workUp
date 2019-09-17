@@ -170,11 +170,11 @@
                 </div></a>
             </div>
             <div class="col">
-                <div class="counter">
+                <a href="{{url_for('files.file_stats')}}"><div class="counter">
                     <i class="fa fa-comments fa-2x"></i>
                     <h2 class="timer count-title count-number">{{received_peer_review_count}}</h2>
                     <p class="count-text ">Reviews received</p>
-                </div>
+                </div></a>
             </div>
         </div>
         <br>
@@ -248,7 +248,8 @@
                         <div class="card-header">
                             <h4><i class="fa fa-comment-dots"></i> Peer reviews</h4>
                         </div>
-                        <div class="card-body">
+                        
+                        <a href="{{url_for('files.file_stats')}}"><div class="card-body">
 
                             {% if number_of_peer_reviews_on_own_uploads == 1 %}
                             <h5 class="card-title">Your essays have been reviewed {{number_of_peer_reviews_on_own_uploads}} time.</h5>
@@ -258,7 +259,7 @@
 														{% if last_received_peer_review_humanized_timestamp != False %}
                             <p class="card-text"><small class="text-muted"> Last reviewed {{last_received_peer_review_humanized_timestamp}}</small></p>
                             {% endif %}
-                        </div>
+                        </div></a>
                     </div>
                 </div>
 
