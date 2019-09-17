@@ -229,6 +229,7 @@ class Comment(db.Model):
 		comment_object= Comment.query.get(comment_id)
 		comment_object.comment = peer_review_contents
 		comment_object.pending = False
+		comment_object.timestamp = datetime.now()
 		db.session.commit()
 	
 	@staticmethod

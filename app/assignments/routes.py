@@ -15,6 +15,8 @@ from pathlib import Path
 
 import app.assignments.formbuilder
 
+import datetime
+
 
 ########## Student class (turma) methods
 @bp.route("/class/create", methods=['GET', 'POST'])
