@@ -114,12 +114,7 @@ def get_user_library_books_from_id (user_id):
 		Turma, Enrollment.turma_id == Turma.id).join(
 		ClassLibraryFile, Enrollment.turma_id==ClassLibraryFile.turma_id).join(
 		LibraryUpload, ClassLibraryFile.library_upload_id==LibraryUpload.id).filter(
-		Enrollment.user_id==user_id).all()
-
-def get_all_uploads_from_assignment_id (assignment_id): 
-	return db.session.query(
-		Upload, User).join(User).filter(
-		Upload.assignment_id == assignment_id).all()    
+		Enrollment.user_id==user_id).all() 
 
 def get_uploads_object ():
 	return db.session.query(Upload, User, Assignment).join(
