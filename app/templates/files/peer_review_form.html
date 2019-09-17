@@ -13,14 +13,13 @@
     <h1>{{title}}</h1>
     <hr>
     {% if user_info %}
-    <h4>{{assignment_info.title}}</h4>
-     <h4>{{user_info.student_number}}</h4>
-    <h5>{{user_info.username}}</h5>
+    <h4><i class="fa fa-tasks"></i> {{assignment_info.title}}</h4>
+    <h4><i class="fa fa-user"></i> {{class_info.turma_label}}</h4>
+    <br>
+     <h4><i class="fa fa-id-badge"></i> {{user_info.student_number}} - {{user_info.username}}</h4>
     <hr>
     {% endif %}
-    
-    
-    <br>
+
      {{ form|safe }}
     <br>
   </div>
