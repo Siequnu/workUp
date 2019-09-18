@@ -305,7 +305,7 @@ def register_admin():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = forms.AdminRegistrationForm()
 		if form.validate_on_submit():
-			user = User(username=form.username.data, email=form.email.data, is_admin=True)
+			user = User(username=form.username.data, email=form.email.data, is_admin=True, registered=datetime.now())
 			db.session.add(user)
 			db.session.commit()
 			
