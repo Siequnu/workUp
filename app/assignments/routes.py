@@ -283,7 +283,7 @@ def create_teacher_review(upload_id):
 def view_peer_review(comment_id):
 	if current_user.id is models.get_file_owner_id (
 		Comment.query.get(comment_id).file_id) or current_user.id is app.assignments.models.get_comment_author_id_from_comment(
-		comment_id):
+		comment_id) or app.models.is_admin(current_user.username):
 	
 		peer_review_form_id = db.session.query(Assignment).join(
 			Comment, Assignment.id==Comment.assignment_id).filter(
