@@ -265,6 +265,8 @@ def create_teacher_review(upload_id):
 			form_contents = json.dumps(request.form)
 			update_comment = app.assignments.models.add_teacher_comment_to_upload(form_contents, upload_id)
 			flash('Teacher review submitted succesfully!', 'success')
+			# Are there more uploads to be corrected in this class?
+			# Get a list of uncorrected assignments, ordered by student number, redirect to next 
 			return redirect(url_for('assignments.view_assignments'))
 		return render_template('files/peer_review_form.html',
 								title='Submit a teacher review',
