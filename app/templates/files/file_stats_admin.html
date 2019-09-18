@@ -58,7 +58,7 @@
 		  <tbody id="searchableTable">
 			{% for upload, user, assignment in template_packages['uploads_object'] %}
             <tr>
-              <td>{{ upload.original_filename }}</td>
+              <td>{{ upload.original_filename|truncate(30)}}</td>
               <td>{{ user.username }}</td>
               <td>{{ upload.timestamp.strftime('%b-%d %H:%M:%S')}}</td>
               <td>{{ assignment.title }}</td>
