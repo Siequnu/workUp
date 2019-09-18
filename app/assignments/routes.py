@@ -265,9 +265,17 @@ def create_teacher_review(upload_id):
 			form_contents = json.dumps(request.form)
 			update_comment = app.assignments.models.add_teacher_comment_to_upload(form_contents, upload_id)
 			flash('Teacher review submitted succesfully!', 'success')
-			# Are there more uploads to be corrected in this class?
-			# Get a list of uncorrected assignments, ordered by student number, redirect to next 
-			return redirect(url_for('assignments.view_assignments'))
+			# For this assignment (class), get a list of uploads that haven't been commented on by current_user.id
+			not_yet_graded_uploads = []
+			uploads = Upload.query.join(User, Upload.user_id == User.id).filter(
+				Upload.assignment_id == assignment_id).order_by(
+				User.student_number.asc()).all()
+			for upload in uploads:
+				if Comment.query.filter(Comment.file_id == upload.id).filter(Comment.user_id ==current_user.id).first() is None:
+					# There is an assignment that hasn't been graded, redirect to the grading page
+					return redirect(url_for('assignments.create_teacher_review', upload_id = upload.id))
+			# No more assignments to be graded, return to assignment detail page
+			return redirect(url_for('assignments.view_assignment_details', assignment_id = assignment_id))
 		return render_template('files/peer_review_form.html',
 								title='Submit a teacher review',
 								assignment_info = Assignment.query.get(assignment_id),
