@@ -47,6 +47,11 @@ def get_assignment_detail_info (assignment_id):
 			Upload.assignment_id == assignment_id).first()
 		except:
 			pass
+		try:
+			student_dict['comments'] = db.session.query(Comment).filter(
+			Comment.file_id == student_dict['upload'].id).all()
+		except:
+			pass
 		assignment_detail_info.append(student_dict)
 	return assignment_detail_info
 	
