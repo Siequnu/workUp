@@ -49,7 +49,7 @@ def get_assignment_detail_info (assignment_id):
 			pass
 		try:
 			student_dict['comments'] = db.session.query(Comment).filter(
-			Comment.file_id == student_dict['upload'].id).all()
+			Comment.file_id == student_dict['upload'].id).filter(Comment.pending == 0).all()
 		except:
 			pass
 		assignment_detail_info.append(student_dict)
