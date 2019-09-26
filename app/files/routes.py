@@ -89,6 +89,8 @@ def delete_file(upload_id):
 		form = app.user.forms.ConfirmationForm()
 		if form.validate_on_submit():
 			app.files.models.delete_upload(upload_id)
+			# Delete any comments for this upload ID
+			app.assignments.models.delete_all_comments_from_upload_id(upload_id)
 			return redirect(url_for('files.file_stats'))
 		return render_template('confirmation_form.html',
 							   title = 'Delete file?',
