@@ -84,8 +84,9 @@
                </td>
             <td>
               {% if user.upload.original_filename %}
-              <a href="{{url_for('files.download', file_id = user.upload.id, rename=True)}}" <button class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Download </button></a>
-              <a href="{{url_for('assignments.create_teacher_review', upload_id = user.upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-highlighter"></i> Grade </button></a>
+              <a href="{{url_for('files.download', file_id = user.upload.id, rename=True)}}" <button class="btn btn-sm btn-block btn-primary"><i class="fa fa-download"></i> Download </button></a>
+              <a href="{{url_for('assignments.create_teacher_review', upload_id = user.upload.id)}}" <button class="btn btn-sm btn-block btn-secondary"><i class="fa fa-highlighter"></i> Grade </button></a>
+              <a href="{{url_for('files.delete_file', upload_id = user.upload.id)}}" <button class="btn btn-sm btn-block btn-danger"><i class="fa fa-trash-alt"></i> Delete </button></a>
               {% else %}
               <a href="{{url_for('files.upload_file', assignment_id = assignment_id, user_id = user.id)}}" <button class="btn btn-sm btn-block btn-success"><i class="fa fa-user-check"></i> Submit for student </button></a>
               {% endif %}
