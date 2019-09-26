@@ -212,6 +212,21 @@ def add_teacher_comment_to_upload (form_contents, upload_id):
 	db.session.commit()
 	return True
 
+def delete_all_comments_from_upload_id (upload_id):
+	comments = Comment.query.filter_by(file_id=upload_id).all()
+	if comments is not None:
+		for comment in comments:
+			db.session.delete(comment)
+	db.session.commit()
+
+def delete_all_comments_from_user_id (user_id):
+	comments = Comment.query.filter_by(user_id=user_id).all()
+	if comments is not None:
+		for comment in comments:
+			db.session.delete(comment)
+	db.session.commit()
+
+
 def new_peer_review_from_form (form_contents, assignment_id):
 	# Check if user has any previous downloads with pending peer reviews
 	pending_assignment = Comment.get_pending_status_from_user_id_and_assignment_id (current_user.id, assignment_id)
