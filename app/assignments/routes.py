@@ -310,9 +310,9 @@ def view_peer_review(comment_id):
 															 submit_label = 'Return',
 															 data_array = form_contents)
 		render_form = form_loader.render_form()
-		return render_template('assignments/form_builder_render.html', render_form=render_form)
+		return render_template('assignments/form_builder_render.html',
+							   render_form=render_form, title = 'Peer review')
 		
-		return render_template('files/peer_review_form.html', title='View peer review', form=form)
 	else: abort (403)
 	
 ############# Peer review forms routes
