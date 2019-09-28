@@ -131,7 +131,14 @@ def get_file_owner_id (file_id):
 	return Upload.query.get(file_id).user_id
 
 def get_peer_reviews_from_upload_id (upload_id):
-	return Comment.query.filter_by(file_id=upload_id).filter_by(pending=False).all()
+	comments = Comment.query.filter_by(file_id=upload_id).filter_by(pending=False).all()
+	comments_array = []	
+	for comment in comments:
+		comment_dict = comment.__dict__
+		user = User.query.get(comment.user_id)
+		comment_dict['humanized_timestamp'] = arrow.get(comment.timestamp, tz.gettz('Asia/Hong_Kong')).humanize()
+		comments_array.append((comment_dict, user))
+	return comments_array
 
 def get_upload_object (upload_id):
 	return Upload.query.get(upload_id)

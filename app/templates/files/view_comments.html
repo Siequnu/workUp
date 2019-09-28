@@ -26,9 +26,13 @@
            <p><em>No peer reviews have been submitted for this work.<br /><br />
          Please check back later.</em></p>
          {% else %}
-         {% for comment in comments %}
+         {% for comment, user in comments %}
              <p>
-           <td><a href="{{url_for('assignments.view_peer_review', comment_id=comment.id)}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review</a></td>
+            {% if user.is_admin == True %}
+           <td><a href="{{url_for('assignments.view_peer_review', comment_id=comment.id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View teacher review by {{user.username}}</a></td>
+           {% else %}
+           <td><a href="{{url_for('assignments.view_peer_review', comment_id=comment.id)}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review by student</a></td>
+           {% endif %}
            </p>
          {% endfor %}
        {% endif %}
