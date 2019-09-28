@@ -68,7 +68,7 @@
             {% endif %}
                <td>{{user.student_number}}</td>
                <td>{{user.username}}</td>
-              <td>{{user.upload.original_filename|default('')}}</td>
+              <td>{{user.upload.original_filename|truncate(50)|default('')}}</td>
                {% if user.upload.original_filename %}
                <td>{{user.upload.timestamp.strftime('%d %b %H:%M:%S')}}</td>
                {% else %}
