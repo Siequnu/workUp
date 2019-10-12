@@ -33,6 +33,9 @@
            {% else %}
            <td><a href="{{url_for('assignments.view_peer_review', comment_id=comment.id)}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review by student</a></td>
            {% endif %}
+           {% if comment.comment_file_upload %}
+           <i class="fa fa-paperclip"></i> 
+           {% endif %}
            </p>
          {% endfor %}
        {% endif %}
