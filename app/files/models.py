@@ -137,6 +137,7 @@ def get_peer_reviews_from_upload_id (upload_id):
 		comment_dict = comment.__dict__
 		user = User.query.get(comment.user_id)
 		comment_dict['humanized_timestamp'] = arrow.get(comment.timestamp, tz.gettz('Asia/Hong_Kong')).humanize()
+		comment_dict['comment_file_upload'] = db.session.query(CommentFileUpload).filter_by(comment_id = comment_dict['id']).first()
 		comments_array.append((comment_dict, user))
 	return comments_array
 
