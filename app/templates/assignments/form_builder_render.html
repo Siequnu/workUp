@@ -10,10 +10,35 @@
         </div>
 
         <body>
+         
             <div class="container">
-                <div class="col-sm-6 col-sm-offset-3">
+              <div class="row">
+             {% if comment_file_upload %}
+            
+              <div class="col-xs-12 col-md-4">
+               <h2>Graded work</h2>
+               <br>
+  
+  <div class="library_card">
+ <div class="img-library_card">
+  {% set thumbnail_filename = comment_file_upload.filename.split('.') %}
+  <img src="/static/thumbnails/{{thumbnail_filename[0]}}.jpeg" />
+ </div>
+ <div class="library_card-content">
+ <p>{{comment_file_upload.original_filename|truncate(42)}}</p>
+ </div>
+  <div class="library_card-read-more">
+  <a href="#" class="btn btn-secondary btn-sm" role="button"><i class="fa fa-download"></i> View correction</a>
+  </div>
+</div>
+
+</div>
+             
+             {% endif %}
+                <div class="col-xs-12 col-md-6 col-sm-offset-3">
                     {{ render_form|safe }}
                 </div>
+                </row>
             </div>
         </body>
     </div>

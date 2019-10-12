@@ -209,8 +209,10 @@ def add_teacher_comment_to_upload (form_contents, upload_id):
 	comment = Comment(comment = form_contents, user_id = current_user.id,
 					  file_id = upload_id, pending = False, assignment_id = Upload.query.get(upload_id).assignment_id)
 	db.session.add(comment)
+	db.session.flush() # Access the new comment ID
+	new_comment_id = comment.id
 	db.session.commit()
-	return True
+	return new_comment_id
 
 def delete_all_comments_from_upload_id (upload_id):
 	comments = Comment.query.filter_by(file_id=upload_id).all()

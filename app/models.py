@@ -265,3 +265,16 @@ class PeerReviewForm(db.Model):
 	def __repr__(self):
 		return '<PeerReviewForm {}>'.format(self.title)
 	
+
+class CommentFileUpload(db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	original_filename = db.Column(db.String(140))
+	filename = db.Column(db.String(140))
+	timestamp = db.Column(db.DateTime, default=datetime.now())
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+	
+	def __repr__(self):
+		return '<Comment File Upload {}>'.format(self.filename)
+	

@@ -2,7 +2,7 @@ from flask import send_from_directory, current_app
 from flask_login import current_user
 
 from app import db
-from app.models import User, Upload, Download, Assignment, Comment, LibraryUpload, ClassLibraryFile, Enrollment, Turma, LibraryDownload, AssignmentTaskFile
+from app.models import User, Upload, Download, Assignment, Comment, CommentFileUpload, LibraryUpload, ClassLibraryFile, Enrollment, Turma, LibraryDownload, AssignmentTaskFile
 import app.files
 import app.assignments 
 from werkzeug import secure_filename
@@ -248,6 +248,23 @@ def save_assignment_file (file, assignment_id, user_id = False):
 		new_upload.user_id = current_user.id
 		
 	db.session.add(new_upload)
+	db.session.commit()
+	
+	
+# Save a comment file to be associated with a student upload
+def save_comment_file_upload (file, comment_id):
+	original_filename = secure_filename(file.filename)
+	random_filename = save_file (file)
+	
+	executor.submit(get_thumbnail, random_filename)
+	
+	# Update DB after file has saved
+	new_teacher_peer_review_file = CommentFileUpload(original_filename = original_filename,
+													 filename = random_filename,
+													 comment_id = comment_id,
+													 user_id = current_user.id,
+													 timestamp = datetime.now())
+	db.session.add(new_teacher_peer_review_file)
 	db.session.commit()
 
 # Verify a filename is secure with werkzeug library
