@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a726ba39eec5585c9a7c5bec126aa432ac8736d34774de3e71978810f2d19a9b"
+            "sha256": "3d7dfc9293c9b868cee96077ec4aba854a9494b3ce7e900a841c3a995b044f6e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -148,6 +148,14 @@
             "git": "https://github.com/colour-science/flask-compress.git",
             "ref": "efa1a1b87de3eb8af22cddddadd066ef089965ee"
         },
+        "flask-excel": {
+            "hashes": [
+                "sha256:260b88c9101de78b00abbdae161e84f6466d24e1c5081583764877e8a26085cc",
+                "sha256:b82ddfe6319ecf2f796ada9966737ac8eaf9a99d6bce773f8acdc08acd7e9fae"
+            ],
+            "index": "pypi",
+            "version": "==0.0.7"
+        },
         "flask-executor": {
             "hashes": [
                 "sha256:ab486a82a9c5a8d937c16f1e930c6b8fe2979707c3c9ec6d88e188717ebd4e03",
@@ -278,6 +286,13 @@
             "index": "pypi",
             "version": "==1.3"
         },
+        "lml": {
+            "hashes": [
+                "sha256:b1bef669dc077a1075fa64b99229b6341085b3b3a98d29c66df1853cc14e6c1a",
+                "sha256:ea5ba817b4adc9e9f5c21725cd2475f912933b7e2dfdf0792aed80077154f63f"
+            ],
+            "version": "==0.0.9"
+        },
         "mako": {
             "hashes": [
                 "sha256:0728c404877cd4ca72c409c0ea372dc5f3b53fa1ad2bb434e1d216c0444ff1fd"
@@ -344,11 +359,11 @@
         },
         "packaging": {
             "hashes": [
-                "sha256:a7ac867b97fdc07ee80a8058fe4435ccd274ecc3b0ed61d852d7d53055528cf9",
-                "sha256:c491ca87294da7cc01902edbe30a5bc6c4c28172b5138ab4e4aa1b9d7bfaeafe"
+                "sha256:28b924174df7a2fa32c1953825ff29c61e2f5e082343165438812f00d3a7fc47",
+                "sha256:d9551545c6d761f3def1677baf08ab2a3ca17c56879e70fecba2fc4dde4ed108"
             ],
             "index": "pypi",
-            "version": "==19.1"
+            "version": "==19.2"
         },
         "pathlib": {
             "hashes": [
@@ -443,6 +458,27 @@
             ],
             "index": "pypi",
             "version": "==0.2.5"
+        },
+        "pyexcel": {
+            "hashes": [
+                "sha256:7fac067e65567c380933b4d382587a5ce6581d0ad85992f6f0bc7c3f16012184",
+                "sha256:f0a7797f3a0de9e6f81151c9581fa90c4e1afce207dc47d2f0ba728dd2e24467"
+            ],
+            "version": "==0.5.15"
+        },
+        "pyexcel-io": {
+            "hashes": [
+                "sha256:08dfe39553b996359b143de3d9ec43e196f1138d47cabb73af04a16821b84d79",
+                "sha256:2cba956814e72b66072d97b00ede4a084ad881ce72129088eb0dc3c7f3d670cd"
+            ],
+            "version": "==0.5.20"
+        },
+        "pyexcel-webio": {
+            "hashes": [
+                "sha256:039538f1b35351f1632891dde29ef4d7fba744e217678ebb5a501336e28ca265",
+                "sha256:3583cf7dcddb747520a8a90e93cf07b0584878b56b3c41c46d132b458a6cfd00"
+            ],
+            "version": "==0.1.4"
         },
         "pyparsing": {
             "hashes": [
@@ -539,6 +575,13 @@
             "index": "pypi",
             "version": "==0.33.11"
         },
+        "texttable": {
+            "hashes": [
+                "sha256:63df57252ca99cb6a2227b40a5e640062175084ba3c949d24342934d24cfe067",
+                "sha256:eff3703781fbc7750125f50e10f001195174f13825a92a45e9403037d539b4f4"
+            ],
+            "version": "==1.6.2"
+        },
         "urllib3": {
             "hashes": [
                 "sha256:2393a695cd12afedd0dcb26fe5d50d0cf248e5a66f75dbd89a3d4eb333a61af4",
@@ -586,11 +629,11 @@
         },
         "werkzeug": {
             "hashes": [
-                "sha256:00d32beac38fcd48d329566f80d39f10ec2ed994efbecfb8dd4b320062d05902",
-                "sha256:0a24d43be6a7dce81bae05292356176d6c46d63e42a0dd3f9504b210a9cfaa43"
+                "sha256:7280924747b5733b246fe23972186c6b348f9ae29724135a6dfc1e53cea433e7",
+                "sha256:e5f4a1f98b52b18a93da705a7458e55afb26f32bff83ff5d19189f92462d65c4"
             ],
             "index": "pypi",
-            "version": "==0.15.6"
+            "version": "==0.16.0"
         },
         "wtforms": {
             "hashes": [

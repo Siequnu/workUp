@@ -5,7 +5,7 @@ from app.assignments import bp, models, forms
 from app.assignments.forms import TurmaCreationForm, AssignmentCreationForm
 
 from app.files import models
-from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile, Enrollment, PeerReviewForm
+from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile, Enrollment, PeerReviewForm, CommentFileUpload
 import app.models
 
 from app import db
@@ -244,7 +244,7 @@ def create_peer_review(assignment_id):
 		
 
 # Display an empty review feedback form
-@bp.route("/create_teacher_review/<upload_id>", methods=['GET', 'POST'])
+@bp.route("/review/create/<upload_id>/teacher", methods=['GET', 'POST'])
 @login_required
 def create_teacher_review(upload_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
@@ -255,6 +255,21 @@ def create_teacher_review(upload_id):
 		form_loader = app.assignments.formbuilder.formLoader(form_data, (url_for('assignments.create_teacher_review', upload_id=upload_id)))
 		render_form = form_loader.render_form()
 		
+		# Insert the file upload HTML into the rendered form
+		#!# Hacky! Is there a better way to merge a file upload field into a preset form?
+		# Split at ><div class="form-title"> and before this add our file upload html
+		file_upload_html = '''enctype="multipart/form-data">
+			<h2>Upload a corrected file</h2>
+			<i>This is an optional step.</i>
+			<br>
+			<br>
+			<input type="file" name="file" /> 
+			<br>
+			<br>
+			''' 
+		split = render_form.split('>', 1)
+		form_html = split[0] + file_upload_html + split[1]
+		
 		# Get assignment and user details
 		assignment_id = Upload.query.get(upload_id).assignment_id
 		assignment_info = Assignment.query.get(assignment_id)
@@ -262,9 +277,25 @@ def create_teacher_review(upload_id):
 		class_info = Turma.query.get(assignment_info.target_turma_id)
 		
 		if request.method == 'POST':
+			# Submit the review comment form 
 			form_contents = json.dumps(request.form)
-			update_comment = app.assignments.models.add_teacher_comment_to_upload(form_contents, upload_id)
+			new_comment_id = app.assignments.models.add_teacher_comment_to_upload(form_contents, upload_id)
 			flash('Teacher review submitted succesfully!', 'success')
+			
+			
+			# Deal with a potential uploaded file
+			if 'file' in request.files:
+				file = request.files['file']
+				if file.filename == '':
+					flash('The filename is blank. Please rename the file.', 'warning')
+					return redirect(request.url)
+				if file and models.allowed_file_extension(file.filename):
+					models.save_comment_file_upload(file, new_comment_id)
+					original_filename = models.get_secure_filename(file.filename)
+					flash('Your file ' + str(original_filename) + ' was uploaded successfully.', 'success')
+					# Redirect to the same page, but show the uploaded file for the comment
+					
+			
 			# For this assignment (class), get a list of uploads that haven't been commented on by current_user.id
 			not_yet_graded_uploads = []
 			uploads = Upload.query.join(User, Upload.user_id == User.id).filter(
@@ -281,12 +312,13 @@ def create_teacher_review(upload_id):
 								assignment_info = Assignment.query.get(assignment_id),
 								user_info = User.query.get(Upload.query.get(upload_id).user_id),
 								class_info = class_info,
-								form=render_form)
+								form=form_html,
+								admin_file_upload = True)
 	abort (403)
 
 
 # Let a receiver or author view a completed peer review
-@bp.route("/view_peer_review/<comment_id>")
+@bp.route("/review/view/<comment_id>")
 @login_required
 def view_peer_review(comment_id):
 	if current_user.id is models.get_file_owner_id (
@@ -298,6 +330,11 @@ def view_peer_review(comment_id):
 			Comment.id==comment_id).first().peer_review_form_id
 		
 		form_contents = json.loads(Comment.query.get(comment_id).comment)
+		
+		# Get any uploaded file, if applicable
+		comment_file_upload = db.session.query(CommentFileUpload).filter_by(
+			comment_id = comment_id).first()
+		
 		
 		if current_user.id is app.assignments.models.get_comment_author_id_from_comment(
 		comment_id):
@@ -311,7 +348,8 @@ def view_peer_review(comment_id):
 															 data_array = form_contents)
 		render_form = form_loader.render_form()
 		return render_template('assignments/form_builder_render.html',
-							   render_form=render_form, title = 'Peer review')
+							   render_form=render_form, title = 'Peer review',
+							   comment_file_upload = comment_file_upload)
 		
 	else: abort (403)
 	
@@ -374,7 +412,7 @@ def submit():
 
 		return form
 
-@bp.route("/add_peer_review_form", methods=['GET', 'POST'])
+@bp.route("/peer-review/forms/add", methods=['GET', 'POST'])
 @login_required
 def add_peer_review_form():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
@@ -382,7 +420,7 @@ def add_peer_review_form():
 	abort(403)
 
 # Admin page to view classes
-@bp.route("/peer_review_form_admin")
+@bp.route("/peer-review/forms/admin")
 @login_required
 def peer_review_form_admin():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
