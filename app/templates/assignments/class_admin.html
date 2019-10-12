@@ -47,6 +47,7 @@
 			  <td>{{class.turma_year}}</td>
 			  <td>
           <a href="{{url_for('assignments.manage_enrollment', class_id=class.id)}}" <button class="btn btn-sm btn-secondary bln-block"><i class="fa fa-user-tag"></i> Manage enrollment</button></a>
+          <a href="{{url_for('assignments.export_class_data', class_id=class.id)}}" <button class="btn btn-sm btn-primary bln-block"><i class="fa fa-file-export"></i> Export class data</button></a>
           <a href="{{url_for('assignments.edit_class', turma_id=class.id)}}" <button class="btn btn-sm btn-warning bln-block"><i class="fa fa-edit"></i> Edit class</button></a>
           <a href="{{url_for('assignments.delete_class', turma_id=class.id)}}" <button class="btn btn-sm btn-danger bln-block"><i class="fa fa-trash-alt"></i> Delete</button></a>
         </td>
