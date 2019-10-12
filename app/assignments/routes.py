@@ -58,15 +58,17 @@ def class_admin():
 
 
 @bp.route("/class/export/<class_id>")
+@login_required
 def export_class_data(class_id):
-	query_sets = db.session.query(User).join(
-		Enrollment, Enrollment.user_id == User.id).filter(
-		Enrollment.turma_id == class_id).order_by(User.student_number.asc()).all()
-	class_object = Turma.query.get(class_id)
-	filename = class_object.turma_label + ' - ' + class_object.turma_term + ' ' + str(class_object.turma_year)
-	column_names = ['student_number', 'username', 'email']
-	return excel.make_response_from_query_sets(query_sets, column_names, "xlsx", file_name = filename)
-	
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		query_sets = db.session.query(User).join(
+			Enrollment, Enrollment.user_id == User.id).filter(
+			Enrollment.turma_id == class_id).order_by(User.student_number.asc()).all()
+		class_object = Turma.query.get(class_id)
+		filename = class_object.turma_label + ' - ' + class_object.turma_term + ' ' + str(class_object.turma_year)
+		column_names = ['student_number', 'username', 'email']
+		return excel.make_response_from_query_sets(query_sets, column_names, "xlsx", file_name = filename)
+	abort (403)
 	
 @bp.route("/class/enrollment/<class_id>")
 @login_required
