@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3d7dfc9293c9b868cee96077ec4aba854a9494b3ce7e900a841c3a995b044f6e"
+            "sha256": "23b9383b528c99e97130bde9520d776a547aa6872487398c02a6174cd02f1930"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -134,6 +134,12 @@
             ],
             "index": "pypi",
             "version": "==2.3.5"
+        },
+        "et-xmlfile": {
+            "hashes": [
+                "sha256:614d9722d572f6246302c4491846d2c393c199cfa4edc9af593437691683335b"
+            ],
+            "version": "==1.0.1"
         },
         "flask": {
             "hashes": [
@@ -270,6 +276,13 @@
             "index": "pypi",
             "version": "==1.1.0"
         },
+        "jdcal": {
+            "hashes": [
+                "sha256:1abf1305fce18b4e8aa248cf8fe0c56ce2032392bc64bbd61b5dff2a19ec8bba",
+                "sha256:472872e096eb8df219c23f2689fc336668bdb43d194094b5cc1707e1640acfc8"
+            ],
+            "version": "==1.4.1"
+        },
         "jinja2": {
             "hashes": [
                 "sha256:065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013",
@@ -356,6 +369,12 @@
             ],
             "index": "pypi",
             "version": "==0.0.4"
+        },
+        "openpyxl": {
+            "hashes": [
+                "sha256:a5285901fff7b99a011462f18506a4fbfe4055191149ff42f59345828f8cf7b2"
+            ],
+            "version": "==2.5.14"
         },
         "packaging": {
             "hashes": [
@@ -480,6 +499,14 @@
             ],
             "version": "==0.1.4"
         },
+        "pyexcel-xlsx": {
+            "hashes": [
+                "sha256:31f261b38270b2a1cc4f86b2792722f1ba266c17d652b6866c353d5b06349d43",
+                "sha256:d60bf71c770d391c61bd76e75e6a3de1619a1db931c5f9b7d3c1ee1f33a6c6bc"
+            ],
+            "index": "pypi",
+            "version": "==0.5.7"
+        },
         "pyparsing": {
             "hashes": [
                 "sha256:1873c03321fc118f4e9746baf201ff990ceb915f433f23b395f5580d1840cb2a",
@@ -577,7 +604,6 @@
         },
         "texttable": {
             "hashes": [
-                "sha256:63df57252ca99cb6a2227b40a5e640062175084ba3c949d24342934d24cfe067",
                 "sha256:eff3703781fbc7750125f50e10f001195174f13825a92a45e9403037d539b4f4"
             ],
             "version": "==1.6.2"

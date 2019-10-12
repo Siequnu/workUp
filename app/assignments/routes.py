@@ -17,6 +17,7 @@ import app.assignments.formbuilder
 
 import datetime
 
+import flask_excel as excel
 
 ########## Student class (turma) methods
 @bp.route("/class/create", methods=['GET', 'POST'])
@@ -54,6 +55,17 @@ def class_admin():
 		classes_array = Turma.query.all()
 		return render_template('assignments/class_admin.html', title='Class admin', classes_array = classes_array)
 	abort (403)
+
+
+@bp.route("/class/export/<class_id>")
+def export_class_data(class_id):
+	query_sets = db.session.query(User).join(
+		Enrollment, Enrollment.user_id == User.id).filter(
+		Enrollment.turma_id == class_id).order_by(User.student_number.asc()).all()
+	class_object = Turma.query.get(class_id)
+	filename = class_object.turma_label + ' - ' + class_object.turma_term + ' ' + str(class_object.turma_year)
+	column_names = ['student_number', 'username', 'email']
+	return excel.make_response_from_query_sets(query_sets, column_names, "xlsx", file_name = filename)
 	
 	
 @bp.route("/class/enrollment/<class_id>")

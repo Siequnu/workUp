@@ -9,6 +9,7 @@ from flask_mail import Mail
 from flask_executor import Executor
 from flask_toastr import Toastr
 from flask_compress import Compress
+import flask_excel as excel
 
 import logging, os
 from logging.handlers import RotatingFileHandler
@@ -37,6 +38,7 @@ def create_app(config_class=Config):
 	executor.init_app(workup_app)
 	toastr.init_app(workup_app)
 	compress.init_app(workup_app)
+	excel.init_excel (workup_app)
 	
 	# Import templates
 	from app.errors import bp as errors_bp
