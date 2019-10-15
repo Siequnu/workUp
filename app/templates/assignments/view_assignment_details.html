@@ -118,9 +118,9 @@
                {% endif %}
                <td>
                 {% if user.comments|length > 0 %}
-                  <a href="{{url_for('files.view_comments', file_id = user.upload.id)}}" <button class="btn btn-primary"><i class="fa fa-comment-alt"></i> {{user.comments|length}}</button></a>
+                  <a href="{{url_for('files.view_comments', file_id = user.upload.id)}}" <button class="btn btn-light"><i class="fa fa-comment-alt"></i> {{user.comments|length}}</button></a>
                  {% else %}
-                 <a href="" <button class="btn btn-primary"><i class="fa fa-comment-alt"></i> {{user.comments|length}}</button></a>
+                 <a href="" <button class="btn btn-light"><i class="fa fa-comment-alt"></i> {{user.comments|length}}</button></a>
                  {% endif %}
                  
                </td>
