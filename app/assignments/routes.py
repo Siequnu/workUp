@@ -106,7 +106,7 @@ def delete_class(turma_id):
 def view_assignments():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		# Get admin view with all assignments
-		clean_assignments_array = app.assignments.models.get_all_assignments_info()
+		clean_assignments_array = app.assignments.models.get_assignment_info()
 		classes = app.assignments.models.get_all_class_info()
 		return render_template('assignments/view_assignments.html',
 							   assignments_array = clean_assignments_array,
@@ -132,12 +132,12 @@ def view_assignment_details(assignment_id):
 		assignment_turma = Assignment.query.get(assignment_id).target_turma_id
 		students_in_class = Enrollment.query.filter(Enrollment.turma_id == assignment_turma).all()
 		completed_assignments = Upload.query.filter(Upload.assignment_id == assignment_id).all()
-		assignment_detail_info = app.assignments.models.get_assignment_detail_info(assignment_id)
+		assignment_student_info = app.assignments.models.get_assignment_student_info(assignment_id)
+		assignment_info = app.assignments.models.get_assignment_info(assignment_id)
 		return render_template('assignments/view_assignment_details.html',
-							   completed_assignments = completed_assignments,
-							   uncomplete_assignments = len(students_in_class) - len(completed_assignments),
-							   assignment_detail_info = assignment_detail_info,
-							   assignment_id = assignment_id
+							   assignment_student_info = assignment_student_info,
+							   assignment_id = assignment_id,
+							   assignment_info = assignment_info
 							   )
 	abort (403)
 

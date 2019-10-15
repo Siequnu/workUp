@@ -9,11 +9,18 @@ from datetime import datetime, date
 from dateutil import tz
 import arrow, json, time
 
-def get_all_assignments_info (): 
+def get_assignment_info (assignment_id = False): 
 	assignments_array = []
-	for assignment, user, turma in db.session.query(Assignment, User, Turma).join(
+	if assignment_id:
+		assignment_info = db.session.query(Assignment, User, Turma).join(
 		User, Assignment.created_by_id == User.id).join(
-		Turma, Assignment.target_turma_id==Turma.id).all():
+		Turma, Assignment.target_turma_id==Turma.id).filter(Assignment.id == assignment_id).all()
+	else:
+		assignment_info = db.session.query(Assignment, User, Turma).join(
+		User, Assignment.created_by_id == User.id).join(
+		Turma, Assignment.target_turma_id==Turma.id).all()
+	
+	for assignment, user, turma in assignment_info:
 		students_in_class = Enrollment.query.filter(Enrollment.turma_id == turma.id).all()
 		completed_assignments = Upload.query.filter(Upload.assignment_id == assignment.id).all()
 		uncomplete_assignments = len(students_in_class) - len(completed_assignments)
@@ -33,8 +40,9 @@ def get_all_assignments_info ():
 	return assignments_array
 
 # Returns array of all students in class with added assignment info if applicable
-def get_assignment_detail_info (assignment_id):
-	turma_id = Assignment.query.get(assignment_id).target_turma_id
+def get_assignment_student_info (assignment_id):
+	assignment = Assignment.query.get(assignment_id)
+	turma_id = assignment.target_turma_id
 	students = db.session.query(User).join(
 		Enrollment, User.id == Enrollment.user_id).filter(
 		Enrollment.turma_id == turma_id).order_by(User.student_number.asc()).all()

@@ -3,46 +3,88 @@
   
   
   {% block app_content %}
+  <link rel="stylesheet" href="/static/css/form-control-borderless.css">
 <div class="container">
 <br>
  
   <div class="container">
-        <div class="col text-left">
-        	<h1>View Assignment Details</h1>
-         <hr>
-        </div>        
+       <div class="row">
+        <div class="col-md-2">
+        	<a href="{{url_for('assignments.view_assignments')}}" <button class="btn btn-light"><i class="fa fa-chevron-left"></i> Back </button></a>
+       </div>
+        <div class="col-md-10">
+         {% for assignment, user, turma, uploaded_assignments, uncomplete_assignments, assignment_task_filename, peer_review_form_title, students_in_class in assignment_info %}
+        	<h1>{{assignment.title}}</h1>
+         {% endfor %}
+        </div>
+       </div>
+  <hr>
   <br>
-  <div class="row text-center">
-	        <div class="col">
-	        <div class="counter">
-      <i class="fa fa-file-upload fa-2x"></i>
-      <h2 class="timer count-title count-number">{{completed_assignments|length}}</h2>
-       <p class="count-text ">Uploaded assignments</p>
-    </div>
-	        </div>
-              <div class="col">
-               <div class="counter">
-      <i class="fa fa-bomb fa-2x"></i>
-      <h2 class="timer count-title count-number">{{uncomplete_assignments}}</h2>
-      <p class="count-text ">Uncomplete assignments</p>
-    </div>
-              </div>  
   
-  </div>
+  {% for assignment, user, turma, uploaded_assignments, uncomplete_assignments, assignment_task_filename, peer_review_form_title, students_in_class in assignment_info %}
+
+                <div class="card bg-light mb-3">
+                    <div class="card-body">
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-2 align-self-center">
+                                    <h2 class="display-5"><span class="badge badge-secondary"><i class="fa fa-file-upload "></i> {{uploaded_assignments|length}} / {{students_in_class|length}}</span></h2>
+                                </div>
+                                <div class="col-10">
+                                    <h3 class="text"><strong>{{turma.turma_label}}</strong></h3>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><i class="fa fa-calendar-check" aria-hidden="true"></i> due on {{assignment.due_date}}</li>
+                                        {% if peer_review_form_title %}
+                                        <li class="list-inline-item"><i class="fa fa-file" aria-hidden="true"></i> {{peer_review_form_title}}</li> 
+                                        {% endif %}
+                                       
+                                        {% if assignment_task_filename %}
+                                        <li class="list-inline-item"><i class="fa fa-info-circle" aria-hidden="true"></i> {{ assignment_task_filename}}</li>
+                                        {% endif %}
+                                    </ul>
+                                    <em>{{assignment.description}}</em>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-footer float-right">
+                        <a href="{{url_for('assignments.download_assignment_uploads', assignment_id = assignment_id)}}" <button class="btn btn-primary"><i class="fa fa-download"></i> Download all assignments</button></a>
+                        <a href="{{url_for('assignments.edit_assignment', assignment_id = assignment.id)}}" <button class="btn btn btn-outline-primary"><i class="fa fa-edit"></i> Edit </button></a>
+                        <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment.id)}}" <button class="btn btn btn-outline-danger float-right"><i class="fa fa-trash-alt"></i> Delete </button></a>
+                    </div>
+                </div>
+
+                {% endfor %}
   
-  <br />
- <input id="myInput" type="text" placeholder="Search..">
-  <br>
-  <br>
+
+ <br>
+<div class="row justify-content-left">
+                        <div class="col-12 col-md-10 col-lg-8">
+                            <form class="card">
+                                <div class="card-body row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <i class="fas fa-search h4 text-body"></i>
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col">
+                                        <input id="myInput" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for students or titles">
+                                    </div>
+                                    <!--end of col-->
+                                </div>
+                            </form>
+                        </div>
+                        <!--end of col-->
+                    </div>
+ 
+ 
   <div class="btn-group">
 								<button type="button" class="btn btn-success btn-filter" data-target="uploaded">Uploaded</button>
 								<button type="button" class="btn btn-warning btn-filter" data-target="not-uploaded">Not uploaded</button>
 								<button type="button" class="btn btn-secondary btn-filter" data-target="all">All</button>
 							</div>
 
-  <div class="float-right">								
-        <a href="{{url_for('assignments.download_assignment_uploads', assignment_id = assignment_id)}}" <button class="btn btn-primary"><i class="fa fa-download"></i> Download all assignments</button></a>
-							</div>
    <div class="container">
       <br>
       <div class="row">
@@ -54,13 +96,13 @@
               <th>Student #</th>
               <th>Username</th>
               <th>Filename</th>
-              <th>Timestamp</th>
+              <th>Uploaded</th>
               <th>Comments</th>
         		  <th>Actions</th>
             </tr>
           </thead>
 		  <tbody id="searchableTable">
-			{% for user in assignment_detail_info %}
+			{% for user in assignment_student_info %}
             {% if user['upload'] %}
             <tr data-status="uploaded">
             {% else %}
@@ -84,9 +126,9 @@
                </td>
             <td>
               {% if user.upload.original_filename %}
-              <a href="{{url_for('files.download', file_id = user.upload.id, rename=True)}}" <button class="btn btn-sm btn-block btn-primary"><i class="fa fa-download"></i> Download </button></a>
-              <a href="{{url_for('assignments.create_teacher_review', upload_id = user.upload.id)}}" <button class="btn btn-sm btn-block btn-secondary"><i class="fa fa-highlighter"></i> Grade </button></a>
-              <a href="{{url_for('files.delete_file', upload_id = user.upload.id)}}" <button class="btn btn-sm btn-block btn-danger"><i class="fa fa-trash-alt"></i> Delete </button></a>
+              <a href="{{url_for('files.download', file_id = user.upload.id, rename=True)}}" <button class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Download </button></a>
+              <a href="{{url_for('assignments.create_teacher_review', upload_id = user.upload.id)}}" <button class="btn btn-sm btn-secondary"><i class="fa fa-highlighter"></i> Grade </button></a>
+              <a href="{{url_for('files.delete_file', upload_id = user.upload.id)}}" <button class="btn btn-sm btn-danger"><i class="fa fa-trash-alt"></i> Delete </button></a>
               {% else %}
               <a href="{{url_for('files.upload_file', assignment_id = assignment_id, user_id = user.id)}}" <button class="btn btn-sm btn-block btn-success"><i class="fa fa-user-check"></i> Submit for student </button></a>
               {% endif %}
