@@ -10,7 +10,7 @@ from app.models import Comment, Download, Upload, Turma, ClassLibraryFile, Enrol
 import random, os
 
 # Access file stats
-@bp.route("/file_stats")
+@bp.route("/uploads")
 @login_required
 def file_stats():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
@@ -22,8 +22,10 @@ def file_stats():
 		template_packages['admin'] = True
 		return render_template('files/file_stats_admin.html', template_packages = template_packages)
 	elif current_user.is_authenticated:
+		all_post_info = models.get_post_info_from_user_id (current_user.id)
 		return render_template('files/file_stats.html',
-							   comment = Comment, all_post_info = models.get_post_info_from_user_id (current_user.id))
+							   comment = Comment,
+							   all_post_info = all_post_info)
 	abort(403)
 
 
@@ -158,7 +160,7 @@ def upload_file(assignment_id, user_id = False):
 
 
 # Student or admin route to replace an uploaded file before a deadline
-@bp.route('/upload/replace/<upload_id>',methods=['GET', 'POST'])
+@bp.route('/upload/replace/<upload_id>', methods=['GET', 'POST'])
 @login_required
 def replace_uploaded_file(upload_id):
 	if current_user.id is models.get_file_owner_id (upload_id) or app.models.is_admin(current_user.username):
@@ -203,7 +205,7 @@ def replace_uploaded_file(upload_id):
 
 	
 
-@bp.route("/comments/<file_id>")
+@bp.route("/comments/<file_id>", methods=['GET', 'POST'])
 @login_required
 def view_comments(file_id):
 	if current_user.id is models.get_file_owner_id (file_id) or app.models.is_admin(current_user.username):

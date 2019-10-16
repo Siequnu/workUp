@@ -151,6 +151,7 @@ def get_post_info_from_user_id (user_id):
 	for upload in upload_info:
 		upload_dict = upload.__dict__ # Convert the SQL Alchemy object into dictionary
 		upload_dict['number_of_comments'] = get_received_peer_review_from_upload_id_count(upload_dict['id'])
+		upload_dict['comments'] = get_peer_reviews_from_upload_id (upload_dict['id'])
 		upload_dict['humanized_timestamp'] = arrow.get(upload_dict['timestamp'], tz.gettz('Asia/Hong_Kong')).humanize()
 		upload_array.append(upload_dict)
 	return upload_array
