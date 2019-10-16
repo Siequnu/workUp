@@ -23,7 +23,7 @@
                         </div>
                         <div class="library_card-content">
                             <h4 class="library_card-title">
-                        {% if upload.number_of_comments > 2 or upload.number_of_comments == 0 %}
+                        {% if upload.number_of_comments != 1 %}
                         {{upload.number_of_comments}} comments
                         {% else %}
                         {{upload.number_of_comments}} comment
@@ -31,12 +31,14 @@
                             </h4>
 
                             <h6>{{upload.original_filename|truncate(27)}}</h6>
-                            <em>{{upload.humanized_timestamp}}</em>
+                            <em>Uploaded {{upload.humanized_timestamp}}</em>
 
                         </div>
+                        {% if upload.number_of_comments > 0 %}
                         <div class="library_card-read-more">
                             <a href="{{url_for('files.view_comments', file_id = upload.id)}}" class="btn btn-primary"><i class="fa fa-comment-dots"></i> View comments</a>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
 
