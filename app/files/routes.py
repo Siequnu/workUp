@@ -209,10 +209,10 @@ def replace_uploaded_file(upload_id):
 @login_required
 def view_comments(file_id):
 	if current_user.id is models.get_file_owner_id (file_id) or app.models.is_admin(current_user.username):
-		upload_object = models.get_upload_object (file_id)
+		upload = models.get_upload_object (file_id)
 		comments = models.get_peer_reviews_from_upload_id (file_id)
 		
-		return render_template('files/view_comments.html', comments = comments, upload_object = upload_object)
+		return render_template('files/view_comments.html', comments = comments, upload = upload)
 	abort (403)
 	
 	
