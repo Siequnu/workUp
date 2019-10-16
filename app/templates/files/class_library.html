@@ -107,10 +107,10 @@
           </div>
           <div class="library_card-read-more">
             <div class="row">
-              <div class="col-xs-12 col-lg-5">
+              <div class="col-xs-12 col-lg-6">
                 <p>
                   <a href="{{url_for('files.download_library_file', library_upload_id = library_upload.id)}}" 
-                     <button class="btn btn-sm btn-block btn-secondary">
+                     <button class="btn btn-sm btn-block btn-outline-secondary">
                   <i class="fa fa-fw fa-download">
                   </i> Download
                 </button>
@@ -118,43 +118,35 @@
             </p>
         </div>
         <div class="col-xs-12 col-lg-6">
-          <p>
-            <a href="{{url_for('files.view_library_downloads', library_upload_id = library_upload.id)}}" 
-               <button class="btn btn-sm btn-block btn-info">
-            <i class="fa fa-fw fa-glasses">
-            </i> View downloads
-          </button>
-        </a>
-      </p>
+          
+            <button class="btn btn-secondary float-right dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class ="fa fa-ellipsis-h">
+              </i>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="{{url_for('files.view_library_downloads', library_upload_id = library_upload.id)}}">
+                <i class="fa fa-glasses">
+                </i> View downloads
+              </a>
+               <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{url_for('files.edit_library_file', library_upload_id = library_upload.id)}}">
+                <i class="fa fa-fw fa-edit">
+                </i> Edit 
+              </a>
+              <a class="dropdown-item" href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id, turma_id = class_library_file.turma_id)}}">
+                <i class="fa fa-fw fa-folder-minus">
+                </i> Delete for this class
+              </a>
+              <a class="dropdown-item" href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id)}}">
+                <i class="fa fa-fw fa-trash-alt">
+                </i> Delete for all
+              </a>
+            </div>
+          
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-<hr>
-<p>
-  <a href="{{url_for('files.edit_library_file', library_upload_id = library_upload.id)}}" 
-     <button class="btn btn-sm btn-primary">
-  <i class="fa fa-fw fa-edit">
-  </i> Edit details
-</button>
-</a>
-</p>
-<p>
-  <a href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id, turma_id = class_library_file.turma_id)}}" 
-     <button class="btn btn-sm btn-warning">
-  <i class="fa fa-fw fa-folder-minus">
-  </i> Delete for this class
-</button>
-</a>
-</p>
-<p>
-  <a href="{{url_for('files.delete_library_file', library_upload_id = library_upload.id)}}" 
-     <button class="btn btn-sm btn-danger">
-  <i class="fa fa-fw fa-trash-alt">
-  </i> Delete for all classes
-</button>
-</a> 
-</p>
-</div>
-</div>
 </div>
 {% endif %}
 {% endfor %}
