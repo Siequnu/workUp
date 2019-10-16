@@ -269,6 +269,13 @@ def save_comment_file_upload (file, comment_id):
 	db.session.add(new_teacher_peer_review_file)
 	db.session.commit()
 
+# Download a comment file 
+def download_comment_file_upload (comment_file_upload_id):
+	comment_file_upload = CommentFileUpload.query.get(comment_file_upload_id)
+	
+	return send_from_directory(filename=comment_file_upload.filename, directory=current_app.config['UPLOAD_FOLDER'],
+								   as_attachment = True, attachment_filename = comment_file_upload.original_filename)
+
 # Verify a filename is secure with werkzeug library
 def get_secure_filename(filename):
 	return secure_filename(filename)
