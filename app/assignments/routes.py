@@ -357,7 +357,7 @@ def view_peer_review(comment_id):
 		form_data = PeerReviewForm.query.get(peer_review_form_id).serialised_form_data
 
 		form_loader = app.assignments.formbuilder.formLoader(form_data,
-															 (url_for('assignments.view_assignments')),
+															 (url_for('files.view_comments', file_id = Comment.query.get(comment_id).file_id)),
 															 submit_label = 'Return',
 															 data_array = form_contents)
 		render_form = form_loader.render_form()
