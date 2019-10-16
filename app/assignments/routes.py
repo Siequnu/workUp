@@ -367,6 +367,23 @@ def view_peer_review(comment_id):
 		
 	else: abort (403)
 	
+	
+# Route to download a library file
+@bp.route('/review/download/<comment_file_upload_id>')
+@login_required
+def download_comment_file_upload(comment_file_upload_id):
+	try:
+		comment_file_upload = CommentFileUpload.query.get(comment_file_upload_id)
+		comment = Comment.query.get(comment_file_upload.comment_id)
+		upload = Upload.query.get(comment.file_id)
+		upload_owner = User.query.get(upload.user_id)
+	except:
+		abort (404)
+	# Only admin or comment-file-upload's comment's upload's owner can download
+	if app.models.is_admin(current_user.username) or upload_owner.id == current_user.id:
+		return app.files.models.download_comment_file_upload (comment_file_upload_id)
+	abort (403)
+	
 ############# Peer review forms routes
 
 

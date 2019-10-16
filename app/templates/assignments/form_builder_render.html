@@ -28,7 +28,7 @@
  <p>{{comment_file_upload.original_filename|truncate(42)}}</p>
  </div>
   <div class="library_card-read-more">
-  <a href="#" class="btn btn-secondary btn-sm" role="button"><i class="fa fa-download"></i> View correction</a>
+  <a href="{{url_for('assignments.download_comment_file_upload', comment_file_upload_id = comment_file_upload.id)}}" class="btn btn-secondary btn-sm" role="button"><i class="fa fa-download"></i> View correction</a>
   </div>
 </div>
 
