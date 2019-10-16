@@ -1,7 +1,5 @@
-
-  {% extends "header.html" %}
-  
-  {% block app_content %}
+{% extends "header.html" %}
+{% block app_content %}
 <div class="container">
   <br>
   <div class="container">
@@ -21,7 +19,6 @@
 </div>
 <hr>
 </div>
-
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-md-4">
@@ -50,26 +47,40 @@
       </h2>
       <br />
       {% if comments|length == 0 %}
-           <p><em>No peer reviews have been submitted for this work.<br /><br />
-         Please check back later.</em></p>
-         {% else %}
-         {% for comment, user in comments %}
-             <p>
-            {% if user.is_admin == True %}
-           <td><a href="{{url_for('assignments.view_peer_review', comment_id=comment.id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View teacher review by {{user.username}}</a></td>
-           {% else %}
-           <td><a href="{{url_for('assignments.view_peer_review', comment_id=comment.id)}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review</a></td>
-           {% endif %}
-            <i class="fa fa-clock"></i> <em>{{comment.humanized_timestamp}}</em>
-            {% if comment.comment_file_upload %}
-           <i class="fa fa-paperclip"></i> Attached comment
-           {% endif %}
-             </p>
-         {% endfor %}
-       {% endif %}
-      
+      <p>
+        <em>No peer reviews have been submitted for this work.
+          <br />
+          <br />
+          Please check back later.
+        </em>
+      </p>
+      {% else %}
+      {% for comment, user in comments %}
+      <p>
+        {% if user.is_admin == True %}
+        <td>
+          <a href="{{url_for('assignments.view_peer_review', comment_id=comment.id)}}" class="btn btn-success btn-sm" role="button" aria-disabled="true">View teacher review by {{user.username}}
+          </a>
+        </td>
+        {% else %}
+        <td>
+          <a href="{{url_for('assignments.view_peer_review', comment_id=comment.id)}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">View peer review
+          </a>
+        </td>
+        {% endif %}
+        <i class="fa fa-clock">
+        </i> 
+        <em>{{comment.humanized_timestamp}}
+        </em>
+        {% if comment.comment_file_upload %}
+        <i class="fa fa-paperclip">
+        </i> Attached comment
+        {% endif %}
+      </p>
+      {% endfor %}
+      {% endif %}
     </div>
   </div>
 </div>  
-  
 {% endblock %}
+
