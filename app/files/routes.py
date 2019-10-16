@@ -116,7 +116,7 @@ def download_file(assignment_id):
 @bp.route("/download/<file_id>")
 @login_required
 def download (file_id):
-	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+	if current_user.id is models.get_file_owner_id (file_id) or app.models.is_admin(current_user.username):
 		filename = Upload.query.get(file_id).filename
 		return models.download_file(filename, rename=True)
 
@@ -151,10 +151,55 @@ def upload_file(assignment_id, user_id = False):
 			flash('Your file ' + str(original_filename) + ' was submitted successfully.', 'success')
 			return redirect(url_for('assignments.view_assignments'))
 		else:
-			flash('You can not upload this kind of file. Please use a iWork, Office or PDF document.', 'warning')
+			flash('You can not upload this kind of file. Please use an iWork, Office or PDF document.', 'warning')
 			return redirect(url_for('assignments.view_assignments'))
 	else:
 		return render_template('files/upload_file.html')
+
+
+# Student or admin route to replace an uploaded file before a deadline
+@bp.route('/upload/replace/<upload_id>',methods=['GET', 'POST'])
+@login_required
+def replace_uploaded_file(upload_id):
+	if current_user.id is models.get_file_owner_id (upload_id) or app.models.is_admin(current_user.username):
+		# If this assignment is over the deadline, and user is not admin, abort	
+		try:
+			upload = Upload.query.get(upload_id)
+			assignment = Assignment.query.get(upload.assignment_id)
+		except:
+			flash ('There was an error retrieving the upload assignment information', 'error')
+			abort (404)
+		
+		if not app.models.is_admin(current_user.username):
+			if app.assignments.models.check_if_assignment_is_over(assignment.id):
+				abort(403)
+				
+		# If the form has been filled out and posted:
+		if request.method == 'POST':
+			if 'file' not in request.files:
+				flash('No file uploaded. Please try again or contact your tutor.', 'warning')
+				return redirect(request.url)
+			file = request.files['file']
+			if file.filename == '':
+				flash('The filename is blank. Please rename the file.', 'warning')
+				return redirect(request.url)
+			if file and models.allowed_file_extension(file.filename):
+				# Delete the original upload and any associated comments
+				models.delete_upload (upload_id)
+				
+				# Save the new file
+				models.save_assignment_file(file, assignment.id, current_user.id)
+				original_filename = models.get_secure_filename(file.filename)
+				flash('Your file ' + str(original_filename) + ' was submitted successfully.', 'success')
+				return redirect(url_for('assignments.view_assignments'))
+			else:
+				flash('You can not upload this kind of file. Please use a iWork, Office or PDF document.', 'warning')
+				return redirect(url_for('assignments.view_assignments'))
+		else:
+			# Get all assignment info with due dates and humanised deadlines
+			assignment = app.assignments.models.get_user_assignment_info(user_id = current_user.id, assignment_id = assignment.id)
+			return render_template('files/replace_uploaded_file.html', current_upload = upload, assignment = assignment)
+	abort (403)
 
 	
 

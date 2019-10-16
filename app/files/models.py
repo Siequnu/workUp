@@ -55,8 +55,9 @@ def edit_library_upload (library_upload_id, form):
 								
 	db.session.commit()
 	
-
+# Delete upload and any comments
 def delete_upload (upload_id):
+	#!# Delete any comments and any uploaded comments associated with this file
 	Upload.query.filter_by(id = upload_id).delete()								
 	db.session.commit()
 
