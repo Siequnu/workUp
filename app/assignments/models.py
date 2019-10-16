@@ -91,17 +91,22 @@ def get_class_enrollment_from_class_id (class_id):
 		User, Enrollment.user_id==User.id).filter(
 		Enrollment.turma_id == class_id).all()
 
-def get_user_assignment_info (user_id):
-	# Get user enrollment, then fetch and compile assignments for each class
-	turma_ids = db.session.query(
-		User, Enrollment).join(
-		Enrollment, User.id == Enrollment.user_id).filter(
-		User.id==user_id).all()
+def get_user_assignment_info (user_id, assignment_id = False):
+	
 	assignments = []
-	for user, enrollment in turma_ids:
-		assignments_array = get_assignments_from_turma_id (enrollment.turma_id)
-		for assignment in assignments_array:
-			assignments.append (assignment)
+	if assignment_id:
+		assignments.append(Assignment.query.get(assignment_id))
+	else:
+		# Get user enrollment, then fetch and compile assignments for each class
+		turma_ids = db.session.query(
+			User, Enrollment).join(
+			Enrollment, User.id == Enrollment.user_id).filter(
+			User.id==user_id).all()
+		for user, enrollment in turma_ids:
+			assignments_array = get_assignments_from_turma_id (enrollment.turma_id)
+			for assignment in assignments_array:
+				assignments.append (assignment)
+	
 	clean_assignments_array = []
 	for assignment in assignments:
 		# Convert each SQL object into a  __dict__, then add extra keys for the template
@@ -119,7 +124,9 @@ def get_user_assignment_info (user_id):
 		if Upload.query.filter_by(assignment_id=assignment_dict['id']).filter_by(user_id=user_id).first() is not None:
 			assignment_dict['submitted_filename']= Upload.query.filter_by(
 				assignment_id=assignment_dict['id']).filter_by(user_id=user_id).first().original_filename
-			
+			#!# Why not just sent the whole upload. Pages looking for submitted_filename can just open the upload object
+			assignment_dict['upload'] = Upload.query.filter_by(
+				assignment_id=assignment_dict['id']).filter_by(user_id=user_id).first()
 			# Check for uploaded or pending peer-reviews
 			# This can either be 0 pending and 0 complete, 0/1 pending and 1 complete, or 0 pending and 2 complete
 			completed_peer_reviews = Comment.get_completed_peer_reviews_from_user_for_assignment (user_id, assignment_dict['id'])
@@ -127,7 +134,11 @@ def get_user_assignment_info (user_id):
 			assignment_dict['completed_peer_review_objects'] = completed_peer_reviews
 			
 		clean_assignments_array.append(assignment_dict)
-	return clean_assignments_array
+	if assignment_id:
+		# Just return the first result
+		return clean_assignments_array.pop()
+	else: # Return an array of all assignments
+		return clean_assignments_array
 
 def get_peer_review_form_from_upload_id (upload_id):
 	return db.session.query(
