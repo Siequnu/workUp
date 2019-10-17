@@ -17,36 +17,6 @@ def is_admin (username):
 	except:
 		return False
 	
-
-def selectFromDb (columnsArray, fromTable, conditionsArray = False, count = False):
-	# Assemble SQL query from input variables
-	if count:
-		sqlQuery = 'SELECT COUNT ('
-		columnsString = ''
-		columnsString = columnsString + columnsArray.pop()
-		sqlQuery = sqlQuery + columnsString + ') FROM ' + str(fromTable)
-	else:
-		sqlQuery = 'SELECT '
-		columnsString = ''
-		columnsArray.reverse()
-		while len(columnsArray) > 1:	
-			columnsString = columnsString + columnsArray.pop() + ', '
-		columnsString = columnsString + columnsArray.pop()
-		sqlQuery = sqlQuery + columnsString + ' FROM ' + str(fromTable)
-	
-	if conditionsArray:
-		conditionsString = ''
-		while len(conditionsArray) > 1:	
-			conditionsString = conditionsString + conditionsArray.pop() + ' AND '
-		conditionsString = conditionsString + conditionsArray.pop()
-		sqlQuery = sqlQuery + ' WHERE ' + str(conditionsString)
-	
-	sql = text(sqlQuery)
-	result = db.engine.execute(sql)	
-	names = []
-	for row in result: names.append(row)
-	return names
-
 class ClassLibraryFile (db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
 	id = db.Column(db.Integer, primary_key=True)
