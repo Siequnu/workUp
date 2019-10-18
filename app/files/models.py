@@ -165,7 +165,7 @@ def allowed_file_extension(filename):
 def get_file_extension(filename):
 	return filename.rsplit('.', 1)[1].lower()
 	
-def delete_all_uploads_and_enrollments_from_user_id (user_id):
+def delete_uploads_enrollments_and_download_records_for_user (user_id):
 	# Delete all upload records for this user
 	assignment_uploads = Upload.query.filter_by(user_id=user_id).all()
 	if assignment_uploads is not None:
@@ -177,6 +177,16 @@ def delete_all_uploads_and_enrollments_from_user_id (user_id):
 	if enrollments is not None:
 		for enrollment in enrollments:
 			db.session.delete(enrollment)
+			
+	library_downloads = LibraryDownload.query.filter_by(user_id=user_id).all()
+	if library_downloads is not None:
+		for library_download in library_downloads:
+			db.session.delete(library_download)
+			
+	downloads = Download.query.filter_by(user_id=user_id).all()
+	if downloads is not None:
+		for download in downloads:
+			db.session.delete(download)
 		
 	db.session.commit()
 
