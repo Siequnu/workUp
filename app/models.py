@@ -44,7 +44,7 @@ class LibraryUpload (db.Model):
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	title = db.Column(db.String(140))
-	description = db.Column(db.String(260))
+	description = db.Column(db.String(500))
 
 	def __repr__(self):
 		return '<Library Upload {}>'.format(self.original_filename)
@@ -53,7 +53,7 @@ class Turma(db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
 	id = db.Column(db.Integer, primary_key=True, index = True)
 	turma_number = db.Column(db.String(140))
-	turma_label = db.Column(db.String(280))
+	turma_label = db.Column(db.String(140))
 	turma_term = db.Column(db.String(140))
 	turma_year = db.Column(db.Integer)
 	
