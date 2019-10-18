@@ -177,7 +177,7 @@ class Download(db.Model):
 class Comment(db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
 	id = db.Column(db.Integer, primary_key=True)
-	comment = db.Column(db.String(500))
+	comment = db.Column(db.String(5000))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	file_id = db.Column(db.Integer)
@@ -211,7 +211,7 @@ class Assignment(db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(140))
-	description = db.Column(db.String(280))
+	description = db.Column(db.String(1000))
 	due_date = db.Column(db.Date)
 	created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	target_turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
@@ -228,7 +228,7 @@ class PeerReviewForm(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(140))
 	description = db.Column(db.String(280))
-	serialised_form_data = db.Column(db.String(280))
+	serialised_form_data = db.Column(db.String(1000))
 	created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	
