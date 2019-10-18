@@ -205,9 +205,9 @@ def delete_user(user_id):
 		form = app.user.forms.ConfirmationForm()
 		confirmation_message = 'Are you sure you want to delete ' + user.username + "'s account?"
 		if form.validate_on_submit():
-			app.models.User.delete_user(user_id)
-			app.files.models.delete_all_uploads_and_enrollments_from_user_id(user_id)
+			app.files.models.delete_uploads_enrollments_and_download_records_for_user(user_id)
 			app.assignments.models.delete_all_comments_from_user_id (user_id)
+			app.models.User.delete_user(user_id)
 			flash('User deleted successfully.', 'success')
 			return redirect(url_for('user.manage_students'))
 		return render_template('confirmation_form.html',
