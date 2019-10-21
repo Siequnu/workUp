@@ -221,7 +221,6 @@ def delete_assignment_from_id (assignment_id):
 		for comment in comments:
 			db.session.delete(comment)
 	db.session.commit()
-	# Download records are not deleted for future reference
 	return True
 
 def add_teacher_comment_to_upload (form_contents, upload_id):
