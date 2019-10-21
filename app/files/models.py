@@ -96,12 +96,18 @@ def get_all_library_books ():
 
 def delete_library_upload_from_id (library_upload_id, turma_id = False):
 	if turma_id == False:
-		# Delete book from every class, and delete upload
-		LibraryUpload.query.filter_by(id=library_upload_id).delete()
+		# Remove the library upload from all classes
 		if db.session.query(ClassLibraryFile).filter_by(library_upload_id=library_upload_id).all() is not None:
 			class_library_files = db.session.query(ClassLibraryFile).filter_by(library_upload_id=library_upload_id).all()
 			for library_file in class_library_files:
 				ClassLibraryFile.query.filter_by(id=library_file.id).delete()
+		# Remove any download records of the library upload
+		if db.session.query(LibraryDownload).filter_by(library_upload_id=library_upload_id).all() is not None:
+			library_downloads = db.session.query(LibraryDownload).filter_by(library_upload_id=library_upload_id).all()
+			for library_download in library_downloads:
+				LibraryDownload.query.filter_by(id=library_file.id).delete()
+		# Delete the Library Upload
+		LibraryUpload.query.filter_by(id=library_upload_id).delete()
 	else: # Only delete the class link.
 		#!# If this is the last class link, delete the file itself?
 		ClassLibraryFile.query.filter_by(turma_id=turma_id).filter_by(library_upload_id=library_upload_id).delete()
