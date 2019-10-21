@@ -211,7 +211,7 @@ class Assignment(db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(140))
-	description = db.Column(db.String(1000))
+	description = db.Column(db.String(1500))
 	due_date = db.Column(db.Date)
 	created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	target_turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
