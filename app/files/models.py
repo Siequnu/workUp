@@ -101,11 +101,13 @@ def delete_library_upload_from_id (library_upload_id, turma_id = False):
 			class_library_files = db.session.query(ClassLibraryFile).filter_by(library_upload_id=library_upload_id).all()
 			for library_file in class_library_files:
 				ClassLibraryFile.query.filter_by(id=library_file.id).delete()
+		
 		# Remove any download records of the library upload
 		if db.session.query(LibraryDownload).filter_by(library_upload_id=library_upload_id).all() is not None:
 			library_downloads = db.session.query(LibraryDownload).filter_by(library_upload_id=library_upload_id).all()
 			for library_download in library_downloads:
-				LibraryDownload.query.filter_by(id=library_file.id).delete()
+				db.session.delete(library_download)
+		
 		# Delete the Library Upload
 		LibraryUpload.query.filter_by(id=library_upload_id).delete()
 	else: # Only delete the class link.
