@@ -7,7 +7,7 @@ from app import db
 from app.files import bp, models, forms
 from app.models import Comment, Download, Upload, Turma, ClassLibraryFile, Enrollment, Assignment, LibraryUpload, LibraryDownload, User
 
-import random, os
+import random, os, re
 
 # Access file stats
 @bp.route("/uploads")
@@ -144,6 +144,10 @@ def upload_file(assignment_id, user_id = False):
 			flash('No file uploaded. Please try again or contact your tutor.', 'warning')
 			return redirect(request.url)
 		file = request.files['file']
+		if re.findall(r'[\u4e00-\u9fff]+', file.filename) != []:
+			# There are Chinese characters in the filename
+			flash('Your filename contains Chinese characters. Please use only English letters and numbers in your filename.', 'warning')
+			return redirect(request.url)
 		if file.filename == '':
 			flash('The filename is blank. Please rename the file.', 'warning')
 			return redirect(request.url)
@@ -182,6 +186,10 @@ def replace_uploaded_file(upload_id):
 				flash('No file uploaded. Please try again or contact your tutor.', 'warning')
 				return redirect(request.url)
 			file = request.files['file']
+			if re.findall(r'[\u4e00-\u9fff]+', file.filename) != []:
+				# There are Chinese characters in the filename
+				flash('Your filename contains Chinese characters. Please use only English letters and numbers in your filename.', 'warning')
+				return redirect(request.url)
 			if file.filename == '':
 				flash('The filename is blank. Please rename the file.', 'warning')
 				return redirect(request.url)
