@@ -296,19 +296,17 @@ def create_teacher_review(upload_id):
 			new_comment_id = app.assignments.models.add_teacher_comment_to_upload(form_contents, upload_id)
 			flash('Teacher review submitted succesfully!', 'success')
 			
-			
 			# Deal with a potential uploaded file
+			#!# File is being sent anyway, when no file is uploaded
+			#!# the result is ImmutableMultiDict([('file', <FileStorage: '' ('application/octet-stream')>)])
 			if 'file' in request.files:
 				file = request.files['file']
 				if file.filename == '':
-					flash('The filename is blank. Please rename the file.', 'warning')
-					return redirect(request.url)
-				if file and models.allowed_file_extension(file.filename):
+					pass
+				elif file and models.allowed_file_extension(file.filename):
 					models.save_comment_file_upload(file, new_comment_id)
 					original_filename = models.get_secure_filename(file.filename)
 					flash('Your file ' + str(original_filename) + ' was uploaded successfully.', 'success')
-					# Redirect to the same page, but show the uploaded file for the comment
-					
 			
 			# For this assignment (class), get a list of uploads that haven't been commented on by current_user.id
 			not_yet_graded_uploads = []
