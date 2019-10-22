@@ -2,15 +2,21 @@
 {% from 'bootstrap/form.html' import render_form %}
 
 {% block app_content %}
-
-<div class="container">
-<a href="{{url_for('main.index')}}" <button class="btn btn-secondary"><i class="fa fa-chevron-left"></i> Back</button></a>
-<br><br>
 {% block body %}
+<div class="container">
+ <br>
+<div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <a href="{{url_for('main.index')}}" <button class="btn btn-light"><i class="fa fa-chevron-left"></i> Back</button></a>
+            </div>
+            <div class="col-md-10">
 
- <div class="container">
-  <h1>{{title}}</h1>
-  <hr>
+                <h1><i class="fa fa-user-graduate"></i> {{title}}</h1>
+
+            </div>
+        </div>
+<hr>
  <div class="row">
    <div class="col-md-2">
     <h4>Settings</h4>
@@ -42,20 +48,36 @@
   </div>
    
    <div class="col-md-4">
-    <p><a href="{{url_for('user.register')}}"" <button class="btn btn-primary"><i class="fa fa-user-plus"></i> Register new student</button></a></p>
-    <p><a class="btn btn-secondary" href="{{url_for('user.batch_import_students')}}" role="button"><i class="fa fa-file-import"></i> Batch import students</a></p>
-    <p><a href="{{url_for('user.send_new_confirmation_email_to_all_unconfirmed_users')}}"" <button class="btn btn-warning"><i class="fa fa-mail-bulk"></i> Bulk email non-confirmed users</button></a></p>
+    <p><a href="{{url_for('user.register')}}"" <button class="btn btn-outline-primary"><i class="fa fa-user-plus"></i> Register new student</button></a></p>
+    <p><a class="btn btn-outline-secondary" href="{{url_for('user.batch_import_students')}}" role="button"><i class="fa fa-file-import"></i> Batch import students</a></p>
+    <p><a href="{{url_for('user.send_new_confirmation_email_to_all_unconfirmed_users')}}"" <button class="btn btn-outline-warning"><i class="fa fa-mail-bulk"></i> Bulk email non-confirmed users</button></a></p>
   
    </div>
    
  </div>
- 
-  <hr>
-  <br>
- <input id="myInput" type="text" placeholder="Search..">
- <br><br>
+<hr>
+  
+  <link rel="stylesheet" href="/static/css/form-control-borderless.css">
+         <div class="row justify-content-left">
+            <div class="col-12 col-md-10 col-lg-8">
+                <form class="card">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-search h4 text-body">
+          </i>
+                        </div>
+                        <!--end of col-->
+                        <div class="col">
+                            <input id="myInput" class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search for students">
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </form>
+            </div>
+            <!--end of col-->
+        </div>
 
-  </div>
+
    <h3>Enrolled users</h3>   
       <div class="table-responsive">
             <table summary="User table" class="table table-bordered table-hover">
