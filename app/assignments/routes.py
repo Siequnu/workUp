@@ -6,6 +6,7 @@ from app.assignments.forms import TurmaCreationForm, AssignmentCreationForm
 
 from app.files import models
 from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile, Enrollment, PeerReviewForm, CommentFileUpload
+from wtforms import SubmitField
 import app.models
 
 from app import db
@@ -25,6 +26,7 @@ import flask_excel as excel
 def create_class():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = forms.TurmaCreationForm()
+		del form.edit
 		if form.validate_on_submit():
 			Turma.new_turma_from_form (form)
 			flash('Class successfully created!', 'success')
@@ -39,6 +41,8 @@ def edit_class(turma_id):
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		turma = Turma.query.get(turma_id)
 		form = TurmaCreationForm(obj=turma)
+		del form.submit # Leaves the edit submit button 
+
 		if form.validate_on_submit():
 			form.populate_obj(turma)
 			db.session.add(turma)
