@@ -1,10 +1,9 @@
  {% extends "header.html" %} {% from 'bootstrap/form.html' import render_form %} {% block app_content %}
 <div class="container">
-    <img src="{{ qrcode(attendance_code_object.code, box_size = 20) }}">
+    <img src="{{ qrcode(url, box_size = 20) }}">
     
     <br/><br/>
-    <p><a href="{{url}}" <button class="btn btn-sm btn-light"><i class="fa fa-plus-circle"></i>  Close attendance </button></a></p>{{attendance_code}}
-    <p>{{url}}</p>
+    <p><a href="{{url_for('classes.close_attendance', attendance_code_id = attendance_code_object.id)}}" <button class="btn btn-sm btn-light"><i class="fa fa-plus-circle"></i>  Close attendance </button></a></p>
 </div>
 
 {% endblock %}
