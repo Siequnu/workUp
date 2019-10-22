@@ -24,21 +24,26 @@
                <h4><i class="fa fa-users"></i> {{turma.turma_label}}</h4>
                <h4><i class="fa fa-calendar-alt"></i> {{turma.turma_term}} {{turma.turma_year}}</h4>
             </div>
+            <div class="card-footer">
+             <a href="{{url_for('classes.create_lesson', class_id = turma.id)}}" <button class="btn btn-lg btn-primary"><i class="fa fa-plus-circle"></i>  Create new lesson </button></a>
+            </div>
         </div>
         
-        <a href="{{url_for('classes.create_lesson', class_id = turma.id)}}" <button class="btn btn-primary"><i class="fa fa-plus-circle"></i>  Create new lesson </button></a>
         
-        <hr>
+        
+        <br>        
+        <h2>Lessons</h2>
+        <br>
         {% for lesson in lessons %}
-          <div class="card bg-light mb-3" style="max-width: 25rem;">
+          <div class="card bg-light mb-3" style="max-width: 35rem;">
             <div class="card-body">
                <h5><i class="fa fa-users"></i> {{lesson.date}}</h5>
                <p><i class="fa fa-calendar-alt"></i> {{lesson.start_time}} {{lesson.end_time}}</p>
             </div>
             <div class="card-footer">
-             <a href="{{url_for('classes.open_attendance', lesson_id = lesson.id)}}" <button class="btn btn-primary"><i class="fa fa-plus-circle"></i>  Open attendance </button></a>
-         <a href="{{url_for('classes.view_attendance', lesson_id = lesson.id)}}" <button class="btn btn-secondary"><i class="fa fa-street-view"></i>  View attendance </button></a>
-         <a href="{{url_for('classes.delete_lesson', lesson_id = lesson.id)}}" <button class="btn btn-warning"><i class="fa fa-trash-alt"></i>  Delete lesson </button></a>
+             <a href="{{url_for('classes.open_attendance', lesson_id = lesson.id)}}" <button class="btn btn-info"><i class="fa fa-plus-circle"></i>  Open attendance </button></a>
+         <a href="{{url_for('classes.view_attendance', lesson_id = lesson.id)}}" <button class="btn btn-outline-secondary"><i class="fa fa-street-view"></i>  View attendance </button></a>
+         <a href="{{url_for('classes.delete_lesson', lesson_id = lesson.id)}}" <button class="btn btn-outline-warning"><i class="fa fa-trash-alt"></i>  Delete lesson </button></a>
             </div>
         </div>
          
