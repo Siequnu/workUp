@@ -3,18 +3,6 @@ from wtforms import StringField, SubmitField, SelectField, DateField, SelectMult
 from wtforms.validators import ValidationError, DataRequired
 from flask_wtf.file import FileField, FileRequired
 from app import db
-
-
-	
-class AssignmentCreationForm(FlaskForm):
-	title = StringField('Assignment title', validators=[DataRequired()])
-	description = StringField('Assignment description', validators=[DataRequired()])
-	due_date = DateField('Due date:', validators=[DataRequired()])
-	target_turmas = SelectMultipleField('For classes', coerce=int, validators=[DataRequired()])
-	peer_review_necessary = BooleanField('Peer review necessary', default=True)
-	peer_review_form_id = SelectField('Peer review form', coerce=int, validators=[DataRequired()])
-	assignment_task_file = FileField(label='Assignment Task File')
-	submit = SubmitField('Create')
 	
 class TurmaCreationForm(FlaskForm):
 	turma_number = StringField('Class number', validators=[DataRequired()])
@@ -33,6 +21,3 @@ class LessonForm(FlaskForm):
 	edit = SubmitField('Edit lesson')
 	submit = SubmitField('Create lesson')
 
-		
-class ConfirmationForm (FlaskForm):
-	submit = SubmitField('Confirm')

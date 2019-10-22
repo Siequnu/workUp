@@ -10,6 +10,7 @@ from flask_executor import Executor
 from flask_toastr import Toastr
 from flask_compress import Compress
 import flask_excel as excel
+from flask_qrcode import QRcode
 
 import logging, os
 from logging.handlers import RotatingFileHandler
@@ -39,6 +40,7 @@ def create_app(config_class=Config):
 	toastr.init_app(workup_app)
 	compress.init_app(workup_app)
 	excel.init_excel (workup_app)
+	qrcode = QRcode(workup_app)
 	
 	# Import templates
 	from app.errors import bp as errors_bp
@@ -46,6 +48,9 @@ def create_app(config_class=Config):
 
 	from app.user import bp as user_bp
 	workup_app.register_blueprint(user_bp, url_prefix='/user')
+	
+	from app.classes import bp as classes_bp
+	workup_app.register_blueprint(classes_bp, url_prefix='/classes')
 	
 	from app.files import bp as files_bp
 	workup_app.register_blueprint(files_bp, url_prefix='/files')

@@ -56,8 +56,8 @@ class Turma(db.Model):
 	turma_label = db.Column(db.String(140))
 	turma_term = db.Column(db.String(140))
 	turma_year = db.Column(db.Integer)
-	class_start_time = db.Column(db.Time)
-	class_end_time = db.Column(db.Time)
+	lesson_start_time = db.Column(db.Time)
+	lesson_end_time = db.Column(db.Time)
 	
 	def __repr__(self):
 		return '<Turma {}>'.format(self.turma_number)
@@ -67,8 +67,8 @@ class Turma(db.Model):
 		new_turma = Turma(turma_number=form.turma_number.data, turma_label=form.turma_label.data,
 					turma_term=form.turma_term.data,
 					turma_year = form.turma_year.data,
-					class_start_time = form.class_start_time.data,
-					class_end_time = form.class_end_time.data)
+					lesson_start_time = form.lesson_start_time.data,
+					lesson_end_time = form.lesson_end_time.data)
 		db.session.add(new_turma)
 		db.session.commit()
 
@@ -250,14 +250,36 @@ class CommentFileUpload(db.Model):
 	comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
 	
 	def __repr__(self):
-		return '<Comment File Upload {}>'.format(self.filename)
+		return '<Comment File Upload {}>'.format(self.original_filename)
 	
 
 class AttendanceCode (db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
 	id = db.Column(db.Integer, primary_key=True)
 	code = db.Column(db.String(140))
+	lesson_id = db.Column(db.Integer, db.ForeignKey('lesson.id'))
 	
 	def __repr__(self):
-		return '<Registration Code {}>'.format(self.filename)
+		return '<Attendance Code {}>'.format(self.code)
 	
+
+class Lesson (db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	date = db.Column(db.Date)
+	start_time = db.Column(db.Time)
+	end_time = db.Column(db.Time)
+	turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
+	
+	def __repr__(self):
+		return '<Lesson {}>'.format(self.id)
+	
+class LessonAttendance (db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	lesson_id = db.Column(db.Integer, db.ForeignKey('lesson.id'))
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	timestamp = db.Column(db.DateTime, default=datetime.now())
+	
+	def __repr__(self):
+		return '<Lesson Attendance {}>'.format(self.id)
