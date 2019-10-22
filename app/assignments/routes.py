@@ -26,7 +26,7 @@ import flask_excel as excel
 def create_class():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username):
 		form = forms.TurmaCreationForm()
-		del form.edit
+		del form.edit 
 		if form.validate_on_submit():
 			Turma.new_turma_from_form (form)
 			flash('Class successfully created!', 'success')
