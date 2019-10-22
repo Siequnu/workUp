@@ -14,7 +14,7 @@
    <div class="col-md-8">
     <h1>{{title}}</h1>
     <hr>
-    <a href="{{url_for('assignments.class_admin')}}" <button class="btn btn-primary"><i class="fa fa-chevron-left"></i> Back</button></a>
+    <a href="{{url_for('classes.class_admin')}}" <button class="btn btn-primary"><i class="fa fa-chevron-left"></i> Back</button></a>
   </div>
   </div>
   
@@ -40,7 +40,7 @@
               <td>{{user.student_number}}</td>
               <td>{{user.username}}</td>
 			  <td>
-          <a href="{{url_for('assignments.remove_enrollment', enrollment_id = enrollment.id)}}" <button class="btn btn-sm btn-warning bln-block"><i class="fa fa-user-slash"></i> Remove</button></a>
+          <a href="{{url_for('classes.remove_enrollment', enrollment_id = enrollment.id)}}" <button class="btn btn-sm btn-warning bln-block"><i class="fa fa-user-slash"></i> Remove</button></a>
         </td>
             </tr>
            {% endfor %}

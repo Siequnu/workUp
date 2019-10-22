@@ -2,107 +2,19 @@ from flask import render_template, flash, redirect, url_for, request, abort, cur
 from flask_login import current_user, login_required
 
 from app.assignments import bp, models, forms
-from app.assignments.forms import TurmaCreationForm, AssignmentCreationForm
+from app.assignments.forms import TurmaCreationForm, AssignmentCreationForm, LessonForm
 
 from app.files import models
-from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile, Enrollment, PeerReviewForm, CommentFileUpload
+from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile, Enrollment, PeerReviewForm, CommentFileUpload, Lesson, AttendanceCode, LessonAttendance
 from wtforms import SubmitField
 import app.models
 
 from app import db
 from sqlalchemy import or_
-import json, zipfile, zipstream, os
+import json, zipfile, zipstream, os, datetime, uuid
 from pathlib import Path
 
 import app.assignments.formbuilder
-
-import datetime
-
-import flask_excel as excel
-
-########## Student class (turma) methods
-@bp.route("/class/create", methods=['GET', 'POST'])
-@login_required
-def create_class():
-	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		form = forms.TurmaCreationForm()
-		del form.edit 
-		if form.validate_on_submit():
-			Turma.new_turma_from_form (form)
-			flash('Class successfully created!', 'success')
-			return redirect(url_for('assignments.class_admin'))
-		return render_template('assignments/class_form.html', title='Create new class', form=form)
-	abort(403)
-	
-	
-@bp.route("/class/edit/<turma_id>", methods=['GET', 'POST'])
-@login_required
-def edit_class(turma_id):	
-	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		turma = Turma.query.get(turma_id)
-		form = TurmaCreationForm(obj=turma)
-		del form.submit # Leaves the edit submit button 
-
-		if form.validate_on_submit():
-			form.populate_obj(turma)
-			db.session.add(turma)
-			db.session.commit()
-			flash('Class edited successfully!', 'success')
-			return redirect(url_for('assignments.class_admin'))
-		return render_template('assignments/class_form.html', title='Edit class', form=form)
-	abort(403)
-
-@bp.route("/class/admin")
-@login_required
-def class_admin():
-	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		classes_array = Turma.query.all()
-		return render_template('assignments/class_admin.html', title='Class admin', classes_array = classes_array)
-	abort (403)
-
-
-@bp.route("/class/export/<class_id>")
-@login_required
-def export_class_data(class_id):
-	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		query_sets = db.session.query(User).join(
-			Enrollment, Enrollment.user_id == User.id).filter(
-			Enrollment.turma_id == class_id).order_by(User.student_number.asc()).all()
-		class_object = Turma.query.get(class_id)
-		filename = class_object.turma_label + ' - ' + class_object.turma_term + ' ' + str(class_object.turma_year)
-		column_names = ['student_number', 'username', 'email']
-		return excel.make_response_from_query_sets(query_sets, column_names, "xlsx", file_name = filename)
-	abort (403)
-	
-@bp.route("/class/enrollment/<class_id>")
-@login_required
-def manage_enrollment(class_id):
-	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		class_enrollment = app.assignments.models.get_class_enrollment_from_class_id(class_id)
-		return render_template('assignments/class_enrollment.html', title='Class enrollment', class_enrollment = class_enrollment)
-	abort (403)
-			
-			
-@bp.route("/class/enrollment/remove/<enrollment_id>")
-@login_required
-def remove_enrollment(enrollment_id):
-	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		class_id = Enrollment.query.get(enrollment_id).turma_id
-		Enrollment.query.filter(Enrollment.id==enrollment_id).delete()
-		db.session.commit()
-		flash('Student removed from class!', 'success')
-		return redirect(url_for('assignments.manage_enrollment', class_id = class_id))
-	abort (403)
-
-@bp.route("/class/delete/<turma_id>")
-@login_required
-def delete_class(turma_id):
-	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		Turma.delete_turma_from_id(turma_id)
-		flash('Class ' + str(turma_id) + ' has been deleted.', 'success')
-		return redirect(url_for('assignments.class_admin'))		
-	abort (403)
-########################################
 
 # View created assignments status
 @bp.route("/view/", methods=['GET', 'POST'])
@@ -235,7 +147,8 @@ def delete_assignment(assignment_id):
 							   form=form)
 	abort (403)
 
-############# User peer review routes
+
+############# Peer review routes
 # Display an empty review feedback form
 @bp.route("/review/<assignment_id>", methods=['GET', 'POST'])
 def create_peer_review(assignment_id):
@@ -386,9 +299,10 @@ def download_comment_file_upload(comment_file_upload_id):
 		return app.files.models.download_comment_file_upload (comment_file_upload_id)
 	abort (403)
 	
-############# Peer review forms routes
 
 
+
+############# Peer review forms builder routes
 @bp.route("/form/builder")
 def form_builder():
 	return render_template('assignments/form_builder_index.html')
