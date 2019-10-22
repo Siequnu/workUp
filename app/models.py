@@ -56,6 +56,8 @@ class Turma(db.Model):
 	turma_label = db.Column(db.String(140))
 	turma_term = db.Column(db.String(140))
 	turma_year = db.Column(db.Integer)
+	class_start_time = db.Column(db.Time)
+	class_end_time = db.Column(db.Time)
 	
 	def __repr__(self):
 		return '<Turma {}>'.format(self.turma_number)
@@ -64,7 +66,9 @@ class Turma(db.Model):
 	def new_turma_from_form (form):
 		new_turma = Turma(turma_number=form.turma_number.data, turma_label=form.turma_label.data,
 					turma_term=form.turma_term.data,
-					turma_year = form.turma_year.data)
+					turma_year = form.turma_year.data,
+					class_start_time = form.class_start_time.data,
+					class_end_time = form.class_end_time.data)
 		db.session.add(new_turma)
 		db.session.commit()
 
@@ -247,4 +251,13 @@ class CommentFileUpload(db.Model):
 	
 	def __repr__(self):
 		return '<Comment File Upload {}>'.format(self.filename)
+	
+
+class AttendanceCode (db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	code = db.Column(db.String(140))
+	
+	def __repr__(self):
+		return '<Registration Code {}>'.format(self.filename)
 	

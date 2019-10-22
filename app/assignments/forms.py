@@ -21,6 +21,8 @@ class TurmaCreationForm(FlaskForm):
 	turma_label = StringField('Class label', validators=[DataRequired()])
 	turma_term = StringField('Class term', validators=[DataRequired()])
 	turma_year = StringField('Class year', validators=[DataRequired()])
+	class_start_time = StringField('Class start time', validators=[DataRequired()])
+	class_end_time = StringField('Class end time', validators=[DataRequired()])
 	submit = SubmitField('Create')
 
 		
