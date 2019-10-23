@@ -5,7 +5,7 @@ def get_greeting ():
 	# Get the greeting
 	if datetime.datetime.now().hour < 12:
 		return 'Good morning'
-	elif 12 <= currentTime.hour < 18:
+	elif 12 <= datetime.datetime.now().hour < 18:
 		return 'Good afternoon'
 	else:
 		return 'Good evening'
