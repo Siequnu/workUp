@@ -41,7 +41,7 @@
                <p><i class="fa fa-calendar-alt"></i> {{lesson.start_time}} {{lesson.end_time}}</p>
             </div>
             <div class="card-footer">
-             <a href="{{url_for('classes.open_attendance', lesson_id = lesson.id)}}" <button class="btn btn-info"><i class="fa fa-plus-circle"></i>  Open attendance </button></a>
+             <a href="{{url_for('classes.open_attendance', lesson_id = lesson.id)}}" <button class="btn btn-info"><i class="fa fa-toggle-on"></i>  Open attendance </button></a>
          <a href="{{url_for('classes.view_attendance', lesson_id = lesson.id)}}" <button class="btn btn-outline-secondary"><i class="fa fa-street-view"></i>  View attendance </button></a>
          <a href="{{url_for('classes.delete_lesson', lesson_id = lesson.id)}}" <button class="btn btn-outline-warning"><i class="fa fa-trash-alt"></i>  Delete lesson </button></a>
             </div>
