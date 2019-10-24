@@ -1,25 +1,47 @@
  {% extends "header.html" %} {% from 'bootstrap/form.html' import render_form %} {% block app_content %}
  
  <div class="container">
-    <br>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <p><a href="{{url_for('classes.close_attendance', attendance_code_id = attendance_code_object.id)}}" <button class="btn btn-light"><i class="fa fa-times-circle"></i>  Close attendance </button></a></p>
-            </div>
-            <div class="col-md-9">
+	<br>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<p><a href="{{url_for('classes.close_attendance', attendance_code_id = attendance_code_object.id)}}" <button class="btn btn-light"><i class="fa fa-times-circle"></i>  Close attendance </button></a></p>
+			</div>
+			<div class="col-md-9">
 
-                <h1>{{greeting}}!</h1>
+				<h1>{{greeting}}!</h1>
 
-            </div>
-        </div>
-        <hr>
-        <br>
+			</div>
+		</div>
+		<hr>
+		<br>
 
+<div class="row">
+			<div class="col-md-7">
+	<img src="{{ qrcode(url, box_size = 15) }}">
+	</div>
+<div class="col-md-2">
 
-    <img src="{{ qrcode(url, box_size = 15) }}">
-    
-    <br/><br/>
+	<script src="https://js.pusher.com/5.0/pusher.min.js"></script>	
+	<script src="/static/js/pusher.js"></script>
+	
+	
+	<div class="attendee-container" style="overflow: auto; max-height: 80vh">
+			<div class="table-responsive">
+				<table class="attendance" id="attendance">
+					<thead>
+						<tr>
+							
+						</tr>
+					</thead>
+					<tbody>
+					
+					</tbody>
+				</table>
+			</div>
+		</div>
+	
+	
 </div>
 
 {% endblock %}

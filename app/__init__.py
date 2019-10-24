@@ -11,6 +11,7 @@ from flask_toastr import Toastr
 from flask_compress import Compress
 import flask_excel as excel
 from flask_qrcode import QRcode
+import pusher
 
 import logging, os
 from logging.handlers import RotatingFileHandler
@@ -24,6 +25,14 @@ mail = Mail()
 executor = Executor()
 toastr = Toastr()
 compress = Compress()
+
+pusher_client = pusher.Pusher(
+  app_id='886641',
+  key='a3d90d6c0e5cfca9fd70',
+  secret='0af51ea5b1f04e03b9f6',
+  cluster='ap3',
+  ssl=True
+)
 
 def create_app(config_class=Config):
 	workup_app = Flask(__name__)
