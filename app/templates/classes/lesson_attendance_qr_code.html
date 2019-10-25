@@ -23,8 +23,27 @@
 <div class="col-md-2">
 
 	<script src="https://js.pusher.com/5.0/pusher.min.js"></script>	
-	<script src="/static/js/pusher.js"></script>
 	
+ 
+ <script>var pusher = new Pusher('{{config['PUSHER_KEY']}}', {
+	  cluster: 'ap3',
+	  forceTLS: true
+	});
+
+	var channel = pusher.subscribe('attendance');
+	channel.bind('my-event', function(data) {
+	  alert(JSON.stringify(data));
+	});
+	
+	
+channel.bind('new-record', (data) => {
+
+       $('#attendance').append(`
+            <tr>
+                <td><div> <h5>${data.data.username} </h5></div></td>
+            </tr>
+       `)
+    });</script>
 	
 	<div class="attendee-container" style="overflow: auto; max-height: 80vh">
 			<div class="table-responsive">
