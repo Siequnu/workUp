@@ -84,12 +84,6 @@ def enroll_user_in_class (user_id, turma_id):
 		db.session.add(new_enrollment)
 		db.session.commit()
 
-def get_class_enrollment_from_class_id (class_id):
-	return db.session.query(
-		Enrollment, Turma, User).join(
-		Turma, Enrollment.turma_id==Turma.id).join(
-		User, Enrollment.user_id==User.id).filter(
-		Enrollment.turma_id == class_id).all()
 
 def get_user_assignment_info (user_id, assignment_id = False):
 	

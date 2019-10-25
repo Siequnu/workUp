@@ -117,6 +117,7 @@
                <td><a href="{{url_for('user.give_admin_rights', user_id = user.id)}}" class="btn btn-warning btn-sm btn-block" role="button"><i class="fa fa-user-tie"></i> Make teacher</a></td>
               {% endif %}       
               <td>
+               <a href="{{url_for('classes.view_attendance_record', user_id = user.id)}}" class="btn btn-info btn-sm btn-block" role="button"><i class="fa fa-calendar-alt"></i> Attendance</a>           
                <a href="{{url_for('user.edit_user', user_id = user.id)}}" class="btn btn-primary btn-sm btn-block" role="button"><i class="fa fa-user-edit"></i> Edit</a>           
                <a href="{{url_for('user.delete_user', user_id = user.id)}}" class="btn btn-danger btn-sm btn-block" role="button"><i class="fa fa-user-times"></i> Delete</a>           
               </td>

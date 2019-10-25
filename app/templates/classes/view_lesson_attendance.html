@@ -24,6 +24,9 @@
                 <h4><i class="fa fa-users"></i> {{turma.turma_label}}</h4>
                 <h4><i class="fa fa-calendar-alt"></i> {{lesson.date}}: {{lesson.start_time}} - {{lesson.end_time}}</h4>
             </div>
+            <div class="card-footer">
+             <a href="{{url_for('classes.open_attendance', lesson_id = lesson.id)}}" <button class="btn btn-sm btn-outline-success"><i class="fa fa-toggle-on"></i>  Mark all students as attending </button></a>
+            </div>
         </div>
 
 
@@ -65,16 +68,27 @@
                                 </tr>
                             </thead>
                             <tbody id="searchableTable">
-                                {% for attendance, user in attendance_list %}
+                                {% for user in attendance_array %}
                                 <tr><td>{{user.student_number}}
                                 </td>
                                 <td>{{user.username}}
                                 </td>
-                                <td>{{attendance.timestamp.strftime('%d %b %H:%M:%S')}}
+                                {% if user.attendance %}
+                                <td>{{user.attendance.timestamp.strftime('%d %b %H:%M:%S')}}
                                 </td>
+                                {% else %}
+                                <td></td>
+                                {% endif %}
+                                
+                                 {% if user.attendance %}
                                 <td>
-                                    <a href="{{url_for('classes.remove_attendance', attendance_id = attendance.id)}}" <button class="btn btn-sm btn-outline-warning"><i class="fa fa-user-slash"></i>  Remove attendance </button></a>
+                                    <a href="{{url_for('classes.remove_attendance', attendance_id = user.attendance.id)}}" <button class="btn btn-sm btn-outline-warning"><i class="fa fa-user-slash"></i>  Remove attendance </button></a>
                                 </td>
+                                {% else %}
+                                   <td>
+                                   <a href="{{url_for('classes.register_student_as_attending', user_id = user.id, lesson_id = lesson.id)}}" <button class="btn btn-sm btn-outline-success"><i class="fa fa-user-plus"></i>  Register as attending </button></a>
+                                </td>
+                                {% endif %}
                                 </tr>
                                 {% endfor %}
                             </tbody>
