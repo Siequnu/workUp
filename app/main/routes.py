@@ -1,4 +1,4 @@
-from flask import render_template, flash, current_app, session, request
+from flask import render_template, flash, current_app, session, request, redirect, url_for
 from flask_login import current_user, login_required
 
 import datetime
@@ -49,3 +49,9 @@ def index():
 							greeting = greeting)
 	
 	return render_template('index.html')
+
+
+# Redirect for lesson registration
+@bp.route('/attend')
+def lesson_registration_redirect():
+	return redirect(url_for('classes.enter_attendance_code'))
