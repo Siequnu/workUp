@@ -143,19 +143,18 @@
             </div>
         </div>
         <hr>
-
         <div class="row text-center">
             <div class="col">
                 <a href="{{url_for('assignments.view_assignments')}}"><div class="counter">
                     <i class="fa fa-file-upload fa-2x"></i>
-                    <h2 class="timer count-title count-number">Assignments completed</h2>
+                    <h2 class="timer count-title count-number">Assignments</h2>
                     <div class="progress-circle progress-{{upload_progress_percentage}}"><span>{{upload_progress_percentage}}</span></div>
                 </div>
             </div></a>
             <div class="col">
                 <div class="counter">
                     <i class="fa fa-comment-dots fa-2x"></i>
-                    <h2 class="timer count-title count-number">Peer reviews completed</h2>
+                    <h2 class="timer count-title count-number">Peer reviews</h2>
                      <div class="progress-circle progress-{{peer_review_progress_percentage}}"><span>{{peer_review_progress_percentage}}</span></div>
                 </div>
             </div>
