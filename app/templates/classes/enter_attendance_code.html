@@ -9,13 +9,12 @@
        <hr>
      </div>
      
-     <div class="col-md-12 col-lg-6 col-sm-12">
+     <div class="row justify-content-left">
+     <div class="col-12 col-md-10 col-lg-6">
+     
      <br>
      <h5>To sign up as attending a class, scan the QR code or enter the word shown on the board at the start of the class.</h5>
-     </div>
      <br>
-        <div class="row justify-content-left">
-            <div class="col-12 col-md-10 col-lg-6">
                 <form class="card">
                     <div class="card-body row no-gutters align-items-center">
                         <div class="col-auto">
@@ -35,13 +34,16 @@
                 </form>
             </div>
             <!--end of col-->
+            
+            <div class="col-md-12 col-lg-1 col-sm-12 text-centered ">
+            </div>
+            <div class="col-md-12 col-lg-4 col-sm-12 text-centered ">
+        <br>
+        <p><a href="{{url_for('classes.view_attendance_record')}}" <button class="btn btn-lg btn-primary"><i class="fa fa-user-check"></i> View your attendance record</button></a></p>
+         </div>
         </div>
         </div>
     
-    <hr>
-    <div class="col-md-12 col-lg-6 col-sm-12">
-    <p><a href="{{url_for('classes.view_attendance_record')}}" <button class="btn btn-lg btn-info"><i class="fa fa-calendar-day"></i> View your attendance record</button></a></p>
-    </div>
     </div>
 
 
