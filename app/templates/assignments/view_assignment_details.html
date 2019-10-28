@@ -153,14 +153,14 @@
               <td>
                 {% if user.comments|length > 0 %}
                 <a href="{{url_for('files.view_comments', file_id = user.upload.id)}}" 
-                   <button class="btn btn-light">
+                   <button class="btn btn-sm btn-light">
                 <i class="fa fa-comment-alt">
                 </i> {{user.comments|length}}
           </button>
           </a>
         {% else %}
         <a href="" 
-           <button class="btn btn-light disabled">
+           <button class="btn btn-sm btn-light disabled">
         <i class="fa fa-comment-alt">
         </i> {{user.comments|length}}
         </button>
