@@ -30,6 +30,8 @@ def index():
 								   classes=app.assignments.models.get_all_class_info(),
 								   library= ClassLibraryFile.query.all(),
 								   assignments = Assignment.query.all(),
+								   active_user_count = app.user.models.get_active_user_count (),
+								   total_library_downloads = app.files.models.get_total_library_downloads_count (),
 								   greeting = greeting)
 		else:
 			# Display help message if a student has signed up and is not part of a class
