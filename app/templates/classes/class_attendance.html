@@ -52,7 +52,7 @@
              
              
                <h5><i class="fa fa-users"></i> {{lesson.date}}</h5>
-               <p><i class="fa fa-calendar-alt"></i> {{lesson.start_time}} {{lesson.end_time}}</p>
+               <p><i class="fa fa-calendar-alt"></i> {{lesson.start_time.strftime('%H:%M')}}-{{lesson.end_time.strftime('%H:%M')}}</p>
             </div>
             </div>
           </div>
