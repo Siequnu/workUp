@@ -63,6 +63,8 @@
                                     </th>
                                     <th>Timestamp
                                     </th>
+                                    <th><i class="fa fa-user-md">
+                                    </th>
                                     <th>Actions
                                     </th>
                                 </tr>
@@ -79,7 +81,11 @@
                                 {% else %}
                                 <td></td>
                                 {% endif %}
-                                
+                                {% if user.justification %}
+                                <td><a href="{{url_for('classes.view_absence_justification', absence_justification_id = user.justification.id)}}" <button class="btn btn-sm btn-outline-primary"><i class="fa fa-user-md"></i>  View justification </button></a></td>
+                                {% else %}
+                                <td></td>
+                                {% endif %}
                                  {% if user.attendance %}
                                 <td>
                                     <a href="{{url_for('classes.remove_attendance', attendance_id = user.attendance.id)}}" <button class="btn btn-sm btn-outline-warning"><i class="fa fa-user-slash"></i>  Remove attendance </button></a>
