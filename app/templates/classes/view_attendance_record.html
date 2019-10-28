@@ -23,10 +23,12 @@
        <span class="badge badge-danger badge-pill"><i class="fa fa-calendar-times"></i>
        </span>
        </li>
-       {% if current_user.is_admin == True %}
+       {% if lesson.justification != False %}
+       <a href="{{url_for('classes.view_absence_justification', absence_justification_id = lesson.justification.id)}}" <button class="btn btn-sm btn-outline-warning"><i class="fa fa-user-md"></i> View uploaded justification</button></a>       
+       {% elif current_user.is_admin == True %}
        <a href="{{url_for('classes.register_student_as_attending', user_id = user.id, lesson_id = lesson.id)}}" <button class="btn btn-sm btn-outline-danger"><i class="fa fa-user-plus"></i> Register as attended</button></a>       
        {% else %}
-       <a href="{{url_for('classes.view_attendance_record')}}" <button class="btn btn-sm btn-outline-danger"><i class="fa fa-user-md"></i> Submit justification</button></a>
+       <a href="{{url_for('classes.upload_absence_justification', lesson_id = lesson.id)}}" <button class="btn btn-sm btn-outline-danger"><i class="fa fa-user-md"></i> Submit justification</button></a>
        {% endif %}
        
        {% endif %}
