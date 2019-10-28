@@ -146,9 +146,9 @@
   </div>
   <div class="card-footer">
     {% if assignment['submitted_filename'] %}
-    <a href="" 
-       <button class="btn btn-secondary btn-sm disabled">
-    <i class="fa fa-file-alt">
+    <a href="{{url_for('files.download', file_id = assignment['upload'].id)}}" 
+       <button class="btn btn-info btn-sm">
+    <i class="fa fa-file-download">
     </i> {{assignment['submitted_filename']}} 
     </button>
   </a>
