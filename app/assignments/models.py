@@ -168,6 +168,9 @@ def get_peer_review_progress_bar_percentage (user_id):
 		return int(float(total_completed_peer_reviews)/float(total_peer_reviews_expected) * 100)
 	else:
 		return 100
+
+def get_total_completed_peer_reviews (user_id):
+	return Comment.query.filter_by(user_id=user_id).filter_by(pending=False).count()
 	
 def get_comment_author_id_from_comment (comment_id):
 	return Comment.query.get(comment_id).user_id

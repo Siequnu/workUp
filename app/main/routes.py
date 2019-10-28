@@ -40,6 +40,7 @@ def index():
 							number_of_uploads = app.files.models.get_uploaded_file_count_from_user_id(current_user.id),
 							upload_progress_percentage = app.assignments.models.get_assignment_upload_progress_bar_percentage (current_user.id),
 							peer_review_progress_percentage = app.assignments.models.get_peer_review_progress_bar_percentage(current_user.id),
+							total_completed_peer_reviews = app.assignments.models.get_total_completed_peer_reviews (current_user.id),
 							number_of_peer_reviews_on_own_uploads = app.assignments.models.get_received_peer_review_count (current_user.id),
 							last_upload_humanized_timestamp = app.assignments.models.last_uploaded_assignment_timestamp (current_user.id),
 							library_file_count = len(app.files.models.get_user_library_books_from_id (current_user.id)),
@@ -47,6 +48,8 @@ def index():
 							last_received_peer_review_humanized_timestamp = app.assignments.models.last_incoming_peer_review_timestamp (current_user.id),
 							assignments_info = app.assignments.models.get_user_assignment_info (current_user.id),
 							attendance_stats_percentage = app.classes.models.get_user_attendance_record_stats (current_user.id, percentage = True),
+							attendance_stats = app.classes.models.get_user_attendance_record_stats (current_user.id),
+							library_download_stat = app.files.models.get_total_downloads_for_user (current_user.id),
 							greeting = greeting)
 	
 	return render_template('index.html')
