@@ -46,6 +46,7 @@ def index():
 							received_peer_review_count = app.assignments.models.get_received_peer_review_count (current_user.id),
 							last_received_peer_review_humanized_timestamp = app.assignments.models.last_incoming_peer_review_timestamp (current_user.id),
 							assignments_info = app.assignments.models.get_user_assignment_info (current_user.id),
+							attendance_stats_percentage = app.classes.models.get_user_attendance_record_stats (current_user.id, percentage = True),
 							greeting = greeting)
 	
 	return render_template('index.html')
