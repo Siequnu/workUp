@@ -1,14 +1,21 @@
  {% extends "header.html" %} {% from 'bootstrap/form.html' import render_form %} {% block app_content %}
 
+
 <div class="container">
     <br>
-    <div class="container">
-     <h4>{{user.username}}'s attendance record</h4>
-     <br>
-     <br>
+<div class="row">
+  <div class="col-md-12">
+    <h1><i class="fa fa-concierge-bell"></i> Attendance</h1>
+    <hr>
+  </div>
+</div>
+
+     
+
      {% for user, turma, lesson_attendance in attendance_record %}
+      <div class="col-md-12">
       <div class="jumbotron">
-        <h1 class="display-4">{{turma.turma_label}}</h1>
+        <h2><i class="fa fa-university"></i> {{user.username}} - {{turma.turma_label}}</h2>
         <hr class="my-4">
        
        <div class="col-4"> 
@@ -35,9 +42,11 @@
        
        
        <br>
+       
        {% endfor %}
        </ul>
        </div> 
+      </div>
       </div>
      {% endfor %}
     </div>
