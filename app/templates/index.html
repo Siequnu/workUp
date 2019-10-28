@@ -146,17 +146,17 @@
         <div class="row text-center">
             <div class="col">
                 <a href="{{url_for('assignments.view_assignments')}}"><div class="counter">
-                    <i class="fa fa-file-upload fa-2x"></i>
+                    <i class="fa fa-cloud-upload-alt fa-2x"></i>
                     <h2 class="timer count-title count-number">Assignments</h2>
                     <div class="progress-circle progress-{{upload_progress_percentage}}"><span>{{upload_progress_percentage}}</span></div>
                     {% if last_upload_humanized_timestamp != False %}
-                            <p class="card-text"><small class="text-muted"> You completed {{number_of_uploads}} assignments, {{last_upload_humanized_timestamp}}</small></p>
+                            <p class="card-text"><small class="text-muted"> {{last_upload_humanized_timestamp}} you completed {{number_of_uploads}} assignments</small></p>
                             {% endif %}
                 </div>
             </div></a>
             <div class="col">
                 <div class="counter">
-                    <i class="fa fa-comment-dots fa-2x"></i>
+                    <i class="fa fa-pen-fancy fa-2x"></i>
                     <h2 class="timer count-title count-number">Peer reviews</h2>
                      <div class="progress-circle progress-{{peer_review_progress_percentage}}"><span>{{peer_review_progress_percentage}}</span></div>
                     {% if total_completed_peer_reviews == 1 %}
@@ -184,7 +184,7 @@
         <div class="row text-center">
           <div class="col">
                 <a href="{{url_for('files.class_library')}}"><div class="counter">
-                    <i class="fa fa-archive fa-2x"></i>
+                    <i class="fa fa-book-open fa-2x"></i>
                     <h2 class="timer count-title count-number">{{library_file_count}}</h2>
                     <p class="count-text ">Library files</p>
                     <p class="card-text"><small class="text-muted"> You have made {{library_download_stat}} downloads</small></p>
