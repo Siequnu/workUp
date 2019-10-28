@@ -37,9 +37,26 @@
         {% for lesson in lessons %}
           <div class="card bg-light mb-3" style="max-width: 35rem;">
             <div class="card-body">
+             
+             <div class="container">
+          <div class="row">
+            <div class="col-4 align-self-center">
+              <h3 class="display-5">
+                <span class="badge badge-secondary">
+                  <i class="fa fa-user-check ">
+                  </i> {{lesson.attendance_stats.attendance}} / {{lesson.attendance_stats.students_in_class}}
+                </span>
+              </h3>
+            </div>
+            <div class="col-8">
+             
+             
                <h5><i class="fa fa-users"></i> {{lesson.date}}</h5>
                <p><i class="fa fa-calendar-alt"></i> {{lesson.start_time}} {{lesson.end_time}}</p>
             </div>
+            </div>
+          </div>
+             </div>
             <div class="card-footer">
              <a href="{{url_for('classes.open_attendance', lesson_id = lesson.id)}}" <button class="btn btn-info"><i class="fa fa-toggle-on"></i>  Open attendance </button></a>
          <a href="{{url_for('classes.view_lesson_attendance', lesson_id = lesson.id)}}" <button class="btn btn-outline-secondary"><i class="fa fa-street-view"></i>  View attendance </button></a>
