@@ -1,10 +1,10 @@
 from app import db
 import app.models, app.email_model
 from app.models import Upload, Download, Assignment, User, Comment, Enrollment, Turma
-from datetime import datetime
 from flask_login import current_user
-import string, time, datetime, xlrd
+import string, time, xlrd
 from flask import url_for, render_template, redirect, session, flash, request, abort, current_app
+from datetime import datetime, timedelta
 
 from sqlalchemy import func
 
@@ -19,6 +19,11 @@ def get_all_student_info ():
 		Turma, Enrollment.turma_id == Turma.id).group_by(
 		User.student_number).all()
 
+def get_active_user_count ():
+	now = datetime.now()
+	active_cutoff = now - timedelta(minutes=1)
+	return User.query.filter(User.last_seen > active_cutoff).count()
+	
 def get_non_enrolled_user_info():
 	enrolled_student_info = get_all_student_info ()
 	enrolled_students_dict = []
@@ -64,7 +69,7 @@ def add_users_from_excel_spreadsheet (user_array, turma_id):
 		db.session.commit()
 		'''
 		# Email student email with password and asking to confirm email.
-		subject = "Elm Online: confirm your email"
+		subject = "workUp: confirm your email"
 		token = app.email_model.ts.dumps(str(form.email.data), salt=current_app.config["TS_SALT"])
 		confirm_url = url_for('user.confirm_email', token=token, _external=True)
 		html = render_template('email/activate.html',confirm_url=confirm_url)
