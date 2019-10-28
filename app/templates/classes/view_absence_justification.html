@@ -13,7 +13,7 @@
             </div>
             <div class="col-md-10">
 
-                <h2>View absence justification</h2>
+                <h2>Absence justification</h2>
 
             </div>
         </div>
@@ -22,6 +22,8 @@
         <br>
 
 <div class="container">
+ <h5>Absence justification for your {{turma.turma_label}} class on {{lesson.date}}.</h5>
+ <br>
  <div class="row">
   <div class="col-xs-12 col-md-4">
   
@@ -38,7 +40,7 @@
      
  </div>
   <div class="library_card-read-more">
-  <a href="{{url_for('main.index')}}" class="btn btn-primary btn-sm" role="button"><i class="fa fa-user-edit"></i> View</a>
+  <a href="{{url_for('classes.download_absence_justification', absence_justification_id = absence_justification.id)}}" class="btn btn-primary btn-sm" role="button"><i class="fa fa-file-download"></i> Download</a>
   </div>
 </div>
 
