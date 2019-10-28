@@ -149,6 +149,9 @@
                     <i class="fa fa-file-upload fa-2x"></i>
                     <h2 class="timer count-title count-number">Assignments</h2>
                     <div class="progress-circle progress-{{upload_progress_percentage}}"><span>{{upload_progress_percentage}}</span></div>
+                    {% if last_upload_humanized_timestamp != False %}
+                            <p class="card-text"><small class="text-muted"> You completed {{number_of_uploads}} assignments, {{last_upload_humanized_timestamp}}</small></p>
+                            {% endif %}
                 </div>
             </div></a>
             <div class="col">
@@ -156,6 +159,11 @@
                     <i class="fa fa-comment-dots fa-2x"></i>
                     <h2 class="timer count-title count-number">Peer reviews</h2>
                      <div class="progress-circle progress-{{peer_review_progress_percentage}}"><span>{{peer_review_progress_percentage}}</span></div>
+                    {% if total_completed_peer_reviews == 1 %}
+                            <p class="card-text"><small class="text-muted"> You have written {{total_completed_peer_reviews}} peer review</small></p>
+                    {% else %}
+                    <p class="card-text"><small class="text-muted"> You have written {{total_completed_peer_reviews}} peer reviews</small></p>
+                    {% endif %}
                 </div>
             </div>
             <div class="col">
@@ -163,6 +171,12 @@
                     <i class="fa fa-user-check fa-2x"></i>
                     <h2 class="timer count-title count-number">Attendance</h2>
                      <div class="progress-circle progress-{{attendance_stats_percentage}}"><span>{{attendance_stats_percentage}}</span></div>
+                     {% if attendance_stats.lessons_attended == 1 %}
+                            <p class="card-text"><small class="text-muted"> You have attended {{attendance_stats.lessons_attended}} lesson</small></p>
+                    {% else %}
+                    <p class="card-text"><small class="text-muted"> You have attended {{attendance_stats.lessons_attended}} lessons</small></p>
+                    {% endif %}
+              
                 </div>
             </div>
         </div>
@@ -173,6 +187,7 @@
                     <i class="fa fa-archive fa-2x"></i>
                     <h2 class="timer count-title count-number">{{library_file_count}}</h2>
                     <p class="count-text ">Library files</p>
+                    <p class="card-text"><small class="text-muted"> You have made {{library_download_stat}} downloads</small></p>
                 </div></a>
             </div>
             <div class="col">
@@ -180,11 +195,14 @@
                     <i class="fa fa-comments fa-2x"></i>
                     <h2 class="timer count-title count-number">{{received_peer_review_count}}</h2>
                     <p class="count-text ">Reviews received</p>
+                    {% if last_received_peer_review_humanized_timestamp != False %}
+                            <p class="card-text"><small class="text-muted"> Last reviewed {{last_received_peer_review_humanized_timestamp}}</small></p>
+                            {% endif %}
                 </div></a>
             </div>
         </div>
         <br>
-        {% if assignments_info|length > 0 %}
+        {% if upload_progress_percentage != 100 %}
         <div class="card">
             <div class="card-header">
                 <h4><i class="fa fa-calendar-alt"></i> Upcoming assignments</h4>
@@ -231,49 +249,6 @@
             </div>
         </div>
         {% endif %}
-
-                <br>
-
-                <div class="card-deck">
-                    <div class="card" style="max-width: 20rem;">
-
-                        <div class="card-header">
-                            <h4><i class="fa fa-user"></i> Your info</h4>
-
-                        </div>
-                        <a href="{{url_for('files.file_stats')}}"><div class="card-body">
-
-                            {% if number_of_uploads == 1 %}
-                            <h5 class="card-title">You have uploaded {{number_of_uploads}} assignment.</h5>
-                            {% else %}
-                            <h5 class="card-title">You have uploaded {{number_of_uploads}} assignments.</h5>
-                            {% endif %}
-														{% if last_upload_humanized_timestamp != False %}
-                            <p class="card-text"><small class="text-muted"> Last uploaded {{last_upload_humanized_timestamp}}</small></p>
-                            {% endif %}
-                        </div></a>
-                    </div>
-
-                    <div class="card" style="max-width: 20rem;">
-                        <div class="card-header">
-                            <h4><i class="fa fa-comment-dots"></i> Peer reviews</h4>
-                        </div>
-                        
-                        <a href="{{url_for('files.file_stats')}}"><div class="card-body">
-
-                            {% if number_of_peer_reviews_on_own_uploads == 1 %}
-                            <h5 class="card-title">Your essays have been reviewed {{number_of_peer_reviews_on_own_uploads}} time.</h5>
-                            {% else %}
-                            <h5 class="card-title">Your essays have been reviewed {{number_of_peer_reviews_on_own_uploads}} times.</h5>
-                            {% endif %}
-														{% if last_received_peer_review_humanized_timestamp != False %}
-                            <p class="card-text"><small class="text-muted"> Last reviewed {{last_received_peer_review_humanized_timestamp}}</small></p>
-                            {% endif %}
-                        </div></a>
-                    </div>
-                </div>
-
-            </div>
 
             {% endif %}
 						{% endblock %}

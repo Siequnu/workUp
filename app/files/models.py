@@ -228,6 +228,9 @@ def download_library_file (library_upload_id):
 								   as_attachment = True, attachment_filename = original_filename)
 
 
+def get_total_downloads_for_user (user_id):
+	return LibraryDownload.query.filter(LibraryDownload.user_id == user_id).count()
+
 def download_assignment_task_file (assignment_id):
 	if db.session.query(Assignment, AssignmentTaskFile).join(
 		AssignmentTaskFile, Assignment.assignment_task_file_id ==  AssignmentTaskFile.id).filter(
