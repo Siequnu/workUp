@@ -25,7 +25,7 @@
                 <h4><i class="fa fa-calendar-alt"></i> {{lesson.date}}: {{lesson.start_time}} - {{lesson.end_time}}</h4>
             </div>
             <div class="card-footer">
-             <a href="{{url_for('classes.open_attendance', lesson_id = lesson.id)}}" <button class="btn btn-sm btn-outline-success"><i class="fa fa-toggle-on"></i>  Mark all students as attending </button></a>
+             <a href="{{url_for('classes.batch_register_lesson_as_attended', lesson_id = lesson.id)}}" <button class="btn btn-sm btn-outline-success"><i class="fa fa-toggle-on"></i>  Mark all students as attending </button></a>
             </div>
         </div>
 
