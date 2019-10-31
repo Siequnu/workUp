@@ -41,6 +41,9 @@
  </div>
   <div class="library_card-read-more">
   <a href="{{url_for('classes.download_absence_justification', absence_justification_id = absence_justification.id)}}" class="btn btn-primary btn-sm" role="button"><i class="fa fa-file-download"></i> Download</a>
+  {% if current_user.is_admin %}
+  <a href="{{url_for('classes.delete_absence_justification', absence_justification_id = absence_justification.id)}}" class="btn btn-warning btn-sm" role="button"><i class="fa fa-trash-alt"></i> Delete</a>
+  {% endif %}
   </div>
 </div>
 
