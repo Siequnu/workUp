@@ -66,6 +66,7 @@
 			  <td>{{class.turma_year}}</td>
 			  <td>
           <a href="{{url_for('classes.class_attendance', class_id=class.id)}}" <button class="btn btn-info bln-block"><i class="fa fa-users"></i> Class attendance</button></a>
+          <a href="{{url_for('classes.send_bulk_email_to_class', class_id=class.id)}}" <button class="btn btn-primary bln-block"><i class="fa fa-mail-bulk"></i> Bulk email</button></a>
           
           <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class ="fa fa-ellipsis-h">
