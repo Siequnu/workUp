@@ -146,6 +146,28 @@ def delete_assignment(assignment_id):
 							   confirmation_message = confirmation_message,
 							   form=form)
 	abort (403)
+	
+
+# Sets the assignment deadline as the previous day, effectively locking the assignment
+@bp.route("/close/<assignment_id>", methods=['GET', 'POST'])
+@login_required
+def close_assignment(assignment_id):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		try: 
+			assignment = Assignment.query.get(assignment_id)
+		except:
+			flash ('Could not find the assignment.', 'error')
+			return redirect(url_for('assignments.view_assignments'))
+		try:
+			if app.assignments.models.check_if_assignment_is_over(assignment_id):
+				flash ('This assignment is already closed.')
+			else:
+				assignment.due_date = datetime.datetime.now().date() - datetime.timedelta(days=1)
+				db.session.commit()
+		except: 
+			flash ('An error occured while changing the assignment deadline.', 'error')
+		return redirect(url_for('assignments.view_assignment_details', assignment_id = assignment_id))
+	abort (403)
 
 
 ############# Peer review routes

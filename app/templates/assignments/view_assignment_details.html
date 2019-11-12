@@ -79,6 +79,12 @@
 </i> Edit 
 </button>
 </a>
+<a href="{{url_for('assignments.close_assignment', assignment_id = assignment.id)}}" 
+   <button class="btn btn btn-outline-warning">
+<i class="fa fa-lock">
+</i> Close assignment 
+</button>
+</a>
 <a href="{{url_for('assignments.delete_assignment', assignment_id = assignment.id)}}" 
    <button class="btn btn btn-outline-danger float-right">
 <i class="fa fa-trash-alt">
