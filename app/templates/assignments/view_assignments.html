@@ -73,10 +73,12 @@
                 </li> 
                 {% endif %}
                 {% if assignment_task_filename %}
-                <li class="list-inline-item">
-                  <i class="fa fa-info-circle" aria-hidden="true">
-                  </i> {{ assignment_task_filename}}
-                </li>
+            <a href="{{url_for('files.download_assignment_file', assignment_id = assignment['id'])}}">
+              <li class="list-inline-item">
+                <i class="fa fa-info-circle" aria-hidden="true">
+                </i> {{assignment_task_filename}}
+              </li>
+            </a>
                 {% endif %}
               </ul>
               <em>{{assignment.description}}
