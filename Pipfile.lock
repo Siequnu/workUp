@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "76d584e212f79e0e19cf5be3ac08ce338e3158d106a9d5f97d6f44cc5b7015b7"
+            "sha256": "aa4a831805682c09fbadbf873453961cb538e29ba0cff7cc6201d643da760dfe"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -218,14 +218,6 @@
             ],
             "index": "pypi",
             "version": "==1.0.2"
-        },
-        "flask-ckeditor": {
-            "hashes": [
-                "sha256:327ad60c3787d96cdc579ce04c284d33343802d3b7422ba998aadbbdee6756f1",
-                "sha256:8d91ee747473dc4e6e0dc166fd71b3136b7d388de757731c019fad835d776c8e"
-            ],
-            "index": "pypi",
-            "version": "==0.4.3"
         },
         "flask-compress": {
             "editable": true,
@@ -548,6 +540,7 @@
             "version": "==0.9.0"
         },
         "pro-writing-aid": {
+            "editable": true,
             "git": "https://github.com/prowriting/prowritingaid.python.git",
             "ref": "99b7dccd73575f806ff28e3e515d3e782ef4d9ca"
         },
