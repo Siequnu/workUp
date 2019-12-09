@@ -5,12 +5,13 @@ from app.grammar import bp, forms
 from app.grammar.forms import GrammarSubmissionForm
 
 from app.files import models
-from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile, Enrollment, PeerReviewForm, CommentFileUpload, Lesson, AttendanceCode, LessonAttendance
+from app.models import Assignment, Upload, Comment, Turma, User, AssignmentTaskFile, Enrollment, PeerReviewForm, CommentFileUpload, Lesson, AttendanceCode, LessonAttendance, GrammarCheck
 from wtforms import SubmitField
 import app.models
 
 from app import db
 import requests
+from datetime import datetime
 
 import ProWritingAidSDK
 from ProWritingAidSDK.rest import ApiException
@@ -27,6 +28,10 @@ api_instance = ProWritingAidSDK.TextApi(ProWritingAidSDK.ApiClient('https://api.
 def check_grammar():
 	form = GrammarSubmissionForm()
 	if form.validate_on_submit():
+		new_grammar_check = GrammarCheck(user_id = current_user.id, timestamp = datetime.now())
+		db.session.add(new_grammar_check)
+		db.session.commit()
+		
 		body = form.body.data 
 		api_request = ProWritingAidSDK.TextAnalysisRequest(body, ["grammar"], "General", "en")
 		api_response = api_instance.post(api_request)
