@@ -12,15 +12,24 @@ import app.models
 from app import db
 import requests
 
+import ProWritingAidSDK
+from ProWritingAidSDK.rest import ApiException
+
+configuration = ProWritingAidSDK.Configuration()
+configuration.host = 'https://api.prowritingaid.com'
+configuration.api_key['licenseCode'] = current_app.config['PRO_WRITING_AID_API_KEY']
+
+api_instance = ProWritingAidSDK.TextApi(ProWritingAidSDK.ApiClient('https://api.prowritingaid.com'))
+
 # Check grammar
 @bp.route("/check/", methods=['GET', 'POST'])
 @login_required
 def check_grammar():
 	form = GrammarSubmissionForm()
-	text = ''
 	if form.validate_on_submit():
-		url = 'https://api.perfecttense.com/correct'
-		payload = open("request.json")
-		headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
-		r = requests.post(url, data=payload, headers=headers)
+		body = form.body.data 
+		api_request = ProWritingAidSDK.TextAnalysisRequest(body, ["grammar"], "General", "en")
+		api_response = api_instance.post(api_request)
+	
+		return render_template('grammar/check_grammar.html', form = form, api_response = api_response, body = body) 
 	return render_template('grammar/check_grammar.html', form = form) 

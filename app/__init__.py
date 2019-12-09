@@ -11,6 +11,7 @@ from flask_toastr import Toastr
 from flask_compress import Compress
 import flask_excel as excel
 from flask_qrcode import QRcode
+from flask_ckeditor import CKEditor
 
 import logging, os
 from logging.handlers import RotatingFileHandler
