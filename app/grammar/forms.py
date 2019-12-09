@@ -7,5 +7,5 @@ from app import db
 
 	
 class GrammarSubmissionForm(FlaskForm):
-	title = TextAreaField('Your assignment', validators=[DataRequired()])
+	body = TextAreaField('', validators=[DataRequired()])
 	submit = SubmitField('Check')
