@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "44594d09c79306c1d58075621c5b8f4064644f909f83badb478d0d978342f2a3"
+            "sha256": "48bee32a81c3b24adec947012d2813fb6699b5224f9e746cb3d32f157ece0e91"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -567,6 +567,11 @@
             "index": "pypi",
             "version": "==0.9.0"
         },
+        "pro-writing-aid": {
+            "editable": true,
+            "git": "https://github.com/prowriting/prowritingaid.python.git",
+            "ref": "99b7dccd73575f806ff28e3e515d3e782ef4d9ca"
+        },
         "pusher": {
             "hashes": [
                 "sha256:668df72fcf61f293313e29a29acd41cce233a45d445a97a9b21dd32ad09a2d17",
@@ -832,11 +837,11 @@
         },
         "werkzeug": {
             "hashes": [
-                "sha256:169ba8a33788476292d04186ab33b01d6add475033dfc07215e6d219cc077096",
-                "sha256:6dc65cf9091cf750012f56f2cad759fa9e879f511b5ff8685e456b4e3bf90d16"
+                "sha256:1e0dedc2acb1f46827daa2e399c1485c8fa17c0d8e70b6b875b4e7f54bf408d2",
+                "sha256:b353856d37dec59d6511359f97f6a4b2468442e454bd1c98298ddce53cac1f04"
             ],
             "index": "pypi",
-            "version": "==1.0.0"
+            "version": "==0.16.1"
         },
         "wtforms": {
             "hashes": [

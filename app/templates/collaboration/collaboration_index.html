@@ -1,0 +1,50 @@
+{% extends "header.html" %} {% block app_content %}
+
+
+<br>
+<div class="container">
+<div class="row">
+  <div class="col-md-6">
+    <h1><i class="fa fa-users"></i> Your collaborations</h1>
+  </div>
+</div>
+<hr>
+
+<a href="{{url_for('collaboration.create_new_firepad')}}" 
+     <button class="btn btn-secondary">
+  <i class="fa fa-plus-circle">
+  </i> Create new pad
+  </button>
+</a>
+<br>
+<br>
+
+<h3>You own these pads</h2>
+<br>
+{% for firepad in firepads %}
+
+<div class="card" style="max-width:10rem;">
+      <div class="card-body">
+     <h5 class="card-title">Pad {{firepad.id}}</h5>
+     <a href="{{url_for('collaboration.collaborate', firepad_id = firepad.id)}}" class="btn btn-primary">Open</a>
+   </div>
+</div>
+<br>
+{% endfor %}
+<br><br>
+<h3>You can edit these pads</h3>
+{% for collab in collabs %}
+
+<div class="card" style="max-width:10rem;">
+      <div class="card-body">
+        <h5 class="card-title">Pad {{collab.id}}</h5>
+        <a href="{{url_for('collaboration.collaborate', firepad_id = collab.firepad_id)}}" class="btn btn-primary">Open</a>
+      </div>
+    </div>
+{% endfor %}
+
+</div>
+{% endblock %}
+
+
+
