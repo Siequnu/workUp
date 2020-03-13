@@ -61,6 +61,9 @@ def create_app(config_class=Config):
 	from app.grammar import bp as grammar_bp
 	workup_app.register_blueprint(grammar_bp, url_prefix='/grammar')
 	
+	from app.collaboration import bp as collaboration_bp
+	workup_app.register_blueprint(collaboration_bp, url_prefix='/collaboration')
+	
 	from app.main import bp as main_bp
 	workup_app.register_blueprint(main_bp)
 	

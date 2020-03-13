@@ -306,3 +306,22 @@ class GrammarCheck(db.Model):
 	
 	def __repr__(self):
 		return '<Grammar Check {}>'.format(self.id)
+	
+
+class Firepad(db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	timestamp = db.Column(db.DateTime, default=datetime.now())
+	owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	
+	def __repr__(self):
+		return '<Firepad {}>'.format(self.id)
+	
+class Collab(db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	firepad_id = db.Column(db.Integer, db.ForeignKey('firepad.id'))
+	
+	def __repr__(self):
+		return '<Collab {}>'.format(self.id)
