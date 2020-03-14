@@ -6,6 +6,7 @@ from app.collaboration import bp
 from app import db
 from datetime import datetime
 from app.models import Firepad, Collab, User, Enrollment
+import app.models
 
 
 # Collaboration home page
@@ -53,31 +54,38 @@ def collaborate(firepad_id):
 @login_required
 def find_user(firepad_id):
 	# If admin, display all students, with shortcut to add entire classes
-	
-	# If student, get list of students from current class
-	# Get user list for the current class
-	enrollments = db.session.query(Enrollment.turma_id).filter(Enrollment.user_id==current_user.id).all()
-	classmates = []
-	for turma_id in enrollments[0]:
-		class_list = db.session.query(
-			User, Enrollment).join(
-			Enrollment, User.id == Enrollment.user_id).filter(
-			Enrollment.turma_id==turma_id).all()
-		for student in class_list: classmates.append(student)
+	if app.models.is_admin(current_user.username):
+		classmates = db.session.query(
+				User, Enrollment).join(
+				Enrollment, User.id == Enrollment.user_id).all()
+	else:
 		
-	# Display searchable table with username and button to add user
+		# If student, get list of students from current class
+		# Get user list for the current class
+		enrollments = db.session.query(Enrollment.turma_id).filter(Enrollment.user_id==current_user.id).all()
+		classmates = []
+		for turma_id in enrollments[0]:
+			class_list = db.session.query(
+				User, Enrollment).join(
+				Enrollment, User.id == Enrollment.user_id).filter(
+				Enrollment.turma_id==turma_id).all()
+			for student in class_list: classmates.append(student)
+			
+		# Display searchable table with username and button to add user
 	return render_template('collaboration/find_user.html', classmates = classmates, firepad_id = firepad_id)
 
 # Method to add new user to a pad
 @bp.route("/add/<user_id>/<firepad_id>")
 @login_required
 def add_user(user_id, firepad_id):
-	#!# Check if this is the owner or an admin
-	user = User.query.get(user_id)
-	collab = Collab (user_id = user_id, firepad_id = firepad_id)
-	db.session.add(collab)
-	db.session.commit()
-	flash ('Successfully added ' + user.username + ' to the pad', 'success')
+	if app.models.is_admin(current_user.username) or Firepad.query.get(firepad_id).owner_id == current_user.id:
+		user = User.query.get(user_id)
+		collab = Collab (user_id = user_id, firepad_id = firepad_id)
+		db.session.add(collab)
+		db.session.commit()
+		flash ('Successfully added ' + user.username + ' to the pad', 'success')
+	else:
+		flash ('Collaborators can only be added by the document owner', 'info')
 	return redirect(url_for('collaboration.collaborate', firepad_id = firepad_id))
 
 
@@ -85,11 +93,13 @@ def add_user(user_id, firepad_id):
 @bp.route("/remove/<user_id>/<firepad_id>")
 @login_required
 def remove_user(user_id, firepad_id):
-	#!# Check if this is the owner or an admin
-	user = User.query.get(user_id)
-	collab = Collab.query.filter_by(user_id = user_id).filter_by(firepad_id = firepad_id).one()
-	
-	db.session.delete(collab)
-	db.session.commit()
-	flash ('Successfully removed ' + user.username + ' from the pad', 'success')
+	if app.models.is_admin(current_user.username) or Firepad.query.get(firepad_id).owner_id == current_user.id:
+		user = User.query.get(user_id)
+		collab = Collab.query.filter_by(user_id = user_id).filter_by(firepad_id = firepad_id).one()
+		
+		db.session.delete(collab)
+		db.session.commit()
+		flash ('Successfully removed ' + user.username + ' from the pad', 'success')
+	else:
+		flash ('Only the owner can remove users from the pad', 'info')
 	return redirect(url_for('collaboration.collaborate', firepad_id = firepad_id))
