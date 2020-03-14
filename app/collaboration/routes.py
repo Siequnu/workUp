@@ -52,7 +52,7 @@ def collaborate(firepad_id):
 		collaborators = db.session.query(
 			Collab, User).join(
 			User, Collab.user_id == User.id).filter(
-			Collab.firepad_id==firepad_id)
+			Collab.firepad_id==firepad_id).all()
 		return render_template('collaboration/firepad.html',
 							api_key = current_app.config['FIREBASE_API_KEY'],
 							auth_domain = current_app.config['FIREBASE_AUTH_DOMAIN'],
