@@ -14,23 +14,10 @@ import app.models
 @login_required
 def collaboration_index():
 	# Get list of owned pads and pads we are collaborating on
-	firepads = Firepad.query.filter_by(owner_id=current_user.id).all()
-	firepads_info_array = []
-	for firepad in firepads:
-		firepad_dict = firepad.__dict__
-		firepad_dict['owner'] = app.collaboration.models.get_firepad_owner_user_object(firepad.id)
-		firepad_dict['collaborators'] = app.collaboration.models.get_firepad_collaborator_user_objects(firepad.id)
-		firepads_info_array.append(firepad_dict)
+	firepads = app.collaboration.models.get_user_owned_firepads()
+	collabs = app.collaboration.models.get_user_collaborating_firepads()
 	
-	collabs = Collab.query.filter_by(user_id=current_user.id).all()
-	collabs_info_array = []
-	for collab in collabs:
-		collab_dict = collab.__dict__
-		collab_dict['owner'] = app.collaboration.models.get_firepad_owner_user_object(collab.firepad_id)
-		collab_dict['collaborators'] = app.collaboration.models.get_firepad_collaborator_user_objects(collab.firepad_id)
-		collabs_info_array.append(collab_dict)
-	
-	return render_template('collaboration/collaboration_index.html', firepads = firepads_info_array, collabs = collabs_info_array)
+	return render_template('collaboration/collaboration_index.html', firepads = firepads, collabs = collabs)
 
 
 # Create new firepad as owner
@@ -38,10 +25,7 @@ def collaboration_index():
 @login_required
 def create_new_firepad():
 	# Create a new firepad in the DB and redirect to the newly created pad
-	firepad = Firepad(owner_id=current_user.id, timestamp = datetime.now())
-	db.session.add(firepad)
-	db.session.flush() # Access the new firepad ID in the redirect
-	db.session.commit()
+	firepad = app.collaboration.models.create_new_firepad()
 	return redirect(url_for('collaboration.collaborate', firepad_id = firepad.id))
 
 @bp.route("/<firepad_id>")
