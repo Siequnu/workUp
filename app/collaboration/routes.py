@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request, abort, current_app, session, Response
 from flask_login import current_user, login_required
 
-from app.collaboration import bp
+from app.collaboration import bp, models
 
 from app import db
 from datetime import datetime
@@ -13,13 +13,9 @@ import app.models
 @bp.route("/")
 @login_required
 def collaboration_index():
-	#!# Filter by username, only get firepads by this owner
-	firepads = Firepad.query.filter_by(owner_id=current_user.id).all()
-	
+	firepads = Firepad.query.filter_by(owner_id=current_user.id).all()	
 	# Collabs
-	#!# Filter by username to only get invites
 	collabs = Collab.query.filter_by(user_id=current_user.id).all()
-	print (firepads, collabs)
 	return render_template('collaboration/collaboration_index.html', firepads = firepads, collabs = collabs)
 
 
@@ -36,17 +32,21 @@ def create_new_firepad():
 @bp.route("/<firepad_id>")
 @login_required
 def collaborate(firepad_id):
-	#!# Check if is owner or collab, otherwise 403
-	collaborators = db.session.query(
-		Collab, User).join(
-		User, Collab.user_id == User.id).filter(
-		Collab.firepad_id==firepad_id)
-	return render_template('collaboration/firepad.html',
+	if app.collaboration.models.check_if_user_has_access_to_firepad(firepad_id, current_user.id):
+		
+		collaborators = db.session.query(
+			Collab, User).join(
+			User, Collab.user_id == User.id).filter(
+			Collab.firepad_id==firepad_id)
+		return render_template('collaboration/firepad.html',
 							api_key = current_app.config['FIREBASE_API_KEY'],
 							auth_domain = current_app.config['FIREBASE_AUTH_DOMAIN'],
 							database_url = current_app.config['FIREBASE_DATABASE_URL'],
 							collaborators = collaborators,
 							firepad_id = firepad_id)
+	else:
+		flash ('You do not have permission to access this pad. Please ask the owner to add you as a collaborator', 'info')
+		return redirect (url_for('collaboration.collaboration_index'))
 
 
 # Form to find new user
