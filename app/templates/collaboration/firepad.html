@@ -274,6 +274,7 @@
     
     
   </div>
+  {% if is_owner == True %}
   <div class="col-md-3">
      <a href="{{url_for('collaboration.find_user', firepad_id = firepad_id)}}" 
      <button class="btn btn-secondary">
@@ -282,6 +283,7 @@
   </button>
 </a>
   </div>
+{% endif %}
 
 <div class="col-md-3">
   
@@ -293,11 +295,18 @@
   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
     <a class="dropdown-item" href="#">{{owner.username}} <i class="fa fa-crown"> </i></a>
     <div class="dropdown-divider"></div>
+    {% if is_owner == True %}
+    
     {% for collaboration, user in collaborators %}
     <a class="dropdown-item" href="{{url_for('collaboration.remove_user', user_id = user.id, firepad_id = firepad_id)}}">{{user.username}} <i class="fa fa-user-slash"></i></a>
     {% endfor %}
     <div class="dropdown-divider"></div>
   <a class="dropdown-item" href="#">Click a user to remove them from this pad</a>
+   {% else %}
+   {% for collaboration, user in collaborators %}
+    <a class="dropdown-item" href="#">{{user.username}}</a>
+    {% endfor %}
+    {% endif %}
 </div>
   </div>
 </div>

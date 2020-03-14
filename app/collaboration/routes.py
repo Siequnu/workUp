@@ -47,6 +47,7 @@ def create_new_firepad():
 @login_required
 def collaborate(firepad_id):
 	if app.collaboration.models.check_if_user_has_access_to_firepad(firepad_id, current_user.id):
+		is_owner = app.models.is_admin(current_user.username) or Firepad.query.get(firepad_id).owner_id == current_user.id
 		owner = app.collaboration.models.get_firepad_owner_user_object(firepad_id)
 		collaborators = db.session.query(
 			Collab, User).join(
@@ -58,6 +59,7 @@ def collaborate(firepad_id):
 							database_url = current_app.config['FIREBASE_DATABASE_URL'],
 							collaborators = collaborators,
 							owner = owner,
+							is_owner = is_owner,
 							firepad_id = firepad_id)
 	else:
 		flash ('You do not have permission to access this pad. Please ask the owner to add you as a collaborator', 'info')
