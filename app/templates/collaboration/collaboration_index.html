@@ -10,6 +10,19 @@
 </div>
 <hr>
 
+{% if firepads|length == 0 %}
+{% if collabs|length == 0 %}
+<div class="jumbotron">
+  <h1 class="display-4">Introducing collaboration pads!</h1>
+  <p class="lead">Using pads, you can easily work in real-time with your classmates online.</p>
+  <hr class="my-4">
+  <p>Once you create a pad, you can invite your colleagues to share and work on this document. The pad will automatically sync as you edit it.</p>
+  <a class="btn btn-primary btn-lg" href="{{url_for('collaboration.create_new_firepad')}}" role="button"><i class="fa fa-plus-circle">
+  </i> Create new pad</a>
+</div>
+{% endif %}
+{% endif %}
+
 <a href="{{url_for('collaboration.create_new_firepad')}}" 
      <button class="btn btn-secondary">
   <i class="fa fa-plus-circle">
@@ -19,6 +32,8 @@
 </br>
 </br>
 </br>
+
+
 
 {% if firepads|length != 0 %}
 <h3><i class="fa fa-crown"> </i> You own these pads</h3>
