@@ -47,7 +47,7 @@ def create_new_firepad():
 @login_required
 def collaborate(firepad_id):
 	if app.collaboration.models.check_if_user_has_access_to_firepad(firepad_id, current_user.id):
-		
+		owner = app.collaboration.models.get_firepad_owner_user_object(firepad_id)
 		collaborators = db.session.query(
 			Collab, User).join(
 			User, Collab.user_id == User.id).filter(
@@ -57,6 +57,7 @@ def collaborate(firepad_id):
 							auth_domain = current_app.config['FIREBASE_AUTH_DOMAIN'],
 							database_url = current_app.config['FIREBASE_DATABASE_URL'],
 							collaborators = collaborators,
+							owner = owner,
 							firepad_id = firepad_id)
 	else:
 		flash ('You do not have permission to access this pad. Please ask the owner to add you as a collaborator', 'info')
@@ -93,11 +94,15 @@ def find_user(firepad_id):
 @login_required
 def add_user(user_id, firepad_id):
 	if app.models.is_admin(current_user.username) or Firepad.query.get(firepad_id).owner_id == current_user.id:
-		user = User.query.get(user_id)
-		collab = Collab (user_id = user_id, firepad_id = firepad_id)
-		db.session.add(collab)
-		db.session.commit()
-		flash ('Successfully added ' + user.username + ' to the pad', 'success')
+		if int(user_id) == int(current_user.id):
+			flash ('You already have access to this pad', 'info')
+			return redirect(url_for('collaboration.collaborate', firepad_id = firepad_id))
+		else:
+			user = User.query.get(user_id)
+			collab = Collab (user_id = user_id, firepad_id = firepad_id)
+			db.session.add(collab)
+			db.session.commit()
+			flash ('Successfully added ' + user.username + ' to the pad', 'success')
 	else:
 		flash ('Collaborators can only be added by the document owner', 'info')
 	return redirect(url_for('collaboration.collaborate', firepad_id = firepad_id))
