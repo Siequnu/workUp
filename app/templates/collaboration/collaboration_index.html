@@ -22,6 +22,7 @@
 
 <h3><i class="fa fa-crown"> </i> You own these pads</h3>
 <br>
+<div class="card-columns">
 {% for firepad in firepads %}
 
 <div class="card" style="max-width:25rem;">
@@ -30,7 +31,7 @@
      <p>
      
      {% if firepad.collaborators == [] %}
-      Not shared.
+      Not shared
      {% else %}
      Shared with
       {% for collaboration, user in firepad['collaborators'] %}
@@ -50,19 +51,21 @@
      <a href="{{url_for('collaboration.collaborate', firepad_id = firepad.id)}}" class="btn btn-primary">Open</a>
    </div>
 </div>
-<br>
+
 {% endfor %}
+</div>
 <hr><br>
 <h3><i class="fa fa-users"> </i>You can edit these pads</h3>
+<div class="card-columns">
 {% for collab in collabs %}
-<br>
+
 <div class="card" style="max-width:25rem;">
       <div class="card-body">
         <h5 class="card-title">{{collab.owner.username}}'s Pad {{collab.firepad_id}} </h5>
        <p>
      
      {% if collab.collaborators == [] %}
-      Not shared.
+      Not shared
      {% else %}
      Shared with 
       {% for collaboration, user in collab['collaborators'] %}
@@ -85,6 +88,7 @@
     </div>
 
 {% endfor %}
+</div>
 
 </div>
 {% endblock %}
