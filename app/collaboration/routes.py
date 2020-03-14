@@ -13,10 +13,24 @@ import app.models
 @bp.route("/")
 @login_required
 def collaboration_index():
-	firepads = Firepad.query.filter_by(owner_id=current_user.id).all()	
+	firepads = Firepad.query.filter_by(owner_id=current_user.id).all()
+	firepads_info_array = []
+	for firepad in firepads:
+		firepad_dict = firepad.__dict__
+		firepad_dict['owner'] = app.collaboration.models.get_firepad_owner_user_object(firepad.id)
+		firepad_dict['collaborators'] = app.collaboration.models.get_firepad_collaborator_user_objects(firepad.id)
+		firepads_info_array.append(firepad_dict)
+	
 	# Collabs
 	collabs = Collab.query.filter_by(user_id=current_user.id).all()
-	return render_template('collaboration/collaboration_index.html', firepads = firepads, collabs = collabs)
+	collabs_info_array = []
+	for collab in collabs:
+		collab_dict = collab.__dict__
+		collab_dict['owner'] = app.collaboration.models.get_firepad_owner_user_object(collab.firepad_id)
+		collab_dict['collaborators'] = app.collaboration.models.get_firepad_collaborator_user_objects(collab.firepad_id)
+		collabs_info_array.append(collab_dict)
+	
+	return render_template('collaboration/collaboration_index.html', firepads = firepads_info_array, collabs = collabs_info_array)
 
 
 # Create new firepad as owner
