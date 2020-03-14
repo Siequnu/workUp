@@ -16,31 +16,74 @@
   </i> Create new pad
   </button>
 </a>
-<br>
-<br>
+</br>
+</br>
+</br>
 
-<h3>You own these pads</h2>
+<h3><i class="fa fa-crown"> </i> You own these pads</h3>
 <br>
 {% for firepad in firepads %}
 
-<div class="card" style="max-width:10rem;">
+<div class="card" style="max-width:25rem;">
       <div class="card-body">
      <h5 class="card-title">Pad {{firepad.id}}</h5>
+     <p>
+     
+     {% if firepad.collaborators == [] %}
+      Not shared.
+     {% else %}
+     Shared with
+      {% for collaboration, user in firepad['collaborators'] %}
+      {% if loop.index == loop.length %}
+         {% if loop.length == 1 %}
+          {{user.username}}
+          {% else %}
+           and {{user.username}}
+          {% endif %}
+      {% else %}
+      {{user.username}}, 
+      {% endif %}
+      {% endfor %}
+    {% endif %}
+    
+     </p>
      <a href="{{url_for('collaboration.collaborate', firepad_id = firepad.id)}}" class="btn btn-primary">Open</a>
    </div>
 </div>
 <br>
 {% endfor %}
-<br><br>
-<h3>You can edit these pads</h3>
+<hr><br>
+<h3><i class="fa fa-users"> </i>You can edit these pads</h3>
 {% for collab in collabs %}
-
-<div class="card" style="max-width:10rem;">
+<br>
+<div class="card" style="max-width:25rem;">
       <div class="card-body">
-        <h5 class="card-title">Pad {{collab.firepad_id}}</h5>
+        <h5 class="card-title">{{collab.owner.username}}'s Pad {{collab.firepad_id}} </h5>
+       <p>
+     
+     {% if collab.collaborators == [] %}
+      Not shared.
+     {% else %}
+     Shared with 
+      {% for collaboration, user in collab['collaborators'] %}
+       {% if loop.index == loop.length %}
+          {% if loop.length == 1 %}
+          {{user.username}}
+          {% else %}
+           and {{user.username}}
+          {% endif %}
+      {% else %}
+      {{user.username}}, 
+      {% endif %}
+      {% endfor %}
+    {% endif %}
+    
+     </p>      
+        
         <a href="{{url_for('collaboration.collaborate', firepad_id = collab.firepad_id)}}" class="btn btn-primary">Open</a>
       </div>
     </div>
+
 {% endfor %}
 
 </div>
