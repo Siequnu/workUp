@@ -16,7 +16,6 @@ def collaboration_index():
 	# Get list of owned pads and pads we are collaborating on
 	firepads = app.collaboration.models.get_user_owned_firepads()
 	collabs = app.collaboration.models.get_user_collaborating_firepads()
-	
 	return render_template('collaboration/collaboration_index.html', firepads = firepads, collabs = collabs)
 
 
@@ -28,6 +27,8 @@ def create_new_firepad():
 	firepad = app.collaboration.models.create_new_firepad()
 	return redirect(url_for('collaboration.collaborate', firepad_id = firepad.id))
 
+
+# Display a firepad and collaborate online
 @bp.route("/<firepad_id>")
 @login_required
 def collaborate(firepad_id):
@@ -51,7 +52,7 @@ def collaborate(firepad_id):
 		return redirect (url_for('collaboration.collaboration_index'))
 
 
-# Form to find new user
+# Searchbox and user list to add to firepad collaborator
 @bp.route("/find/<firepad_id>")
 @login_required
 def find_user(firepad_id):
@@ -102,10 +103,31 @@ def remove_user(user_id, firepad_id):
 	if app.models.is_admin(current_user.username) or Firepad.query.get(firepad_id).owner_id == current_user.id:
 		user = User.query.get(user_id)
 		collab = Collab.query.filter_by(user_id = user_id).filter_by(firepad_id = firepad_id).one()
-		
 		db.session.delete(collab)
 		db.session.commit()
 		flash ('Successfully removed ' + user.username + ' from the pad', 'success')
 	else:
 		abort (403)
 	return redirect(url_for('collaboration.collaborate', firepad_id = firepad_id))
+
+
+#!# Update user delete method to remove firepads they own
+# Method to delete a firepad
+@bp.route("/<firepad_id>/remove")
+@login_required
+def remove_firepad(firepad_id):
+	if app.models.is_admin(current_user.username) or Firepad.query.get(firepad_id).owner_id == current_user.id:
+		try:
+			# Remove all collabs
+			collabs = Collab.query.filter_by (firepad_id = firepad_id)
+			for collab in collabs:
+				db.session.delete(collab)
+				
+			# Finally, remove the firepad
+			firepad = Firepad.query.get (firepad_id)
+			db.session.delete (firepad)
+			db.session.commit()
+			flash ('Successfully removed this pad', 'success')
+		except:
+			flash ('An error occured while deleting this pad', 'warning')
+		return redirect (url_for('collaboration.collaboration_index'))

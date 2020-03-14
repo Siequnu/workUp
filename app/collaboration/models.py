@@ -5,6 +5,7 @@ from app import db
 from app.models import User, Firepad, Collab
 import app.models
 
+# Return all self-owned firepad objects from the current user
 def get_user_owned_firepads():
 	firepads = Firepad.query.filter_by(owner_id=current_user.id).all()
 	firepads_info_array = []
@@ -15,6 +16,8 @@ def get_user_owned_firepads():
 		firepads_info_array.append(firepad_dict)
 	return firepads_info_array
 
+
+# Return all collaboration objects for the current user
 def get_user_collaborating_firepads():
 	collabs = Collab.query.filter_by(user_id=current_user.id).all()
 	collabs_info_array = []
@@ -31,7 +34,7 @@ def create_new_firepad():
 	# Create a new firepad in the DB and redirect to the newly created pad
 	firepad = Firepad(owner_id=current_user.id, timestamp = datetime.now())
 	db.session.add(firepad)
-	db.session.flush() # Access the new firepad ID in the redirect
+	db.session.flush() # Access the new firepad ID
 	db.session.commit()
 	return firepad
 
@@ -47,6 +50,8 @@ def check_if_user_has_access_to_firepad(firepad_id, user_id):
 	else:
 		return False
 	
+
+# Return the owner object from a firepad_id
 def get_firepad_owner_user_object(firepad_id):
 	try:
 		return User.query.get(Firepad.query.get(firepad_id).owner_id)
