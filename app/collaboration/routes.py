@@ -13,6 +13,7 @@ import app.models
 @bp.route("/")
 @login_required
 def collaboration_index():
+	# Get list of owned pads and pads we are collaborating on
 	firepads = Firepad.query.filter_by(owner_id=current_user.id).all()
 	firepads_info_array = []
 	for firepad in firepads:
@@ -21,7 +22,6 @@ def collaboration_index():
 		firepad_dict['collaborators'] = app.collaboration.models.get_firepad_collaborator_user_objects(firepad.id)
 		firepads_info_array.append(firepad_dict)
 	
-	# Collabs
 	collabs = Collab.query.filter_by(user_id=current_user.id).all()
 	collabs_info_array = []
 	for collab in collabs:
@@ -37,6 +37,7 @@ def collaboration_index():
 @bp.route("/new")
 @login_required
 def create_new_firepad():
+	# Create a new firepad in the DB and redirect to the newly created pad
 	firepad = Firepad(owner_id=current_user.id, timestamp = datetime.now())
 	db.session.add(firepad)
 	db.session.flush() # Access the new firepad ID in the redirect
@@ -106,7 +107,7 @@ def add_user(user_id, firepad_id):
 			db.session.commit()
 			flash ('Successfully added ' + user.username + ' to the pad', 'success')
 	else:
-		flash ('Collaborators can only be added by the document owner', 'info')
+		abort (403)
 	return redirect(url_for('collaboration.collaborate', firepad_id = firepad_id))
 
 
@@ -122,5 +123,5 @@ def remove_user(user_id, firepad_id):
 		db.session.commit()
 		flash ('Successfully removed ' + user.username + ' from the pad', 'success')
 	else:
-		flash ('Only the owner can remove users from the pad', 'info')
+		abort (403)
 	return redirect(url_for('collaboration.collaborate', firepad_id = firepad_id))
