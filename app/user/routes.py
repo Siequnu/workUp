@@ -207,6 +207,10 @@ def delete_user(user_id):
 		if form.validate_on_submit():
 			app.files.models.delete_uploads_enrollments_and_download_records_for_user(user_id)
 			app.assignments.models.delete_all_comments_from_user_id (user_id)
+			app.grammar.models.delete_all_grammar_check_records_from_user_id(user_id)
+			app.classes.models.delete_all_user_absence_justification_uploads(user_id)
+			app.classes.models.delete_all_user_attendance_records(user_id)
+			app.collaboration.models.delete_all_user_pads_and_collabs (user_id)
 			app.models.User.delete_user(user_id)
 			flash('User deleted successfully.', 'success')
 			return redirect(url_for('user.manage_students'))

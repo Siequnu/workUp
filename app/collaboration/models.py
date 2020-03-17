@@ -75,6 +75,29 @@ def check_if_user_is_a_collaborator (firepad_id, user_id):
 		else:
 			pass
 	return False
+
+# Method called when deleting a uset to remove all their firepads and collabs
+def delete_all_user_pads_and_collabs (user_id):
+	# Delete all the pads this user is collaborating on
+	collabs = Collab.query.filter_by(user_id=user_id).all()
+	if collabs is not None:
+		for collab in collabs:
+			db.session.delete(collab)
+	db.session.commit()
+	
+	# Get a list of pads the user owns
+	pads = Firepad.query.filter_by(owner_id=user_id).all()
+	if pads is not None:
+		for pad in pads:
+			# Delete any collaborations invitations that were made by this owner
+			collabs = Collab.query.filter_by(firepad_id = pad.id).all()
+			if collabs is not None:
+				for collab in collabs:
+					db.session.delete(collab)
+			# Delete the pad itself
+			db.session.delete(pad)
+	db.session.commit()
+
 	
 	
 	
