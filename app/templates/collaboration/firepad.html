@@ -269,13 +269,13 @@
 <br>
 <div class="container">
 <div class="row">
-  <div class="col-md-5">
+  <div class="col-md-4">
     <h1><i class="fa fa-users"></i> Collaboration {{firepad_id}}</h1>
     
     
   </div>
   {% if is_owner == True %}
-  <div class="col-md-3">
+  <div class="col-md-2">
      <a href="{{url_for('collaboration.find_user', firepad_id = firepad_id)}}" 
      <button class="btn btn-secondary">
   <i class="fa fa-user-plus">
@@ -283,6 +283,23 @@
   </button>
 </a>
   </div>
+{% endif %}
+
+{% if is_admin == True %}
+<div class="col-md-2">
+  <div class="dropdown">
+  <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-users-group">
+  </i> Add class
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    {% for class in classes %}
+    <a class="dropdown-item" href="{{url_for('collaboration.add_class_as_collaborator', class_id = class.id, firepad_id = firepad_id)}}">{{class.turma_label}}</a>
+    {% endfor %}
+</div>
+  </div>
+</div>
+
 {% endif %}
 
 <div class="col-md-3">
