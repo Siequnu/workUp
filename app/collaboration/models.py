@@ -83,7 +83,6 @@ def delete_all_user_pads_and_collabs (user_id):
 	if collabs is not None:
 		for collab in collabs:
 			db.session.delete(collab)
-	db.session.commit()
 	
 	# Get a list of pads the user owns
 	pads = Firepad.query.filter_by(owner_id=user_id).all()
