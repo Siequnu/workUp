@@ -5,7 +5,7 @@ from app.collaboration import bp, models
 
 from app import db
 from datetime import datetime
-from app.models import Firepad, Collab, User, Enrollment
+from app.models import Firepad, Collab, User, Enrollment, Turma
 import app.models
 
 
@@ -39,6 +39,7 @@ def collaborate(firepad_id):
 			Collab, User).join(
 			User, Collab.user_id == User.id).filter(
 			Collab.firepad_id==firepad_id).all()
+		
 		return render_template('collaboration/firepad.html',
 							api_key = current_app.config['FIREBASE_API_KEY'],
 							auth_domain = current_app.config['FIREBASE_AUTH_DOMAIN'],
@@ -46,6 +47,8 @@ def collaborate(firepad_id):
 							collaborators = collaborators,
 							owner = owner,
 							is_owner = is_owner,
+							is_admin = app.models.is_admin(current_user.username),
+							classes = Turma.query.all(),
 							firepad_id = firepad_id)
 	else:
 		flash ('You do not have permission to access this pad. Please ask the owner to add you as a collaborator', 'info')
@@ -91,6 +94,23 @@ def add_user(user_id, firepad_id):
 			db.session.add(collab)
 			db.session.commit()
 			flash ('Successfully added ' + user.username + ' to the pad', 'success')
+	else:
+		abort (403)
+	return redirect(url_for('collaboration.collaborate', firepad_id = firepad_id))
+
+# Method to add an entire class as collaborators in a pad
+@bp.route("/add/class/<class_id>/<firepad_id>")
+@login_required
+def add_class_as_collaborator(class_id, firepad_id):
+	if app.models.is_admin(current_user.username):
+		# Get class enrollment:
+		turma = Turma.query.get(class_id)
+		class_enrollment = app.classes.models.get_class_enrollment_from_class_id (class_id)
+		for enrollment, turma, user in class_enrollment:
+			collab = Collab (user_id = user.id, firepad_id = firepad_id)
+			db.session.add(collab)
+		db.session.commit()	
+		flash ('Successfully created a pad for ' + turma.turma_label + '.', 'success')
 	else:
 		abort (403)
 	return redirect(url_for('collaboration.collaborate', firepad_id = firepad_id))
