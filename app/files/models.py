@@ -165,7 +165,7 @@ def get_post_info_from_user_id (user_id):
 	return upload_array
 
 def get_received_peer_review_from_upload_id_count (upload_id):
-	return Comment.query.filter_by(file_id=upload_id).count()
+	return Comment.query.filter_by(file_id=upload_id).filter_by(pending=False).count()
 
 def allowed_file_extension(filename):
 		return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
