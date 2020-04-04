@@ -43,6 +43,8 @@ def download_random_file(assignment_id):
 		return models.download_file(filename)
 	
 	# Make sure not to give the same file to the same peer reviewer twice
+	#!# This logic only works if there is a maximum of two peer reviews per student
+	#!# Consider expanding this to allow more peer reviews.
 	completed_comment = Comment.query.filter(
 		Comment.assignment_id==assignment_id).filter(
 		Comment.user_id==current_user.id).first()
@@ -61,22 +63,48 @@ def download_random_file(assignment_id):
 		flash('There are no files currently available for download. Please check back later.')
 		return redirect(url_for('assignments.view_assignments'))
 	
-	filename = random.choice(uploads_not_from_user).filename
-	random_file = os.path.join (current_app.config['UPLOAD_FOLDER'], filename)
+	# Attempt to assign "random" choice so that students receive at least 1 peer review per work.
+	# If this is truly random some students end up with 4 and others 0
 	
-	# Send SQL data to database
-	download = Download(filename=filename, user_id = current_user.id)
-	db.session.add(download)
-	db.session.commit()
+	# Make a population for each amount of peer reviews; no peer reviews = highest weighting
+	no_peer_reviews = []
+	one_peer_review = []
+	more_peer_reviews = []
+	for file in uploads_not_from_user:
+		peer_reviews = app.files.models.get_peer_reviews_from_upload_id(file.id)
+		if len(peer_reviews) == 0:
+			no_peer_reviews.append(file)
+		elif len(peer_reviews) == 1:
+			one_peer_review.append(file)
+		else:
+			more_peer_reviews.append(file)
+	
+	# If there are files with no peer reviews, prefer those
+	if len(no_peer_reviews) > 0:
+		file = random.choice (no_peer_reviews)
+	# If all files have at least 2 reviews, randomly assign from files with >3
+	elif len(no_peer_reviews) == 0 and len(one_peer_review) == 0:
+		file = random.choice (more_peer_reviews)
+	# All files have at least one peer review. Selecting from files that have 1 or more peer reviews.
+	else:
+		# Pick weighted random population of files from one_peer_reviews and more_peer_reviews
+		random_population = random.choices(population = [one_peer_review, more_peer_reviews],
+				   weights = [0.8, 0.2],
+				   k = 1)
+		# Pick a file from the randomly selected population
+		file = random.choice(random_population[0])
 	
 	# Update comments table with pending commment
-	upload_id = Upload.query.filter_by(filename=filename).first().id
+	upload_id = Upload.query.filter_by(filename=file.filename).first().id
 	comment_pending = Comment(user_id = int(current_user.id), file_id = int(upload_id),
 							  pending = True, assignment_id=assignment_id)
 	db.session.add(comment_pending)
 	db.session.commit()
 
-	return send_file(random_file, as_attachment=True)
+	# Download the file
+	#!# Rename the file to something more sensible than a UUID?
+	#!# Do not use original filename for privacy reasons	
+	return app.files.models.download_file(file.filename, rename = False)
 
 
 # Delete a file
