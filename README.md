@@ -1,5 +1,5 @@
 # workUp
-workUp is a app web application designed to help teachers distribute student work for peer review.
+workUp is web app designed to help teachers manage their classes.
 
 Managing student work for peer distribution is time consuming and can be a large impediment to
 teachers implementing this otherwise very beneficial study method. It is hoped that this app can
