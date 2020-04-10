@@ -109,12 +109,13 @@
                                  {% if user.attendance %}
                                 <td>
                                     <a href="{{url_for('classes.remove_attendance', attendance_id = user.attendance.id)}}" <button class="btn btn-sm btn-outline-warning"><i class="fa fa-user-slash"></i>  Remove attendance </button></a>
-                                </td>
+                                
                                 {% else %}
                                    <td>
                                    <a href="{{url_for('classes.register_student_as_attending', user_id = user.id, lesson_id = lesson.id)}}" <button class="btn btn-sm btn-outline-success"><i class="fa fa-user-plus"></i>  Register as attending </button></a>
-                                </td>
                                 {% endif %}
+                                <a href="{{url_for('classes.view_attendance_record', user_id = user.id, attendance_id = user.attendance.id)}}" <button class="btn btn-sm btn-outline-primary"><i class="fa fa-tasks"></i>  View attendance record </button></a>
+                                   </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
