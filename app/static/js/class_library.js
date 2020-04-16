@@ -10,21 +10,21 @@ $(function() {
 		// Get library upload data via AJAX
 		$.ajax({
 			method: "GET",
-			url: "http://127.0.0.1:5000/api/v1/library/" + libraryUploadId,
+			url: "/api/v1/library/" + libraryUploadId,
 			headers: {'key': apiKey},
 			error: function(jqXHR, textStatus, errorThrown) {
 				alert('An error occured.');
 			},
-			success: function(data) {
+			success: function(libraryUpload) {
 				// Add the data to the edit form div
-				$('#edited_upload_title').text(data.library_upload.title);
-				$('#edited_upload_description').text(data.library_upload.description);
+				$('#edited_upload_title').text(libraryUpload.title);
+				$('#edited_upload_description').text(libraryUpload.description);
 
-				var thumbnailFilename = data.library_upload.filename.split('.');
+				var thumbnailFilename = libraryUpload.filename.split('.');
 				$("#edited_upload_image").attr("src", "/static/thumbnails/" + thumbnailFilename[0] + ".jpeg");
 
-				$('#formTitleField').val(data.library_upload.title);
-				$('#formDescriptionField').val(data.library_upload.description);
+				$('#formTitleField').val(libraryUpload.title);
+				$('#formDescriptionField').val(libraryUpload.description);
 
 			}
 		});
@@ -37,7 +37,7 @@ $(function() {
 		// Send data via AJAX
 		$.ajax({
 			type: "PUT",
-			url: "http://127.0.0.1:5000/api/v1/library/" + libraryUploadId,
+			url: "/api/v1/library/" + libraryUploadId,
 			contentType: 'application/json',
 			headers: {'key': apiKey},
 			data: JSON.stringify({
@@ -47,15 +47,15 @@ $(function() {
 			error: function(jqXHR, textStatus, errorThrown) {
 				alert('An error occured.');
 			},
-			success: function(data) {
+			success: function(libraryUpload) {
 				// Hide the modal div
 				$('#editFormModal').modal('hide');
 
 				//Update the original library card
-				$('#' + libraryUploadId + " #libraryCardTitle").text(data.library_upload.title);
-				$('#' + libraryUploadId + " #library_card-description").text(data.library_upload.description);
+				$('#' + libraryUploadId + " #libraryCardTitle").text(libraryUpload.title);
+				$('#' + libraryUploadId + " #library_card-description").text(libraryUpload.description);
 
-				toastr.success('Library item ' + data.library_upload.title + ' updated successfully.')
+				toastr.success('Library item ' + libraryUpload.title + ' updated successfully.')
 
 			}
 		});

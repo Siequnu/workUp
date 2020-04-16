@@ -51,11 +51,10 @@ def delete_api_key(id):
 library_uploads_schema = LibraryUploadSchema (many = True)
 library_upload_schema = LibraryUploadSchema ()
 class LibraryListApi (Resource):
-	
 	def get(self):
 		if models.validate_api_key (request.headers.get('key')):
 			library_uploads = library_uploads_schema.dump(LibraryUpload.query.all())
-			return {'library_uploads': library_uploads}, 200
+			return library_uploads, 200
 		else: return {}, 401
 
 class LibraryUploadApi (Resource):
@@ -69,7 +68,7 @@ class LibraryUploadApi (Resource):
 		args = self.reqparse.parse_args()
 		if models.validate_api_key (request.headers.get('key')):
 			library_upload = library_upload_schema.dump(LibraryUpload.query.get(id))
-			return {'library_upload': library_upload}, 200
+			return library_upload, 200
 		else: return {}, 401
 	
 	def put(self, id):
@@ -81,7 +80,7 @@ class LibraryUploadApi (Resource):
 			library_upload.title = args['title']
 			library_upload.description = args['description']
 			db.session.commit()
-			
 			result = library_upload_schema.dump(library_upload)
-			return {'library_upload': result}, 200
+			
+			return result, 200
 		else: return {}, 401
