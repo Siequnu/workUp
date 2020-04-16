@@ -9,6 +9,7 @@ from app.models import Comment, Download, Upload, Turma, ClassLibraryFile, Enrol
 
 import random, os, re
 
+
 # Access file stats
 @bp.route("/uploads")
 @login_required
@@ -314,7 +315,7 @@ def download_assignment_file(assignment_id):
 	abort (403)
 
 # Admin form to upload a library file
-@bp.route('/library/upload/',methods=['GET', 'POST'])
+@bp.route('/library/upload/', methods=['GET', 'POST'])
 @login_required
 def upload_library_file():
 	if app.models.is_admin(current_user.username):	

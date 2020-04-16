@@ -11,6 +11,8 @@ from flask_toastr import Toastr
 from flask_compress import Compress
 import flask_excel as excel
 from flask_qrcode import QRcode
+from flask_marshmallow import Marshmallow
+
 
 import logging, os
 from logging.handlers import RotatingFileHandler
@@ -24,6 +26,8 @@ mail = Mail()
 executor = Executor()
 toastr = Toastr()
 compress = Compress()
+ma = Marshmallow ()
+
 
 def create_app(config_class=Config):
 	workup_app = Flask(__name__)
@@ -41,6 +45,7 @@ def create_app(config_class=Config):
 	compress.init_app(workup_app)
 	excel.init_excel (workup_app)
 	qrcode = QRcode(workup_app)
+	ma.init_app(workup_app)
 	
 	# Import templates
 	from app.errors import bp as errors_bp
@@ -63,6 +68,10 @@ def create_app(config_class=Config):
 	
 	from app.collaboration import bp as collaboration_bp
 	workup_app.register_blueprint(collaboration_bp, url_prefix='/collaboration')
+	
+	from app.api import bp as api_bp
+	workup_app.register_blueprint(api_bp)
+	
 	
 	from app.main import bp as main_bp
 	workup_app.register_blueprint(main_bp)
