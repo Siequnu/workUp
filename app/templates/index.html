@@ -127,6 +127,17 @@
 
             </div>
         </div>
+        
+        <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-network-wired"></i> API</h5>
+            </div>
+            <div class="card-body">
+                <p><a class="btn btn-outline-dark" href="{{url_for('api.create_api_key')}}" role="button"><i class="fa fa-plug"></i> Register new API key</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('api.manage_api_keys')}}" role="button"><i class="fa fa-tools"></i> Manage API keys</a></p>
+
+            </div>
+        </div>
 
     </div>
     {% else %}
