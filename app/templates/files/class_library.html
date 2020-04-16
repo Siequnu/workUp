@@ -1,4 +1,7 @@
 {% extends "header.html" %} {% block app_content %}
+<script src="/static/js/class_library.js"></script>
+
+
 <div class="container">
   <br>
   <div class="container">
@@ -62,8 +65,55 @@
   </i> Upload new library file 
   </button>
 </a>
-</div>
 <br>
+
+<!-- Edit Library Card Modal -->
+<div class="modal fade" id="editFormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Library Card</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container" id="editLibraryUploadDiv">
+  
+        <div class="library_card">
+          <div class="img-library_card">
+            <img id="edited_upload_image" src="#" />
+          </div>
+          <div class="library_card-content">
+            <h4 class="library_card-title" id="edited_upload_title">
+              
+            </h4>
+            <p id="edited_upload_description"></p>
+          </div>
+          <div class="card bg-light mb-3" style="max-width: 30rem;">
+           <div class="card-body">
+             <form id="editLibraryUploadForm" method="POST">
+             <label for="title">Title:</label><br>
+             <input id="formTitleField" name="title" type="text" required placeholder="Enter the title here..."><br>
+           <label for="title">Description:</label><br>
+           <input id="formDescriptionField" name="description" type="text" required placeholder="Enter the description here..."><br>
+          
+      </form>
+    </div>
+    </div>
+  </div>
+  
+</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="modalSaveButton" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </br>
 <div class="container">
   <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -96,14 +146,15 @@
       {% if class_library_file.turma_id == class.id %}
       {% set thumbnail_filename = library_upload.filename.split('.') %}
       <div class="col-xs-12 col-sm-4">
-        <div class="library_card">
+        <div class="library_card" id="{{library_upload.id}}">
           <div class="img-library_card">
             <img src="/static/thumbnails/{{thumbnail_filename[0]}}.jpeg" />
           </div>
-          <div class="library_card-content">
-            <h4 class="library_card-title">
+          <div class="library_card-content" id="libraryCardContent">
+            <h4 class="library_card-title" id="libraryCardTitle">
               {{library_upload.title}}
-            </h4> {{library_upload.description}}
+            </h4>
+            <p id="library_card-description">{{library_upload.description}}</p>
           </div>
           <div class="library_card-read-more">
             <div class="row">
@@ -129,7 +180,7 @@
                 </i> View downloads
               </a>
                <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{{url_for('files.edit_library_file', library_upload_id = library_upload.id)}}">
+              <a class="dropdown-item editLibraryUpload" data-toggle="modal" data-target="#editFormModal" href="{{url_for('files.edit_library_file', library_upload_id = library_upload.id)}}">
                 <i class="fa fa-fw fa-edit">
                 </i> Edit 
               </a>
