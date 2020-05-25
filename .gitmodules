@@ -19,3 +19,6 @@
 [submodule "app/errors"]
 	path = app/errors
 	url = https://github.com/Siequnu/flask-errors.git
+[submodule "app/api"]
+	path = app/api
+	url = https://github.com/Siequnu/flask-api.git
