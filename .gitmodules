@@ -4,3 +4,6 @@
 [submodule "app/assignments"]
 	path = app/assignments
 	url = https://github.com/Siequnu/flask-assignments.git
+[submodule "app/user"]
+	path = app/user
+	url = https://github.com/Siequnu/flask-user.git
