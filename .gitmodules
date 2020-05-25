@@ -7,3 +7,6 @@
 [submodule "app/user"]
 	path = app/user
 	url = https://github.com/Siequnu/flask-user.git
+[submodule "app/collaboration"]
+	path = app/collaboration
+	url = https://github.com/Siequnu/flask-collaboration.git
