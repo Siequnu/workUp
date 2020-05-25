@@ -13,3 +13,6 @@
 [submodule "app/classes"]
 	path = app/classes
 	url = https://github.com/Siequnu/flask-classes.git
+[submodule "app/files"]
+	path = app/files
+	url = https://github.com/Siequnu/flask-files.git
