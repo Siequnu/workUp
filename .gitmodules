@@ -1,3 +1,6 @@
 [submodule "app/grammar"]
 	path = app/grammar
 	url = https://github.com/Siequnu/flask-grammar.git
+[submodule "app/assignments"]
+	path = app/assignments
+	url = https://github.com/Siequnu/flask-assignments.git
