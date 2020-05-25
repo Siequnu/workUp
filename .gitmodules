@@ -1,6 +1,0 @@
-[submodule "app/app/grammar"]
-	path = app/app/grammar
-	url = https://github.com/Siequnu/flask-grammar.git
-[submodule "app/grammar"]
-	path = app/grammar
-	url = https://github.com/Siequnu/flask-grammar.git
