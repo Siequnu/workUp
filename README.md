@@ -265,6 +265,13 @@ client_max_body_size 200M;
 ```
 Finally, restart nginx ```sudo service nginx restart```
 
+* To avoid nonaggregated column SQL error, log into mysql and disable strict mode
+```sh
+set global sql_mode='';
+
+```
+
+
 
 
 
