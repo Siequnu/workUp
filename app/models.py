@@ -139,18 +139,6 @@ class User(UserMixin, db.Model):
 			return True
 		else:
 			return False
-	
-class AssignmentTaskFile(db.Model):
-	__table_args__ = {'sqlite_autoincrement': True}
-	id = db.Column(db.Integer, primary_key=True)
-	original_filename = db.Column(db.String(140))
-	filename = db.Column(db.String(140))
-	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-	
-	def __repr__(self):
-		return '<Assignment Task File {}>'.format(self.filename)		
-
 
 
 class Upload(db.Model):
