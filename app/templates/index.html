@@ -177,10 +177,12 @@
                     <i class="fa fa-user-check fa-2x"></i>
                     <h2 class="timer count-title count-number">Attendance</h2>
                      <div class="progress-circle progress-{{attendance_stats_percentage}}"><span>{{attendance_stats_percentage}}</span></div>
-                     {% if attendance_stats.lessons_attended == 1 %}
-                            <p class="card-text"><small class="text-muted"> You have attended {{attendance_stats.lessons_attended}} lesson</small></p>
-                    {% else %}
-                    <p class="card-text"><small class="text-muted"> You have attended {{attendance_stats.lessons_attended}} lessons</small></p>
+                    {% if attendance_stats %}
+                        {% if attendance_stats.lessons_attended == 1 %}
+                                <p class="card-text"><small class="text-muted"> You have attended {{attendance_stats.lessons_attended}} lesson</small></p>
+                        {% else %}
+                        <p class="card-text"><small class="text-muted"> You have attended {{attendance_stats.lessons_attended}} lessons</small></p>
+                        {% endif %}
                     {% endif %}
               
                 </div>
