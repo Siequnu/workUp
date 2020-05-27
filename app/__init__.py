@@ -103,6 +103,3 @@ def create_app(config_class=Config):
 		
 	return workup_app
 
-# Import other classes
-from app import models
-
