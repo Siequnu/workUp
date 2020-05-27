@@ -1,17 +1,21 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+from dotenv import load_dotenv
+load_dotenv()
+
 class Config(object):
+	APP_NAME = 'APP_NAME'
+	
 	WTF_CSRF_ENABLED = False
-	SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(12)
-	MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+	SECRET_KEY = os.environ.get('SECRET_KEY') or '6f63cd6a06ff4ae488b398e19d641661' # Generate with python3 -c "import uuid; print(uuid.uuid4().hex)"
+	MAX_CONTENT_LENGTH = 16 * 1024 * 1024 # Max content (default: 16MB)
 	APP_ROOT = basedir
 	
 	THUMBNAIL_FOLDER = os.path.join(basedir, 'app/static/thumbnails/')
 	THUMBNAIL_RESOLUTION = 120
-	
 	UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
-	ALLOWED_EXTENSIONS = set(['pdf', 'doc', 'docx', 'pages'])
+	ALLOWED_EXTENSIONS = set(['pdf', 'doc', 'docx', 'pages', 'key', 'ppt', 'pptx', 'zip', 'rar'])
 	
 	SIGNUP_CODES = {''}
 	REGISTRATION_IS_OPEN = False
@@ -25,15 +29,28 @@ class Config(object):
 	MAIL_PASSWORD = ''
 	MAIL_DEFAULT_SENDER = ''
 	
+	PUSHER_APP_ID = ''
+	PUSHER_KEY = ''
+	PUSHER_SECRET = ''
+	PUSHER_CLUSTER = ''
+	PUSHER_SSL = True
+	
+	FIREBASE_API_KEY = ''
+	FIREBASE_AUTH_DOMAIN = ''
+	FIREBASE_DATABASE_URL = ''
+	
 	TOASTR_OPACITY = False
 	TOASTR_PROGRESS_BAR = 'false'
 	TOASTR_EXTENDED_TIMEOUT = 50
 	
-	TS_SALT = os.environ.get('SECRET_KEY') or os.urandom(12)
-	TS_RECOVER_SALT = os.environ.get('SECRET_KEY') or os.urandom(12)
+	EXECUTOR_PROPAGATE_EXCEPTIONS = True
+	EXECUTOR_TYPE = 'process'
+	
+	TS_SALT = os.environ.get('SECRET_KEY') or '6f63cd6a06ff4ae488b398e19d641661'
+	TS_RECOVER_SALT = os.environ.get('SECRET_KEY') or '6f63cd6a06ff4ae488b398e19d641661'
 	TS_MAX_AGE = 86400
 	
 	# SQL
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-		'sqlite:///' + os.path.join(basedir, 'workUpApp.db')
+		'mysql+pymysql://SQLUSER:SQLPASSWORD@localhost:3306/DBNAME'
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
