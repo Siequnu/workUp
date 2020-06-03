@@ -28,3 +28,6 @@
 [submodule "app/consultations"]
 	path = app/consultations
 	url = https://github.com/Siequnu/flask-consultations.git
+[submodule "app/mentors"]
+	path = app/mentors
+	url = https://github.com/Siequnu/flask-mentors.git

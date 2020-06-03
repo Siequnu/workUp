@@ -69,6 +69,9 @@ def create_app(config_class=Config):
 	from app.collaboration import bp as collaboration_bp
 	workup_app.register_blueprint(collaboration_bp, url_prefix='/collaboration')
 	
+	from app.consultations import bp as consultations_bp
+	workup_app.register_blueprint(consultations_bp, url_prefix='/consultations')
+	
 	from app.api import bp as api_bp
 	workup_app.register_blueprint(api_bp)
 	
