@@ -22,3 +22,6 @@
 [submodule "app/api"]
 	path = app/api
 	url = https://github.com/Siequnu/flask-api.git
+[submodule "app/tests"]
+	path = app/tests
+	url = https://github.com/Siequnu/flask-tests.git
