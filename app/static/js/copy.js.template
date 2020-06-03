@@ -1,0 +1,6 @@
+var config = {};
+	
+// Website API key
+// Create this by logging in as an admin in the API key management section
+config.apiKey = 'API_KEY';
+
