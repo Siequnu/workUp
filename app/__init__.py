@@ -72,6 +72,9 @@ def create_app(config_class=Config):
 	from app.consultations import bp as consultations_bp
 	workup_app.register_blueprint(consultations_bp, url_prefix='/consultations')
 	
+	from app.mentors import bp as mentors_bp
+	workup_app.register_blueprint(mentors_bp, url_prefix='/mentors')
+	
 	from app.api import bp as api_bp
 	workup_app.register_blueprint(api_bp)
 	
