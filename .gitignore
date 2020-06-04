@@ -1,5 +1,6 @@
 # App specific files
-≈.env
+.vscode/
+.env
 Pipfile
 app/static/js/config.js
 config.py
