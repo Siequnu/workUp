@@ -78,6 +78,6 @@ def lesson_registration_redirect():
 
 
 # Terms of the website
-@bp.route('/terms')
+@bp.route('/features')
 def terms():
-	return render_template('terms.html')
+	return render_template('features.html')
