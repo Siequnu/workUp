@@ -10,23 +10,27 @@
 # `Pipfile.lock` and then regenerate `requirements*.txt`.
 ################################################################################
 
--e git+https://github.com/colour-science/flask-compress.git@7e9cf781e66786943add0f2e47b461cce820bd18#egg=flask-compress
+-e git+https://github.com/colour-science/flask-compress.git@7cfbd5af9dac6aca9df833dd3a73ed9fc8adade3#egg=flask-compress
 -e git+https://github.com/prowriting/prowritingaid.python.git@99b7dccd73575f806ff28e3e515d3e782ef4d9ca#egg=pro-writing-aid
 alembic==1.0.10
 aniso8601==8.0.0
-appdirs==1.4.3
+appdirs==1.4.4
 arrow==0.13.1
 atomicwrites==1.3.0
 attrs==19.1.0
 blinker==1.4
 bootstrap-flask==1.0.10
 brotli==1.0.7
+cairocffi==1.1.0 ; python_version >= '3.5'
+cairosvg==2.4.2 ; python_version >= '3.5'
 certifi==2019.3.9
 cffi==1.14.0
 chardet==3.0.4
 click==7.0
-cryptography==2.9
+cryptography==2.9.2
+cssselect2==0.3.0 ; python_version >= '3.5'
 decorator==4.4.0
+defusedxml==0.6.0 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
 distlib==0.3.0
 dominate==2.3.5
 et-xmlfile==1.0.1
@@ -37,18 +41,20 @@ flask-httpauth==3.2.4
 flask-limiter==1.0.1
 flask-login==0.4.1
 flask-mail==0.9.1
-flask-marshmallow==0.11.0
+flask-marshmallow==0.13.0
 flask-migrate==2.4.0
 flask-oidc==1.4.0
 flask-qrcode==3.0.0
 flask-restful==0.3.8
 flask-sqlalchemy==2.4.0
 flask-toastr==0.5.2
+flask-weasyprint==0.6
 flask-wtf==0.14.2
 flask==1.0.2
-httplib2==0.18.0
+html5lib==1.0.1
+httplib2==0.12.3
 idna==2.8
-importlib-metadata==1.6.0 ; python_version < '3.8'
+importlib-metadata==1.6.1 ; python_version < '3.8'
 infinity==1.4
 intervals==0.8.1
 itsdangerous==1.1.0
@@ -58,39 +64,40 @@ limits==1.3
 lml==0.0.9
 mako==1.0.9
 markupsafe==1.1.1
-marshmallow-sqlalchemy==0.22.3
-marshmallow==3.5.1
+marshmallow-sqlalchemy==0.23.1
+marshmallow==3.6.1 ; python_version >= '3.5'
 more-itertools==7.0.0
 ndg-httpsclient==0.5.1
 oauth2client==4.1.3
 okta==0.0.4
-openpyxl==3.0.3
-packaging==20.3
+openpyxl==3.0.3 ; python_version >= '3.6'
+packaging==20.4
 pathlib==1.0.1
 pbr==5.4.5
-pillow==7.1.1
+pillow==7.1.2
 pipenv-to-requirements==0.9.0
-pipenv==2018.11.26
+pipenv==2020.6.2 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 pluggy==0.9.0
 pusher==3.0.0
 py==1.8.0
 pyasn1-modules==0.2.5
 pyasn1==0.4.5
-pycparser==2.20
+pycparser==2.20 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 pyexcel-io==0.5.20
 pyexcel-webio==0.1.4
 pyexcel-xlsx==0.5.8
-pyexcel==0.5.15
+pyexcel==0.6.2 ; python_version >= '3.6'
 pymysql==0.9.3
-pynacl==1.3.0
+pynacl==1.4.0 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 pyopenssl==19.1.0
 pyparsing==2.4.0
+pyphen==0.9.5
 pytest-flask==0.14.0
 pytest==4.4.1
 python-dateutil==2.8.0
-python-dotenv==0.12.0
+python-dotenv==0.13.0
 python-editor==1.0.4
-pytz==2019.3
+pytz==2020.1
 qrcode==6.1
 redis==3.2.1
 requests==2.21.0
@@ -99,17 +106,20 @@ six==1.12.0
 sqlalchemy-utils==0.33.11
 sqlalchemy==1.3.3
 texttable==1.6.2
+tinycss2==1.0.2 ; python_version >= '3.5'
 urllib3==1.24.3
-validators==0.14.3
-virtualenv-clone==0.5.4
-virtualenv==20.0.17
+validators==0.15.0
+virtualenv-clone==0.5.4 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
+virtualenv==20.0.21 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 visitor==0.1.3
 wand==0.5.3
+weasyprint==51 ; python_version >= '3.5'
+webencodings==0.5.1
 werkzeug==0.16.1
 wtforms-alchemy==0.16.9
 wtforms-components==0.10.4
 wtforms==2.2.1
 xlrd==1.2.0
 xvfbwrapper==0.2.9
-zipp==3.1.0
+zipp==3.1.0 ; python_version >= '3.6'
 zipstream==1.1.4
