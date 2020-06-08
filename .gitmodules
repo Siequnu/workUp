@@ -31,3 +31,9 @@
 [submodule "app/mentors"]
 	path = app/mentors
 	url = https://github.com/Siequnu/flask-mentors.git
+[submodule "app/statements"]
+	path = app/statements
+	url = https://github.com/Siequnu/flask-statements.git
+[submodule "app/references"]
+	path = app/references
+	url = https://github.com/Siequnu/flask-references.git
