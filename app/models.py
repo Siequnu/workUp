@@ -16,7 +16,42 @@ def is_admin (username):
 		return User.query.filter(User.username==username).one_or_none().is_admin
 	except:
 		return False
+
+class StatementProject (db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	title = db.Column(db.String(140))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
+	archived = db.Column(db.Boolean, default=False)
 	
+	def __repr__(self):
+		return '<Statement Project {}>'.format(self.id)
+	
+class StatementUpload (db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	project_id = db.Column(db.Integer, db.ForeignKey('statement_project.id'))
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	original_filename = db.Column(db.String(140))
+	filename = db.Column(db.String(140))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
+	description = db.Column(db.String(250))
+	
+	def __repr__(self):
+		return '<Statement Upload {}>'.format(self.id)
+	
+class StatementDownload(db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	statement_id = db.Column(db.Integer, db.ForeignKey('statement_upload.id'))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	
+	def __repr__(self):
+		return '<Statement Download {}>'.format(self.filename)
+
+
 class ClassLibraryFile (db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
 	id = db.Column(db.Integer, primary_key=True)
@@ -90,6 +125,46 @@ class Enrollment (db.Model):
 	
 	def __repr__(self):
 		return '<Enrollment {}>'.format(self.id)
+	
+
+	
+class ReferenceUpload (db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	form_contents = db.Column(db.String(10000))
+	suitability = db.Column(db.String(5000))
+	school_information = db.Column(db.String(5000))
+	student_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	student_name = db.Column(db.String(50))
+	referee_name = db.Column(db.String(50))
+	referee_position = db.Column(db.String(200))
+	archived = db.Column(db.Boolean, default=False)
+	
+	def __repr__(self):
+		return '<Reference {}>'.format(self.id)
+	
+class ReferenceVersionUpload (db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	original_reference_id = db.Column(db.Integer, db.ForeignKey('reference_upload.id'))
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	original_filename = db.Column(db.String(140))
+	filename = db.Column(db.String(140))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
+	description = db.Column(db.String(250))
+	
+	def __repr__(self):
+		return '<Reference Version {}>'.format(self.id)
+
+class ReferenceVersionDownload(db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	reference_version_id = db.Column(db.Integer, db.ForeignKey('reference_version_upload.id'))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	
+	def __repr__(self):
+		return '<Reference Version Download {}>'.format(self.filename)
 	
 
 class User(UserMixin, db.Model):
