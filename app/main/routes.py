@@ -75,3 +75,9 @@ def index():
 @bp.route('/attend')
 def lesson_registration_redirect():
 	return redirect(url_for('classes.enter_attendance_code'))
+
+
+# Terms of the website
+@bp.route('/terms')
+def terms():
+	return render_template('terms.html')
