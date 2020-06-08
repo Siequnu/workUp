@@ -53,6 +53,9 @@ def create_app(config_class=Config):
 
 	from app.user import bp as user_bp
 	workup_app.register_blueprint(user_bp, url_prefix='/user')
+
+	from app.statements import bp as statements_bp
+	workup_app.register_blueprint(statements_bp, url_prefix='/statements')
 	
 	from app.classes import bp as classes_bp
 	workup_app.register_blueprint(classes_bp, url_prefix='/classes')
@@ -62,6 +65,9 @@ def create_app(config_class=Config):
 	
 	from app.assignments import bp as assignments_bp
 	workup_app.register_blueprint(assignments_bp, url_prefix='/assignments')
+
+	from app.references import bp as references_bp
+	workup_app.register_blueprint(references_bp, url_prefix='/references')
 	
 	from app.grammar import bp as grammar_bp
 	workup_app.register_blueprint(grammar_bp, url_prefix='/grammar')
