@@ -12,6 +12,7 @@ from flask_compress import Compress
 import flask_excel as excel
 from flask_qrcode import QRcode
 from flask_marshmallow import Marshmallow
+from flask_dropzone import Dropzone
 
 
 import logging
@@ -28,6 +29,7 @@ executor = Executor()
 toastr = Toastr()
 compress = Compress()
 ma = Marshmallow()
+dropzone = Dropzone ()
 
 
 def create_app(config_class):
@@ -47,6 +49,7 @@ def create_app(config_class):
     excel.init_excel(workup_app)
     qrcode = QRcode(workup_app)
     ma.init_app(workup_app)
+    dropzone.init_app (workup_app)
 
     # Import templates
     from app.errors import bp as errors_bp
