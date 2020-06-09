@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 
 import datetime
 
-from app.models import Assignment, Enrollment, ClassLibraryFile, Assignment
+from app.models import Assignment, Enrollment, ClassLibraryFile, Assignment, StatementProject
 import app.assignments.models
 import app.files.models
 from app import db
@@ -22,26 +22,37 @@ def before_request():
 @bp.route('/')
 @bp.route('/index')
 def index():
+	index_template = str('index_') + current_app.config['APP_NAME'] + '.html'
 	if current_user.is_authenticated:
 		greeting = app.main.models.get_greeting ()
 		if app.models.is_admin(current_user.username):
 			return render_template(
-				'index.html', admin = True,
+				index_template, admin = True,
+				greeting = greeting,
+				
+				# Student count and info
+				active_user_count = app.user.models.get_active_user_count (),
 				student_count = app.user.models.get_total_user_count(),
 				classes=app.assignments.models.get_all_class_info(),
+				
+				# Library
 				library= ClassLibraryFile.query.all(),
-				assignments = Assignment.query.all(),
-				active_user_count = app.user.models.get_active_user_count (),
 				total_library_downloads = app.files.models.get_total_library_downloads_count (),
-				greeting = greeting
+				
+				# Assignments
+				assignments = Assignment.query.all(),
+
+				# Statements
+				statement_projects = StatementProject.query.all(),
+				statement_projects_needing_review = app.statements.models.get_projects_needing_review()
 			)
 		else:
 			# Display help message if a student has signed up and is not part of a class
 			if Enrollment.query.filter(Enrollment.user_id==current_user.id).first() is None:
 				flash('You do not appear to be part of a class. Please contact your tutor for assistance.', 'warning')
-				return render_template('index.html')
+				return render_template(index_template)
 			return render_template(
-				'index.html',
+				index_template,
 				
 				# Assignments
 				assignments_info = app.assignments.models.get_user_assignment_info (current_user.id),
@@ -68,7 +79,7 @@ def index():
 				greeting = greeting
 			)
 	
-	return render_template('index.html')
+	return render_template(index_template)
 
 
 # Redirect for lesson registration
@@ -76,8 +87,20 @@ def index():
 def lesson_registration_redirect():
 	return redirect(url_for('classes.enter_attendance_code'))
 
+## workUp specific routing
 
-# Terms of the website
+# Features of the website
 @bp.route('/features')
 def terms():
-	return render_template('features.html')
+	if current_app.config['APP_NAME'] == 'workUp':
+		return render_template('features.html')
+	else: return redirect(url_for('main.index'))
+
+## elmOnline specific routing
+
+# Page that displays the QR code
+@bp.route('/contact')
+def contact():
+	if current_app.config['APP_NAME'] == 'elmOnline':
+		return render_template('contact.html')
+	else: return redirect(url_for('main.index'))

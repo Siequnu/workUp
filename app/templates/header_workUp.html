@@ -1,0 +1,70 @@
+<title>
+    {% block title %} {% if title %}{{ title }} - workUp{% else %} workUp Online{% endif %} {% endblock %}
+</title>
+
+{% block navbar %}
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+    <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button"
+        data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa fa-bars"></i>
+    </button>
+
+    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+        <img src="/static/w_logo.png" width="40" height="40" class="d-inline-block align-middle" alt=""> workUp</a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('main.index')}}">Home</a>
+            </li>
+            <li class="nav-item dropdown mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Assignments
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{url_for('assignments.view_assignments')}}">My assignments</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{url_for('files.file_stats')}}">My feedback</a>
+                </div>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('files.class_library')}}">Library</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded"
+                    href="{{url_for('classes.enter_attendance_code')}}">Attendance</a>
+            </li>
+            <li class="nav-item dropdown mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Tools
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{url_for('grammar.check_grammar')}}">Grammar check</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{url_for('collaboration.collaboration_index')}}">Collaborate</a>
+                </div>
+            </li>
+
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_anonymous %}
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('user.login')}}">Login</a>
+            </li>
+            {% else %}
+            <li class="nav-item mx-0 mx-lg-1">
+                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('user.logout')}}">Logout</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<br></br>
+{% endblock %}

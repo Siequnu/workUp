@@ -1,0 +1,648 @@
+{% extends "header.html" %} {% block app_content %}
+<br> {% if current_user.is_anonymous %}
+
+<link rel="stylesheet" href="/static/css/index.css" type="text/css">
+
+<div class="container">
+    
+
+        <div class="jumbotron">
+       
+        <h1 class="text-light text-center">Elm Education</h1>
+        <br>
+        <h3 class="text-light text-center">Trusted University Application Consultants</h3>
+        
+</div>
+   
+    
+    <br />
+    
+</div>
+
+<div class="container-fluid p-5">
+      <div class="row m-auto text-center w-75">
+        
+        <div class="col-4 princing-item red">
+          <div class="pricing-divider ">
+              <h3 class="text-light">PERSONAL STATEMENT</h3>
+            <h4 class="my-0 display-2 text-light font-weight-normal mb-3"><span class="h3">个人陈述</span> 
+
+             <svg class='pricing-divider-img' enable-background='new 0 0 300 100' height='100px' id='Layer_1' preserveAspectRatio='none' version='1.1' viewBox='0 0 300 100' width='300px' x='0px' xml:space='preserve' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg' y='0px'>
+          <path class='deco-layer deco-layer--1' d='M30.913,43.944c0,0,42.911-34.464,87.51-14.191c77.31,35.14,113.304-1.952,146.638-4.729
+	c48.654-4.056,69.94,16.218,69.94,16.218v54.396H30.913V43.944z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--2' d='M-35.667,44.628c0,0,42.91-34.463,87.51-14.191c77.31,35.141,113.304-1.952,146.639-4.729
+	c48.653-4.055,69.939,16.218,69.939,16.218v54.396H-35.667V44.628z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--3' d='M43.415,98.342c0,0,48.283-68.927,109.133-68.927c65.886,0,97.983,67.914,97.983,67.914v3.716
+	H42.401L43.415,98.342z' fill='#FFFFFF' opacity='0.7'></path>
+          <path class='deco-layer deco-layer--4' d='M-34.667,62.998c0,0,56-45.667,120.316-27.839C167.484,57.842,197,41.332,232.286,30.428
+	c53.07-16.399,104.047,36.903,104.047,36.903l1.333,36.667l-372-2.954L-34.667,62.998z' fill='#FFFFFF'></path>
+        </svg>
+          </div>
+          <div class="card-body bg-white mt-0 shadow">
+            <ul class="list-unstyled mb-5 position-relative">
+              <li><b>2</b> edits included</li>
+              <li><b>1 hour</b> online support</li>
+              <li><b>30 minute </b>brainstorm time</li>
+              <li><b>Cambridge Graduate advisor</b></li>
+              <li><b>Help center access</b></li>
+            </ul>
+            
+            <a href="{{url_for('main.contact')}}"><button type="button" class="btn btn-lg btn-block  btn-custom ">Contact us</button></a>
+          </div>
+        </div>
+        
+        <div class="col-4 princing-item blue">
+          <div class="pricing-divider ">
+              <h3 class="text-light">UCAS APPLICATION</h3>
+            <h4 class="my-0 display-2 text-light font-weight-normal mb-3"><span class="h3">UCAS申请</span> 
+
+             <svg class='pricing-divider-img' enable-background='new 0 0 300 100' height='100px' id='Layer_1' preserveAspectRatio='none' version='1.1' viewBox='0 0 300 100' width='300px' x='0px' xml:space='preserve' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg' y='0px'>
+          <path class='deco-layer deco-layer--1' d='M30.913,43.944c0,0,42.911-34.464,87.51-14.191c77.31,35.14,113.304-1.952,146.638-4.729
+	c48.654-4.056,69.94,16.218,69.94,16.218v54.396H30.913V43.944z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--2' d='M-35.667,44.628c0,0,42.91-34.463,87.51-14.191c77.31,35.141,113.304-1.952,146.639-4.729
+	c48.653-4.055,69.939,16.218,69.939,16.218v54.396H-35.667V44.628z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--3' d='M43.415,98.342c0,0,48.283-68.927,109.133-68.927c65.886,0,97.983,67.914,97.983,67.914v3.716
+	H42.401L43.415,98.342z' fill='#FFFFFF' opacity='0.7'></path>
+          <path class='deco-layer deco-layer--4' d='M-34.667,62.998c0,0,56-45.667,120.316-27.839C167.484,57.842,197,41.332,232.286,30.428
+	c53.07-16.399,104.047,36.903,104.047,36.903l1.333,36.667l-372-2.954L-34.667,62.998z' fill='#FFFFFF'></path>
+        </svg>
+          </div>
+
+          <div class="card-body bg-white mt-0 shadow">
+            <ul class="list-unstyled mb-5 position-relative">
+              <li><b>5 </b>edits included</li>
+              <li><b>2 hours</b> online support</li>
+              <li><b>30 minute</b> brainstorm time</li>
+              <li><b>Cambridge Graduate advisor</b></li>
+              <li><b>Help center access</b></li>
+            </ul>
+            <a href="{{url_for('main.contact')}}"><button type="button" class="btn btn-lg btn-block  btn-custom ">Contact us</button></a>
+          </div>
+        </div>
+
+        <div class="col-4 princing-item green">
+          <div class="pricing-divider ">
+              <h3 class="text-light">ESSAY CONSULTING</h3>
+            <h4 class="my-0 display-2 text-light font-weight-normal mb-3"><span class="h3">论文指导</span> 
+
+             <svg class='pricing-divider-img' enable-background='new 0 0 300 100' height='100px' id='Layer_1' preserveAspectRatio='none' version='1.1' viewBox='0 0 300 100' width='300px' x='0px' xml:space='preserve' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg' y='0px'>
+          <path class='deco-layer deco-layer--1' d='M30.913,43.944c0,0,42.911-34.464,87.51-14.191c77.31,35.14,113.304-1.952,146.638-4.729
+	c48.654-4.056,69.94,16.218,69.94,16.218v54.396H30.913V43.944z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--2' d='M-35.667,44.628c0,0,42.91-34.463,87.51-14.191c77.31,35.141,113.304-1.952,146.639-4.729
+	c48.653-4.055,69.939,16.218,69.939,16.218v54.396H-35.667V44.628z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--3' d='M43.415,98.342c0,0,48.283-68.927,109.133-68.927c65.886,0,97.983,67.914,97.983,67.914v3.716
+	H42.401L43.415,98.342z' fill='#FFFFFF' opacity='0.7'></path>
+          <path class='deco-layer deco-layer--4' d='M-34.667,62.998c0,0,56-45.667,120.316-27.839C167.484,57.842,197,41.332,232.286,30.428
+	c53.07-16.399,104.047,36.903,104.047,36.903l1.333,36.667l-372-2.954L-34.667,62.998z' fill='#FFFFFF'></path>
+        </svg>
+          </div>
+          <div class="card-body bg-white mt-0 shadow">
+            <ul class="list-unstyled mb-5 position-relative">
+              <li><b>5</b> edits included</li>
+              <li><b>2 hour</b> online support</li>
+              <li><b>30 minute </b>brainstorm time</li>
+              <li><b>Cambridge Graduate advisor</b></li>
+              <li><b>Help center access</b></li>
+            </ul>
+            
+            <a href="{{url_for('main.contact')}}"><button type="button" class="btn btn-lg btn-block  btn-custom ">Contact us</button></a>
+          </div>
+        </div>
+
+        
+               
+      </div>
+    </div>
+      
+      
+      
+<div class="container-fluid p-5">
+      <div class="row m-auto text-center w-75">
+        
+        <div class="col-4 princing-item purple">
+          <div class="pricing-divider ">
+
+              <h3 class="text-light">INTERVIEW TRAINING</h3>
+            <h4 class="my-0 display-2 text-light font-weight-normal mb-3"><span class="h3">面试辅导</span>  
+
+             <svg class='pricing-divider-img' enable-background='new 0 0 300 100' height='100px' id='Layer_1' preserveAspectRatio='none' version='1.1' viewBox='0 0 300 100' width='300px' x='0px' xml:space='preserve' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg' y='0px'>
+          <path class='deco-layer deco-layer--1' d='M30.913,43.944c0,0,42.911-34.464,87.51-14.191c77.31,35.14,113.304-1.952,146.638-4.729
+	c48.654-4.056,69.94,16.218,69.94,16.218v54.396H30.913V43.944z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--2' d='M-35.667,44.628c0,0,42.91-34.463,87.51-14.191c77.31,35.141,113.304-1.952,146.639-4.729
+	c48.653-4.055,69.939,16.218,69.939,16.218v54.396H-35.667V44.628z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--3' d='M43.415,98.342c0,0,48.283-68.927,109.133-68.927c65.886,0,97.983,67.914,97.983,67.914v3.716
+	H42.401L43.415,98.342z' fill='#FFFFFF' opacity='0.7'></path>
+          <path class='deco-layer deco-layer--4' d='M-34.667,62.998c0,0,56-45.667,120.316-27.839C167.484,57.842,197,41.332,232.286,30.428
+	c53.07-16.399,104.047,36.903,104.047,36.903l1.333,36.667l-372-2.954L-34.667,62.998z' fill='#FFFFFF'></path>
+        </svg>
+          </div>
+
+          <div class="card-body bg-white mt-0 shadow">
+            <ul class="list-unstyled mb-5 position-relative">
+              <li><b>2 hours</b> face to face support</li>
+              <li><b>1 hour</b> brainstorm time</li>
+              <li><b>Cambridge Graduate advisor</b></li>
+              <li><b>Help center access</b></li>
+            </ul>
+            <a href="{{url_for('main.contact')}}"><button type="button" class="btn btn-lg btn-block  btn-custom ">Contact us</button></a>
+          </div>
+        </div>
+        
+        <div class="col-4 princing-item pink">
+          <div class="pricing-divider ">
+              <h3 class="text-light">PRE-TEST TUTORING</h3>
+            <h4 class="my-0 display-2 text-light font-weight-normal mb-3"><span class="h3">附加笔试辅导</span> 
+
+             <svg class='pricing-divider-img' enable-background='new 0 0 300 100' height='100px' id='Layer_1' preserveAspectRatio='none' version='1.1' viewBox='0 0 300 100' width='300px' x='0px' xml:space='preserve' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg' y='0px'>
+          <path class='deco-layer deco-layer--1' d='M30.913,43.944c0,0,42.911-34.464,87.51-14.191c77.31,35.14,113.304-1.952,146.638-4.729
+	c48.654-4.056,69.94,16.218,69.94,16.218v54.396H30.913V43.944z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--2' d='M-35.667,44.628c0,0,42.91-34.463,87.51-14.191c77.31,35.141,113.304-1.952,146.639-4.729
+	c48.653-4.055,69.939,16.218,69.939,16.218v54.396H-35.667V44.628z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--3' d='M43.415,98.342c0,0,48.283-68.927,109.133-68.927c65.886,0,97.983,67.914,97.983,67.914v3.716
+	H42.401L43.415,98.342z' fill='#FFFFFF' opacity='0.7'></path>
+          <path class='deco-layer deco-layer--4' d='M-34.667,62.998c0,0,56-45.667,120.316-27.839C167.484,57.842,197,41.332,232.286,30.428
+	c53.07-16.399,104.047,36.903,104.047,36.903l1.333,36.667l-372-2.954L-34.667,62.998z' fill='#FFFFFF'></path>
+        </svg>
+          </div>
+
+          <div class="card-body bg-white mt-0 shadow">
+            <ul class="list-unstyled mb-5 position-relative">
+              <li><b>5 </b>sample tests</li>
+              <li><b>2 hours</b> math and critical thinking tutoring</li>
+              <li><b>All </b> test registration included</li>
+              <li><b>Cambridge Graduate advisor</b></li>
+              <li><b>Help center access</b></li>
+            </ul>
+            <a href="{{url_for('main.contact')}}"><button type="button" class="btn btn-lg btn-block  btn-custom ">Contact us</button></a>
+          </div>
+        </div>
+
+        <div class="col-4 princing-item oak">
+          <div class="pricing-divider ">
+              <h3 class="text-light">PORTFOLIO OPTIMISATION</h3>
+            <h4 class="my-0 display-2 text-light font-weight-normal mb-3"><span class="h3">背景提升</span> 
+
+             <svg class='pricing-divider-img' enable-background='new 0 0 300 100' height='100px' id='Layer_1' preserveAspectRatio='none' version='1.1' viewBox='0 0 300 100' width='300px' x='0px' xml:space='preserve' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg' y='0px'>
+          <path class='deco-layer deco-layer--1' d='M30.913,43.944c0,0,42.911-34.464,87.51-14.191c77.31,35.14,113.304-1.952,146.638-4.729
+	c48.654-4.056,69.94,16.218,69.94,16.218v54.396H30.913V43.944z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--2' d='M-35.667,44.628c0,0,42.91-34.463,87.51-14.191c77.31,35.141,113.304-1.952,146.639-4.729
+	c48.653-4.055,69.939,16.218,69.939,16.218v54.396H-35.667V44.628z' fill='#FFFFFF' opacity='0.6'></path>
+          <path class='deco-layer deco-layer--3' d='M43.415,98.342c0,0,48.283-68.927,109.133-68.927c65.886,0,97.983,67.914,97.983,67.914v3.716
+	H42.401L43.415,98.342z' fill='#FFFFFF' opacity='0.7'></path>
+          <path class='deco-layer deco-layer--4' d='M-34.667,62.998c0,0,56-45.667,120.316-27.839C167.484,57.842,197,41.332,232.286,30.428
+	c53.07-16.399,104.047,36.903,104.047,36.903l1.333,36.667l-372-2.954L-34.667,62.998z' fill='#FFFFFF'></path>
+        </svg>
+          </div>
+
+          <div class="card-body bg-white mt-0 shadow">
+            <ul class="list-unstyled mb-5 position-relative">
+              <li><b>10 </b> edits included</li>
+              <li><b>2 hours</b> face to face support</li>
+              <li><b>1 hour</b> brainstorm time</li>
+              <li><b>Cambridge Graduate advisor</b></li>
+              <li><b>Help center access</b></li>
+            </ul>
+            <a href="{{url_for('main.contact')}}"><button type="button" class="btn btn-lg btn-block  btn-custom ">Contact us</button></a>
+          </div>
+        </div>
+               
+      </div>
+    </div>
+
+
+
+<!-- About Section-->
+        <section class="page-section bg-info text-white mb-0" id="about">
+            <div class="container">
+                <!-- About Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-white">About Elm Education</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- About Section Content-->
+                <div class="row">
+                    <div class="col-lg-4 ml-auto"><p class="lead">Every student is unique. Every student has unique opportunities and a unique future. We firmly believe in this, and we strive to help our students reach their dream university.</p></div>
+                    <div class="col-lg-4 mr-auto"><p class="lead">We plan, manage and finalise our students' journeys into higher education. As one of Beijing's oldest and most established education consultancies, you can trust our track record.</p></div>
+                </div>
+            </div>
+        </section>
+        
+        
+        
+        <div class="container">
+    
+<br>
+        <div class="jumbotron">
+       
+        <h1 class="text-light text-center">Access to leading universities</h1>
+        <br>
+        <h2 class="text-light text-center">Every year, our students are admitted to dozens of top higher-education institutions in the UK!</h2>
+        <hr>
+        <img src="/static/logos/cambridge.png" height="150">
+        <img src="/static/logos/imperial.png" height="150">
+        <img src="/static/logos/lse.png" height="150">
+        <img src="/static/logos/manchester.gif" height="150">
+        <img src="/static/logos/durham.png" height="150">
+        <img src="/static/logos/kcl.png" height="150">
+        <img src="/static/logos/leeds.png" height="150">
+        <img src="/static/logos/oxford.png" height="150">
+        
+        
+        
+        
+        
+</div>
+        </div>
+        
+        
+  
+        <div class="container">
+                    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="/static/caroussel/1.jpg" alt="First slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/static/caroussel/2.jpg" alt="Second slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/static/caroussel/3.jpg" alt="Third slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/static/caroussel/4.jpg" alt="Third slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/static/caroussel/5.jpg" alt="Third slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleSlidesOnly" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleSlidesOnly" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+                    
+   
+        
+                <section class="page-section bg-secondary text-white mb-0" id="about">
+            <div class="container">
+                <!-- About Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-white">About Elm Education</h2>
+                <!-- Icon Divider-->
+                
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- About Section Content-->
+                
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 ml-auto"><p class="lead">Degrees and qualifications from the U.K are well renowned and have a high degree of acceptance around the international working world. They will help open doors to almost every job in the future. </p></div>
+                    <div class="col-lg-4 mr-auto"><p class="lead">From job opportunities, to working internships and shadowing, a degree from the U.K. will support the student in the future.
+</p></div>
+                </div>
+            </div>
+        </section>
+                
+    <br><br><hr>            
+    <div class="container">
+        <img class="d-block w-100" src="/static/contact_us.png" alt="Third slide">
+    </div>
+                
+                
+
+{% elif admin %}
+<div class="container">
+    <div class="row">
+
+        <h1>{{greeting}}, Professor {{ current_user.username }}!</h1>
+
+    </div>
+
+    <hr>
+
+    <div class="row text-center">
+        <div class="col">
+            <div class="counter">
+                <i class="fa fa-archive fa-2x"></i>
+                <h2 class="timer count-title count-number">{{library|length}}</h2>
+                <p class="count-text ">Library Files</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="counter">
+                <i class="fa fa-user-graduate fa-2x"></i>
+                <h2 class="timer count-title count-number">{{student_count}}</h2>
+                <p class="count-text ">Students</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="counter">
+                <i class="fa fa-university fa-2x"></i>
+                <h2 class="timer count-title count-number">{{classes|length}}</h2>
+                <p class="count-text ">Classes</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="counter">
+                <i class="fa fa-briefcase fa-2x"></i>
+                <h2 class="timer count-title count-number">{{statement_projects|length}}</h2>
+                <p class="count-text ">Statement Projects</p>
+            </div>
+        </div>
+    </div>
+    <br>
+    
+     {% if statement_projects_needing_review|length > 0 %}
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fa fa-file-alt"></i> Personal statements needing review</h4>
+            </div>
+            <div class="card-body">
+
+                {% for project in statement_projects_needing_review %}
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-2 text-center">
+                            <h1 class="display-4"><span class="badge badge-warning">{{project.total_uploads}}</span></h1>
+                            <h4>uploads</h4>
+                        </div>
+                        <div class="col-6">
+                            <h2 class="text"><i class="fa fa-fw fa-user" aria-hidden="true"></i><strong>{{project.project_owner_username}}</strong></h2>
+                            <h5 class="text"><strong>{{project.title}}</strong></h5>
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><i class="fa fa-file-upload" aria-hidden="true"></i> last upload {{project.latest_upload_humanised_timestamp}}</li>
+                                <li class="list-inline-item"><i class="fa fa-calendar" aria-hidden="true"></i> created on {{project.timestamp.strftime('%A')}}, {{project.humanized_timestamp}}</li>
+                            </ul>
+                            
+                        </div>
+                        <div class="col-4 text-right align-center">
+                        <a href="{{url_for('statements.view_statement_project', project_id = project.id)}}" <button class="btn btn-lg btn-primary"><i class="fa fa-fw fa-book-open"></i> View project </button></a>
+                        </div>
+                    </div>
+                
+                {% if loop.index < loop.length %}
+                <hr>
+                {% endif %}
+                </div>
+				{% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    <br>
+
+    <div class="card-deck">
+        <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-university"></i> Classes</h5>
+            </div>
+            <div class="card-body">
+                <p><a class="btn btn-outline-dark" href="{{url_for('classes.create_class')}}" role="button"><i class="fa fa-plus-circle"></i> Create new class</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('classes.class_admin')}}" role="button"><i class="fa fa-chalkboard-teacher"></i> Manage classes</a></p>
+            </div>
+        </div>
+
+        <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-users"></i> Students</h5>
+            </div>
+            <div class="card-body">
+                <p><a class="btn btn-outline-dark" href="{{url_for('main.contact')}}" role="button"><i class="fa fa-user-plus"></i> Register new student</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('user.manage_students')}}" role="button"><i class="fa fa-users-cog"></i> Manage students</a></p>
+            </div>
+        </div>
+
+        <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-user-graduate"></i> Teachers</h5>
+            </div>
+            <div class="card-body">
+                <p><a class="btn btn-outline-dark" href="{{url_for('user.register_admin')}}" role="button"><i class="fa fa-user-plus"></i> Register new teacher</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('user.manage_teachers')}}" role="button"><i class="fa fa-user-graduate"></i> Manage teachers</a></p>
+
+            </div>
+        </div>
+
+    </div>
+    
+      <br>
+    <div class="card-deck">
+        <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-file-upload"></i> Assignments</h5>
+            </div>
+            <div class="card-body">
+                <p><a class="btn btn-outline-dark" href="{{url_for('assignments.create_assignment')}}" role="button"><i class="fa fa-calendar-plus"></i> Create assignment</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('assignments.view_assignments')}}" role="button"><i class="fa fa-tasks"></i> Manage assignments</a></p>
+            </div>
+        </div>
+
+       <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-file-signature"></i> Peer review forms</h5>
+            </div>
+            <div class="card-body">
+                <p><a class="btn btn-outline-dark" href="{{url_for('assignments.add_peer_review_form')}}" role="button"><i class="fa fa-file"></i> New peer review form</a></p>
+                <a class="btn btn-outline-dark" href="{{url_for('assignments.peer_review_form_admin')}}" role="button"><i class="fa fa-file-signature"></i> Manage peer review forms</a>
+            </div>
+        </div>
+       
+       
+       <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-network-wired"></i> API</h5>
+            </div>
+            <div class="card-body">
+                <p><a class="btn btn-outline-dark" href="{{url_for('api.create_api_key')}}" role="button"><i class="fa fa-plug"></i> Register new API key</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('api.manage_api_keys')}}" role="button"><i class="fa fa-tools"></i> Manage API keys</a></p>
+
+            </div>
+        </div>
+    </div>
+    
+    {% else %}
+    <link rel="stylesheet" href="/static/css/progress-circle.css">
+    <div class="container">
+        <div class="row">
+            <div class="container">
+                <h1 class="text-warning">{{greeting}}, {{ current_user.username }}!</h1>
+            </div>
+        </div>
+        <hr>
+        
+        
+        <div class="row text-center">
+            <div class="col">
+                <div class="counter">
+                    <i class="fa fa-bullseye fa-2x"></i>
+                    <h2 class="timer count-title count-number">Your milestones</h2>
+                    <br>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width:40%" >
+                          Assignments
+                        </div>
+                        <div class="progress-bar bg-warning" role="progressbar" style="width:10%">
+                          UCAS deadline
+                        </div>
+                        <div class="progress-bar bg-danger" role="progressbar" style="width:20%">
+                          Internship
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col">
+                <div class="counter">
+                    <h3 class="timer count-title count-number">Your mentors</h3>
+                    {% for mentor in mentors %}
+                        {% if mentor.profile_picture != None %}
+                            {% set thumbnail_filename = mentor.profile_picture.split('.') %}
+                            <img src="/static/thumbnails/{{thumbnail_filename[0]}}.jpeg" class="rounded-circle" width="200px" />
+                        {% endif %}
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+        
+        <div class="row text-center">
+            <div class="col">
+                <div class="counter">
+                    <i class="fa fa-file-upload fa-2x"></i>
+                    <h2 class="timer count-title count-number">Assignments completed</h2>
+                    <div class="progress-circle progress-{{upload_progress_percentage}}"><span>{{upload_progress_percentage}}</span></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="counter">
+                    <i class="fa fa-comment-dots fa-2x"></i>
+                    <h2 class="timer count-title count-number">Consultations</h2>
+                     
+                     <p>June 14th, 4:30pm</p>
+                     <p>June 16th, 3:00pm</p>
+                     <p>June 14th, 5:00am</p>
+                     <a href="{{url_for('main.index')}}" <button class="btn btn-light"><i class="fa fa-chevron-right"></i> View your calendar</button></a>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row text-center">
+          <div class="col">
+                <div class="counter">
+                    <i class="fa fa-archive fa-2x"></i>
+                    <h2 class="timer count-title count-number">{{library_file_count}}</h2>
+                    <p class="count-text ">Library files</p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="counter">
+                    <i class="fa fa-comments fa-2x"></i>
+                    <h2 class="timer count-title count-number">{{received_peer_review_count}}</h2>
+                    <p class="count-text ">Reviews received</p>
+                </div>
+            </div>
+        </div>
+        <br>
+
+
+        {% if upload_progress_percentage != 100 %}
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fa fa-calendar-alt"></i> Upcoming assignments</h4>
+            </div>
+            <div class="card-body">
+
+                {% for assignment in assignments_info %}
+				{% if assignment['submitted_filename'] %}
+								
+				{% else %}
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-2 text-center">
+                            <h1 class="display-4"><span class="badge badge-secondary">{{assignment['due_date'].strftime('%d')}}</span></h1>
+                            <h2>{{assignment['due_date'].strftime('%b')|upper}}</h2>
+                        </div>
+                        <div class="col-10">
+                            <h3 class="text"><strong>{{assignment['title']}}</strong></h3>
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><i class="fa fa-calendar" aria-hidden="true"></i> due on {{assignment['due_date'].strftime('%A')}}, {{assignment['humanized_due_date']}}</li>
+                            {% if assignment['assignment_task_filename'] %}
+                             <a href="{{url_for('assignments.download_assignment_file', assignment_id = assignment['id'])}}"><li class="list-inline-item"><i class="fa fa-info-circle" aria-hidden="true"></i> {{ assignment['assignment_task_filename']}}</li></a>
+                            {% endif %}
+                                
+                            </ul>
+                            <ul class="list-inline">
+                           {% if assignment['assignment_is_past_deadline'] %}
+                            <a href="#" class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true"><i class="fa fa-clock"></i> Assignment overdue.</a>
+                            {% else %}
+                            <a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}" <button class="btn btn-sm btn-warning"><i class="fa fa-file-upload"></i> Upload your assignment </button></a>
+                            {% endif %}
+                            </ul>
+                            <em>{{assignment['description']}}</em>
+                        </div>
+                    </div>
+                </div>
+                {% if loop.index < loop.length %}
+                <hr>
+                {% endif %}
+				{% endif %}
+				{% endfor %}
+
+            </div>
+        </div>
+        {% endif %}
+        
+        
+        <br>
+                <div class="card-deck">
+                    <div class="card" style="max-width: 20rem;">
+
+                        <div class="card-header">
+                            <h4><i class="fa fa-user"></i> Your info</h4>
+
+                        </div>
+                        <div class="card-body">
+
+                            {% if number_of_uploads == 1 %}
+                            <h5 class="card-title">You have uploaded {{number_of_uploads}} documents.</h5>
+                            {% else %}
+                            <h5 class="card-title">You have uploaded {{number_of_uploads}} documents.</h5>
+                            {% endif %}
+														{% if last_upload_humanized_timestamp != False %}
+                            <p class="card-text"><small class="text-muted"> Last uploaded {{last_upload_humanized_timestamp}}</small></p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card" style="max-width: 20rem;">
+                        <div class="card-header">
+                            <h4><i class="fa fa-comment-dots"></i> Peer reviews</h4>
+                        </div>
+                        <div class="card-body">
+
+                            {% if number_of_peer_reviews_on_own_uploads == 1 %}
+                            <h5 class="card-title">Your essays have been reviewed {{number_of_peer_reviews_on_own_uploads}} time.</h5>
+                            {% else %}
+                            <h5 class="card-title">Your essays have been reviewed {{number_of_peer_reviews_on_own_uploads}} times.</h5>
+                            {% endif %}
+														{% if last_received_peer_review_humanized_timestamp != False %}
+                            <p class="card-text"><small class="text-muted"> Last reviewed {{last_received_peer_review_humanized_timestamp}}</small></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            {% endif %}
+						{% endblock %}
