@@ -8,7 +8,6 @@ logs/
 make_requirements.sh
 migrations/
 push_to_server.sh
-run_tests.sh
 setup_test_db.py
 test.db
 test.pdf
