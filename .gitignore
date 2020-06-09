@@ -15,9 +15,9 @@ test.pdf
 test2.pdf
 workUp.code-workspace
 uploads/
-test_uploads/
-app/static/test_thumbnails/
+uploads_test/
 app/static/thumbnails/
+app/static/thumbnails_test/
 
 
 # Created by https://www.gitignore.io/api/macos,flask,python
