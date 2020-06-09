@@ -1,0 +1,115 @@
+.bg-gradient {
+background: #C9D6FF;
+background: -webkit-linear-gradient(to right, #E2E2E2, #C9D6FF); 
+background: linear-gradient(to right, #E2E2E2, #C9D6FF);
+} 
+.pricing-divider {
+border-radius: 20px;
+background: #C64545;
+padding: 1em 0 4em;
+position: relative;
+}
+.blue .pricing-divider{
+background: #2D5772; 
+}
+.green .pricing-divider {
+background: #1AA85C; 
+}
+.purple .pricing-divider {
+background: #551a8b; 
+}
+.pink .pricing-divider {
+background: #ff69b4; 
+}
+.oak .pricing-divider {
+background:#4F2412
+}
+.red b {
+  color:#C64545
+}
+.blue b {
+  color:#2D5772
+}
+.green b {
+  color:#1AA85C
+}
+
+.purple b {
+  color:#551a8b
+}
+
+.pink b {
+  color:#ff69b4
+}
+
+.oak b {
+  color:#4F2412
+}
+
+
+.pricing-divider-img {
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	width: 100%;
+	height: 80px;
+}
+.deco-layer {
+	-webkit-transition: -webkit-transform 0.5s;
+	transition: transform 0.5s;
+}
+.btn-custom  {
+  background:#C64545; color:#fff; border-radius:20px
+}
+
+.img-float {
+  width:50px; position:absolute;top:-3.5rem;right:1rem
+}
+
+.princing-item {
+  transition: all 150ms ease-out;
+}
+.princing-item:hover {
+  transform: scale(1.05);
+}
+.princing-item:hover .deco-layer--1 {
+  -webkit-transform: translate3d(15px, 0, 0);
+  transform: translate3d(15px, 0, 0);
+}
+.princing-item:hover .deco-layer--2 {
+  -webkit-transform: translate3d(-15px, 0, 0);
+  transform: translate3d(-15px, 0, 0);
+}
+
+
+
+
+
+html,body {
+    width: 100%;
+    height: 100%;
+    background: #222222 url('/static/index-background_elmOnline.jpg') no-repeat top center fixed;
+    background-size: cover;
+}
+
+.jumbotron {
+   background: rgba(44, 62, 80, 0.5);
+   border-radius: 16px ;
+}
+
+h1 {
+    font-size: 60px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 1px 4px #000;
+    margin-top: 20px;
+}
+
+p {  
+    color: #fff;
+    line-height: 1.3em;
+    text-align: justify;
+}
+
+
+

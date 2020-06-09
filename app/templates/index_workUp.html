@@ -1,14 +1,13 @@
 {% extends "header.html" %} {% block app_content %}
 <br> {% if current_user.is_anonymous %}
 
-<link rel="stylesheet" href="/static/css/index.css" type="text/css">
+<link rel="stylesheet" href="/static/css/index_workUp.css" type="text/css">
 
 <div class="container">
-    
 
-        <div class="jumbotron">
+    <div class="jumbotron">
         <h1 class="display-4 text-center">
-			<i class="fa fa-user-graduate fa-1x"></i></h1>
+            <i class="fa fa-user-graduate fa-1x"></i></h1>
         <br>
         <h1 class="display-4">workUp - Learning Management</h1>
         <br>
@@ -18,8 +17,8 @@
         <p>Teachers can manage assignment uploads, class grades and enrollment.</p>
         <br>
         <a class="btn btn-secondary btn-lg" href="{{url_for('user.register')}}" role="button">Student registration</a>
-</div>
-   
+    </div>
+
     <br />
     <br />
 </div>
@@ -46,7 +45,7 @@
                 {% endif %}
             </div>
         </div>
-    <div class="col">
+        <div class="col">
             <div class="counter">
                 <i class="fa fa-user-graduate fa-2x"></i>
                 <h2 class="timer count-title count-number">{{student_count}}</h2>
@@ -79,8 +78,10 @@
                 <h5><i class="fa fa-university"></i> Classes & attendance</h5>
             </div>
             <div class="card-body">
-                <p><a class="btn btn-outline-dark" href="{{url_for('classes.create_class')}}" role="button"><i class="fa fa-plus-circle"></i> Create new class</a></p>
-                <p><a class="btn btn-outline-dark" href="{{url_for('classes.class_admin')}}" role="button"><i class="fa fa-chalkboard-teacher"></i> Manage classes</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('classes.create_class')}}" role="button"><i
+                            class="fa fa-plus-circle"></i> Create new class</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('classes.class_admin')}}" role="button"><i
+                            class="fa fa-chalkboard-teacher"></i> Manage classes</a></p>
             </div>
         </div>
 
@@ -89,8 +90,10 @@
                 <h5><i class="fa fa-file-signature"></i> Peer review forms</h5>
             </div>
             <div class="card-body">
-                <p><a class="btn btn-outline-dark" href="{{url_for('assignments.add_peer_review_form')}}" role="button"><i class="fa fa-file"></i> New peer review form</a></p>
-                <a class="btn btn-outline-dark" href="{{url_for('assignments.peer_review_form_admin')}}" role="button"><i class="fa fa-file-signature"></i> Manage peer review forms</a>
+                <p><a class="btn btn-outline-dark" href="{{url_for('assignments.add_peer_review_form')}}"
+                        role="button"><i class="fa fa-file"></i> New peer review form</a></p>
+                <a class="btn btn-outline-dark" href="{{url_for('assignments.peer_review_form_admin')}}"
+                    role="button"><i class="fa fa-file-signature"></i> Manage peer review forms</a>
             </div>
         </div>
 
@@ -99,8 +102,10 @@
                 <h5><i class="fa fa-file-upload"></i> Assignments</h5>
             </div>
             <div class="card-body">
-                <p><a class="btn btn-outline-dark" href="{{url_for('assignments.create_assignment')}}" role="button"><i class="fa fa-calendar-plus"></i> Create assignment</a></p>
-                <p><a class="btn btn-outline-dark" href="{{url_for('assignments.view_assignments')}}" role="button"><i class="fa fa-tasks"></i> Manage assignments</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('assignments.create_assignment')}}" role="button"><i
+                            class="fa fa-calendar-plus"></i> Create assignment</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('assignments.view_assignments')}}" role="button"><i
+                            class="fa fa-tasks"></i> Manage assignments</a></p>
             </div>
         </div>
     </div>
@@ -112,8 +117,10 @@
                 <h5><i class="fa fa-users"></i> Students</h5>
             </div>
             <div class="card-body">
-                <p><a class="btn btn-outline-dark" href="{{url_for('user.register')}}" role="button"><i class="fa fa-user-plus"></i> Register new student</a></p>
-                <p><a class="btn btn-outline-dark" href="{{url_for('user.manage_students')}}" role="button"><i class="fa fa-users-cog"></i> Manage students</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('user.register')}}" role="button"><i
+                            class="fa fa-user-plus"></i> Register new student</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('user.manage_students')}}" role="button"><i
+                            class="fa fa-users-cog"></i> Manage students</a></p>
             </div>
         </div>
 
@@ -122,19 +129,23 @@
                 <h5><i class="fa fa-user-graduate"></i> Teachers</h5>
             </div>
             <div class="card-body">
-                <p><a class="btn btn-outline-dark" href="{{url_for('user.register_admin')}}" role="button"><i class="fa fa-user-plus"></i> Register new teacher</a></p>
-                <p><a class="btn btn-outline-dark" href="{{url_for('user.manage_teachers')}}" role="button"><i class="fa fa-user-graduate"></i> Manage teachers</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('user.register_admin')}}" role="button"><i
+                            class="fa fa-user-plus"></i> Register new teacher</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('user.manage_teachers')}}" role="button"><i
+                            class="fa fa-user-graduate"></i> Manage teachers</a></p>
 
             </div>
         </div>
-        
+
         <div class="card bg-light mb-2" style="max-width: 20rem;">
             <div class="card-header">
                 <h5><i class="fa fa-network-wired"></i> API</h5>
             </div>
             <div class="card-body">
-                <p><a class="btn btn-outline-dark" href="{{url_for('api.create_api_key')}}" role="button"><i class="fa fa-plug"></i> Register new API key</a></p>
-                <p><a class="btn btn-outline-dark" href="{{url_for('api.manage_api_keys')}}" role="button"><i class="fa fa-tools"></i> Manage API keys</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('api.create_api_key')}}" role="button"><i
+                            class="fa fa-plug"></i> Register new API key</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('api.manage_api_keys')}}" role="button"><i
+                            class="fa fa-tools"></i> Manage API keys</a></p>
 
             </div>
         </div>
@@ -151,24 +162,30 @@
         <hr>
         <div class="row text-center">
             <div class="col">
-                <a href="{{url_for('assignments.view_assignments')}}"><div class="counter">
-                    <i class="fa fa-cloud-upload-alt fa-2x"></i>
-                    <h2 class="timer count-title count-number">Assignments</h2>
-                    <div class="progress-circle progress-{{upload_progress_percentage}}"><span>{{upload_progress_percentage}}</span></div>
-                    {% if last_upload_humanized_timestamp != False %}
-                            <p class="card-text"><small class="text-muted"> {{last_upload_humanized_timestamp}} you completed {{number_of_uploads}} assignments</small></p>
-                            {% endif %}
-                </div>
+                <a href="{{url_for('assignments.view_assignments')}}">
+                    <div class="counter">
+                        <i class="fa fa-cloud-upload-alt fa-2x"></i>
+                        <h2 class="timer count-title count-number">Assignments</h2>
+                        <div class="progress-circle progress-{{upload_progress_percentage}}">
+                            <span>{{upload_progress_percentage}}</span></div>
+                        {% if last_upload_humanized_timestamp != False %}
+                        <p class="card-text"><small class="text-muted"> {{last_upload_humanized_timestamp}} you
+                                completed {{number_of_uploads}} assignments</small></p>
+                        {% endif %}
+                    </div>
             </div></a>
             <div class="col">
                 <div class="counter">
                     <i class="fa fa-pen-fancy fa-2x"></i>
                     <h2 class="timer count-title count-number">Peer reviews</h2>
-                     <div class="progress-circle progress-{{peer_review_progress_percentage}}"><span>{{peer_review_progress_percentage}}</span></div>
+                    <div class="progress-circle progress-{{peer_review_progress_percentage}}">
+                        <span>{{peer_review_progress_percentage}}</span></div>
                     {% if total_completed_peer_reviews == 1 %}
-                            <p class="card-text"><small class="text-muted"> You have written {{total_completed_peer_reviews}} peer review</small></p>
+                    <p class="card-text"><small class="text-muted"> You have written {{total_completed_peer_reviews}}
+                            peer review</small></p>
                     {% else %}
-                    <p class="card-text"><small class="text-muted"> You have written {{total_completed_peer_reviews}} peer reviews</small></p>
+                    <p class="card-text"><small class="text-muted"> You have written {{total_completed_peer_reviews}}
+                            peer reviews</small></p>
                     {% endif %}
                 </div>
             </div>
@@ -176,37 +193,46 @@
                 <div class="counter">
                     <i class="fa fa-user-check fa-2x"></i>
                     <h2 class="timer count-title count-number">Attendance</h2>
-                     <div class="progress-circle progress-{{attendance_stats_percentage}}"><span>{{attendance_stats_percentage}}</span></div>
+                    <div class="progress-circle progress-{{attendance_stats_percentage}}">
+                        <span>{{attendance_stats_percentage}}</span></div>
                     {% if attendance_stats %}
-                        {% if attendance_stats.lessons_attended == 1 %}
-                                <p class="card-text"><small class="text-muted"> You have attended {{attendance_stats.lessons_attended}} lesson</small></p>
-                        {% else %}
-                        <p class="card-text"><small class="text-muted"> You have attended {{attendance_stats.lessons_attended}} lessons</small></p>
-                        {% endif %}
+                    {% if attendance_stats.lessons_attended == 1 %}
+                    <p class="card-text"><small class="text-muted"> You have attended
+                            {{attendance_stats.lessons_attended}} lesson</small></p>
+                    {% else %}
+                    <p class="card-text"><small class="text-muted"> You have attended
+                            {{attendance_stats.lessons_attended}} lessons</small></p>
                     {% endif %}
-              
+                    {% endif %}
+
                 </div>
             </div>
         </div>
         <br>
         <div class="row text-center">
-          <div class="col">
-                <a href="{{url_for('files.class_library')}}"><div class="counter">
-                    <i class="fa fa-book-open fa-2x"></i>
-                    <h2 class="timer count-title count-number">{{library_file_count}}</h2>
-                    <p class="count-text ">Library files</p>
-                    <p class="card-text"><small class="text-muted"> You have made {{library_download_stat}} downloads</small></p>
-                </div></a>
+            <div class="col">
+                <a href="{{url_for('files.class_library')}}">
+                    <div class="counter">
+                        <i class="fa fa-book-open fa-2x"></i>
+                        <h2 class="timer count-title count-number">{{library_file_count}}</h2>
+                        <p class="count-text ">Library files</p>
+                        <p class="card-text"><small class="text-muted"> You have made {{library_download_stat}}
+                                downloads</small></p>
+                    </div>
+                </a>
             </div>
             <div class="col">
-                <a href="{{url_for('files.file_stats')}}"><div class="counter">
-                    <i class="fa fa-comments fa-2x"></i>
-                    <h2 class="timer count-title count-number">{{received_peer_review_count}}</h2>
-                    <p class="count-text ">Reviews received</p>
-                    {% if last_received_peer_review_humanized_timestamp != False %}
-                            <p class="card-text"><small class="text-muted"> Last reviewed {{last_received_peer_review_humanized_timestamp}}</small></p>
-                            {% endif %}
-                </div></a>
+                <a href="{{url_for('files.file_stats')}}">
+                    <div class="counter">
+                        <i class="fa fa-comments fa-2x"></i>
+                        <h2 class="timer count-title count-number">{{received_peer_review_count}}</h2>
+                        <p class="count-text ">Reviews received</p>
+                        {% if last_received_peer_review_humanized_timestamp != False %}
+                        <p class="card-text"><small class="text-muted"> Last reviewed
+                                {{last_received_peer_review_humanized_timestamp}}</small></p>
+                        {% endif %}
+                    </div>
+                </a>
             </div>
         </div>
         <br>
@@ -218,31 +244,40 @@
             <div class="card-body">
 
                 {% for assignment in assignments_info %}
-				{% if assignment['submitted_filename'] %}
-								
-				{% else %}
+                {% if assignment['submitted_filename'] %}
+
+                {% else %}
 
                 <div class="container">
                     <div class="row">
                         <div class="col-2 text-center">
-                            <h1 class="display-4"><span class="badge badge-secondary">{{assignment['due_date'].strftime('%d')}}</span></h1>
+                            <h1 class="display-4"><span
+                                    class="badge badge-secondary">{{assignment['due_date'].strftime('%d')}}</span></h1>
                             <h2>{{assignment['due_date'].strftime('%b')|upper}}</h2>
                         </div>
                         <div class="col-10">
                             <h3 class="text"><strong>{{assignment['title']}}</strong></h3>
                             <ul class="list-inline">
-                                <li class="list-inline-item"><i class="fa fa-calendar" aria-hidden="true"></i> due on {{assignment['due_date'].strftime('%A')}}, {{assignment['humanized_due_date']}}</li>
-                            {% if assignment['assignment_task_filename'] %}
-                             <a href="{{url_for('assignments.download_assignment_file', assignment_id = assignment['id'])}}"><li class="list-inline-item"><i class="fa fa-info-circle" aria-hidden="true"></i> {{ assignment['assignment_task_filename']}}</li></a>
-                            {% endif %}
-                                
+                                <li class="list-inline-item"><i class="fa fa-calendar" aria-hidden="true"></i> due on
+                                    {{assignment['due_date'].strftime('%A')}}, {{assignment['humanized_due_date']}}</li>
+                                {% if assignment['assignment_task_filename'] %}
+                                <a
+                                    href="{{url_for('assignments.download_assignment_file', assignment_id = assignment['id'])}}">
+                                    <li class="list-inline-item"><i class="fa fa-info-circle" aria-hidden="true"></i>
+                                        {{ assignment['assignment_task_filename']}}</li>
+                                </a>
+                                {% endif %}
+
                             </ul>
                             <ul class="list-inline">
-                           {% if assignment['assignment_is_past_deadline'] %}
-                            <a href="#" class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true"><i class="fa fa-clock"></i> Assignment overdue.</a>
-                            {% else %}
-                            <a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}" <button class="btn btn-sm btn-warning"><i class="fa fa-file-upload"></i> Upload your assignment </button></a>
-                            {% endif %}
+                                {% if assignment['assignment_is_past_deadline'] %}
+                                <a href="#" class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true"><i
+                                        class="fa fa-clock"></i> Assignment overdue.</a>
+                                {% else %}
+                                <a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}" <button
+                                    class="btn btn-sm btn-warning"><i class="fa fa-file-upload"></i> Upload your
+                                    assignment </button></a>
+                                {% endif %}
                             </ul>
                             <em>{{assignment['description']}}</em>
                         </div>
@@ -251,12 +286,12 @@
                 {% if loop.index < loop.length %}
                 <hr>
                 {% endif %}
-				{% endif %}
-				{% endfor %}
+                {% endif %}
+                {% endfor %}
 
             </div>
         </div>
         {% endif %}
 
-            {% endif %}
-						{% endblock %}
+        {% endif %}
+        {% endblock %}

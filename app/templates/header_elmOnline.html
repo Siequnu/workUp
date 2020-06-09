@@ -1,5 +1,8 @@
+<!-- JS config -->
+<script src="/static/js/config_elmOnline.js"></script>
+
 <!-- Favicon -->
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="shortcut icon" href="/static/favicon_elmOnline.ico">
 
 <title>
     {% block title %} {% if title %}{{ title }} - Elm Online{% else %} Elm Online{% endif %} {% endblock %}
@@ -16,7 +19,9 @@
     </button>
 
     <a class="navbar-brand" href="{{ url_for('main.index') }}">
-        <img src="/static/w_logo.png" width="40" height="40" class="d-inline-block align-middle" alt=""> Elm Online</a>
+
+        <img src="{{ url_for('static', filename='logo_elmOnline.png') }}" width="40" height="40"
+            class="d-inline-block align-middle" alt=""> Elm Online</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
@@ -72,30 +77,3 @@
 <br>
 <br></br>
 {% endblock %}
-
-{% block content %}
-<br>
-{{ toastr.include_jquery() }} {{ toastr.include_toastr_css() }} {{ toastr.message() }}
-
-{% block app_content %}
-{% endblock %}
-
-{% endblock %}
-
-
-{% block footer %}
-<div class="container-footer">
-    <footer class="text-center">
-        <br />
-        <br />
-
-    </footer>
-</div>
-{% endblock %}
-{% block scripts %}
-{{ toastr.include_toastr_js() }}
-{{ bootstrap.load_js() }}
-<script src="/static/js/searchable-table.js"></script>
-{% endblock %}
-{% block templateScripts %}
-{% endblock templateScripts %}

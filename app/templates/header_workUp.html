@@ -1,5 +1,8 @@
+<!-- JS config -->
+<script src="/static/js/config_workUp.js"></script>
+
 <!-- Favicon -->
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="shortcut icon" href="/static/favicon_workUp.ico">
 
 <title>
     {% block title %} {% if title %}{{ title }} - workUp{% else %} workUp Online{% endif %} {% endblock %}
@@ -16,7 +19,9 @@
     </button>
 
     <a class="navbar-brand" href="{{ url_for('main.index') }}">
-        <img src="/static/w_logo.png" width="40" height="40" class="d-inline-block align-middle" alt=""> workUp</a>
+
+        <img src="{{ url_for('static', filename='logo_workUp.png') }}" width="40" height="40"
+            class="d-inline-block align-middle" alt=""> workUp</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
