@@ -22,9 +22,7 @@ def before_request():
 @bp.route('/')
 @bp.route('/index')
 def index():
-	print (current_app.config['APP_NAME'])
 	index_template = str('index_') + current_app.config['APP_NAME'] + '.html'
-	print (index_template)
 	if current_user.is_authenticated:
 		greeting = app.main.models.get_greeting ()
 		if app.models.is_admin(current_user.username):
