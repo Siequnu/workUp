@@ -347,16 +347,3 @@ class LessonAttendance (db.Model):
 	def __repr__(self):
 		return '<Lesson Attendance {}>'.format(self.id)
 	
-
-class AbsenceJustificationUpload(db.Model):
-	__table_args__ = {'sqlite_autoincrement': True}
-	id = db.Column(db.Integer, primary_key=True)
-	original_filename = db.Column(db.String(140))
-	filename = db.Column(db.String(140))
-	justification = db.Column(db.String(1500))
-	timestamp = db.Column(db.DateTime, default=datetime.now())
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-	lesson_id = db.Column(db.Integer, db.ForeignKey('lesson.id'))
-	
-	def __repr__(self):
-		return '<Absence Justification Upload {}>'.format(self.original_filename)
