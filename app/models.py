@@ -360,13 +360,3 @@ class AbsenceJustificationUpload(db.Model):
 	
 	def __repr__(self):
 		return '<Absence Justification Upload {}>'.format(self.original_filename)
-	
-class ApiKey(db.Model):
-	__table_args__ = {'sqlite_autoincrement': True}
-	id = db.Column(db.Integer, primary_key=True)
-	created = db.Column(db.DateTime, default=datetime.now())
-	key = db.Column(db.String(64))
-	description = db.Column(db.String(280))
-	
-	def __repr__(self):
-		return '<API Key {}>'.format(self.key)
