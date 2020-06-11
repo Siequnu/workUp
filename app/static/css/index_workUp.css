@@ -19,11 +19,13 @@ h1 {
     margin-top: 20px;
 }
 
-p {  
+.jumbotron p {  
     color: #fff;
     line-height: 1.3em;
     text-align: justify;
 }
+
+.card, img {border-radius: 5px;}
 
 .1 {
   width:100%;
