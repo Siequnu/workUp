@@ -316,16 +316,6 @@ class CommentFileUpload(db.Model):
 		return '<Comment File Upload {}>'.format(self.original_filename)
 	
 
-class AttendanceCode (db.Model):
-	__table_args__ = {'sqlite_autoincrement': True}
-	id = db.Column(db.Integer, primary_key=True)
-	code = db.Column(db.String(140))
-	lesson_id = db.Column(db.Integer, db.ForeignKey('lesson.id'))
-	
-	def __repr__(self):
-		return '<Attendance Code {}>'.format(self.code)
-	
-
 class Lesson (db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
 	id = db.Column(db.Integer, primary_key=True)
