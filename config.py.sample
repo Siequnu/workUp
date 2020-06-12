@@ -6,6 +6,10 @@ load_dotenv()
 
 class Config(object):
 	APP_NAME = 'APP_NAME'
+
+	CUSTOM_SERVICES = [
+		{'path': 'app.mentors', 'bp': 'bp', 'url_prefix': '/mentors'},
+	]
 	
 	WTF_CSRF_ENABLED = False
 	SECRET_KEY = os.environ.get('SECRET_KEY') or '6f63cd6a06ff4ae488b398e19d641661' # Generate with python3 -c "import uuid; print(uuid.uuid4().hex)"
