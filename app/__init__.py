@@ -50,48 +50,27 @@ def create_app(config_class):
     qrcode = QRcode(workup_app)
     ma.init_app(workup_app)
     dropzone.init_app (workup_app)
-
-    # Import templates
+    
     from app.errors import bp as errors_bp
     workup_app.register_blueprint(errors_bp)
 
-    from app.user import bp as user_bp
-    workup_app.register_blueprint(user_bp, url_prefix='/user')
-
-    from app.statements import bp as statements_bp
-    workup_app.register_blueprint(statements_bp, url_prefix='/statements')
-
-    from app.classes import bp as classes_bp
-    workup_app.register_blueprint(classes_bp, url_prefix='/classes')
-
-    from app.files import bp as files_bp
-    workup_app.register_blueprint(files_bp, url_prefix='/files')
-
-    from app.assignments import bp as assignments_bp
-    workup_app.register_blueprint(assignments_bp, url_prefix='/assignments')
-
-    from app.references import bp as references_bp
-    workup_app.register_blueprint(references_bp, url_prefix='/references')
-
-    from app.grammar import bp as grammar_bp
-    workup_app.register_blueprint(grammar_bp, url_prefix='/grammar')
-
-    from app.collaboration import bp as collaboration_bp
-    workup_app.register_blueprint(
-        collaboration_bp, url_prefix='/collaboration')
-
-    from app.consultations import bp as consultations_bp
-    workup_app.register_blueprint(
-        consultations_bp, url_prefix='/consultations')
-
-    from app.mentors import bp as mentors_bp
-    workup_app.register_blueprint(mentors_bp, url_prefix='/mentors')
-
-    from app.api import bp as api_bp
-    workup_app.register_blueprint(api_bp)
-
-    from app.main import bp as main_bp
-    workup_app.register_blueprint(main_bp)
+    # Import templates
+    
+    basic_services = [
+        {'path': 'app.main', 'bp': 'bp'},
+        {'path': 'app.api', 'bp': 'bp'},
+        {'path': 'app.user', 'bp': 'bp', 'url_prefix': '/user'},
+        {'path': 'app.files', 'bp': 'bp', 'url_prefix': '/files'}
+    ]
+    all_services = basic_services + workup_app.config['CUSTOM_SERVICES']
+    
+    import importlib
+    for service in all_services:
+        module = importlib.import_module(service['path'], package='app')
+        if 'url_prefix' in service:
+            workup_app.register_blueprint(getattr(module, service['bp']), url_prefix=service['url_prefix'])
+        else:
+            workup_app.register_blueprint(getattr(module, service['bp']))
 
     # Create an uploads folder if non-existant
     if not os.path.exists(os.path.join(workup_app.config['UPLOAD_FOLDER'])):
