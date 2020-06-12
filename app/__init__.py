@@ -14,9 +14,7 @@ from flask_qrcode import QRcode
 from flask_marshmallow import Marshmallow
 from flask_dropzone import Dropzone
 
-
-import logging
-import os
+import importlib, logging, os
 from logging.handlers import RotatingFileHandler
 
 db = SQLAlchemy()
@@ -50,27 +48,24 @@ def create_app(config_class):
     qrcode = QRcode(workup_app)
     ma.init_app(workup_app)
     dropzone.init_app (workup_app)
-    
-    from app.errors import bp as errors_bp
-    workup_app.register_blueprint(errors_bp)
 
-    # Import templates
-    
+    # Compile registry of blueprints
     basic_services = [
-        {'path': 'app.main', 'bp': 'bp'},
-        {'path': 'app.api', 'bp': 'bp'},
-        {'path': 'app.user', 'bp': 'bp', 'url_prefix': '/user'},
-        {'path': 'app.files', 'bp': 'bp', 'url_prefix': '/files'}
+        {'path': 'app.main'},
+        {'path': 'app.api'},
+        {'path': 'app.errors'},
+        {'path': 'app.user', 'url_prefix': '/user'},
+        {'path': 'app.files', 'url_prefix': '/files'}
     ]
     all_services = basic_services + workup_app.config['CUSTOM_SERVICES']
     
-    import importlib
+    # Enable each service
     for service in all_services:
         module = importlib.import_module(service['path'], package='app')
         if 'url_prefix' in service:
-            workup_app.register_blueprint(getattr(module, service['bp']), url_prefix=service['url_prefix'])
+            workup_app.register_blueprint(getattr(module, 'bp'), url_prefix=service['url_prefix'])
         else:
-            workup_app.register_blueprint(getattr(module, service['bp']))
+            workup_app.register_blueprint(getattr(module, 'bp'))
 
     # Create an uploads folder if non-existant
     if not os.path.exists(os.path.join(workup_app.config['UPLOAD_FOLDER'])):
