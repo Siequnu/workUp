@@ -1,4 +1,10 @@
 {% extends "header.html" %} {% block app_content %}
+
+<!-- Activate Bootstrap data toggle-->
+<script>
+  $(function () {$('[data-toggle="popover"]').popover()})
+</script>
+
 <br> {% if current_user.is_anonymous %}
 
 <link rel="stylesheet" href="/static/css/index_elmOnline.css" type="text/css">
@@ -536,7 +542,7 @@
 		</div>
 		<hr>
 
-		<!-- Milestones -->
+		<!-- Milestones widget -->
 		<div class="row text-center">
 			<div class="col">
 				<div class="counter">
@@ -544,16 +550,15 @@
 					<h2 class="timer count-title count-number">Your milestones</h2>
 					<br>
 					<div class="container">
-						<div class="progress">
-							<div class="progress-bar bg-success" role="progressbar" style="width:40%">
-								Assignments
+						<div class="progress" style="height:40px">
+							{% for goal in goals %}
+							<div class="progress-bar mypopover {{'bg-success' if goal.completed else 'bg-dark'}}"
+								role="progressbar" data-toggle="popover" data-trigger="hover"
+								title="{{goal.date_due.strftime('%d %b %Y')}}" data-content="{{goal.description}}"
+								style="width:{{100 / goals|length }}%">
+								{{goal.title}}
 							</div>
-							<div class="progress-bar bg-warning" role="progressbar" style="width:10%">
-								UCAS deadline
-							</div>
-							<div class="progress-bar bg-danger" role="progressbar" style="width:20%">
-								Internship
-							</div>
+							{% endfor %}
 						</div>
 					</div>
 				</div>
@@ -579,7 +584,7 @@
 		</div>
 		<br>
 		{% endif %}
-		
+
 
 		<!-- Consultations -->
 		{% if consultations %}

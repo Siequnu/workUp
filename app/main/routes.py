@@ -11,10 +11,12 @@ from app.main import bp
 import app.user
 
 # Statements
-try:
-	import app.consultations.models
-except:
-	pass
+try: import app.consultations.models
+except: pass
+
+# Goals
+try: import app.goals.models
+except: pass
 
 @current_app.before_request
 def before_request():
@@ -93,6 +95,9 @@ def index():
 
 				# Consultations
 				consultations = app.consultations.models.get_consultation_info_array (current_user.id) if app.main.models.is_active_service ('app.consultations') else False,
+
+				# Goals
+				goals = app.goals.models.get_student_goals_from_user_id (current_user.id) if app.main.models.is_active_service ('app.goals') else False,
 			)
 	
 	return render_template(index_template)
