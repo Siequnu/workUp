@@ -43,8 +43,8 @@ def index():
 				assignments = Assignment.query.all(),
 
 				# Statements
-				statement_projects = StatementProject.query.all(),
-				statement_projects_needing_review = app.statements.models.get_projects_needing_review()
+				statement_projects = StatementProject.query.all() if app.main.models.is_active_service ('app.statements') else False,
+				statement_projects_needing_review = app.statements.models.get_projects_needing_review() if app.main.models.is_active_service ('app.statements') else False
 			)
 		else:
 			# Display help message if a student has signed up and is not part of a class

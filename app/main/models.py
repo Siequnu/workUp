@@ -1,3 +1,4 @@
+from flask import current_app
 import datetime
 
 # Returns a string with the correct greeting based on the time of the day
@@ -9,3 +10,9 @@ def get_greeting ():
 		return 'Good afternoon'
 	else:
 		return 'Good evening'
+
+def is_active_service (service_name):
+	for service in current_app.config['CUSTOM_SERVICES']:
+		if str(service_name) in service.values():
+			return True
+	return False
