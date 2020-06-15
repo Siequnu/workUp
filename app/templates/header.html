@@ -1,16 +1,9 @@
-<!-- Load Bootstrap CSS -->
-{{ bootstrap.load_css() }}
+<!-- Load CSS -->
 {{ dropzone.load_css() }}
-<!-- Custom fonts for this template -->
-<!-- Fonts imported in CSS theme-->
-
-<!-- CSS and Fontawesome -->
 <link href="/static/css/library_card.css" rel="stylesheet">
 <link href="/static/bootstrap/css/flatly.css" rel="stylesheet">
-<script src="https://kit.fontawesome.com/7bd5544b77.js"></script>
 
 <!-- Load appropriate header for the service -->
-
 {% if config.APP_NAME == 'workUp' %}
     {% include "header_workUp.html" %}
 {% elif config.APP_NAME == 'elmOnline' %}
