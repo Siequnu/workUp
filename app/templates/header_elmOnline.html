@@ -11,27 +11,25 @@
 {% block navbar %}
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
-    <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button"
-        data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fa fa-bars"></i>
-    </button>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" id="mainNav">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
     <a class="navbar-brand" href="{{ url_for('main.index') }}">
 
         <img src="{{ url_for('static', filename='logo_elmOnline.png') }}" width="40" height="40"
             class="d-inline-block align-middle" alt=""> Elm Online</a>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="navbarColor03">
         <ul class="navbar-nav mr-auto">
             {% if current_user.is_anonymous %}
             {% else %}
-            <li class="nav-item mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('main.index')}}">Home</a>
+            <li class="nav-item">
+                <a class="nav-link rounded" href="{{url_for('main.index')}}">Home</a>
             </li>
-            <li class="nav-item dropdown mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded dropdown-toggle" href="#" id="navbarDropdown" role="button"
+            <li class="nav-item dropdown">
+                <a class="nav-link rounded dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Assignments
                 </a>
@@ -42,8 +40,8 @@
                 </div>
             </li>
 
-            <li class="nav-item dropdown mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded dropdown-toggle" href="#" id="navbarDropdown" role="button"
+            <li class="nav-item dropdown">
+                <a class="nav-link rounded dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     University Applications
                 </a>
@@ -57,8 +55,8 @@
                     <a class="dropdown-item" href="{{url_for('references.references_login')}}">References</a>
                 </div>
             </li>
-            <li class="nav-item mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('files.class_library')}}">Library</a>
+            <li class="nav-item">
+                <a class="nav-link rounded" href="{{url_for('files.class_library')}}">Library</a>
             </li>
             {% endif %}
 
@@ -66,18 +64,15 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
             {% if current_user.is_anonymous %}
-            <li class="nav-item mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('user.login')}}">Login</a>
+            <li class="nav-item">
+                <a class="nav-link rounded" href="{{url_for('user.login')}}">Login</a>
             </li>
             {% else %}
-            <li class="nav-item mx-0 mx-lg-1">
-                <a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{url_for('user.logout')}}">Logout</a>
+            <li class="nav-item">
+                <a class="nav-link rounded" href="{{url_for('user.logout')}}">Logout</a>
             </li>
             {% endif %}
         </ul>
     </div>
 </nav>
-<br>
-<br>
-<br></br>
 {% endblock %}
