@@ -10,6 +10,12 @@ from app import db
 from app.main import bp
 import app.user
 
+# Statements
+try:
+	import app.consultations.models
+except:
+	pass
+
 @current_app.before_request
 def before_request():
 	if current_user.is_authenticated:
@@ -22,9 +28,14 @@ def before_request():
 @bp.route('/')
 @bp.route('/index')
 def index():
+	# Dynamically generate the index template name based on app name
 	index_template = str('index_') + current_app.config['APP_NAME'] + '.html'
+	
 	if current_user.is_authenticated:
+		# All models get the greeting
 		greeting = app.main.models.get_greeting ()
+		
+		# For admin views
 		if app.models.is_admin(current_user.username):
 			return render_template(
 				index_template, admin = True,
@@ -44,8 +55,10 @@ def index():
 
 				# Statements
 				statement_projects = StatementProject.query.all() if app.main.models.is_active_service ('app.statements') else False,
-				statement_projects_needing_review = app.statements.models.get_projects_needing_review() if app.main.models.is_active_service ('app.statements') else False
+				statement_projects_needing_review = app.statements.models.get_projects_needing_review() if app.main.models.is_active_service ('app.statements') else False,
+
 			)
+		# Student views
 		else:
 			# Display help message if a student has signed up and is not part of a class
 			if Enrollment.query.filter(Enrollment.user_id==current_user.id).first() is None:
@@ -76,7 +89,10 @@ def index():
 				attendance_stats = app.classes.models.get_user_attendance_record_stats (current_user.id),
 				
 				# Greeting
-				greeting = greeting
+				greeting = greeting,
+
+				# Consultations
+				consultations = app.consultations.models.get_consultation_info_array (current_user.id) if app.main.models.is_active_service ('app.consultations') else False,
 			)
 	
 	return render_template(index_template)
