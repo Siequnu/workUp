@@ -37,3 +37,6 @@
 [submodule "app/references"]
 	path = app/references
 	url = https://github.com/Siequnu/flask-references.git
+[submodule "app/goals"]
+	path = app/goals
+	url = https://github.com/Siequnu/flask-goals.git
