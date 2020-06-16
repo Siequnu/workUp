@@ -416,11 +416,11 @@
 			{% for project in statement_projects_needing_review %}
 			<div class="container">
 				<div class="row align-items-center">
-					<div class="col-2 text-center">
+					<div class="col-12 col-lg-2 text-center">
 						<h1 class="display-4"><span class="badge badge-warning">{{project.total_uploads}}</span></h1>
 						<h4>{{'upload' if project.total_uploads == 1 else 'uploads'}}</h4>
 					</div>
-					<div class="col-6">
+					<div class="col-12 col-lg-6">
 						<h2 class="text"><i class="fa fa-fw fa-user"
 								aria-hidden="true"></i><strong>{{project.project_owner_username}}</strong></h2>
 						<h5 class="text"><strong>{{project.title}}</strong></h5>
@@ -432,7 +432,7 @@
 						</ul>
 
 					</div>
-					<div class="col-4 text-right align-center">
+					<div class="col-12 col-lg-4 text-right align-center">
 						<a href="{{url_for('statements.view_statement_project', project_id = project.id)}}" <button
 							class="btn btn-lg btn-outline-primary"><i class="fa fa-fw fa-book-open"></i> View project <i class="fa fa-chevron-right"></i>
 							</button></a>
@@ -645,12 +645,12 @@
 
 				<div class="container">
 					<div class="row">
-						<div class="col-2 text-center">
+						<div class="col-12 col-lg-2 text-center">
 							<h1 class="display-4"><span
 									class="badge badge-secondary">{{assignment['due_date'].strftime('%d')}}</span></h1>
 							<h2>{{assignment['due_date'].strftime('%b')|upper}}</h2>
 						</div>
-						<div class="col-10">
+						<div class="col-12 col-lg-10">
 							<h3 class="text"><strong>{{assignment['title']}}</strong></h3>
 							<ul class="list-inline">
 								<li class="list-inline-item"><i class="fa fa-calendar" aria-hidden="true"></i> due on
