@@ -18,6 +18,10 @@ except: pass
 try: import app.goals.models
 except: pass
 
+# Mentors
+try: import app.mentors.models
+except: pass
+
 @current_app.before_request
 def before_request():
 	if current_user.is_authenticated:
@@ -98,6 +102,9 @@ def index():
 
 				# Goals
 				goals = app.goals.models.get_student_goals_from_user_id (current_user.id) if app.main.models.is_active_service ('app.goals') else False,
+
+				# Mentors
+				mentors = app.mentors.models.get_mentors_from_student_id (current_user.id) if app.main.models.is_active_service ('app.mentors') else False
 			)
 	
 	return render_template(index_template)

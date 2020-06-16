@@ -514,6 +514,18 @@
 			</div>
 		</div>
 	</div>
+	<br>
+	<div class="card-deck">
+        <div class="card bg-light mb-2" style="max-width: 20rem;">
+            <div class="card-header">
+                <h5><i class="fa fa-file-upload"></i> My profile</h5>
+            </div>
+            <div class="card-body">
+                <p><a class="btn btn-outline-dark" href="{{url_for('user.user_profile', user_id = current_user.id)}}" role="button"><i class="fa fa-calendar-plus"></i> View my profile</a></p>
+                <p><a class="btn btn-outline-dark" href="{{url_for('user.profile_edit')}}" role="button"><i class="fa fa-tasks"></i> Edit my profile</a></p>
+            </div>
+        </div>
+    </div>
 
 	{% else %}
 

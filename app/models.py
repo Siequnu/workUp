@@ -178,6 +178,13 @@ class User(UserMixin, db.Model):
 	registered = db.Column(db.DateTime, default=datetime.now())
 	email_confirmed = db.Column(db.Boolean, default=False)
 	is_admin = db.Column(db.Boolean, default=False)
+	profile_name = db.Column(db.String(200))
+	profile_title = db.Column(db.String(200))
+	profile_education = db.Column(db.String(200))
+	profile_qualification = db.Column(db.String(200))
+	profile_text = db.Column(db.String(2000))
+	profile_picture = db.Column(db.String(200))
+
 
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
