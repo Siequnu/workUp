@@ -34,11 +34,11 @@
 
 <!-- Scripts -->
 {% block scripts %}
-{{ toastr.include_toastr_js() }}
+{{ bootstrap.load_js() }}
 <script src="/static/js/searchable-table.js"></script>
 <script src="https://kit.fontawesome.com/7bd5544b77.js"></script>
 {{ dropzone.load_js() }}
-{{ bootstrap.load_js() }}
+{{ toastr.include_toastr_js() }}
 {% endblock %}
 
 <!-- Load any scripts that are in the template -->
