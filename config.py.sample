@@ -53,6 +53,10 @@ class Config(object):
 	TS_SALT = os.environ.get('SECRET_KEY') or '6f63cd6a06ff4ae488b398e19d641661'
 	TS_RECOVER_SALT = os.environ.get('SECRET_KEY') or '6f63cd6a06ff4ae488b398e19d641661'
 	TS_MAX_AGE = 86400
+
+	COMPRESS_MIMETYPES = ['text/html', 'text/css', 'text/xml', 'application/json', 'application/javascript']
+	COMPRESS_LEVEL = 6
+	COMPRESS_MIN_SIZE = 500
 	
 	# SQL
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
