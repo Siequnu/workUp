@@ -109,7 +109,6 @@ def lesson_registration_redirect():
 	return redirect(url_for('classes.enter_attendance_code'))
 
 ## workUp specific routing
-
 # Features of the website
 @bp.route('/features')
 def terms():
@@ -117,8 +116,8 @@ def terms():
 		return render_template('features.html')
 	else: return redirect(url_for('main.index'))
 
-## elmOnline specific routing
 
+## elmOnline specific routing
 # Page that displays the QR code
 @bp.route('/contact')
 def contact():

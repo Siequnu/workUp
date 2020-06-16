@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ebf22aa120cd0ae8ba111faddb9720f38e373897ce1935a4bc8d3d91b44df834"
+            "sha256": "2993633797e3c4099299f47a1ed615852377640e48bd768684486dd06366e572"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -72,11 +72,11 @@
         },
         "bootstrap-flask": {
             "hashes": [
-                "sha256:26c61912fff4584e23472ae66f2d98a8d7340bc1c89b48d21e19acb900356b9b",
-                "sha256:3df7044dc9075c01e0c198450da2bd2b84e21a72c8e7cf6157ba51edb8a08ad9"
+                "sha256:a64368423512bff9e12b2d9f63be510bd3926f31e61b6be3760761d67a47a786",
+                "sha256:f5e75b7fb976ba2268eac88240e1a9b249c7848a0cb639f45a6be14d913c88c2"
             ],
             "index": "pypi",
-            "version": "==1.3.2"
+            "version": "==1.4"
         },
         "brotli": {
             "hashes": [
