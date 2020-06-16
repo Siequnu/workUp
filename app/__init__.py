@@ -34,6 +34,8 @@ def create_app(config_class):
     workup_app = Flask(__name__)
     workup_app.config.from_object(config_class)
 
+    workup_app.jinja_env.cache = {}
+
     db.init_app(workup_app)
     migrate.init_app(workup_app, db)
     workup_app.app_context().push()
