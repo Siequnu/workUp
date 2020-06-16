@@ -51,8 +51,10 @@
                     <a class="dropdown-item" href="{{url_for('consultations.view_consultations')}}">Consultations</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{url_for('statements.view_statements')}}">Personal Statements</a>
+                    {% if current_user.is_admin %}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{url_for('references.references_login')}}">References</a>
+                    {% endif %}
                 </div>
             </li>
             <li class="nav-item">

@@ -2,29 +2,23 @@
 
 <!-- Activate Bootstrap data toggle-->
 <script>
-  $(function () {$('[data-toggle="popover"]').popover()})
+	$(function () { $('[data-toggle="popover"]').popover() })
 </script>
 
 <br> {% if current_user.is_anonymous %}
 
+<!-- Jumbotron -->
 <link rel="stylesheet" href="/static/css/index_elmOnline.css" type="text/css">
-
 <div class="container">
-
-
 	<div class="jumbotron">
-
 		<h1 class="text-light text-center">Elm Education</h1>
 		<br>
 		<h3 class="text-light text-center">Trusted University Application Consultants</h3>
-
 	</div>
-
-
 	<br />
-
 </div>
 
+<!-- Pricing -->
 <div class="container-fluid p-5">
 	<div class="row m-auto text-center w-75">
 
@@ -132,8 +126,6 @@
 	</div>
 </div>
 
-
-
 <div class="container-fluid p-5">
 	<div class="row m-auto text-center w-75">
 
@@ -240,7 +232,6 @@
 </div>
 
 
-
 <!-- About Section-->
 <section class="page-section bg-info text-white mb-0" id="about">
 	<div class="container">
@@ -267,9 +258,8 @@
 </section>
 
 
-
+<!-- Info jumbotron -->
 <div class="container">
-
 	<br>
 	<div class="jumbotron">
 
@@ -286,16 +276,10 @@
 		<img src="/static/elm/logos/kcl.png" height="150">
 		<img src="/static/elm/logos/leeds.png" height="150">
 		<img src="/static/elm/logos/oxford.png" height="150">
-
-
-
-
-
 	</div>
 </div>
 
-
-
+<!-- Carousel -->
 <div class="container">
 	<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
 		<div class="carousel-inner">
@@ -324,7 +308,6 @@
 			<span class="sr-only">Next</span>
 		</a>
 	</div>
-
 
 
 	<section class="page-section bg-secondary text-white mb-0" id="about">
@@ -356,10 +339,11 @@
 </div>
 </section>
 
+<!-- Contact us -->
 <br><br>
 <hr>
 <div class="container">
-	<img class="d-block w-100" src="/static/elm/contact_us.png" alt="Third slide">
+	<img class="d-block w-100" src="/static/elm/contact_us.png" alt="Contact Elm">
 </div>
 
 
@@ -367,13 +351,11 @@
 {% elif admin %}
 <div class="container">
 	<div class="row">
-
 		<h1>{{greeting}}, Professor {{ current_user.username }}!</h1>
-
 	</div>
-
 	<hr>
 
+	<!-- Site stat widgets -->
 	<div class="row text-center">
 		<div class="col">
 			<div class="counter">
@@ -406,6 +388,7 @@
 	</div>
 	<br>
 
+	<!-- Statement projects needing review -->
 	{% if statement_projects_needing_review|length > 0 %}
 	<div class="card">
 		<div class="card-header">
@@ -434,7 +417,8 @@
 					</div>
 					<div class="col-12 col-lg-4 text-right align-center">
 						<a href="{{url_for('statements.view_statement_project', project_id = project.id)}}" <button
-							class="btn btn-lg btn-outline-primary"><i class="fa fa-fw fa-book-open"></i> View project <i class="fa fa-chevron-right"></i>
+							class="btn btn-lg btn-outline-primary"><i class="fa fa-fw fa-book-open"></i> View project <i
+								class="fa fa-chevron-right"></i>
 							</button></a>
 					</div>
 				</div>
@@ -449,6 +433,7 @@
 	{% endif %}
 	<br>
 
+	<!-- Admin management widgets -->
 	<div class="card-deck">
 		<div class="card bg-light mb-2" style="max-width: 20rem;">
 			<div class="card-header">
@@ -531,6 +516,8 @@
 	</div>
 
 	{% else %}
+
+	<!-- Student view -->
 	<link rel="stylesheet" href="/static/css/progress-circle.css">
 	<div class="container">
 
@@ -543,6 +530,7 @@
 		<hr>
 
 		<!-- Milestones widget -->
+		{% if goals %}
 		<div class="row text-center">
 			<div class="col">
 				<div class="counter">
@@ -565,6 +553,7 @@
 			</div>
 		</div>
 		<br>
+		{% endif %}
 
 		<!-- Mentors -->
 		{% if mentors %}
