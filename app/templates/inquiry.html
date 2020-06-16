@@ -1,0 +1,157 @@
+{% extends "header.html" %} {% block app_content %}
+
+<link rel="stylesheet" href="/static/bootstrap/mdb.lite.min.css" type="text/css">
+<script src="/static/bootstrap/mdb.min.js"></script>
+<div class="container">
+<!--Section: Contact v.2-->
+<div class="jumbotron">
+<section class="mb-4">
+        <h1 class="display-4 text-center">
+                <i class="fa fa-user-graduate fa-1x"></i></h1>
+            <br>
+            <h1 class="display-4 text-center">workUp - Learning Management</h1>
+            <br>
+            <p class="lead">Using an online management system is a great way to improve the education at your school or institution</p>
+            <p class="lead">workUp helps teachers and students manage attendance, assignments, grades and class files.
+            </p>
+            <hr class="my-4">
+        <!--Section heading-->
+        <h2 class="display-6 text-center">Contact us to license this service</h2>
+        <!--Section description-->
+        
+        <div class="row">
+    
+            <!--Grid column-->
+            <div class="col-md-9 mb-md-0 mb-5">
+                <form id="form" name="form" action="{{ url_for('main.inquire') }}" method="POST">
+    
+                    <!--Grid row-->
+                    <div class="row">
+    
+                        <!--Grid column-->
+                        <div class="col-md-6">
+                            <div class="md-form mb-0">
+                                <input type="text" id="name" name="name" class="form-control">
+                                <label for="name" class="">Your name</label>
+                            </div>
+                        </div>
+                        <!--Grid column-->
+    
+                        <!--Grid column-->
+                        <div class="col-md-6">
+                            <div class="md-form mb-0">
+                                <input type="text" id="email" name="email" class="form-control">
+                                <label for="email" class="">Your email</label>
+                            </div>
+                        </div>
+                        <!--Grid column-->
+    
+                    </div>
+                    <!--Grid row-->
+
+    
+                    <!--Grid row-->
+                    <div class="row">
+    
+                        <!--Grid column-->
+                        <div class="col-md-12">
+    
+                            <div class="md-form">
+                                <textarea type="text" id="message" name="message" rows="2" class="form-control md-textarea"></textarea>
+                                <label for="message">Your message</label>
+                            </div>
+    
+                        </div>
+                    </div>
+                    <!--Grid row-->
+    
+                </form>
+    
+                <div class="text-center text-md-left">
+                    <a class="btn btn-primary" onclick="document.getElementById('form').submit();">Send</a>
+                </div>
+                <div class="status"></div>
+            </div>
+            <!--Grid column-->
+    
+            
+    
+        </div>
+    
+    </section>
+    <!--Section: Contact v.2-->
+</div>
+
+
+<div class="container">
+    
+        <div class="container">
+
+            <div class="card-deck">
+                <div class="card " style="width: 300px;">
+                    <img src="static/assets/student_home.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">The student home page allows for quick access to vital information.</p>
+                    </div>
+                </div>
+    
+                <div class="card" style="width: 18rem;">
+                    <img src="static/assets/create_assignment.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Teachers can create assignments targeted at one or more classes. All the
+                            uploads
+                            for this assignment will
+                            be distributed randomly among colleagues for peer-review.</p>
+                    </div>
+                </div>
+            
+                <div class="card" style="width: 18rem;">
+                    <img src="static/assets/view_assignments.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Students can quickly check their assignments. Peer reviews can only be uploaded
+                            once the student has completed
+                            their own assignment.</p>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card-deck">
+    
+                <div class="card" style="width: 18rem;">
+                    <img src="static/assets/file_stats.png" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">Students can check how many of their colleagues have downloaded their work and
+                            submitted peer reviews.</p>
+                    </div>
+                </div>
+    
+                <div class="card" style="width: 305px;">
+                    <img src="static/assets/submit_peerreview.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p>Teachers can create forms to assess students. As the students get more comfortable
+                            with the peer review process, the teacher can edit the form
+                            to allow the students more freedom with the structure of their peer review.</p>
+                    </div>
+                </div>
+
+
+                
+
+            </div>
+            <br><br>
+            <!-- Features text-->
+            <div class="card">
+                <div class="card-body">
+                    <p>We provide full technical documentation on embedding sites and can provide advice to your IT team if necessary.</p>
+
+                    <p>Sites can be embedded by using a proxy. </p>
+
+                    <p>The site is hosted by us, but runs under your URL. Once your IT team have set up a few things, we take care of all the setup. </p>
+
+                    <p>As part of the setup, we make any adjustments to the layout to ensure that everything looks correct within your house style. </p>
+
+                    </p>
+                </div>
+            </div>
+    
+            {% endblock %}

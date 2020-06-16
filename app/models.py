@@ -344,3 +344,20 @@ class LessonAttendance (db.Model):
 	def __repr__(self):
 		return '<Lesson Attendance {}>'.format(self.id)
 	
+
+
+class Inquiry (db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(140))
+	email = db.Column(db.String(140))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
+	message = db.Column(db.String(500))
+	
+	def save (self):
+		db.session.add(self)
+		db.session.commit ()
+
+	#¡# Send an email to admin?
+	def __repr__(self):
+		return '<Inquiry {}>'.format(self.id)

@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 
 import datetime
 
-from app.models import Assignment, Enrollment, ClassLibraryFile, Assignment, StatementProject
+from app.models import Assignment, Enrollment, ClassLibraryFile, Assignment, StatementProject, Inquiry
 import app.assignments.models
 import app.files.models
 from app import db
@@ -118,10 +118,28 @@ def lesson_registration_redirect():
 ## workUp specific routing
 # Features of the website
 @bp.route('/features')
-def terms():
+def features():
 	if current_app.config['APP_NAME'] == 'workUp':
 		return render_template('features.html')
 	else: return redirect(url_for('main.index'))
+
+
+@bp.route('/inquire', methods=['GET', 'POST'])
+def inquire():
+	if request.method == 'POST':
+		print (request.form)
+		inquiry = Inquiry (
+			name = request.form.get('name'),
+			email = request.form.get('email'),
+			message = request.form.get('message'),
+			timestamp = datetime.datetime.now ()
+		)
+		inquiry.save ()
+		#¡# Send email to to admin?
+		flash ('Thank you! We have received your enquiry and will be in touch soon.', 'success')
+		return render_template('inquiry.html')
+
+	return render_template('inquiry.html')
 
 
 ## elmOnline specific routing
