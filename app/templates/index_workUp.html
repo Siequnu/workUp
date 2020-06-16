@@ -152,16 +152,22 @@
 
     </div>
     {% else %}
+
+    <!-- Student view -->
     <link rel="stylesheet" href="/static/css/progress-circle.css">
     <div class="container">
+        
+        <!-- Greeting -->
         <div class="row">
             <div class="container">
                 <h1>{{greeting}}, {{ current_user.username }}!</h1>
             </div>
         </div>
         <hr>
+        
+        <!-- Status widgets -->
         <div class="row text-center">
-            <div class="col">
+            <div class="col-12 col-md-4">
                 <a href="{{url_for('assignments.view_assignments')}}">
                     <div class="counter">
                         <i class="fa fa-cloud-upload-alt fa-2x"></i>
@@ -174,7 +180,7 @@
                         {% endif %}
                     </div>
             </div></a>
-            <div class="col">
+            <div class="col-12 col-md-4">
                 <div class="counter">
                     <i class="fa fa-pen-fancy fa-2x"></i>
                     <h2 class="timer count-title count-number">Peer reviews</h2>
@@ -189,7 +195,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col">
+            <div class="col-12 col-md-4">
                 <div class="counter">
                     <i class="fa fa-user-check fa-2x"></i>
                     <h2 class="timer count-title count-number">Attendance</h2>
