@@ -124,23 +124,37 @@ def features():
 	else: return redirect(url_for('main.index'))
 
 
+# Inquiry form
 @bp.route('/inquire', methods=['GET', 'POST'])
 def inquire():
-	if request.method == 'POST':
-		print (request.form)
-		inquiry = Inquiry (
-			name = request.form.get('name'),
-			email = request.form.get('email'),
-			message = request.form.get('message'),
-			timestamp = datetime.datetime.now ()
-		)
-		inquiry.save ()
-		#¡# Send email to to admin?
-		flash ('Thank you! We have received your enquiry and will be in touch soon.', 'success')
+	if current_app.config['APP_NAME'] == 'workUp':
+		if request.method == 'POST':
+			print (request.form)
+			inquiry = Inquiry (
+				name = request.form.get('name'),
+				email = request.form.get('email'),
+				message = request.form.get('message'),
+				timestamp = datetime.datetime.now ()
+			)
+			inquiry.save ()
+			#¡# Send email to to admin?
+			flash ('Thank you! We have received your enquiry and will be in touch soon.', 'success')
+			return render_template('inquiry.html')
+
 		return render_template('inquiry.html')
+	else: return redirect(url_for('main.index'))
 
-	return render_template('inquiry.html')
+# Inquiry form
+@bp.route('/inquiries/view', methods=['GET', 'POST'])
+@login_required
+def view_inquiries():
+	if current_app.config['APP_NAME'] == 'workUp':
+		if app.models.is_admin(current_user.username):
+			inquiries = Inquiry.query.all()
+			return render_template('view_inquiries.html', inquiries = inquiries)
 
+		return render_template('inquiry.html')
+	else: return redirect(url_for('main.index'))
 
 ## elmOnline specific routing
 # Page that displays the QR code
