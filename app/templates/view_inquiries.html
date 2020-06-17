@@ -21,6 +21,7 @@
                     <th><i class="fa fa-signature"></i></th>
                     <th><i class="fa fa-at"></i></th>
                     <th><i class="fa fa-envelope-open-text"></i></th>
+                    <th><i class="fa fa-tools"></i></th>
                 </tr>
             </thead>
             <tbody id="searchableTable">
@@ -29,6 +30,7 @@
                     <td>{{inquiry.name}}</td>
                     <td>{{inquiry.email}}</td>
                     <td>{{inquiry.message}}</td>
+                    <td><a href="{{url_for('main.delete_inquiry', inquiry_id = inquiry.id)}}"><i class="fa fa-trash"></i></a></td>
                 </tr>
                 {% endfor %}
             </tbody>

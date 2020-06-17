@@ -358,6 +358,10 @@ class Inquiry (db.Model):
 		db.session.add(self)
 		db.session.commit ()
 
+	def delete (self):
+		db.session.delete (self)
+		db.session.commit ()
+
 	#¡# Send an email to admin?
 	def __repr__(self):
 		return '<Inquiry {}>'.format(self.id)
