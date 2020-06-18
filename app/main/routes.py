@@ -135,7 +135,10 @@ def index():
                         current_user.id) if app.main.models.is_active_service('app.mentors') else False
             )
 
-    return render_template(index_template)
+    if current_app.config['APP_NAME'] == 'workUp':
+        return render_template('product.html')
+    else:
+        return render_template(index_template)
 
 
 # Redirect for lesson registration
@@ -166,9 +169,15 @@ def features():
     else:
         return redirect(url_for('main.index'))
 
+
+@bp.route('/product', methods=['GET', 'POST'])
+def product():
+    if current_app.config['APP_NAME'] == 'workUp':
+        return render_template('product.html')
+    else:
+        return redirect(url_for('main.index'))
+
 # Inquiry form
-
-
 @bp.route('/inquiries/view', methods=['GET', 'POST'])
 @login_required
 def view_inquiries():
