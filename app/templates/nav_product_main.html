@@ -1,0 +1,45 @@
+<!-- Navigation -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark text-uppercase">
+    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+        <img src="{{ url_for('static', filename='logo_workUp.png') }}" width="40" height="40"> workUp
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav" aria-controls="mainNav"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse collapse" id="mainNav">
+        <ul class="navbar-nav mr-auto main-links">
+            <li class="nav-item scrollspy">
+                <a class="nav-link" href="#overview">Overview</a>
+            </li>
+            <li class="nav-item scrollspy">
+                <a class="nav-link" href="#users">Users</a>
+            </li>
+            <li class="nav-item scrollspy">
+                <a class="nav-link" href="#features">Features</a>
+            </li>
+            <li class="nav-item scrollspy">
+                <a class="nav-link" href="#licencing">Licencing</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('main.product_teachers')}}">For teachers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('main.product_consultancies')}}">For consultancies</a>
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('main.inquire')}}">Contact us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('user.login')}}">Student Login</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>

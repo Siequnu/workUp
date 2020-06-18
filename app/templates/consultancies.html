@@ -1,0 +1,205 @@
+{% extends "header_product.html" %}
+
+{% block app_content %}
+
+{% include "nav_product_static_pages.html" %}
+
+<div class="jumbotron card card-image" id="overview" style="background-size:cover; background-repeat: no-repeat; background-image: linear-gradient(
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.5)
+      ),
+      url(/static/assets/product/education_consultant.jpeg);">
+    <div class="text-white text-center py-5 px-4" style="text-shadow: 2px 2px #000000;">
+        <div>
+
+            <h1 class="display-4 text-center">
+                <i class="fa fa-user-graduate fa-1x"></i></h1>
+            <br>
+            <h1 class="display-4">WorkUp for Education Consultancies</h1>
+            <br>
+            <h4 class="mx-5 mb-5">
+                WorkUp has been specially developed to aid you in helping students with Personal Statements, References
+                and much
+                more.
+            </h4>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+
+    <ul class="nav nav-pills nav-fill">
+        <li class="nav-item">
+            <a href="#personal-statements" class="nav-link active" data-toggle="tab">Personal Statements</a>
+        </li>
+        <li class="nav-item">
+            <a href="#references" class="nav-link" data-toggle="tab">References</a>
+        </li>
+        <li class="nav-item">
+            <a href="#office-hours" class="nav-link" data-toggle="tab">Appointments</a>
+        </li>
+        <li class="nav-item">
+            <a href="#goals" class="nav-link" data-toggle="tab">Application goals</a>
+        </li>
+        <li class="nav-item">
+            <a href="#email" class="nav-link" data-toggle="tab">Email</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="personal-statements">
+
+            <br>
+            <h3 class="display-6 text-left">Personal statements</h3>
+            <p>Help students understand how to craft a perfect personal statement.</p>
+            <hr>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/statements_homepage.png" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">Personal statements overview.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/statements_timeline.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Timeline view shows the statement developing from draft to final version.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="references">
+            <br>
+            <h3 id="references" class="display-6 text-left">Student reference
+                letters
+            </h3>
+            <p>Efficiently capture and organise student references.</p>
+            <hr>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/references_capture.png" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">Capturing a good reference can be challenging. Our form will help the
+                            writers
+                            give
+                            you the information you need for the perfect references letter.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/references_timeline.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">A timeline view visually displays and edits the team makes to the
+                            references.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/references_overview.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Quickly triage and work on multiple references.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="office-hours">
+            <br>
+            <h3 class="display-6 text-left">Appointments</h3>
+            <p>Easily schedule office hours with students, and assign pre-reading documents. Afterwards, your report
+                can
+                be
+                downloaded.</p>
+            <hr>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/appointment_scheduling.png" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">Conveniently allow multiple scheduling options which can be chosen by
+                            the
+                            teacher
+                            or student.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/appointment_calendar.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Stay in control of your schedule with a flexible calendar view.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/appointment_report.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Upload your report after the appointment, with downloadable reading links
+                            and a PDF view.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="goals">
+            <br>
+            <h3 class="display-6 text-left">Goals</h3>
+            <p>Intuitively view milestones and goals.</p>
+            <hr>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/goals_empty_milestones.png" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">Goals can be linked to academic achievements or application timelines.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/goals_completed_milestones.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Mark goals as complete to track the student's progress.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="email">
+
+            <br>
+            <h3 class="display-6 text-left">Efficient email</h3>
+            <p>Efficiently send beautiful emails.</p>
+            <hr>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%">
+                    <img src="static/assets/features/email_sending.png" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">Easily send bulk emails to an entire class.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%">
+                    <img src="static/assets/features/email_no_lesson.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">WorkUp sends rich full-HTML with beautiful fonts and images.</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div> <!-- First container -->
+
+<br>
+<br>
+</div>
+
+{% endblock %}

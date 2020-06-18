@@ -1,0 +1,280 @@
+{% extends "header_product.html" %}
+
+{% block app_content %}
+
+{% include "nav_product_static_pages.html" %}
+
+<div class="jumbotron card card-image" id="overview" style="background-image: linear-gradient(
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.5)
+      ),
+      url(/static/assets/product/teacher_computer.jpeg);">
+    <div class="text-white text-center py-5 px-4" style="text-shadow: 2px 2px #000000;">
+        <div>
+
+            <h1 class="display-4 text-center">
+                <i class="fa fa-user-graduate fa-1x"></i></h1>
+            <br>
+            <h1 class="display-4">WorkUp for teachers</h1>
+            <h4 class="mx-5 mb-5">
+                Explore how WorkUp can assist you in the classroom.
+            </h4>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+
+    <ul class="nav nav-pills nav-fill">
+        <li class="nav-item">
+            <a href="#assignments" class="nav-link active" data-toggle="tab">Assignments</a>
+        </li>
+        <li class="nav-item">
+            <a href="#peer-review" class="nav-link" data-toggle="tab">Peer review</a>
+        </li>
+        <li class="nav-item">
+            <a href="#office-hours" class="nav-link" data-toggle="tab">Office hours</a>
+        </li>
+        <li class="nav-item">
+            <a href="#attendance" class="nav-link" data-toggle="tab">Attendance</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tools" class="nav-link" data-toggle="tab">Tools</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="assignments">
+
+            <br>
+            <!-- Assessment and peer-review-->
+            <h3 class="display-6 text-left">Assignments</h3>
+            <p>WorkUp makes it easy to create and track assignments for multiple classes. </p>
+            <hr>
+
+            <div class="card-deck" style="width: 100%;">
+                <div class="card ">
+                    <img src="static/assets/features/student_home.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">The student home page allows for quick access to vital information.</p>
+                    </div>
+                </div>
+
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/create_assignment.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Teachers can create assignments targeted at one or more classes. All
+                            the
+                            uploads
+                            for this assignment will
+                            be distributed randomly among colleagues for peer-review.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/view_assignments.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Students can quickly check their assignments. Peer reviews can only be
+                            uploaded
+                            once the student has completed
+                            their own assignment.</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="peer-review">
+
+            <br>
+            <h3 class="display-6 text-left">Assessment and peer-review</h3>
+            <p>WorkUp helps distribute and collect assignments and peer-reviews to large numbers of classes and
+                students.</p>
+            <hr>
+
+            <div class="card-deck" style="width: 100%;">
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/view_assignments.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Students can quickly check their assignments. Peer reviews can only be
+                            uploaded
+                            once the student has completed
+                            their own assignment.</p>
+                    </div>
+                </div>
+
+
+                <div class="card ">
+                    <img src="static/assets/features/student_home.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">The student home page allows for quick access to vital information.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/submit_peerreview.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Teachers can create forms to assess students. As the students get more
+                            comfortable
+                            with the peer review process, the teacher can edit the form
+                            to allow the students more freedom with the structure of their peer review.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="tab-pane fade" id="office-hours">
+            <br>
+            <h3 class="display-6 text-left">Appointments</h3>
+            <p>Easily schedule office hours with students, and assign pre-reading documents. Afterwards, your report
+                can
+                be
+                downloaded.</p>
+            <hr>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/appointment_scheduling.png" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">Conveniently allow multiple scheduling options which can be chosen by
+                            the
+                            teacher
+                            or student.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/appointment_calendar.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Stay in control of your schedule with a flexible calendar view.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/appointment_report.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Upload your report after the appointment, with downloadable reading links
+                            and a PDF view.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="attendance">
+
+            <br>
+            <h3 class="display-6 text-left">Attendance</h3>
+            <p>WorkUp makes taking and tracking attendance fun and intuitive.</p>
+            <hr>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/attendance_live_qr.png" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">Students can scan a QR code with their phones and automatically
+                            register
+                            for
+                            the
+                            class.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/attendance_registered.png" style="width: 100%;">
+                    <div class="card-body">
+
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/attendance_lessons.png" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">Get a quick overview of class attendance.</p>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/attendance_class_view.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Efficiently track class attendance.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/attendance_absence_justification.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">If students miss a class, they can upload a digital absence
+                            justification.
+                            Approve or
+                            not,
+                            with
+                            one
+                            click.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tools">
+
+            <br>
+            <h3 class="display-6 text-left">Tools</h3>
+            <p>Nifty extra tools to help students in their work.</p>
+            <hr>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/tools_collaboration.png" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">Students can easily work on documents in real time, without using
+                            cumbersome
+                            third-party tools.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/assets/features/tools_grammarcheck.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Check for grammar and spelling mistakes.</p>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </div>
+        </div>
+
+    </div>
+
+</div> <!-- Container -->
+
+<br><br>
+
+<div class="jumbotron card card-image" id="overview" style="background-image: linear-gradient(
+        rgba(0, 0, 0, 0.4), 
+        rgba(0, 0, 0, 0.4)
+      ),
+      url(/static/assets/product/gradient_background_2.png);">
+    <div class="text-white text-center py-5 px-4">
+        <blockquote class="blockquote">
+            <p class="mb-0">WorkUp allowed me to give feedback to students with great efficiency and saved me a lot of time.</p>
+            <footer class="blockquote-footer text-white">Xu Lanzhi <cite title="Source Title">Renmin University, China</cite></footer>
+        </blockquote>
+
+        <a href="{{ url_for('main.inquire') }}" class="btn peach-gradient">
+            License WorkUp for your school <i class="fas fa-chevron-right"></i></a>
+    </div>
+</div>
+
+<br>
+<br>
+</div>
+
+{% endblock %}
