@@ -3,6 +3,7 @@
 
 <link rel="stylesheet" href="/static/css/index_workUp.css" type="text/css">
 
+<!-- This will not show, as non-logged in users will redirect to the product page -->
 <div class="container">
 
     <div class="jumbotron">
@@ -16,11 +17,13 @@
         <p>Students can track assignment deadlines, grades, and peer review colleagues' work.</p>
         <p>Teachers can manage assignment uploads, class grades and enrollment.</p>
         <br>
-        <a class="btn btn-secondary btn-lg" href="{{url_for('user.register')}}" role="button">Student registration <i class="fa fa-chevron-right"></i></a>
+        <a class="btn btn-secondary btn-lg" href="{{url_for('user.register')}}" role="button">Student registration <i
+                class="fa fa-chevron-right"></i></a>
         <hr class="my-4">
         <p class="lead">Interested in licensing this software for use at your school?</p>
         <a class="btn btn-info btn-lg" href="{{url_for('main.features')}}" role="button">View service features</a>
-        <a class="btn btn-success btn-lg" href="{{url_for('main.features', _anchor='inquire')}}" role="button">Contact us</a>
+        <a class="btn btn-success btn-lg" href="{{url_for('main.features', _anchor='inquire')}}" role="button">Contact
+            us</a>
     </div>
 
     <br />
@@ -38,7 +41,7 @@
     <hr>
 
     <div class="row text-center">
-        <div class="col">
+        <div class="col-6 col-lg-3 mb-3">
             <div class="counter">
                 <i class="fa fa-plug fa-2x"></i>
                 <h2 class="timer count-title count-number">{{active_user_count}}</h2>
@@ -49,21 +52,21 @@
                 {% endif %}
             </div>
         </div>
-        <div class="col">
+        <div class="col-6 col-lg-3 mb-3">
             <div class="counter">
                 <i class="fa fa-user-graduate fa-2x"></i>
                 <h2 class="timer count-title count-number">{{student_count}}</h2>
                 <p class="count-text ">Students</p>
             </div>
         </div>
-        <div class="col">
+        <div class="col-6 col-lg-3 mb-3">
             <div class="counter">
                 <i class="fa fa-tasks fa-2x"></i>
                 <h2 class="timer count-title count-number">{{assignments|length}}</h2>
                 <p class="count-text ">Assignments</p>
             </div>
         </div>
-        <div class="col">
+        <div class="col-6 col-lg-3 mb-3">
             <div class="counter">
                 <i class="fa fa-cloud-download-alt fa-2x"></i>
                 <h2 class="timer count-title count-number">{{total_library_downloads}}</h2>
@@ -74,81 +77,65 @@
 
     </div>
 
-    <br>
-
-    <div class="card-deck">
-        <div class="card border-primary mb-3" style="max-width: 20rem;">
-            <div class="card-header">
-                <h5><i class="fa fa-university"></i> Classes & attendance</h5>
-            </div>
-            <div class="card-body">
-                <p><a class="btn btn-outline-primary" href="{{url_for('classes.create_class')}}" role="button"><i
-                            class="fa fa-plus-circle"></i> Create new class</a></p>
-                <p><a class="btn btn-outline-primary" href="{{url_for('classes.class_admin')}}" role="button"><i
-                            class="fa fa-chalkboard-teacher"></i> Manage classes</a></p>
-            </div>
-        </div>
-
-        <div class="card border-primary mb-3" style="max-width: 20rem;">
-            <div class="card-header">
-                <h5><i class="fa fa-file-signature"></i> Peer review forms</h5>
-            </div>
-            <div class="card-body">
-                <p><a class="btn btn-outline-primary" href="{{url_for('assignments.add_peer_review_form')}}"
-                        role="button"><i class="fa fa-file"></i> New peer review form</a></p>
-                <a class="btn btn-outline-primary" href="{{url_for('assignments.peer_review_form_admin')}}"
-                    role="button"><i class="fa fa-file-signature"></i> Manage peer review forms</a>
+    <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 mb-3">
+            <div class="card border-primary">
+                <div class="card-header">
+                    <h5><i class="fa fa-university"></i> Classes & attendance</h5>
+                </div>
+                <div class="card-body">
+                    <p><a class="btn btn-block btn-outline-primary" href="{{url_for('classes.create_class')}}" role="button"><i
+                                class="fa fa-plus-circle"></i> Create new class</a></p>
+                    <p><a class="btn btn-block btn-outline-primary" href="{{url_for('classes.class_admin')}}" role="button"><i
+                                class="fa fa-chalkboard-teacher"></i> Manage classes</a></p>
+                    <p><a class="btn btn-block btn-outline-primary" href="{{url_for('user.register')}}" role="button"><i
+                                class="fa fa-user-plus"></i> Register new student</a></p>
+                    <p><a class="btn btn-block btn-outline-primary" href="{{url_for('user.manage_students')}}" role="button"><i
+                                class="fa fa-users-cog"></i> Manage students</a></p>
+                </div>
             </div>
         </div>
 
-        <div class="card border-primary mb-3" style="max-width: 20rem;">
+        <div class="col-12 col-md-4 col-lg-3 mb-3">
+        <div class="card border-primary">
             <div class="card-header">
                 <h5><i class="fa fa-file-upload"></i> Assignments</h5>
             </div>
             <div class="card-body">
-                <p><a class="btn btn-outline-primary" href="{{url_for('assignments.create_assignment')}}" role="button"><i
-                            class="fa fa-calendar-plus"></i> Create assignment</a></p>
-                <p><a class="btn btn-outline-primary" href="{{url_for('assignments.view_assignments')}}" role="button"><i
-                            class="fa fa-tasks"></i> Manage assignments</a></p>
+                <p><a class="btn btn-block btn-outline-primary" href="{{url_for('assignments.create_assignment')}}"
+                        role="button"><i class="fa fa-calendar-plus"></i> Create assignment</a></p>
+                <p><a class="btn btn-block btn-outline-primary" href="{{url_for('assignments.view_assignments')}}"
+                        role="button"><i class="fa fa-tasks"></i> Manage assignments</a></p>
+                <p><a class="btn btn-block btn-outline-primary" href="{{url_for('assignments.add_peer_review_form')}}"
+                        role="button"><i class="fa fa-file"></i> New peer review form</a></p>
+                <a class="btn btn-block btn-outline-primary" href="{{url_for('assignments.peer_review_form_admin')}}"
+                    role="button"><i class="fa fa-file-signature"></i> Manage peer review forms</a>
             </div>
         </div>
     </div>
-
-    <br>
-    <div class="card-deck">
-        <div class="card border-primary mb-3" style="max-width: 20rem;">
-            <div class="card-header">
-                <h5><i class="fa fa-users"></i> Students</h5>
-            </div>
-            <div class="card-body">
-                <p><a class="btn btn-outline-primary" href="{{url_for('user.register')}}" role="button"><i
-                            class="fa fa-user-plus"></i> Register new student</a></p>
-                <p><a class="btn btn-outline-primary" href="{{url_for('user.manage_students')}}" role="button"><i
-                            class="fa fa-users-cog"></i> Manage students</a></p>
-            </div>
-        </div>
-
-        <div class="card border-primary mb-3" style="max-width: 20rem;">
+    <div class="col-12 col-md-4 col-lg-3 mb-3">
+        <div class="card border-primary">
             <div class="card-header">
                 <h5><i class="fa fa-user-graduate"></i> Teachers</h5>
             </div>
             <div class="card-body">
-                <p><a class="btn btn-outline-primary" href="{{url_for('user.register_admin')}}" role="button"><i
+                <p><a class="btn btn-block btn-outline-primary" href="{{url_for('user.register_admin')}}" role="button"><i
                             class="fa fa-user-plus"></i> Register new teacher</a></p>
-                <p><a class="btn btn-outline-primary" href="{{url_for('user.manage_teachers')}}" role="button"><i
+                <p><a class="btn btn-block btn-outline-primary" href="{{url_for('user.manage_teachers')}}" role="button"><i
                             class="fa fa-user-graduate"></i> Manage teachers</a></p>
 
             </div>
         </div>
-
-        <div class="card border-primary mb-3" style="max-width: 20rem;">
+    </div>
+    <div class="col-12 col-md-4 col-lg-3 mb-3">
+        <div class="card border-primary">
             <div class="card-header">
                 <h5><i class="fa fa-network-wired"></i> API</h5>
             </div>
             <div class="card-body">
-                <p><a class="btn btn-outline-primary" href="{{url_for('api.create_api_key')}}" role="button"><i
+                <p><a class="btn btn-block btn-outline-primary" href="{{url_for('api.create_api_key')}}" role="button"><i
                             class="fa fa-plug"></i> Register new API key</a></p>
-                <p><a class="btn btn-outline-primary" href="{{url_for('api.manage_api_keys')}}" role="button"><i
+                <p><a class="btn btn-block btn-outline-primary" href="{{url_for('api.manage_api_keys')}}" role="button"><i
                             class="fa fa-tools"></i> Manage API keys</a></p>
 
             </div>
@@ -160,7 +147,7 @@
     <!-- Student view -->
     <link rel="stylesheet" href="/static/css/progress-circle.css">
     <div class="container">
-        
+
         <!-- Greeting -->
         <div class="row">
             <div class="container">
@@ -168,7 +155,7 @@
             </div>
         </div>
         <hr>
-        
+
         <!-- Status widgets -->
         <div class="row text-center">
             <div class="col-12 col-md-4">
