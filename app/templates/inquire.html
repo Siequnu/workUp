@@ -4,7 +4,7 @@
 
 {% include "nav_product_static_pages.html" %}
 
-<div class="jumbotron card card-image" id="overview" style="background-size:cover; background-repeat: no-repeat; background-image: linear-gradient(
+<div class="jumbotron card card-image" style="background-size:cover; background-repeat: no-repeat; background-image: linear-gradient(
         rgba(0, 0, 0, 0.5), 
         rgba(0, 0, 0, 0.5)
       ),
@@ -27,7 +27,7 @@
 
 <div class="container">
     <!--Section: Contact v.2-->
-    <div id="inquire" class="jumbotron">
+    <div class="jumbotron">
         <section class="mb-4">
             <h2 class="display-6 text-center">Contact us to license this service.</h2>
 
@@ -111,5 +111,9 @@
 
     </div> <!-- Contact div-->
 </div>
+
+<script>
+    $('.contact-sales').addClass('active');
+</script>
 
 {% endblock %}
