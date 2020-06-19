@@ -170,6 +170,23 @@
                 color: #272f70;
                 background-color: #ffffff;
             }
+
+            .nav-pills .nav-link.active {
+                background-color: #323e4d;
+                color: white;
+            }
+
+            .nav-pills .nav-link {
+                margin: 0 20px;
+            }
+
+            .nav-pills .nav-link:not(.active) {
+                color: #323e4d;
+            }
+
+            .nav-pills a:hover {
+                background-color: rgba(33, 33, 48, 0.2);
+            }
         </style>
 
 
@@ -197,15 +214,15 @@
     <script src="/static/bootstrap/mdb.min.js"></script>
     {{ toastr.include_toastr_js() }}
     <script>
-        
+
         // Nav click handler
-        $('.navbar-nav.main-links>li>a').on('click', function () {
+        $('a.smooth').on('click', function () {
             // If clicking a link when on mobile (collapsible nav),
             // collapse the nav after clicking link
             if ($(".navbar-collapse").hasClass("show")) {
                 $('.collapse').collapse('toggle');
             }
-            
+
             // If this is a page anchor, follow it
             if ($(this).attr('href').charAt(0)) {
                 $('html,body').animate({
@@ -214,7 +231,7 @@
                 event.preventDefault();
             }
             // else, follow link as normal
-            
+
         });
 
         //Scrollspy feature
