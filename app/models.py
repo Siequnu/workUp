@@ -365,3 +365,26 @@ class Inquiry (db.Model):
 	#¡# Send an email to admin?
 	def __repr__(self):
 		return '<Inquiry {}>'.format(self.id)
+
+
+
+class Feedback (db.Model):
+	__table_args__ = {'sqlite_autoincrement': True}
+	id = db.Column(db.Integer, primary_key=True)
+	loved = db.Column(db.String(500))
+	improve = db.Column(db.String(500))
+	valuable = db.Column(db.String(500))
+	learn = db.Column(db.String(500))
+	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
+	
+	def save (self):
+		db.session.add(self)
+		db.session.commit ()
+
+	def delete (self):
+		db.session.delete (self)
+		db.session.commit ()
+
+
+	def __repr__(self):
+		return '<Feedback {}>'.format(self.id)

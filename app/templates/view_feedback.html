@@ -1,0 +1,49 @@
+{% extends "header.html" %} {% block app_content %}
+
+<link rel="stylesheet" href="/static/bootstrap/mdb.lite.min.css" type="text/css">
+<script src="/static/bootstrap/mdb.min.js"></script>
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1><i class="fa fa-handshake"></i> Feedback</h1>
+        </div>
+    </div>
+    <hr>
+
+
+    <div class="table-responsive">
+        <table id="dtBasicExample" summary="User table"
+            class="table table-striped table-bordered table-sm table-hover text-small" cellspacing="0"
+            style="width: auto;">
+            <thead>
+                <tr>
+                    <th><i class="fa fa-signature"></i></th>
+                    <th><i class="fa fa-at"></i></th>
+                    <th><i class="fa fa-envelope-open-text"></i></th>
+                    <th><i class="fa fa-envelope-open-text"></i></th>
+                    <th><i class="fa fa-tools"></i></th>
+                </tr>
+            </thead>
+            <tbody id="searchableTable">
+                {% for feedback in feedbacks %}
+                <tr>
+                    <td>{{feedback.loved}}</td>
+                    <td>{{feedback.improve}}</td>
+                    <td>{{feedback.learn}}</td>
+                    <td>{{feedback.valuable}}</td>
+                    <td><a href="{{url_for('main.delete_feedback', feedback_id = feedback.id)}}"><i class="fa fa-trash"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!--end of .table-responsive-->
+
+
+</div>
+{% endblock %}

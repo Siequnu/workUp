@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 
 import datetime
 
-from app.models import Assignment, Enrollment, ClassLibraryFile, Assignment, StatementProject, Inquiry
+from app.models import Assignment, Enrollment, ClassLibraryFile, Assignment, StatementProject, Inquiry, Feedback
 import app.assignments.models
 import app.files.models
 from app import db
@@ -177,6 +177,53 @@ def product_consultancies():
 @bp.route('/features')
 def features():
 	return redirect(url_for('main.index'))
+
+
+# URL for THU feedback
+@bp.route('/feedback', methods=['GET', 'POST'])
+def feedback():
+	if current_app.config['APP_NAME'] == 'workUp':
+		if request.method == 'POST':
+			feedback = Feedback(
+				loved=request.form.get('loved'),
+				improve=request.form.get('improve'),
+				learn=request.form.get('learn'),
+				valuable=request.form.get('valuable'),
+				timestamp=datetime.datetime.now()
+			)
+			feedback.save()
+			# ¡# Send email to to admin?
+			flash(
+				'Thank you for your feedback. See you soon!', 'success')
+			return redirect(url_for('main.product'))
+		else: 
+			return render_template('feedback.html')
+	else:
+		return redirect(url_for('main.index'))
+
+
+# Inquiry form
+@bp.route('/feedback/view')
+@login_required
+def view_feedback():
+	if current_app.config['APP_NAME'] == 'workUp':
+		if app.models.is_admin(current_user.username):
+			feedbacks = Feedback.query.all()
+			return render_template('view_feedback.html', feedbacks=feedbacks)
+	return redirect(url_for('main.index'))
+
+# Inquiry form
+@bp.route('/feedback/delete/<feedback_id>')
+@login_required
+def delete_feedback(feedback_id):
+	if current_app.config['APP_NAME'] == 'workUp':
+		if app.models.is_admin(current_user.username):
+			feedback = Feedback.query.get(feedback_id)
+			feedback.delete()
+			flash('Removed the feedback.', 'success')
+			return redirect(url_for('main.view_feedback'))
+	else:
+		return redirect(url_for('main.index'))
 
 
 @bp.route('/inquire', methods=['GET', 'POST'])
