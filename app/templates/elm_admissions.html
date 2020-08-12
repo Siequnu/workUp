@@ -1,0 +1,214 @@
+{% extends "elm_header_product.html" %}
+
+{% block app_content %}
+
+{% include "elm_nav_product_static_pages.html" %}
+
+<div class="jumbotron card card-image" id="overview" style="background-image: linear-gradient(
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.5)
+      ),
+      url(/static/assets/product/teacher_computer.jpeg);">
+    <div class="text-white text-center py-5 px-4" style="text-shadow: 2px 2px #000000;">
+        <div>
+            <br>
+            <br>
+            <br>
+            <h1 class="display-4">University Admissions</h1>
+            <br>
+            <h4 class="mx-5 mb-5">
+                What makes a great personal statement? We know, and we will help you to write the best possible one!
+            </h4>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+
+    <ul class="nav nav-tabs nav-fill">
+        <li class="nav-item">
+            <a href="#personal-statements" class="nav-link active" data-toggle="tab">Personal Statements</a>
+        </li>
+        <li class="nav-item">
+            <a href="#ucas" class="nav-link" data-toggle="tab">UCAS</a>
+        </li>
+        <li class="nav-item">
+            <a href="#interview-training" class="nav-link" data-toggle="tab">Interview training</a>
+        </li>
+        <li class="nav-item">
+            <a href="#visa" class="nav-link" data-toggle="tab">Visa assistance</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="personal-statements">
+
+            <br>
+            <!-- Assessment and peer-review-->
+            <h3 class="display-6 text-left">Personal statements</h3>
+            <p>What makes a great personal statement? We know, and we will help you to write the best possible one! </p>
+            <hr>
+
+            <div class="card-deck mb-3" style="width: 100%;">
+                <div class="card ">
+                    <img src="static/elm/index/ps_standout.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Stand out from the crowd with our personal statement course.</p>
+                    </div>
+                </div>
+
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/ps_handwritten.jpg" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">We will help you discover what to write to truly portray yourself in the best way.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-deck" style="width: 100%;">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/ps_student_writing.jpg" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">We have a team of experts at hand to tell you exactly what university admissions staff are expecting to read in your statement.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/ps_writing.jpg" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">In a rush? No problem! We have an express service that will ensure you get your Personal Statement in time, and ready to upload!</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div class="tab-pane fade" id="ucas">
+            <br>
+            <h3 class="display-6 text-left">UCAS</h3>
+            <p>Easily navigate the UCAS system with out help. We will ensure you never miss a deadline, and we are always at hand to help you submit your documents.</p>
+            <hr>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/ps_ucas.png" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">Learn with our start course on how to use UCAS.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/ps_ucas_alt.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Stay in control of your uploads with our personal timeline.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/ps_ucas_alt_two.png" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Ensure that you make the right choices to achieve your dream university.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="interview-training">
+
+            <br>
+            <h3 class="display-6 text-left">Interview training</h3>
+            <p>With our team of Cambridge and Oxford specialists, interview training has never been more effective.</p>
+            <hr>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/interview.jpg" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">What do interviewers expect to hear from you? We will train you in the best way to approach your vital interview.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/cambridge.jpg" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Our experienced team of interview trainers will guide you through the secrets of the Oxbridge interview process.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/cambridge_interview.jpg" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Understand why you are asked certain things in your interview, and what you can do to stand out among the crowd.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="visa">
+
+            <br>
+            <h3 class="display-6 text-left">Visa and immigration assistance</h3>
+            <p>It can be hard to navigate the paperwork of the immigration process. We are here to help.</p>
+            <hr>
+            <div class="card-deck">
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/visa_help.jpg" style="width: 100%">
+                    <div class="card-body">
+                        <p class="card-text">We have decades of experience handling the immigration procedure, from applying to receiving your UK visa.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/chinese_passport.jpeg" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">We help with guardianship and legal issues that you might encounter moving to the UK.</p>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 100%;">
+                    <img src="static/elm/index/chinese_students_in_hall.jpg" style="width: 100%;">
+                    <div class="card-body">
+                        <p class="card-text">Don't let some paperwork error stop you from going to your dream university. Let us use our vast experience to help your dreams come true.</p>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </div>
+        </div>
+
+    </div>
+
+</div> <!-- Container -->
+
+<br><br>
+
+<div class="jumbotron card card-image" style="background-image: linear-gradient(
+        rgba(0, 0, 0, 0.4), 
+        rgba(0, 0, 0, 0.4)
+      ),
+      url(/static/assets/product/gradient_background_2.png);">
+    <div class="text-white text-center py-5 px-4">
+        <blockquote class="blockquote">
+            <p class="mb-0">"Quote here."</p>
+            <footer class="blockquote-footer text-white">Name <cite title="Source Title">KCL, London</cite></footer>
+        </blockquote>
+
+        <a href="{{ url_for('main.elm_inquire') }}" class="btn peach-gradient">
+            Contact us to find out more <i class="fas fa-chevron-right"></i></a>
+    </div>
+</div>
+
+<br>
+<br>
+</div>
+
+<script>
+    $('.for-teachers').addClass('active');
+</script>
+
+{% endblock %}

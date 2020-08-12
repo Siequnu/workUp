@@ -1,0 +1,96 @@
+{% extends "elm_header_product.html" %}
+
+{% block app_content %}
+
+{% include "elm_nav_product_static_pages.html" %}
+
+<div class="jumbotron card card-image" style="background-size:cover; background-repeat: no-repeat; background-image: linear-gradient(
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.5)
+      ),
+      url(/static/assets/product/teacher_computer_2.jpeg);">
+    <div class="text-white text-center py-5 px-4" style="text-shadow: 2px 2px #000000;">
+        <div>
+            <h1 class="display-4">We are here to help you!</h1>
+            <br>
+            <h4 class="mx-1 mb-5">
+               Using our services is a great way to ensure your acceptance at your dream university
+            </h4>
+            <img src="/static/elm/elm_qr_code.JPG" style="width: 20%" class="mx-auto d-block"/>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!--Section: Contact v.2-->
+    <div class="jumbotron">
+        <section class="mb-4">
+            <h2 class="display-6 text-center">Contact us to find out more.</h2>
+
+            <div class="row">
+
+                <!--Grid column-->
+                <div class="col-md-9 mb-md-0 mb-5">
+                    <form id="form" name="form" action="{{ url_for('main.elm_inquire') }}" method="POST">
+
+                        <!--Grid row-->
+                        <div class="row">
+
+                            <!--Grid column-->
+                            <div class="col-md-6">
+                                <div class="md-form mb-0">
+                                    <input type="text" id="name" name="name" class="form-control">
+                                    <label for="name" class="">Your name</label>
+                                </div>
+                            </div>
+                            <!--Grid column-->
+
+                            <!--Grid column-->
+                            <div class="col-md-6">
+                                <div class="md-form mb-0">
+                                    <input type="text" id="email-address" name="email-address" class="form-control">
+                                    <label for="email-address" class="">Your email</label>
+                                </div>
+                            </div>
+                            <!--Grid column-->
+                        </div>
+
+                        <!--Grid row-->
+                        <div class="row">
+
+                            <!--Grid column-->
+                            <div class="col-md-12">
+
+                                <div class="md-form">
+                                    <textarea type="text" id="message" name="message" rows="2"
+                                        class="form-control md-textarea"></textarea>
+                                    <label for="message">How can we help you?</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--Grid row-->
+
+                    </form>
+
+                    <div class="text-center text-md-left">
+                        <a class="btn btn-primary" onclick="document.getElementById('form').submit();">Send</a>
+                    </div>
+                    <div class="status"></div>
+                </div>
+
+                <!--Grid column-->
+            </div>
+
+        </section>
+        <!--Section: Contact-->
+
+
+    </div> <!-- Contact div-->
+</div>
+
+<script>
+    $('.contact-sales').addClass('active');
+</script>
+
+{% endblock %}

@@ -38,7 +38,9 @@
         <div class="container-footer text-center">
             <footer class="blockquote-footer">
                 <br>
+                {% if config.APP_NAME == 'workUp' %}
                 <p>WorkUp is designed and developed by Patrick Johansson © 2020</p>
+                {% endif %}
             </footer>
         </div>
         {% endblock %}

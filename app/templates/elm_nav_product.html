@@ -1,0 +1,42 @@
+<!-- Navigation -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+        <img src="{{ url_for('static', filename='logo_elmOnline.png') }}" width="40" height="40"> Elm Education
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="mainNav"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse collapse" id="mainNav">
+        <ul class="navbar-nav mr-auto main-links">
+            <li class="nav-item scrollspy">
+                <a class="nav-link smooth" href="#overview">Overview</a>
+            </li>
+            <li class="nav-item scrollspy">
+                <a class="nav-link smooth" href="#about-us">About us</a>
+            </li>
+            <li class="nav-item scrollspy">
+                <a class="nav-link smooth" href="#courses">Courses</a>
+            </li>
+            <li class="nav-item scrollspy">
+                <a class="nav-link smooth" href="#universities">Universities</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('main.elm_admissions')}}">Admissions</a>
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('main.elm_inquire')}}">Contact us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('user.login')}}">Student Login</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>

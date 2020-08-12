@@ -137,6 +137,8 @@ def index():
 
 	if current_app.config['APP_NAME'] == 'workUp':
 		return render_template('product.html')
+	elif current_app.config['APP_NAME'] == 'elmOnline':
+		return render_template('elm_product.html')
 	else:
 		return render_template(index_template)
 
@@ -157,14 +159,12 @@ def product():
 	else:
 		return redirect(url_for('main.index'))
 
-
 @bp.route('/teachers')
 def product_teachers():
 	if current_app.config['APP_NAME'] == 'workUp':
 		return render_template('teachers.html')
 	else:
 		return redirect(url_for('main.index'))
-
 
 @bp.route('/consultancies')
 def product_consultancies():
@@ -177,7 +177,6 @@ def product_consultancies():
 @bp.route('/features')
 def features():
 	return redirect(url_for('main.index'))
-
 
 # URL for THU feedback
 @bp.route('/feedback', methods=['GET', 'POST'])
@@ -200,7 +199,6 @@ def feedback():
 			return render_template('feedback.html')
 	else:
 		return redirect(url_for('main.index'))
-
 
 # Inquiry form
 @bp.route('/feedback/view')
@@ -272,10 +270,34 @@ def delete_inquiry(inquiry_id):
 # elmOnline specific routing
 # Page that displays the QR code
 
-
 @bp.route('/contact')
 def contact():
 	if current_app.config['APP_NAME'] == 'elmOnline':
 		return render_template('contact.html')
+	else:
+		return redirect(url_for('main.index'))
+
+@bp.route('/admissions')
+def elm_admissions():
+	if current_app.config['APP_NAME'] == 'elmOnline': return render_template('elm_admissions.html')
+	else: return redirect(url_for('main.index'))
+
+@bp.route('/elm/inquire', methods=['GET', 'POST'])
+def elm_inquire():
+	if current_app.config['APP_NAME'] == 'elmOnline':
+		if request.method == 'POST':
+			inquiry = Inquiry(
+				name=request.form.get('name'),
+				email=request.form.get('email-address'),
+				message=request.form.get('message'),
+				timestamp=datetime.datetime.now()
+			)
+			inquiry.save()
+			# ¡# Send email to to admin?
+			flash(
+				'Thank you! We have received your enquiry and will be in touch soon.', 'success')
+			return redirect(url_for('main.index'))
+		else: 
+			return render_template('elm_inquire.html')
 	else:
 		return redirect(url_for('main.index'))
