@@ -43,3 +43,6 @@
 [submodule "app/checklists"]
 	path = app/checklists
 	url = https://github.com/Siequnu/flask-checklists.git
+[submodule "app/portfolio"]
+	path = app/portfolio
+	url = https://github.com/Siequnu/flask-portfolio
