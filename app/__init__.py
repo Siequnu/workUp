@@ -74,6 +74,10 @@ def create_app(config_class):
             '\'unsafe-inline\'',
             '\'unsafe-eval\'',
         ],
+        'connect-src': [
+            '\'self\'',
+            '*.pusher.com',
+        ],
         'script-src': [
             '\'self\'',
             '\'unsafe-inline\'',
