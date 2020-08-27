@@ -43,12 +43,13 @@
                     University Applications
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{url_for('goals.view_goals')}}">Goals</a>
-                    <div class="dropdown-divider"></div>
+                    <!--<a class="dropdown-item" href="{{url_for('goals.view_goals')}}">Goals</a>
+                    <div class="dropdown-divider"></div> -->
                     <a class="dropdown-item" href="{{url_for('consultations.view_consultations')}}">Consultations</a>
                     <div class="dropdown-divider"></div>
+                    <!--
                     <a class="dropdown-item" href="{{url_for('portfolio.view_portfolios')}}">Application Documents</a>
-                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-divider"></div>-->
                     <a class="dropdown-item" href="{{url_for('statements.view_statements')}}">Personal Statements</a>
                     {% if current_user.is_admin %}
                     <div class="dropdown-divider"></div>
