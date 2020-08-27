@@ -88,7 +88,7 @@ def create_app(config_class):
             'cdnjs.cloudflare.com',
         ]
     }
-    talisman.init_app(workup_app, content_security_policy=csp)
+    talisman.init_app(workup_app, content_security_policy=csp, force_https=False)
 
     # Compile registry of blueprints
     basic_services = [
