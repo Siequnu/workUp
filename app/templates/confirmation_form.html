@@ -4,21 +4,22 @@
 
 {% block app_content %}
 <div class="container">
-<br>
- <div class="container">
+  <br>
+  <div class="container">
 
- <div class="card bg-light mb-3">
-  <div class="card-body">
-    <h1>{{title}}</h1>
-    <hr>
-    <h5>{{confirmation_message}}</h5>
-    <br>
-    <form method="post">
-    {{ render_form(form) }}
-     </form>
-      <br>
+    <div class="card bg-light mb-3">
+      <div class="card-body">
+        <h1>{{title}}</h1>
+        <hr>
+        <h5>{{confirmation_message}}</h5>
+        <br>
+        <form method="post">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+          {{ render_form(form) }}
+        </form>
+        <br>
+      </div>
+    </div>
   </div>
-  </div>
-</div>
 </div>
 {% endblock %}

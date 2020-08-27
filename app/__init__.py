@@ -1,6 +1,9 @@
 from flask import Flask
 from config import *
 
+import importlib, logging, os
+from logging.handlers import RotatingFileHandler
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -13,9 +16,8 @@ import flask_excel as excel
 from flask_qrcode import QRcode
 from flask_marshmallow import Marshmallow
 from flask_dropzone import Dropzone
-
-import importlib, logging, os
-from logging.handlers import RotatingFileHandler
+from flask_talisman import Talisman
+from flask_seasurf import SeaSurf
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -28,7 +30,8 @@ toastr = Toastr()
 compress = Compress()
 ma = Marshmallow()
 dropzone = Dropzone ()
-
+csrf = SeaSurf()
+talisman = Talisman()
 
 def create_app(config_class):
     workup_app = Flask(__name__)
@@ -49,7 +52,39 @@ def create_app(config_class):
     excel.init_excel(workup_app)
     qrcode = QRcode(workup_app)
     ma.init_app(workup_app)
-    dropzone.init_app (workup_app)
+    dropzone.init_app(workup_app)
+    csrf.init_app(workup_app)
+
+    # Set a talisman policy
+    csp = {
+        'default-src': [
+            '\'self\'',
+            '\'unsafe-inline\'',
+            'cdnjs.cloudflare.com',
+            'fonts.googleapis.com',
+            'fonts.gstatic.com',
+            '*.pusher.com',
+            '*.w3.org',
+            'kit-free.fontawesome.com'
+        ],
+        'img-src': '*',
+        'style-src': [
+            '*',
+            '\'self\'',
+            '\'unsafe-inline\'',
+            '\'unsafe-eval\'',
+        ],
+        'script-src': [
+            '\'self\'',
+            '\'unsafe-inline\'',
+            '*.pusher.com',
+            'ajax.googleapis.com',
+            'code.jquery.com',
+            'cdn.jsdelivr.net',
+            'cdnjs.cloudflare.com',
+        ]
+    }
+    talisman.init_app(workup_app, content_security_policy=csp)
 
     # Compile registry of blueprints
     basic_services = [

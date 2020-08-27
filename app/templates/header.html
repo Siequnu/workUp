@@ -36,12 +36,12 @@
         <!-- Footer -->
         {% block footer %}
         <div class="container-footer text-center">
+            <br>
+            {% if config.APP_NAME == 'workUp' %}
             <footer class="blockquote-footer">
-                <br>
-                {% if config.APP_NAME == 'workUp' %}
                 <p>WorkUp is designed and developed by Patrick Johansson © 2020</p>
-                {% endif %}
             </footer>
+            {% endif %}
         </div>
         {% endblock %}
 
@@ -51,6 +51,7 @@
         {{ bootstrap.load_js() }}
         {{ toastr.include_toastr_js() }}
         <script src="/static/js/searchable-table.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
         {% endblock %}
 
         <!-- Load any scripts that are in the template -->
