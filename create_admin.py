@@ -1,6 +1,7 @@
 from app import create_app
+from config import workUp
 
-app = create_app()
+app = create_app(workUp)
 
 from app import db
 from app.models import User
