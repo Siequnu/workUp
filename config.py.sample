@@ -42,10 +42,14 @@ class Config(object):
 	FIREBASE_API_KEY = ''
 	FIREBASE_AUTH_DOMAIN = ''
 	FIREBASE_DATABASE_URL = ''
+
+	PERFECT_TENSE_CLIENT_ID = ''
+	PRO_WRITING_AID_API_KEY = ''
 	
 	TOASTR_OPACITY = False
 	TOASTR_PROGRESS_BAR = 'false'
 	TOASTR_EXTENDED_TIMEOUT = 50
+	TOASTR_JQUERY_VERSION = '3.5.0'
 	
 	EXECUTOR_PROPAGATE_EXCEPTIONS = True
 	EXECUTOR_TYPE = 'process'
@@ -57,8 +61,12 @@ class Config(object):
 	COMPRESS_MIMETYPES = ['text/html', 'text/css', 'text/xml', 'application/json', 'application/javascript']
 	COMPRESS_LEVEL = 6
 	COMPRESS_MIN_SIZE = 500
+
+	DROPZONE_ALLOWED_FILE_CUSTOM = True
+	DROPZONE_ALLOWED_FILE_TYPE = 'image/*, .pdf, .txt, .pptx, .ppt, .xls, .xlsx'
 	
 	# SQL
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
 		'mysql+pymysql://SQLUSER:SQLPASSWORD@localhost:3306/DBNAME'
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
+	SQLALCHEMY_POOL_RECYCLE=300
