@@ -106,15 +106,6 @@ class Turma(db.Model):
 					lesson_end_time = form.lesson_end_time.data)
 		db.session.add(new_turma)
 		db.session.commit()
-
-
-	@staticmethod
-	def delete_turma_from_id (turma_id):
-		Turma.query.filter(Turma.id==turma_id).delete()
-		Assignment.query.filter(Assignment.target_turma_id==turma_id).delete()
-		ClassLibraryFile.query.filter(ClassLibraryFile.turma_id==turma_id).delete()
-		Enrollment.query.filter(Enrollment.turma_id==turma_id).delete()
-		db.session.commit()
 	
 	
 class Enrollment (db.Model):
