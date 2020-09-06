@@ -6,6 +6,7 @@ load_dotenv()
 
 class Config(object):
 	APP_NAME = 'APP_NAME'
+	APP_URL = 'https://appname.com'
 
 	CUSTOM_SERVICES = [
 		{'path': 'app.mentors', 'bp': 'bp', 'url_prefix': '/mentors'},
