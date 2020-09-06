@@ -69,4 +69,4 @@ class Config(object):
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
 		'mysql+pymysql://SQLUSER:SQLPASSWORD@localhost:3306/DBNAME'
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
-	SQLALCHEMY_POOL_RECYCLE=300
+	SQLALCHEMY_ENGINE_OPTIONS = {'pool_size': 100, 'pool_recycle': 280}
