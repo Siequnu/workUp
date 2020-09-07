@@ -23,6 +23,16 @@
 
     <body>
 
+        <style>
+            @media screen and (max-width: 375px) {
+                h1 {font-size: 2rem;}
+            }
+
+            @media screen and (max-width: 992px) {
+                a.viewAssignmentChevron {display: none;}
+            }
+        </style>
+        
         <!-- Load content block -->
         {% block content %}
         <br>
