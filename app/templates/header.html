@@ -12,9 +12,9 @@
 
         <!-- Load appropriate header for the service -->
         {% if config.APP_NAME == 'workUp' %}
-        {% include "header_workUp.html" %}
+        {% include "workUp/header_workUp.html" %}
         {% elif config.APP_NAME == 'elmOnline' %}
-        {% include "header_elmOnline.html" %}
+        {% include "elmOnline/header_elmOnline.html" %}
         {% elif config.APP_NAME == 'Unikey' %}
         {% include "header_Unikey.html" %}
         {% endif %}

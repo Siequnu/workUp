@@ -136,9 +136,9 @@ def index():
 			)
 
 	if current_app.config['APP_NAME'] == 'workUp':
-		return render_template('product.html')
+		return render_template('workUp/product.html')
 	elif current_app.config['APP_NAME'] == 'elmOnline':
-		return render_template('elm_product.html')
+		return render_template('elmOnline/elm_product.html')
 	else:
 		return render_template(index_template)
 
@@ -155,21 +155,21 @@ def lesson_registration_redirect():
 @bp.route('/product')
 def product():
 	if current_app.config['APP_NAME'] == 'workUp':
-		return render_template('product.html')
+		return render_template('workUp/product.html')
 	else:
 		return redirect(url_for('main.index'))
 
 @bp.route('/teachers')
 def product_teachers():
 	if current_app.config['APP_NAME'] == 'workUp':
-		return render_template('teachers.html')
+		return render_template('workUp/teachers.html')
 	else:
 		return redirect(url_for('main.index'))
 
 @bp.route('/consultancies')
 def product_consultancies():
 	if current_app.config['APP_NAME'] == 'workUp':
-		return render_template('consultancies.html')
+		return render_template('workUp/consultancies.html')
 	else:
 		return redirect(url_for('main.index'))
 
@@ -196,7 +196,7 @@ def feedback():
 				'Thank you for your feedback. See you soon!', 'success')
 			return redirect(url_for('main.product'))
 		else: 
-			return render_template('feedback.html')
+			return render_template('workUp/feedback.html')
 	else:
 		return redirect(url_for('main.index'))
 
@@ -207,7 +207,7 @@ def view_feedback():
 	if current_app.config['APP_NAME'] == 'workUp':
 		if app.models.is_admin(current_user.username):
 			feedbacks = Feedback.query.all()
-			return render_template('view_feedback.html', feedbacks=feedbacks)
+			return render_template('workUp/view_feedback.html', feedbacks=feedbacks)
 	return redirect(url_for('main.index'))
 
 # Inquiry form
@@ -240,7 +240,7 @@ def inquire():
 				'Thank you! We have received your enquiry and will be in touch soon.', 'success')
 			return redirect(url_for('main.product'))
 		else: 
-			return render_template('inquire.html')
+			return render_template('workUp/inquire.html')
 	else:
 		return redirect(url_for('main.index'))
 
@@ -251,7 +251,7 @@ def view_inquiries():
 	if current_app.config['APP_NAME'] == 'workUp':
 		if app.models.is_admin(current_user.username):
 			inquiries = Inquiry.query.all()
-			return render_template('view_inquiries.html', inquiries=inquiries)
+			return render_template('workUp/view_inquiries.html', inquiries=inquiries)
 	return redirect(url_for('main.index'))
 
 # Inquiry form
@@ -273,13 +273,13 @@ def delete_inquiry(inquiry_id):
 @bp.route('/contact')
 def contact():
 	if current_app.config['APP_NAME'] == 'elmOnline':
-		return render_template('contact.html')
+		return render_template('elmOnline/contact.html')
 	else:
 		return redirect(url_for('main.index'))
 
 @bp.route('/admissions')
 def elm_admissions():
-	if current_app.config['APP_NAME'] == 'elmOnline': return render_template('elm_admissions.html')
+	if current_app.config['APP_NAME'] == 'elmOnline': return render_template('elmOnline/elm_admissions.html')
 	else: return redirect(url_for('main.index'))
 
 @bp.route('/elm/inquire', methods=['GET', 'POST'])
@@ -298,6 +298,6 @@ def elm_inquire():
 				'Thank you! We have received your enquiry and will be in touch soon.', 'success')
 			return redirect(url_for('main.index'))
 		else: 
-			return render_template('elm_inquire.html')
+			return render_template('elmOnline/elm_inquire.html')
 	else:
 		return redirect(url_for('main.index'))
