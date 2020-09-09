@@ -67,6 +67,7 @@ def index():
 
 				# Assignments
 				assignments=Assignment.query.all(),
+				total_uploads = app.files.models.get_all_uploads_count(),
 
 				# Statements
 				statement_projects=StatementProject.query.all(

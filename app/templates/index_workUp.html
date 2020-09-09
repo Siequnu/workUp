@@ -23,6 +23,7 @@
             }
         };
 
+        // Update user stats
         var updateUserStats = function () {
             fetch('/api/users/stats').then(res => res.json()).then(data => {
                 const activeUserCountElement = '.activeUserCount';
@@ -39,10 +40,22 @@
             });
         };
 
+        // Update user stats
+        var updateFileStats = function () {
+            fetch('/api/files   /stats').then(res => res.json()).then(data => {
+                const totalUploadsCountElement = '.uploadCount';
+                if (!($(totalUploadsCountElement).text() == data.total_uploads)) {
+                    $(totalUploadsCountElement).text(data.total_uploads);
+                    animateCSS(totalUploadsCountElement, 'heartBeat');
+                }
+            });
+        };
+
         // Fetch the latest file stats every second
         window.setInterval(function () {
             fetchLibraryStats();
             updateUserStats();
+            updateFileStats();
         }, 1000);
 
         const animateCSS = (element, animation, prefix = 'animate__') =>
@@ -75,7 +88,7 @@
     <hr>
 
     <div class="row text-center">
-        <div class="col-6 col-lg-3 mb-3">
+        <div class="col-6 col-lg-2 mb-3">
             <div class="counter">
                 <i class="fa fa-plug fa-2x"></i>
                 <h2 class="timer count-title count-number activeUserCount">{{active_user_count}}</h2>
@@ -86,21 +99,28 @@
                 {% endif %}
             </div>
         </div>
-        <div class="col-6 col-lg-3 mb-3">
+        <div class="col-6 col-lg-2 mb-3">
             <div class="counter">
                 <i class="fa fa-user-graduate fa-2x"></i>
                 <h2 class="timer count-title count-number userCount">{{student_count}}</h2>
                 <p class="count-text ">Users</p>
             </div>
         </div>
-        <div class="col-6 col-lg-3 mb-3">
+        <div class="col-6 col-lg-2 mb-3">
             <div class="counter">
                 <i class="fa fa-tasks fa-2x"></i>
                 <h2 class="timer count-title count-number">{{assignments|length}}</h2>
                 <p class="count-text ">Assignments</p>
             </div>
         </div>
-        <div class="col-6 col-lg-3 mb-3">
+        <div class="col-6 col-lg-2 mb-3">
+            <div class="counter">
+                <i class="fa fa-file-upload fa-2x"></i>
+                <h2 class="timer count-title count-number uploadCount">{{total_uploads}}</h2>
+                <p class="count-text ">Assignment uploads</p>
+            </div>
+        </div>
+        <div class="col-6 col-lg-2 mb-3">
             <div class="counter">
                 <i class="fa fa-cloud-download-alt fa-2x"></i>
                 <h2 class="timer count-title count-number libraryDownloads">{{total_library_downloads}}</h2>
@@ -117,7 +137,7 @@
                 </div>
                 <div class="card-body">
                     <p><a class="btn btn-block btn-outline-primary" href="{{url_for('classes.create_class')}}"
-                            role="button"><i class="fa fa-plus-circle"></i> Create new class</a></p>
+                            role="button"><i class="fa fa-plus-circle"></i> New class</a></p>
                     <p><a class="btn btn-block btn-outline-primary" href="{{url_for('classes.class_admin')}}"
                             role="button"><i class="fa fa-chalkboard-teacher"></i> Manage classes</a></p>
                     <p><a class="btn btn-block btn-outline-primary" href="{{url_for('user.register')}}" role="button"><i
@@ -138,7 +158,7 @@
                 </div>
                 <div class="card-body">
                     <p><a class="btn btn-block btn-outline-primary" href="{{url_for('assignments.create_assignment')}}"
-                            role="button"><i class="fa fa-calendar-plus"></i> Create assignment</a></p>
+                            role="button"><i class="fa fa-calendar-plus"></i> New assignment</a></p>
                     <p><a class="btn btn-block btn-outline-primary" href="{{url_for('assignments.view_assignments')}}"
                             role="button"><i class="fa fa-tasks"></i> Manage assignments</a></p>
                     <p><a class="btn btn-block btn-outline-primary"
@@ -158,7 +178,7 @@
                 </div>
                 <div class="card-body">
                     <p><a class="btn btn-block btn-outline-primary" href="{{url_for('user.register_admin')}}"
-                            role="button"><i class="fa fa-user-plus"></i> Register new teacher</a></p>
+                            role="button"><i class="fa fa-user-plus"></i> New teacher</a></p>
                     <p><a class="btn btn-block btn-outline-primary" href="{{url_for('user.manage_teachers')}}"
                             role="button"><i class="fa fa-user-graduate"></i> Manage teachers</a></p>
 
@@ -173,7 +193,7 @@
                 </div>
                 <div class="card-body">
                     <p><a class="btn btn-block btn-outline-primary" href="{{url_for('api.create_api_key')}}"
-                            role="button"><i class="fa fa-plug"></i> Register new API key</a></p>
+                            role="button"><i class="fa fa-plug"></i> New API key</a></p>
                     <p><a class="btn btn-block btn-outline-primary" href="{{url_for('api.manage_api_keys')}}"
                             role="button"><i class="fa fa-tools"></i> Manage API keys</a></p>
 
