@@ -1,0 +1,9 @@
+{
+  "name": "workUp",
+  "short_name": "workUp",
+  "theme_color": "#2f3e4e",
+  "background_color": "#000000",
+  "display": "fullscreen",
+  "scope": "/",
+  "start_url": "/"
+}
