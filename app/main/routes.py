@@ -64,6 +64,7 @@ def index():
 				# Library
 				library=ClassLibraryFile.query.all(),
 				total_library_downloads=app.files.models.get_total_library_downloads_count(),
+				total_library_count = ClassLibraryFile.query.count(),
 
 				# Assignments
 				assignments=Assignment.query.all(),
