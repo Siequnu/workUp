@@ -81,6 +81,7 @@ def create_app(config_class):
         'connect-src': [
             '\'self\'',
             '*.pusher.com',
+            'wss://ws-ap3.pusher.com'
         ],
         'font-src': [
             '\'self\'',
