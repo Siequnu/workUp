@@ -320,6 +320,9 @@ class Lesson (db.Model):
 	date = db.Column(db.Date)
 	start_time = db.Column(db.Time)
 	end_time = db.Column(db.Time)
+	online_lesson_code = db.Column(db.String(140))
+	online_lesson_password = db.Column(db.String(140))
+	online_lesson_url = db.Column(db.String(500))
 	turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
 	
 	def __repr__(self):
