@@ -78,6 +78,12 @@ def create_app(config_class):
             '\'self\'',
             '*.pusher.com',
         ],
+        'font-src': [
+            '\'self\'',
+            'data:',
+            '*.fontawesome.com',
+            'fonts.gstatic.com',
+        ],
         'script-src': [
             '\'self\'',
             '\'unsafe-inline\'',
