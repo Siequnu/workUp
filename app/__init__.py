@@ -67,7 +67,11 @@ def create_app(config_class):
             '*.w3.org',
             'kit-free.fontawesome.com'
         ],
-        'img-src': '*',
+        'img-src': [
+            '*',
+            '\'self\'',
+            'data:'
+        ],
         'style-src': [
             '*',
             '\'self\'',
