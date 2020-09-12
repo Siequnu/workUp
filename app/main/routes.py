@@ -33,7 +33,7 @@ except:
 def before_request():
 	if current_user.is_authenticated:
 		if app.files.models.new_library_files_since_last_seen():
-			flash('New library files have been uploaded', 'info')
+			flash('New library files have been uploaded!', 'info')
 		current_user.last_seen = datetime.datetime.now()
 		db.session.commit()
 
@@ -145,15 +145,106 @@ def index():
 		return render_template(index_template)
 
 
+@bp.route('/superintendant')
+def superintendant ():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		if current_app.config['APP_NAME'] == 'workUp':
+			return render_template(
+				'workUp/superintendant.html',
+
+				# Student count and info
+				active_user_count=app.user.models.get_active_user_count(),
+				student_count=app.user.models.get_total_user_count(),
+				classes=app.assignments.models.get_all_class_info(),
+
+				# Library
+				library=ClassLibraryFile.query.all(),
+				total_library_downloads=app.files.models.get_total_library_downloads_count(),
+				total_library_count = ClassLibraryFile.query.count(),
+
+				# Assignments
+				assignments=Assignment.query.all(),
+				total_uploads = app.files.models.get_all_uploads_count(),
+
+				# Statements
+				statement_projects=StatementProject.query.all(
+				) if app.main.models.is_active_service('app.statements') else False,
+				statement_projects_needing_review=app.statements.models.get_projects_needing_review(
+				) if app.main.models.is_active_service('app.statements') else False,
+
+			)
+		else:
+			return redirect (url_for ('main.index'))
+
+	
+@bp.route('/superintendant/stats')
+def superintendant_stats ():
+	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+		if current_app.config['APP_NAME'] == 'workUp':
+			return render_template(
+				'workUp/superintendant_stats.html',
+
+				# Student count and info
+				active_user_count=app.user.models.get_active_user_count(),
+				student_count=app.user.models.get_total_user_count(),
+				classes=app.assignments.models.get_all_class_info(),
+
+				# Library
+				library=ClassLibraryFile.query.all(),
+				total_library_downloads=app.files.models.get_total_library_downloads_count(),
+				total_library_count = ClassLibraryFile.query.count(),
+
+				# Assignments
+				assignments=Assignment.query.all(),
+				total_uploads = app.files.models.get_all_uploads_count(),
+
+				# Statements
+				statement_projects=StatementProject.query.all(
+				) if app.main.models.is_active_service('app.statements') else False,
+				statement_projects_needing_review=app.statements.models.get_projects_needing_review(
+				) if app.main.models.is_active_service('app.statements') else False,
+
+			)
+		else:
+			return redirect (url_for ('main.index'))
+	
+
+
+
+#                                                                                                                                       
+#                                                                                                                                       
+#                                                                             kkkkkkkk          UUUUUUUU     UUUUUUUU                   
+#                                                                             k::::::k          U::::::U     U::::::U                   
+#                                                                             k::::::k          U::::::U     U::::::U                   
+#                                                                             k::::::k          UU:::::U     U:::::UU                   
+#  wwwwwww           wwwww           wwwwwww ooooooooooo   rrrrr   rrrrrrrrr   k:::::k    kkkkkkkU:::::U     U:::::Uppppp   ppppppppp   
+#   w:::::w         w:::::w         w:::::woo:::::::::::oo r::::rrr:::::::::r  k:::::k   k:::::k U:::::D     D:::::Up::::ppp:::::::::p  
+#    w:::::w       w:::::::w       w:::::wo:::::::::::::::or:::::::::::::::::r k:::::k  k:::::k  U:::::D     D:::::Up:::::::::::::::::p 
+#     w:::::w     w:::::::::w     w:::::w o:::::ooooo:::::orr::::::rrrrr::::::rk:::::k k:::::k   U:::::D     D:::::Upp::::::ppppp::::::p
+#      w:::::w   w:::::w:::::w   w:::::w  o::::o     o::::o r:::::r     r:::::rk::::::k:::::k    U:::::D     D:::::U p:::::p     p:::::p
+#       w:::::w w:::::w w:::::w w:::::w   o::::o     o::::o r:::::r     rrrrrrrk:::::::::::k     U:::::D     D:::::U p:::::p     p:::::p
+#        w:::::w:::::w   w:::::w:::::w    o::::o     o::::o r:::::r            k:::::::::::k     U:::::D     D:::::U p:::::p     p:::::p
+#         w:::::::::w     w:::::::::w     o::::o     o::::o r:::::r            k::::::k:::::k    U::::::U   U::::::U p:::::p    p::::::p
+#          w:::::::w       w:::::::w      o:::::ooooo:::::o r:::::r           k::::::k k:::::k   U:::::::UUU:::::::U p:::::ppppp:::::::p
+#           w:::::w         w:::::w       o:::::::::::::::o r:::::r           k::::::k  k:::::k   UU:::::::::::::UU  p::::::::::::::::p 
+#            w:::w           w:::w         oo:::::::::::oo  r:::::r           k::::::k   k:::::k    UU:::::::::UU    p::::::::::::::pp  
+#             www             www            ooooooooooo    rrrrrrr           kkkkkkkk    kkkkkkk     UUUUUUUUU      p::::::pppppppp    
+#                                                                                                                    p:::::p            
+#                                                                                                                    p:::::p            
+#                                                                                                                   p:::::::p           
+#                                                                                                                   p:::::::p           
+#                                                                                                                   p:::::::p           
+#                                                                                                                   ppppppppp           
+#                                                                                                                                       
+
+# workUp specific routing
+
 # Redirect for lesson registration
 @bp.route('/attend')
 def lesson_registration_redirect():
 	return redirect(url_for('classes.enter_attendance_code'))
 
-# workUp specific routing
 # Features of the website
-
-
 @bp.route('/product')
 def product():
 	if current_app.config['APP_NAME'] == 'workUp':
@@ -269,9 +360,20 @@ def delete_inquiry(inquiry_id):
 	else:
 		return redirect(url_for('main.index'))
 
+
+#             /$$                /$$$$$$            /$$ /$$                    
+#            | $$               /$$__  $$          | $$|__/                    
+#    /$$$$$$ | $$ /$$$$$$/$$$$ | $$  \ $$ /$$$$$$$ | $$ /$$ /$$$$$$$   /$$$$$$ 
+#   /$$__  $$| $$| $$_  $$_  $$| $$  | $$| $$__  $$| $$| $$| $$__  $$ /$$__  $$
+#  | $$$$$$$$| $$| $$ \ $$ \ $$| $$  | $$| $$  \ $$| $$| $$| $$  \ $$| $$$$$$$$
+#  | $$_____/| $$| $$ | $$ | $$| $$  | $$| $$  | $$| $$| $$| $$  | $$| $$_____/
+#  |  $$$$$$$| $$| $$ | $$ | $$|  $$$$$$/| $$  | $$| $$| $$| $$  | $$|  $$$$$$$
+#   \_______/|__/|__/ |__/ |__/ \______/ |__/  |__/|__/|__/|__/  |__/ \_______/
+#                                                                              
+#                                                                              
+#   
 # elmOnline specific routing
 # Page that displays the QR code
-
 @bp.route('/contact')
 def contact():
 	if current_app.config['APP_NAME'] == 'elmOnline':

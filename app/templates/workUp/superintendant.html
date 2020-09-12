@@ -1,0 +1,166 @@
+{% extends "header.html" %} {% block app_content %}
+
+<!-- Animation library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<!-- Alternative Bootstrap theme -->
+<link rel="stylesheet" href="/static/bootstrap/mdb.lite.min.css" type="text/css">
+<script src="/static/bootstrap/mdb.min.js"></script>
+
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1><i class="fa fa-user-shield"></i> Superintendant</h1>
+        </div>
+    </div>
+    <hr>
+
+    <!-- Site stat widgets -->
+    <div class="row text-center">
+        <div class="col-6 col-lg-2 mb-3">
+            <div class="counter">
+                <i class="fa fa-plug fa-2x"></i>
+                <h2 class="timer count-title count-number activeUserCount">{{active_user_count}}</h2>
+                {% if active_user_count == 1 %}
+                <p class="count-text ">Active user</p>
+                {% else %}
+                <p class="count-text ">Active users</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-6 col-lg-2 mb-3">
+            <div class="counter">
+                <i class="fa fa-user-graduate fa-2x"></i>
+                <h2 class="timer count-title count-number userCount">{{student_count}}</h2>
+                <p class="count-text ">Users</p>
+            </div>
+        </div>
+        <div class="col-6 col-lg-2 mb-3">
+            <div class="counter">
+                <i class="fa fa-tasks fa-2x"></i>
+                <h2 class="timer count-title count-number">{{assignments|length}}</h2>
+                <p class="count-text ">Assignments</p>
+            </div>
+        </div>
+        <div class="col-6 col-lg-2 mb-3">
+            <div class="counter">
+                <i class="fa fa-file-upload fa-2x"></i>
+                <h2 class="timer count-title count-number uploadCount">{{total_uploads}}</h2>
+                <p class="count-text ">Assignment uploads</p>
+            </div>
+        </div>
+        <div class="col-6 col-lg-2 mb-3">
+            <div class="counter">
+                <i class="fa fa-book fa-2x"></i>
+                <h2 class="timer count-title count-number libraryUploads">{{total_library_count}}</h2>
+                <p class="count-text ">Library books</p>
+            </div>
+        </div>
+        <div class="col-6 col-lg-2 mb-3">
+            <div class="counter">
+                <i class="fa fa-book-reader fa-2x"></i>
+                <h2 class="timer count-title count-number libraryDownloads">{{total_library_downloads}}</h2>
+                <p class="count-text ">Library downloads</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 mb-3">
+            <div class="card border-primary">
+                <div class="card-header">
+                    <h5><i class="fa fa-network-wired"></i> API</h5>
+                </div>
+                <div class="card-body">
+                    <p><a class="btn btn-block btn-outline-primary" href="{{url_for('api.create_api_key')}}"
+                            role="button"><i class="fa fa-plug"></i> New API key</a></p>
+                    <p><a class="btn btn-block btn-outline-primary" href="{{url_for('api.manage_api_keys')}}"
+                            role="button"><i class="fa fa-tools"></i> Manage API keys</a></p>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Scripts -->
+<script>
+    // Checker for library stats, updates once a second
+    var updateStats = function () {
+        // On load, get the latest download number
+        var fetchLibraryStats = function () {
+            fetch('/api/library/stats').then(res => res.json()).then(data => {
+                setLibraryStats(data.download_count);
+            });
+        };
+
+        // Function to set library stats
+        var setLibraryStats = function (downloadCount) {
+            const libraryDownloadsElement = '.libraryDownloads';
+            if (!($(libraryDownloadsElement).text() == downloadCount)) {
+                $(libraryDownloadsElement).text(downloadCount);
+                animateCSS(libraryDownloadsElement, 'heartBeat');
+            }
+        };
+
+        // Update user stats
+        var updateUserStats = function () {
+            fetch('/api/users/stats').then(res => res.json()).then(data => {
+                const activeUserCountElement = '.activeUserCount';
+                if (!($(activeUserCountElement).text() == data.active_users)) {
+                    $(activeUserCountElement).text(data.active_users);
+                    animateCSS(activeUserCountElement, 'heartBeat');
+                }
+
+                const userCountElement = '.userCount';
+                if (!($(userCountElement).text() == data.user_count)) {
+                    $(userCountElement).text(data.user_count);
+                    animateCSS(userCountElement, 'heartBeat');
+                }
+            });
+        };
+
+        // Update file stats
+        var updateFileStats = function () {
+            fetch('/api/files/stats').then(res => res.json()).then(data => {
+                const totalUploadsCountElement = '.uploadCount';
+                if (!($(totalUploadsCountElement).text() == data.total_uploads)) {
+                    $(totalUploadsCountElement).text(data.total_uploads);
+                    animateCSS(totalUploadsCountElement, 'heartBeat');
+                }
+            });
+        };
+
+        // Fetch the latest file stats every second
+        window.setInterval(function () {
+            fetchLibraryStats();
+            updateUserStats();
+            updateFileStats();
+        }, 1000);
+
+        const animateCSS = (element, animation, prefix = 'animate__') =>
+            // We create a Promise and return it
+            new Promise((resolve, reject) => {
+                const animationName = `${prefix}${animation}`;
+                const node = document.querySelector(element);
+
+                node.classList.add(`${prefix}animated`, animationName);
+
+                // When the animation ends, we clean the classes and resolve the Promise
+                function handleAnimationEnd() {
+                    node.classList.remove(`${prefix}animated`, animationName);
+                    node.removeEventListener('animationend', handleAnimationEnd);
+
+                    resolve('Animation ended');
+                }
+
+                node.addEventListener('animationend', handleAnimationEnd);
+            });
+    };
+    updateStats();
+</script>
+{% endblock %}
