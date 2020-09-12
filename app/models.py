@@ -159,6 +159,7 @@ class User(UserMixin, db.Model):
 	registered = db.Column(db.DateTime, default=datetime.now())
 	email_confirmed = db.Column(db.Boolean, default=False)
 	is_admin = db.Column(db.Boolean, default=False)
+	is_superintendant = db.Column(db.Boolean, default=False)
 	profile_name = db.Column(db.String(200))
 	profile_title = db.Column(db.String(200))
 	profile_education = db.Column(db.String(200))

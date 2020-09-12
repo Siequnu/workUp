@@ -10,7 +10,7 @@ username = input('Enter an administrator username: ')
 email = input('Enter an administrator email address: ')
 password = input('Enter an administrator password: ')
 
-user = User(username=username, email=email, email_confirmed=True, is_admin=True)
+user = User(username=username, email=email, email_confirmed=True, is_admin=True, is_superintendant =True)
 user.set_password(password)
 
 try:

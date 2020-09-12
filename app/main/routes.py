@@ -147,7 +147,7 @@ def index():
 
 @bp.route('/superintendant')
 def superintendant ():
-	if current_user.is_authenticated and app.models.is_admin(current_user.username):
+	if current_user.is_authenticated and app.models.is_admin(current_user.username) and current_user.is_superintendant:
 		if current_app.config['APP_NAME'] == 'workUp':
 			return render_template(
 				'workUp/superintendant.html',
@@ -172,9 +172,11 @@ def superintendant ():
 				statement_projects_needing_review=app.statements.models.get_projects_needing_review(
 				) if app.main.models.is_active_service('app.statements') else False,
 
+				# Sign-up codes
+				sign_up_code = current_app.config['SIGNUP_CODES']
+
 			)
-		else:
-			return redirect (url_for ('main.index'))
+	return redirect (url_for ('main.index'))
 
 	
 @bp.route('/superintendant/stats')
