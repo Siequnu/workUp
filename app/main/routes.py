@@ -173,8 +173,7 @@ def superintendant ():
 				) if app.main.models.is_active_service('app.statements') else False,
 
 			)
-		else:
-			return redirect (url_for ('main.index'))
+	return redirect (url_for ('main.index'))
 
 	
 @bp.route('/superintendant/stats')
