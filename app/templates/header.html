@@ -1,73 +1,80 @@
-<DOCTYPE html>
-    <html lang="en">
+<!doctype html>
+<html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1.0" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1.0" />
 
-        <!-- Load CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="/static/css/library_card.css" rel="stylesheet">
-        <link href="https://bootswatch.com/4/flatly/bootstrap.min.css" rel="stylesheet">
+    <!-- Load CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="/static/css/library_card.css" rel="stylesheet">
+    <link href="https://bootswatch.com/4/flatly/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Load appropriate header for the service -->
-        {% if config.APP_NAME == 'workUp' %}
-        {% include "workUp/header_workUp.html" %}
-        {% elif config.APP_NAME == 'elmOnline' %}
-        {% include "elmOnline/header_elmOnline.html" %}
-        {% elif config.APP_NAME == 'Unikey' %}
-        {% include "header_Unikey.html" %}
-        {% endif %}
+    <!-- Load appropriate header for the service -->
+    {% if config.APP_NAME == 'workUp' %}
+    {% include "workUp/header_workUp.html" %}
+    {% elif config.APP_NAME == 'elmOnline' %}
+    {% include "elmOnline/header_elmOnline.html" %}
+    {% endif %}
 
-    </head>
+</head>
 
-    <body>
+<body>
 
-        <style>
-            .nav-link {transition: 0.15s;}
-            @media screen and (max-width: 500px) {
-                h1 {font-size: 2rem;}
+    <!-- Custom small-screen CSS fixes -->
+    <style>
+        .nav-link {
+            transition: 0.15s;
+        }
+
+        @media screen and (max-width: 500px) {
+            h1 {
+                font-size: 2rem;
             }
+        }
 
-            @media screen and (max-width: 992px) {
-                a.viewAssignmentChevron {display: none;}
+        @media screen and (max-width: 992px) {
+            a.viewAssignmentChevron {
+                display: none;
             }
-        </style>
-        
-        <!-- Load content block -->
-        {% block content %}
+        }
+    </style>
+
+    <!-- Load content block -->
+    {% block content %}
+    <br>
+    <!-- Toastr message-->
+    {{ toastr.include_jquery() }} {{ toastr.include_toastr_css() }} {{ toastr.message() }}
+    {% block app_content %}
+
+    {% endblock %}
+    {% endblock %}
+
+    <!-- Footer -->
+    {% block footer %}
+    <div class="container-footer text-center">
         <br>
-        <!-- Toastr message-->
-        {{ toastr.include_jquery() }} {{ toastr.include_toastr_css() }} {{ toastr.message() }}
-        {% block app_content %}
+        {% if config.APP_NAME == 'workUp' %}
+        <footer class="blockquote-footer">
+            <p>WorkUp is designed and developed by Patrick Johansson © 2020</p>
+        </footer>
+        {% endif %}
+    </div>
+    {% endblock %}
 
-        {% endblock %}
-        {% endblock %}
+    <!-- Scripts -->
+    {% block scripts %}
+    <script src="/static/js/lib/fontawesome-kit-7bd5544b77.js"></script>
+    {{ bootstrap.load_js() }}
+    {{ toastr.include_toastr_js() }}
+    <script src="/static/js/searchable-table.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    {% endblock %}
 
-        <!-- Footer -->
-        {% block footer %}
-        <div class="container-footer text-center">
-            <br>
-            {% if config.APP_NAME == 'workUp' %}
-            <footer class="blockquote-footer">
-                <p>WorkUp is designed and developed by Patrick Johansson © 2020</p>
-            </footer>
-            {% endif %}
-        </div>
-        {% endblock %}
+    <!-- Load any scripts that are in the template -->
+    {% block templateScripts %}
+    {% endblock templateScripts %}
+</body>
 
-        <!-- Scripts -->
-        {% block scripts %}
-        <script src="/static/js/lib/fontawesome-kit-7bd5544b77.js"></script>
-        {{ bootstrap.load_js() }}
-        {{ toastr.include_toastr_js() }}
-        <script src="/static/js/searchable-table.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-        {% endblock %}
-
-        <!-- Load any scripts that are in the template -->
-        {% block templateScripts %}
-        {% endblock templateScripts %}
-    </body>
-
-    </html>
+</html>

@@ -5,6 +5,8 @@
     {% block title %} {% if title %}{{ title }} - Elm Online{% else %} Elm Online{% endif %} {% endblock %}
 </title>
 
+<meta name="description" content="workUp is a complete online teaching solution, for teachers and consultancies">
+
 {% block navbar %}
 
 <!-- Navigation -->
@@ -61,7 +63,6 @@
                 <a class="nav-link rounded" href="{{url_for('files.class_library')}}">Library</a>
             </li>
             {% endif %}
-
 
         </ul>
         <ul class="nav navbar-nav navbar-right">
