@@ -80,6 +80,11 @@
                 <a class="nav-link rounded" href="{{url_for('user.login')}}">Login</a>
             </li>
             {% else %}
+            {% if current_user.is_superintendant %}
+            <li class="nav-item">
+                <a class="nav-link rounded logout" href="{{url_for('main.superintendant')}}">Superintendant</a>
+            </li>
+            {% endif %}
             <li class="nav-item">
                 <a class="nav-link rounded logout" href="{{url_for('user.logout')}}">Logout</a>
             </li>
