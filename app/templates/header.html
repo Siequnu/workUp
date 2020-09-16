@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
 
     <!-- Load CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -17,11 +18,9 @@
     {% elif config.APP_NAME == 'elmOnline' %}
     {% include "elmOnline/header_elmOnline.html" %}
     {% endif %}
-
 </head>
 
 <body>
-
     <!-- Custom small-screen CSS fixes -->
     <style>
         .nav-link {
@@ -44,8 +43,10 @@
     <!-- Load content block -->
     {% block content %}
     <br>
+
     <!-- Toastr message-->
     {{ toastr.include_jquery() }} {{ toastr.include_toastr_css() }} {{ toastr.message() }}
+
     {% block app_content %}
 
     {% endblock %}
