@@ -193,6 +193,19 @@ class User(UserMixin, db.Model):
 			user = User.query.get(user_id)
 			user.is_admin = False
 			db.session.commit()
+
+	@staticmethod
+	def give_superintendant_rights(user_id):
+		user = User.query.get(user_id)
+		user.is_superintendant = True
+		db.session.commit()
+	
+	@staticmethod
+	def remove_superintendant_rights(user_id):
+		if int(user_id) != 1: # Can't remove original admin
+			user = User.query.get(user_id)
+			user.is_superintendant = False
+			db.session.commit()
 	
 	@staticmethod
 	def delete_user (user_id):
