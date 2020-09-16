@@ -148,67 +148,64 @@ def index():
 @bp.route('/superintendant')
 def superintendant ():
 	if current_user.is_authenticated and app.models.is_admin(current_user.username) and current_user.is_superintendant:
-		if current_app.config['APP_NAME'] == 'workUp':
-			return render_template(
-				'workUp/superintendant.html',
+		return render_template(
+			'superintendant.html',
 
-				# Student count and info
-				active_user_count=app.user.models.get_active_user_count(),
-				student_count=app.user.models.get_total_user_count(),
-				classes=app.assignments.models.get_all_class_info(),
+			# Student count and info
+			active_user_count=app.user.models.get_active_user_count(),
+			student_count=app.user.models.get_total_user_count(),
+			classes=app.assignments.models.get_all_class_info(),
 
-				# Library
-				library=ClassLibraryFile.query.all(),
-				total_library_downloads=app.files.models.get_total_library_downloads_count(),
-				total_library_count = ClassLibraryFile.query.count(),
+			# Library
+			library=ClassLibraryFile.query.all(),
+			total_library_downloads=app.files.models.get_total_library_downloads_count(),
+			total_library_count = ClassLibraryFile.query.count(),
 
-				# Assignments
-				assignments=Assignment.query.all(),
-				total_uploads = app.files.models.get_all_uploads_count(),
+			# Assignments
+			assignments=Assignment.query.all(),
+			total_uploads = app.files.models.get_all_uploads_count(),
 
-				# Statements
-				statement_projects=StatementProject.query.all(
-				) if app.main.models.is_active_service('app.statements') else False,
-				statement_projects_needing_review=app.statements.models.get_projects_needing_review(
-				) if app.main.models.is_active_service('app.statements') else False,
+			# Statements
+			statement_projects=StatementProject.query.all(
+			) if app.main.models.is_active_service('app.statements') else False,
+			statement_projects_needing_review=app.statements.models.get_projects_needing_review(
+			) if app.main.models.is_active_service('app.statements') else False,
 
-				# Sign-up codes
-				sign_up_code = current_app.config['SIGNUP_CODES']
+			# Sign-up codes
+			sign_up_code = current_app.config['SIGNUP_CODES']
 
-			)
+		)
 	return redirect (url_for ('main.index'))
 
 	
 @bp.route('/superintendant/stats')
 def superintendant_stats ():
-	if current_user.is_authenticated and app.models.is_admin(current_user.username):
-		if current_app.config['APP_NAME'] == 'workUp':
-			return render_template(
-				'workUp/superintendant_stats.html',
+	if current_user.is_authenticated and app.models.is_admin(current_user.username) and current_user.is_superintendant:
+		return render_template(
+			'superintendant_stats.html',
 
-				# Student count and info
-				active_user_count=app.user.models.get_active_user_count(),
-				student_count=app.user.models.get_total_user_count(),
-				classes=app.assignments.models.get_all_class_info(),
+			# Student count and info
+			active_user_count=app.user.models.get_active_user_count(),
+			student_count=app.user.models.get_total_user_count(),
+			classes=app.assignments.models.get_all_class_info(),
 
-				# Library
-				library=ClassLibraryFile.query.all(),
-				total_library_downloads=app.files.models.get_total_library_downloads_count(),
-				total_library_count = ClassLibraryFile.query.count(),
+			# Library
+			library=ClassLibraryFile.query.all(),
+			total_library_downloads=app.files.models.get_total_library_downloads_count(),
+			total_library_count = ClassLibraryFile.query.count(),
 
-				# Assignments
-				assignments=Assignment.query.all(),
-				total_uploads = app.files.models.get_all_uploads_count(),
+			# Assignments
+			assignments=Assignment.query.all(),
+			total_uploads = app.files.models.get_all_uploads_count(),
 
-				# Statements
-				statement_projects=StatementProject.query.all(
-				) if app.main.models.is_active_service('app.statements') else False,
-				statement_projects_needing_review=app.statements.models.get_projects_needing_review(
-				) if app.main.models.is_active_service('app.statements') else False,
+			# Statements
+			statement_projects=StatementProject.query.all(
+			) if app.main.models.is_active_service('app.statements') else False,
+			statement_projects_needing_review=app.statements.models.get_projects_needing_review(
+			) if app.main.models.is_active_service('app.statements') else False,
 
-			)
-		else:
-			return redirect (url_for ('main.index'))
+		)
+	return redirect (url_for ('main.index'))
 	
 
 
