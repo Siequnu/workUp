@@ -132,6 +132,7 @@ wtforms-alchemy==0.16.9
 wtforms-components==0.10.4
 wtforms==2.2.1
 xlrd==1.2.0
+xpinyin==0.5.7
 xvfbwrapper==0.2.9
 zipp==3.1.0
 zipstream==1.1.4

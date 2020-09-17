@@ -18,6 +18,7 @@ from flask_marshmallow import Marshmallow
 from flask_dropzone import Dropzone
 from flask_talisman import Talisman
 from flask_seasurf import SeaSurf
+from xpinyin import Pinyin
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -32,6 +33,7 @@ ma = Marshmallow()
 dropzone = Dropzone ()
 csrf = SeaSurf()
 talisman = Talisman()
+pinyin = Pinyin()
 
 def create_app(config_class):
     workup_app = Flask(__name__)
