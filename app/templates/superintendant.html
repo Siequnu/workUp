@@ -61,24 +61,7 @@
     </div>
 
     <div class="row">
-        <div class="col-12 col-md-4 col-lg-4 mb-3">
-            <div class="card border-primary">
-                <div class="card-header">
-                    <h5><i class="fa fa-network-wired"></i> API</h5>
-                </div>
-                <div class="card-body">
-
-
-                    <p><a class="btn btn-block btn-outline-success" href="{{url_for('api.create_api_key')}}"
-                            role="button"><i class="fa fa-plug"></i> New API key</a></p>
-                    <p><a class="btn btn-block btn-outline-primary" href="{{url_for('api.manage_api_keys')}}"
-                            role="button"><i class="fa fa-tools"></i> Manage API keys</a></p>
-
-
-                </div>
-            </div>
-        </div>
-
+        <!-- Teacher management links -->
         <div class="col-12 col-md-4 col-lg-4 mb-3">
             <div class="card border-primary">
                 <div class="card-header">
@@ -100,6 +83,7 @@
             </div>
         </div>
 
+        <!-- Student management widgets-->
         <div class="col-12 col-md-8 col-lg-8 mb-3">
             <div class="card border-primary">
                 <div class="card-header">
@@ -158,6 +142,55 @@
                 </div>
             </div>
         </div>
+
+        <!-- API Management widgets-->
+        <div class="col-12 col-md-4 col-lg-4 mb-3">
+            <div class="card border-primary">
+                <div class="card-header">
+                    <h5><i class="fa fa-network-wired"></i> API</h5>
+                </div>
+                <div class="card-body">
+
+                    <p><a class="btn btn-block btn-outline-success" href="{{url_for('api.create_api_key')}}"
+                            role="button"><i class="fa fa-plug"></i> New API key</a></p>
+                    <p><a class="btn btn-block btn-outline-primary" href="{{url_for('api.manage_api_keys')}}"
+                            role="button"><i class="fa fa-tools"></i> Manage API keys</a></p>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Inquiries/feedback form -->
+        <div class="col-12 col-md-4 col-lg-4 mb-3">
+            <div class="card border-primary">
+                <div class="card-header">
+                    <h5><i class="fa fa-handshake"></i> Inquiries</h5>
+                </div>
+                <div class="card-body">
+
+                    <p><a class="btn btn-block btn-outline-info" href="{{url_for('main.view_inquiries')}}"
+                            role="button"><i class="fa fa-file-signature"></i> View inquiries</a></p>
+
+                </div>
+            </div>
+        </div>
+
+        {% if config.APP_NAME == 'workUp' %}
+        <!-- Personalised feedback form -->
+        <div class="col-12 col-md-4 col-lg-4 mb-3">
+            <div class="card border-primary">
+                <div class="card-header">
+                    <h5><i class="fa fa-comments"></i> Feedback</h5>
+                    <p>Feedback form is available at workupnow.online/feedback</p>
+                </div>
+                <div class="card-body">
+                    <p><a class="btn btn-block btn-outline-info" href="{{url_for('main.view_feedback')}}"
+                            role="button"><i class="fa fa-comment"></i> View feedback</a></p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
     </div>
 </div>
 
