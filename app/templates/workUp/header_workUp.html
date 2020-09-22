@@ -83,11 +83,34 @@
                 <a class="nav-link rounded" href="{{url_for('user.login')}}">Login</a>
             </li>
             {% else %}
-            {% if current_user.is_superintendant %}
-            <li class="nav-item">
-                <a class="nav-link rounded logout" href="{{url_for('main.superintendant')}}">Superintendant</a>
-            </li>
-            {% endif %}
+            
+                <!-- Superintendant link -->
+                {% if current_user.is_superintendant %}
+                <li class="nav-item">
+                    <a class="nav-link rounded" href="{{url_for('main.superintendant')}}">Superintendant</a>
+                </li>
+                {% endif %}
+            
+                <!-- Activate student view -->
+                {% if current_user.is_admin %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link rounded dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Student view</a>
+                    <div class="dropdown-menu view-as-class" aria-labelledby="navbarDropdown">
+                    
+                    </div>
+
+                </li>
+                {% endif %}
+
+                <!-- Return to teacher view -->
+                {% if current_user.can_return_to_admin %}
+                <li class="nav-item">
+                    <a class="nav-link rounded" href="{{url_for('user.view_as_admin')}}">Return to teacher view</a>
+                </li>
+                {% endif %}
+
+            <!-- Logout link for all authenticated users -->
             <li class="nav-item">
                 <a class="nav-link rounded logout" href="{{url_for('user.logout')}}">Logout</a>
             </li>
@@ -95,4 +118,5 @@
         </ul>
     </div>
 </nav>
+
 {% endblock %}

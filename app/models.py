@@ -159,6 +159,7 @@ class User(UserMixin, db.Model):
 	registered = db.Column(db.DateTime, default=datetime.now())
 	email_confirmed = db.Column(db.Boolean, default=False)
 	is_admin = db.Column(db.Boolean, default=False)
+	can_return_to_admin = db.Column(db.Boolean, default=False)
 	is_superintendant = db.Column(db.Boolean, default=False)
 	profile_name = db.Column(db.String(200))
 	profile_title = db.Column(db.String(200))
@@ -177,6 +178,10 @@ class User(UserMixin, db.Model):
 	def check_password(self, password):
 		return check_password_hash(self.password_hash, password)
 
+	def set_can_return_to_admin(self, boolean):
+		self.can_return_to_admin = boolean
+		db.session.commit ()
+
 	@staticmethod
 	def user_email_is_confirmed (username):
 		return User.query.filter_by(username=username).first().email_confirmed
@@ -189,10 +194,9 @@ class User(UserMixin, db.Model):
 	
 	@staticmethod
 	def remove_admin_rights(user_id):
-		if int(user_id) != 1: # Can't remove original admin
-			user = User.query.get(user_id)
-			user.is_admin = False
-			db.session.commit()
+		user = User.query.get(user_id)
+		user.is_admin = False
+		db.session.commit()
 
 	@staticmethod
 	def give_superintendant_rights(user_id):

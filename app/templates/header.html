@@ -67,11 +67,33 @@
     <!-- Scripts -->
     {% block scripts %}
     <script src="/static/js/lib/fontawesome-kit-7bd5544b77.js"></script>
+    
     {{ bootstrap.load_js() }}
     {{ toastr.include_toastr_js() }}
+    
     <script src="/static/js/searchable-table.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    
+    {% if config.APP_NAME == 'workUp' %}
+        {% if current_user.is_admin == True %}
+        <!-- Generate student class view dropdown for teachers-->
+        <script type="text/javascript">
+            // Get the teacher classes
+            $(function () {
+                fetch('{{url_for('classes.get_turmas_list_api')}}').then(res => res.json()).then(data => {
+                    var html;
+                    $.each(data, function (indexInArray, turmaObject) { 
+                        html = '<a class="dropdown-item" href="/user/view/' + turmaObject.id + '">' + turmaObject.label + '</a>';
+                        $('.view-as-class').append (html);
+                    });
+                });
+            });
+        </script>
+        {% endif %}
+    {% endif %}
+
     {% endblock %}
+    
 
     <!-- Load any scripts that are in the template -->
     {% block templateScripts %}
