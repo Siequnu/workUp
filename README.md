@@ -266,10 +266,27 @@ client_max_body_size 200M;
 ```
 Finally, restart nginx ```sudo service nginx restart```
 
-* To avoid nonaggregated column SQL error, log into mysql and disable strict mode
+* To avoid nonaggregated column SQL error, add the following to my.cnf 
 ```sh
-set global sql_mode='';
+sql_mode = STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+```
 
+* To avoid SQL Server has gone away, leading to server error 500 when accessing database for the first time, set in app settings
+
+```sh
+SQLALCHEMY_POOL_PRE_PING = True
+```
+
+Experimental fix: 
+SQLALCHEMY_ENGINE_OPTIONS = {'pool_size': 100, 'pool_recycle': 280}
+
+Add the following to my.cnf
+```sh
+max_allowed_packet=16M
+# 8 hours
+wait_timeout = 28800
+interactive_timeout = 28800
+max_allowed_packet = 256M
 ```
 
 
