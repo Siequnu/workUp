@@ -1,10 +1,8 @@
 from datetime import datetime
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin, current_user
+from flask_login import UserMixin
 from app import login
-from sqlalchemy import text, cast, String
-import json
 
 @login.user_loader
 def load_user(id):
