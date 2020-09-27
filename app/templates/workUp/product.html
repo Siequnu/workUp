@@ -16,13 +16,21 @@
     <div class="text-white text-center py-5 ">
         <div>
             <h1 class="display-4">workUp - Manage Learning</h1>
-            <h4 class="mx-5 mb-5">workUp is a complete online learning service. </h4>
+            <h4 class="mx-5 mb-5">workUp is a complete online learning management service. </h4>
             <h4>It helps teachers and
                 students manage attendance, assignments, grades and much more.
             </h4>
             <br>
-            <a href="#features" class="btn peach-gradient btn-lg smooth"> View
-                features <i class="fas fa-chevron-down"></i></a>
+            <div class="row">
+                <div class="col">
+                    <a href="{{ url_for('main.brochure') }}" class="btn btn-info btn-lg smooth"><i class="fas fa-cloud-download-alt"></i> Download information brochure</a>
+                </div>
+                <div class="col">
+                    <a href="#features" class="btn heavy-rain-gradient btn-lg smooth text-dark"> View
+                        features <i class="fas fa-chevron-down"></i></a>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>

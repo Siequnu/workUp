@@ -1,4 +1,4 @@
-from flask import render_template, flash, current_app, session, request, redirect, url_for, abort
+from flask import render_template, flash, current_app, request, redirect, url_for, send_from_directory
 from flask_login import current_user, login_required
 
 import datetime
@@ -248,6 +248,18 @@ def lesson_registration_redirect():
 def product():
 	if current_app.config['APP_NAME'] == 'workUp':
 		return render_template('workUp/product.html')
+	else:
+		return redirect(url_for('main.index'))
+
+
+# Features of the website
+@bp.route('/brochure')
+def brochure():
+	if current_app.config['APP_NAME'] == 'workUp':
+		return send_from_directory(filename='WorkUp brochure public.pdf',
+								   directory='static/',
+								   as_attachment = True,
+								   attachment_filename = 'WorkUp - Learning Management Software.pdf')
 	else:
 		return redirect(url_for('main.index'))
 
