@@ -212,3 +212,7 @@ Temporary Items
 
 # End of https://www.gitignore.io/api/macos,flask,python
 .flaskenv
+marketing/WorkUp brochure public.pages
+marketing/WorkUp brochure public.pdf
+marketing/WorkUp brochure.pages
+marketing/WorkUp brochure.pdf
