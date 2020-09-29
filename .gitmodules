@@ -46,6 +46,6 @@
 [submodule "app/portfolio"]
 	path = app/portfolio
 	url = https://github.com/Siequnu/flask-portfolio
-[submodule "app/live-assessment"]
-	path = app/live-assessment
+[submodule "app/live_assessment"]
+	path = app/live_assessment
 	url = https://github.com/Siequnu/flask-live-assessment
