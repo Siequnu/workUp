@@ -278,7 +278,7 @@ SQLALCHEMY_POOL_PRE_PING = True
 ```
 
 Experimental fix: 
-SQLALCHEMY_ENGINE_OPTIONS = {'pool_size': 100, 'pool_recycle': 280}
+SQLALCHEMY_ENGINE_OPTIONS = {'pool_size': 100, 'pool_recycle': 30}
 
 Add the following to my.cnf
 ```sh
