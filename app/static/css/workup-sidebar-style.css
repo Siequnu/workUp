@@ -64,7 +64,7 @@ a:focus {
 }
 
 #sidebarCollapse {
-    
+
 }
 
 #sidebar.active {
@@ -150,7 +150,6 @@ a.article:hover {
 
 #content {
     width: calc(100% - 250px);
-    padding: 15px;
     min-height: 100vh;
     transition: all 0.3s;
     position: absolute;
@@ -162,6 +161,8 @@ a.article:hover {
     width: 100%;
 }
 
+.mini-nav {display: none; margin: 0}
+
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
@@ -169,6 +170,8 @@ a.article:hover {
 #sidebarCollapse {display: none;}
 
 @media (max-width: 768px) {
+    .mini-nav {display: block;}
+
     #sidebar {
         margin-left: -250px;
     }
