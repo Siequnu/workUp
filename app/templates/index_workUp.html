@@ -260,40 +260,6 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12 col-md-6 col-lg-6 mb-3">
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fa fa-university"></i> Classes & attendance</h5>
-                </div>
-                <div class="card-body">
-                    <a class="btn btn-block btn-outline-primary" href="{{url_for('classes.create_class')}}"
-                        role="button"><i class="fa fa-plus-circle"></i> New class</a>
-                    <a class="btn btn-block btn-outline-primary" href="{{url_for('classes.class_admin')}}"
-                        role="button"><i class="fa fa-chalkboard-teacher"></i> Manage classes</a>
-                    <a class="btn btn-block btn-outline-primary" href="{{url_for('user.manage_students')}}"
-                        role="button"><i class="fa fa-users-cog"></i> Manage students</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-lg-6 mb-3">
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fa fa-file-upload"></i> Assignments & feedback</h5>
-                </div>
-                <div class="card-body">
-                    <a class="btn btn-block btn-outline-primary" href="{{url_for('assignments.create_assignment')}}"
-                        role="button"><i class="fa fa-calendar-plus"></i> New assignment</a>
-                    <a class="btn btn-block btn-outline-primary" href="{{url_for('assignments.view_assignments')}}"
-                        role="button"><i class="fa fa-tasks"></i> Manage assignments</a>
-                    <a class="btn btn-block btn-outline-primary"
-                        href="{{url_for('assignments.peer_review_form_admin')}}" role="button"><i
-                            class="fa fa-file-signature"></i> Manage feedback forms</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
     {% else %}
 
@@ -469,6 +435,8 @@
             </div>
         </div>
         <br>
+
+        <!-- Display any upcoming assignments-->
         {% if upload_progress_percentage != 100 %}
         <div class="card">
             <div class="card-header">
@@ -544,6 +512,5 @@
     {% endif %}
 
     {% endif %}
-</div>
 
 {% endblock %}

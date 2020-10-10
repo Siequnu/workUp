@@ -10,7 +10,7 @@
     {% block title %} {% if title %}{{ title }} - workUp{% else %} workUp Online{% endif %} {% endblock %}
 </title>
 
-<meta name="description" content="workUp is a complete online teaching solution, for teachers and consultancies">
+<meta name="description" content="workUp is a complete online learning management platform, for teachers and consultancies">
 
 {% block navbar %}
 
@@ -23,7 +23,8 @@
 <nav id="sidebar" class="text-uppercase bg-primary navbar-dark">
     <div class="sidebar-header">
         <a href="{{url_for ('main.index')}}">
-            <img src="{{ url_for('static', filename='logo_workUp.png') }}" width="40" height="40" class="d-inline-block align-middle" /> workUp
+            <img src="{{ url_for('static', filename='logo_workUp.png') }}" width="40" height="40" class="d-inline-block align-middle" />
+            <h3>workUp</h3>
         </a>
     </div>
 

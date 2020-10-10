@@ -9,7 +9,6 @@ p {
     font-size: 1.1em;
     font-weight: 300;
     line-height: 1.7em;
-    color: #999;
 }
 
 a,
@@ -63,10 +62,8 @@ a:focus {
     transition: all 0.3s;
 }
 
-#sidebarCollapse {
-
-}
-
+.sidebar-header img {display: inline;}
+.sidebar-header h3 {display: inline; vertical-align: middle; padding-left: 7px; text-transform: initial;}
 #sidebar.active {
     margin-left: -250px;
 }
