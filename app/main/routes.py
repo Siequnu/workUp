@@ -56,6 +56,9 @@ def index():
 				index_template, admin=True,
 				greeting=greeting,
 
+				# Lessons today
+				lessons_today = app.classes.models.get_teacher_lessons_today_from_teacher_id (current_user.id),
+				
 				# Student count and info
 				active_user_count=app.user.models.get_active_user_count(),
 				student_count=app.user.models.get_total_user_count(),
