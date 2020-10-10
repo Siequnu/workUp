@@ -45,7 +45,14 @@
 
         <!-- Load content block -->
         <div id="content">
-            {% block content %}
+
+            {% if config.APP_NAME == 'workUp' %}
+            <button type="button" id="sidebarCollapse" class="btn btn-info">
+                <i class="fas fa-align-left"></i>
+                <span>Toggle Sidebar</span>
+            </button>
+            {% endif %}
+
             <br>
 
             <!-- Toastr message-->
@@ -54,15 +61,14 @@
             {% block app_content %}
 
             {% endblock %}
-            {% endblock %}
-                
-        
+
+
             {% if config.APP_NAME == 'workUp' %}
-                <div class="container-footer text-center">
-                    <footer class="blockquote-footer">
-                        <p>WorkUp is designed and developed by Patrick Johansson © 2020</p>
-                    </footer>
-                </div>
+            <div class="container-footer text-center">
+                <footer class="blockquote-footer">
+                    <p>WorkUp is designed and developed by Patrick Johansson © 2020</p>
+                </footer>
+            </div>
             {% endif %}
 
         </div>
@@ -78,10 +84,38 @@
         <script src="/static/js/searchable-table.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 
-         <!-- jQuery Custom Scroller CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
-
         {% if config.APP_NAME == 'workUp' %}
+        
+        <script>
+            $(document).ready(function () {
+                
+                // Function to toggle the sidebar
+                var toggleSidebar = function () {
+                    // open or close navbar
+                    $('#sidebar').toggleClass('active');
+                    // close dropdowns
+                    $('.collapse.in').toggleClass('in');
+                    // and also adjust aria-expanded attributes we use for the open/closed arrows
+                    // in our CSS
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                }
+
+                // Click handler to open the menu
+                $('body').on('click', '#sidebarCollapse', function () {
+                    toggleSidebar ();
+                });
+
+                // Clicking outside the sidebar is an implicit close
+                $('#content').on('click', function () {
+                    if ($('#sidebar').hasClass('active')) {
+                        toggleSidebar ();
+                    }
+                })
+
+            });
+        </script>
+
+
         {% if current_user.is_admin == True %}
         <!-- Generate student class view dropdown for teachers-->
         <script type="text/javascript">
@@ -103,10 +137,11 @@
 
         {% endblock %}
 
-
         <!-- Load any scripts that are in the template -->
         {% block templateScripts %}
+
         {% endblock templateScripts %}
+
     </body>
 </div>
 

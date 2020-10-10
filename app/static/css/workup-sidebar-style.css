@@ -63,6 +63,10 @@ a:focus {
     transition: all 0.3s;
 }
 
+#sidebarCollapse {
+    
+}
+
 #sidebar.active {
     margin-left: -250px;
 }
@@ -162,11 +166,13 @@ a.article:hover {
     MEDIAQUERIES
 ----------------------------------------------------- */
 
+#sidebarCollapse {display: none;}
 
 @media (max-width: 768px) {
     #sidebar {
         margin-left: -250px;
     }
+
     #sidebar.active {
         margin-left: 0;
     }
@@ -178,5 +184,9 @@ a.article:hover {
     }
     #sidebarCollapse span {
         display: none;
+    }
+
+    #sidebarCollapse {
+        display: inline-block;
     }
 }

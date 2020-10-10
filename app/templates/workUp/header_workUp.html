@@ -19,7 +19,7 @@
 <!-- Scrollbar Custom CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
 
-<!-- Navigation -->
+<!-- Navigation --> 
 <nav id="sidebar" class="text-uppercase bg-primary navbar-dark">
     <div class="sidebar-header">
         <a href="{{url_for ('main.index')}}">
@@ -126,25 +126,5 @@
     </ul>
     -->
 </nav>
-
-<script>
-    $(document).ready(function () {
-
-        $("#sidebar").mCustomScrollbar({
-            theme: "minimal"
-        });
-
-        $('#sidebarCollapse').on('click', function () {
-            // open or close navbar
-            $('#sidebar').toggleClass('active');
-            // close dropdowns
-            $('.collapse.in').toggleClass('in');
-            // and also adjust aria-expanded attributes we use for the open/closed arrows
-            // in our CSS
-            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-        });
-
-    });
-</script>
 
 {% endblock %}
