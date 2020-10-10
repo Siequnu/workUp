@@ -14,109 +14,137 @@
 
 {% block navbar %}
 
+<!-- Sidebar style CSS -->
+<link href="/static/css/workup-sidebar-style.css" rel="stylesheet">
+<!-- Scrollbar Custom CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
 <!-- Navigation -->
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary text-uppercase" id="mainNav">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03"
-        aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <a class="navbar-brand" href="{{ url_for('main.index') }}">
-
-        <img src="{{ url_for('static', filename='logo_workUp.png') }}" width="40" height="40"
-            class="d-inline-block align-middle" alt=""> workUp</a>
-
-    <div class="collapse navbar-collapse" id="navbarColor03">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link rounded" href="{{url_for('main.index')}}">Home</a>
-            </li>
-            {% if current_user.is_admin %}
-            <li class="nav-item">
-                <a class="nav-link rounded" href="{{url_for('assignments.view_assignments')}}">Assignments</a>
-            </li>
-            {% else %}
-            <li class="nav-item dropdown">
-                <a class="nav-link rounded dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Assignments
-                </a>         
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{url_for('assignments.view_assignments')}}">My assignments</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{url_for('files.file_stats')}}">My feedback</a>
-                </div>
-            </li>
-            {% endif %}
-            <li class="nav-item ">
-                <a class="nav-link rounded" href="{{url_for('files.class_library')}}">Library</a>
-            </li>
-            <li class="nav-item">
-                {% if current_user.is_admin %}
-                <a class="nav-link rounded" href="{{url_for('classes.enter_attendance_code')}}">Classes</a>
-                {% else %}
-                <a class="nav-link rounded" href="{{url_for('classes.enter_attendance_code')}}">Attendance</a>
-                {% endif %}
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link rounded dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Tools
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{url_for('grammar.check_grammar')}}">Grammar check</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{url_for('collaboration.collaboration_index')}}">Collaborate</a>
-                    {% if current_user.is_admin %}
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{url_for('classes.random_student_generator')}}">Random student generator</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{url_for('classes.group_generator')}}">Group generator</a>
-                    {% endif %}
-                </div>
-            </li>
-
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            {% if current_user.is_anonymous %}
-            <li class="nav-item">
-                <a class="nav-link rounded" href="{{url_for('user.login')}}">Login</a>
-            </li>
-            {% else %}
-            
-                <!-- Superintendant link -->
-                {% if current_user.is_superintendant %}
-                <li class="nav-item">
-                    <a class="nav-link rounded" href="{{url_for('main.superintendant')}}">Superintendant</a>
-                </li>
-                {% endif %}
-            
-                <!-- Activate student view -->
-                {% if current_user.is_admin %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link rounded dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Student view</a>
-                    <div class="dropdown-menu view-as-class" aria-labelledby="navbarDropdown">
-                    
-                    </div>
-
-                </li>
-                {% endif %}
-
-                <!-- Return to teacher view -->
-                {% if current_user.can_return_to_admin %}
-                <li class="nav-item">
-                    <a class="nav-link rounded" href="{{url_for('user.view_as_admin')}}">Return to teacher view</a>
-                </li>
-                {% endif %}
-
-            <!-- Logout link for all authenticated users -->
-            <li class="nav-item">
-                <a class="nav-link rounded logout" href="{{url_for('user.logout')}}">Logout</a>
-            </li>
-            {% endif %}
-        </ul>
+<nav id="sidebar" class="text-uppercase bg-primary navbar-dark">
+    <div class="sidebar-header">
+        <a href="{{url_for ('main.index')}}">
+            <img src="{{ url_for('static', filename='logo_workUp.png') }}" width="40" height="40" class="d-inline-block align-middle" /> workUp
+        </a>
     </div>
+
+    <ul class="list-unstyled components">
+
+        <!-- Assignments-->
+        {% if current_user.is_admin %}
+        <li class="nav-item">
+            <a href="{{url_for('assignments.view_assignments')}}">Assignments</a>
+        </li>
+        {% else %}
+        <li>
+            <a class="sidebar-dropdown-toggle dropdown-toggle" href="#assignmentsSubmenu" role="button" data-toggle="collapse">
+                Assignments
+            </a>
+            <ul class="collapse list-unstyled" id="assignmentsSubmenu">
+                <li><a href="{{url_for('assignments.view_assignments')}}">My assignments</a></li>
+                <li><a href="{{url_for('files.file_stats')}}">My feedback</a></li>
+            </ul>
+        </li>
+        {% endif %}
+
+        <!-- Library-->
+        <li class="nav-item ">
+            <a href="{{url_for('files.class_library')}}">Library</a>
+        </li>
+
+        <!-- Attendance-->
+        <li class="nav-item">
+            {% if current_user.is_admin %}
+            <a href="{{url_for('classes.enter_attendance_code')}}">Classes</a>
+            {% else %}
+            <a href="{{url_for('classes.enter_attendance_code')}}">Attendance</a>
+            {% endif %}
+        </li>
+
+        <!-- Tools-->
+        <li>
+            <a class="sidebar-dropdown-toggle dropdown-toggle" href="#toolsSubmenu" role="button" data-toggle="collapse">
+                Tools
+            </a>
+            <ul class="collapse list-unstyled" id="toolsSubmenu">
+                <li><a href="{{url_for('grammar.check_grammar')}}">Grammar check</a></li>
+                <li><a href="{{url_for('collaboration.collaboration_index')}}">Collaborate</a></li>
+                {% if current_user.is_admin %}
+                <li><a href="{{url_for('classes.random_student_generator')}}">Random student generator</a></li>
+                <li><a href="{{url_for('classes.group_generator')}}">Group generator</a></li>
+                {% endif %}
+            </ul>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled components">
+        <!-- Login -->
+        {% if current_user.is_anonymous %}
+        <li class="nav-item">
+            <a href="{{url_for('user.login')}}">Login</a>
+        </li>
+
+        {% else %}
+        <!-- Superintendant link -->
+        {% if current_user.is_superintendant %}
+        <li class="nav-item">
+            <a href="{{url_for('main.superintendant')}}">Superintendant</a>
+        </li>
+        {% endif %}
+
+        <!-- Activate student view -->
+        {% if current_user.is_admin %}
+        <li>
+            <a class="sidebar-dropdown-toggle dropdown-toggle" href="#studentViewSubmenu" role="button" data-toggle="collapse">Student view</a>
+            <ul class="collapse list-unstyled view-as-class" id="studentViewSubmenu">
+                <!-- Placeholder, will be filled with the classes that we can view-->
+            </ul>
+        </li>
+        {% endif %}
+
+        <!-- Return to teacher view -->
+        {% if current_user.can_return_to_admin %}
+        <li class="nav-item">
+            <a href="{{url_for('user.view_as_admin')}}">Return to teacher view</a>
+        </li>
+        {% endif %}
+
+        <!-- Logout link for all authenticated users -->
+        <li class="nav-item">
+            <a class="logout" href="{{url_for('user.logout')}}">Logout</a>
+        </li>
+        {% endif %}
+    </ul>
+
+    <!-- Not needed so far
+    <ul class="list-unstyled CTAs">
+        <li>
+            <a href=#" class="download">Download source</a>
+        </li>
+        <li>
+            <a href="#" class="article">Back to article</a>
+        </li>
+    </ul>
+    -->
 </nav>
+
+<script>
+    $(document).ready(function () {
+
+        $("#sidebar").mCustomScrollbar({
+            theme: "minimal"
+        });
+
+        $('#sidebarCollapse').on('click', function () {
+            // open or close navbar
+            $('#sidebar').toggleClass('active');
+            // close dropdowns
+            $('.collapse.in').toggleClass('in');
+            // and also adjust aria-expanded attributes we use for the open/closed arrows
+            // in our CSS
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+
+    });
+</script>
 
 {% endblock %}
