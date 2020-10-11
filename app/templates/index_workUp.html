@@ -478,7 +478,7 @@
 
         <!-- Display any upcoming assignments-->
         {% if upload_progress_percentage != 100 %}
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-header">
                 <h4><i class="fa fa-calendar-alt"></i> Upcoming assignments</h4>
             </div>
@@ -515,7 +515,7 @@
                                 <a href="#" class="btn btn-danger btn-sm disabled" role="button" aria-disabled="true"><i
                                         class="fa fa-clock"></i> Assignment overdue.</a>
                                 {% else %}
-                                <a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}" <button
+                                <a href="{{url_for('files.upload_file', assignment_id = assignment['id'])}}"> <button
                                     class="btn btn-sm btn-warning"><i class="fa fa-file-upload"></i> Upload your
                                     assignment </button></a>
                                 {% endif %}
@@ -532,7 +532,10 @@
 
             </div>
         </div>
+        {% endif %} <!-- Upcoming assignments view -->
     </div>
+    
+    
 
     {% block templateScripts %}
     <script type="text/javascript">
@@ -549,8 +552,7 @@
     </script>
     {% endblock %}
 
-    {% endif %}
 
-    {% endif %}
+    {% endif %} <!-- Student view-->
 
 {% endblock %}
