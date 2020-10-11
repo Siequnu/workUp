@@ -166,7 +166,7 @@ a.article:hover {
 
 #sidebarCollapse {display: none;}
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .mini-nav {display: block;}
 
     #sidebar {
