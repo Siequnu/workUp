@@ -79,7 +79,7 @@
             </div>
             {% endif %}
 
-        </div>
+        </div> <!-- #content -->
 
 
         <!-- Scripts -->
@@ -93,63 +93,68 @@
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 
         {% if config.APP_NAME == 'workUp' %}
+        <!-- workUp specific scripts -->
         
-        <!-- jQuery Custom Scroller CDN -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+            <!-- jQuery Custom Scroller CDN -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
-        <script>
-            $(document).ready(function () {
-                
-                $("#sidebar").mCustomScrollbar({
-                    theme: "minimal"
-                });
-                
-                // Function to toggle the sidebar
-                var toggleSidebar = function () {
-                    // Open or close navbar
-                    $('#sidebar').toggleClass('active');
+            <script>
+                $(document).ready(function () {            
+                    // Enable the side scrollbar
+                    $("#sidebar").mCustomScrollbar({theme: "minimal"});
                     
-                    // Close  dropdowns
-                    $('.collapse.in').toggleClass('in');
-                    
-                    // and also adjust aria-expanded attributes we use for the open/closed arrows
-                    // in our CSS
-                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                }
-
-                // Click handler to open the menu
-                $('body').on('click', '#sidebarCollapse', function () {
-                    toggleSidebar ();
-                });
-
-                // Clicking outside the sidebar is an implicit close
-                $('#content').on('click', function () {
-                    if ($('#sidebar').hasClass('active')) {
-                        toggleSidebar ();
+                    // Function to toggle the sidebar
+                    var toggleSidebar = function () {
+                        // Open or close navbar
+                        $('#sidebar').toggleClass('active');
+                        
+                        // Close  dropdowns
+                        $('.collapse.in').toggleClass('in');
+                        
+                        // and also adjust aria-expanded attributes we use for the open/closed arrows
+                        // in our CSS
+                        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
                     }
-                })
 
-            });
-        </script>
+                    // Click handler to open the menu
+                    $('body').on('click', '#sidebarCollapse', function () {toggleSidebar ();});
+
+                    // Clicking outside the sidebar is an implicit close
+                    $('#content').on('click', function () {
+                        if ($('#sidebar').hasClass('active')) {toggleSidebar ();}
+                    })
+
+                    // Helper function to add active class to a navbar item
+                    var setAsActiveNavItem = function (navClass) {
+                        $('#sidebar li').removeClass ('active');
+                        $('#sidebar li.' + navClass).addClass ('active');
+                    };
+                    
+                    // Add the appropriate active layer to the sidebar, based on parsing the url
+                    setAsActiveNavItem (window.location.pathname.split('/')[1]);
+                });
+            </script>
 
 
-        {% if current_user.is_admin == True %}
-        <!-- Generate student class view dropdown for teachers-->
-        <script type="text/javascript">
-            // Get the teacher classes
-            $(function () {
-                fetch('{{url_for('classes.get_turmas_list_api')}}').then(res => res.json()).then(data => {
-                    var html;
-                    $.each(data, function (indexInArray, turmaObject) {
-                        html = '<a href="/user/view/' + turmaObject.id +
-                            '">' +
-                            turmaObject.label + '</a>';
-                        $('.view-as-class').append(html);
+            {% if current_user.is_admin == True %}
+            <!-- Generate student class view dropdown for teachers-->
+            <script type="text/javascript">
+                // Get the teacher classes
+                $(function () {
+                    fetch('{{url_for('classes.get_turmas_list_api')}}').then(res => res.json()).then(data => {
+                        var html;
+                        $.each(data, function (indexInArray, turmaObject) {
+                            html = '<a href="/user/view/' + turmaObject.id +
+                                '">' +
+                                turmaObject.label + '</a>';
+                            $('.view-as-class').append(html);
+                        });
                     });
                 });
-            });
-        </script>
-        {% endif %}
+            </script>
+            {% endif %}
+        
+        <!-- end of workUp scripts -->    
         {% endif %}
 
         {% endblock %}
@@ -160,6 +165,6 @@
         {% endblock templateScripts %}
 
     </body>
-</div>
+</div> <!-- #wrapper -->
 
 </html>

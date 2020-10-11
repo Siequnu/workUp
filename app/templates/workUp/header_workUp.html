@@ -32,13 +32,13 @@
 
         <!-- Assignments-->
         {% if current_user.is_admin %}
-        <li class="nav-item">
-            <a href="{{url_for('assignments.view_assignments')}}">Assignments</a>
+        <li class="nav-item assignments">
+            <a href="{{url_for('assignments.view_assignments')}}"><i class="fa fa-fw fa-thumbtack mr-2"></i>Assignments</a>
         </li>
         {% else %}
         <li>
             <a class="sidebar-dropdown-toggle dropdown-toggle" href="#assignmentsSubmenu" role="button" data-toggle="collapse">
-                Assignments
+                <i class="fa fa-fw fa-thumbtack mr-2"></i>Assignments
             </a>
             <ul class="collapse list-unstyled" id="assignmentsSubmenu">
                 <li><a href="{{url_for('assignments.view_assignments')}}">My assignments</a></li>
@@ -48,23 +48,23 @@
         {% endif %}
 
         <!-- Library-->
-        <li class="nav-item ">
-            <a href="{{url_for('files.class_library')}}">Library</a>
+        <li class="nav-item files">
+            <a href="{{url_for('files.class_library')}}"><i class="fa fa-fw fa-book-open mr-2"></i>Library</a>
         </li>
 
         <!-- Attendance-->
-        <li class="nav-item">
+        <li class="nav-item classes">
             {% if current_user.is_admin %}
-            <a href="{{url_for('classes.enter_attendance_code')}}">Classes</a>
+            <a href="{{url_for('classes.enter_attendance_code')}}"><i class="fa fa-fw fa-chalkboard-teacher mr-2"></i>Classes</a>
             {% else %}
-            <a href="{{url_for('classes.enter_attendance_code')}}">Attendance</a>
+            <a href="{{url_for('classes.enter_attendance_code')}}"><i class="fa fa-fw fa-user-check mr-2"></i>Attendance</a>
             {% endif %}
         </li>
 
         <!-- Tools-->
-        <li>
+        <li class="tools grammar collaboration">
             <a class="sidebar-dropdown-toggle dropdown-toggle" href="#toolsSubmenu" role="button" data-toggle="collapse">
-                Tools
+                <i class="fa fa-fw fa-laptop-house mr-2"></i>Tools
             </a>
             <ul class="collapse list-unstyled" id="toolsSubmenu">
                 <li><a href="{{url_for('grammar.check_grammar')}}">Grammar check</a></li>
