@@ -1,5 +1,10 @@
 {% extends "header.html" %} {% block app_content %}
 
+<!-- Hide footer on this -->
+<style>
+    .blockquote-footer {display: none;}
+</style>
+
 {% if admin %}
 <!-- Animation library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
