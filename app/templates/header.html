@@ -20,6 +20,8 @@
         {% include "workUp/header_workUp.html" %}
         {% elif config.APP_NAME == 'elmOnline' %}
         {% include "elmOnline/header_elmOnline.html" %}
+        {% elif config.APP_NAME == 'LCECAcademy' %}
+        {% include "lcec/header_lcec.html" %}
         {% endif %}
     </head>
 
@@ -61,6 +63,21 @@
             </nav>
             {% endif %}
 
+            {% if config.APP_NAME == 'LCECAcademy' %}
+            <nav class="navbar mini-nav navbar-expand-lg text-uppercase">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-light">
+                        <i class="fas fa-align-left"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
+
+                    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+
+                    <img src="{{ url_for('static', filename='logo_LCECAcademy.png') }}" width="35" height="40"
+                        class="d-inline-block align-middle" alt=""> LCEC ACademy</a>
+            </nav>
+            {% endif %}
+
             <br>
 
             <!-- Toastr message-->
@@ -92,7 +109,7 @@
         <script src="/static/js/searchable-table.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 
-        {% if config.APP_NAME == 'workUp' %}
+        {% if config.APP_NAME == 'workUp' or config.APP_NAME == 'LCECAcademy' %}
         <!-- workUp specific scripts -->
         
             <!-- jQuery Custom Scroller CDN -->

@@ -1,0 +1,29 @@
+{% extends "lcec/header_product.html" %}
+
+{% block app_content %}
+
+{% include "lcec/nav_product_main.html" %}
+
+<br>
+<br>
+
+<div class="jumbotron card card-image" id="overview" style="background-image: linear-gradient(
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.5)
+      ),
+      url(/static/assets/product/teacher_computer.jpeg);">
+    <div class="text-white text-center py-5 ">
+        <div>
+            <h1 class="display-4">LCEC</h1>
+            <h4 class="mx-5 mb-5">Education Consultants</h4>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <a href="{{url_for('user.login')}}" class="btn btn-warning btn-lg smooth text-dark"> Login <i class="fas fa-chevron-right"></i></a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

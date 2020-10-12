@@ -1,0 +1,120 @@
+{% extends "workUp/header_product.html" %}
+
+{% block app_content %}
+
+{% include "workUp/nav_product_static_pages.html" %}
+
+<div class="jumbotron card card-image" style="background-size:cover; background-repeat: no-repeat; background-image: linear-gradient(
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.5)
+      ),
+      url(/static/assets/product/teacher_computer_2.jpeg);">
+    <div class="text-white text-center py-5 px-4" style="text-shadow: 2px 2px #000000;">
+        <div>
+
+            <h1 class="display-4 text-center">
+                <i class="fa fa-user-graduate fa-1x"></i></h1>
+            <br>
+            <h1 class="display-4">You can use WorkUp, too!</h1>
+            <br>
+            <h4 class="mx-5 mb-5">
+                Using an online management system is a great way to improve the education at your
+                school or institution
+            </h4>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!--Section: Contact v.2-->
+    <div class="jumbotron">
+        <section class="mb-4">
+            <h2 class="display-6 text-center">Contact us to license this service.</h2>
+
+            <div class="row">
+
+                <!--Grid column-->
+                <div class="col-md-9 mb-md-0 mb-5">
+                    <form id="form" name="form" action="{{ url_for('main.inquire') }}" method="POST">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+
+                        <!--Grid row-->
+                        <div class="row">
+
+                            <!--Grid column-->
+                            <div class="col-md-6">
+                                <div class="md-form mb-0">
+                                    <input type="text" id="name" name="name" class="form-control">
+                                    <label for="name" class="">Your name</label>
+                                </div>
+                            </div>
+                            <!--Grid column-->
+
+                            <!--Grid column-->
+                            <div class="col-md-6">
+                                <div class="md-form mb-0">
+                                    <input type="text" id="email-address" name="email-address" class="form-control">
+                                    <label for="email-address" class="">Your email</label>
+                                </div>
+                            </div>
+                            <!--Grid column-->
+                        </div>
+
+                        <!--Grid row-->
+                        <div class="row">
+
+                            <!--Grid column-->
+                            <div class="col-md-12">
+
+                                <div class="md-form">
+                                    <textarea type="text" id="message" name="message" rows="2"
+                                        class="form-control md-textarea"></textarea>
+                                    <label for="message">How would you like to use this service?</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--Grid row-->
+
+                    </form>
+
+                    <div class="text-center text-md-left">
+                        <a class="btn btn-primary" onclick="document.getElementById('form').submit();">Send</a>
+                    </div>
+                    <div class="status"></div>
+                </div>
+
+                <!--Grid column-->
+            </div>
+
+        </section>
+        <!--Section: Contact-->
+
+        <div class="card-body">
+            <p><i class="fa fa-wrench"></i>
+                We provide full technical documentation on embedding sites and can provide advice to your IT
+                team if necessary.</p>
+
+            <p><i class="fa fa-link"></i> The site is hosted by us, but runs under your URL. We can take care of
+                all the setup.</p>
+
+            <p> <i class="fa fa-paint-brush"></i> As part of the setup, we make any adjustments to the layout to
+                ensure that everything looks
+                correct within your house style. </p>
+
+            <p> <i class="fa fa-file-contract"></i> We can provide a domain name, chosen by you (e.g.
+                www.school-portal.com) and a domain email address (e.g. hello@school-portal.com).</p>
+
+            <p> <i class="fa fa-server"></i> In our standard we guarantee 99.5% uptime of the website,
+                all security, privacy, and maintenance updates to the database or front pages.</p>
+
+        </div>
+
+    </div> <!-- Contact div-->
+</div>
+
+<script>
+    $('.contact-sales').addClass('active');
+</script>
+
+{% endblock %}

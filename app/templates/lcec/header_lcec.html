@@ -1,0 +1,146 @@
+<!-- Favicon -->
+<link rel="shortcut icon" href="/static/favicon_LCECAcademy.ico">
+<link rel="icon" href="/static/favicon_LCECAcademy.ico">
+
+<title>
+    {% block title %} {% if title %}{{ title }} - LCEC Academy{% else %} LCEC Academy{% endif %} {% endblock %}
+</title>
+
+<meta name="description" content="LCEC Academy is a professional education consultancy company">
+
+{% block navbar %}
+
+<!-- Sidebar style CSS -->
+<link href="/static/css/lcec-sidebar-style.css" rel="stylesheet">
+<!-- Scrollbar Custom CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+<!-- Navigation --> 
+<nav id="sidebar" class="text-uppercase">
+    <div class="sidebar-header">
+        <a href="{{url_for ('main.index')}}">
+            <img src="{{ url_for('static', filename='logo_LCECAcademy.png') }}" width="35" height="40" class="d-inline-block align-middle" />
+            <h3>LCEC Academy</h3>
+        </a>
+    </div>
+
+    <ul class="list-unstyled components">
+
+        <!-- Assignments
+        {% if current_user.is_admin %}
+        <li class="nav-item assignments">
+            <a href="{{url_for('assignments.view_assignments')}}"><i class="fa fa-fw fa-thumbtack mr-2"></i>Assignments</a>
+        </li>
+        {% else %}
+        <li>
+            <a class="sidebar-dropdown-toggle dropdown-toggle" href="#assignmentsSubmenu" role="button" data-toggle="collapse">
+                <i class="fa fa-fw fa-thumbtack mr-2"></i>Assignments
+            </a>
+            <ul class="collapse list-unstyled" id="assignmentsSubmenu">
+                <li><a href="{{url_for('assignments.view_assignments')}}">My assignments</a></li>
+                <li><a href="{{url_for('files.file_stats')}}">My feedback</a></li>
+            </ul>
+        </li>
+        {% endif %}
+        -->
+
+        <!-- Personal Statements -->
+        <li class="nav-item statements">
+            <a href="{{url_for('statements.view_statements')}}"><i class="fa fa-fw fa-signature mr-2"></i>Statements</a>
+        </li>
+        
+        <!-- References -->
+        <li class="nav-item references">
+            <a href="{{url_for('references.view_references')}}"><i class="fa fa-fw fa-quote-right mr-2"></i>References</a>
+        </li>
+
+        <!-- Library-->
+        <li class="nav-item files">
+            <a href="{{url_for('files.class_library')}}"><i class="fa fa-fw fa-book-open mr-2"></i>Library</a>
+        </li>
+
+        <!-- Attendance-->
+        <li class="nav-item classes">
+            {% if current_user.is_admin %}
+            <a href="{{url_for('classes.enter_attendance_code')}}"><i class="fa fa-fw fa-chalkboard-teacher mr-2"></i>Classes</a>
+            {% else %}
+            <a href="{{url_for('classes.enter_attendance_code')}}"><i class="fa fa-fw fa-user-check mr-2"></i>Attendance</a>
+            {% endif %}
+        </li>
+
+        <!-- Students -->
+        {% if current_user.is_admin %}
+        <li class="nav-item">
+            <a href="{{url_for('user.manage_students')}}"><i class="fa fa-fw fa-users mr-2"></i>Students</a>
+        </li>
+        {% endif %}
+
+
+        <!-- Tools-->
+        <li class="tools grammar collaboration">
+            <a class="sidebar-dropdown-toggle dropdown-toggle" href="#toolsSubmenu" role="button" data-toggle="collapse">
+                <i class="fa fa-fw fa-laptop-house mr-2"></i>Tools
+            </a>
+            <ul class="collapse list-unstyled" id="toolsSubmenu">
+                <li><a href="{{url_for('grammar.check_grammar')}}">Grammar check</a></li>
+                <li><a href="{{url_for('collaboration.collaboration_index')}}">Collaborate</a></li>
+                {% if current_user.is_admin %}
+                <li><a href="{{url_for('classes.random_student_generator')}}">Random student generator</a></li>
+                <li><a href="{{url_for('classes.group_generator')}}">Group generator</a></li>
+                {% endif %}
+            </ul>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled components">
+        <!-- Login -->
+        {% if current_user.is_anonymous %}
+        <li class="nav-item">
+            <a href="{{url_for('user.login')}}">Login</a>
+        </li>
+
+        {% else %}
+        <!-- Superintendant link -->
+        {% if current_user.is_superintendant %}
+        <li class="nav-item">
+            <a href="{{url_for('main.superintendant')}}">Superintendant</a>
+        </li>
+        {% endif %}
+
+        <!-- Activate student view -->
+        {% if current_user.is_admin %}
+        <li>
+            <a class="sidebar-dropdown-toggle dropdown-toggle" href="#studentViewSubmenu" role="button" data-toggle="collapse">Student view</a>
+            <ul class="collapse list-unstyled view-as-class" id="studentViewSubmenu">
+                <!-- Placeholder, will be filled with the classes that we can view-->
+            </ul>
+        </li>
+        {% endif %}
+
+        <!-- Return to teacher view -->
+        {% if current_user.can_return_to_admin %}
+        <li class="nav-item">
+            <a href="{{url_for('user.view_as_admin')}}">Return to teacher view</a>
+        </li>
+        {% endif %}
+
+        <!-- Logout link for all authenticated users -->
+        <li class="nav-item">
+            <a class="logout" href="{{url_for('user.logout')}}">Logout</a>
+        </li>
+        {% endif %}
+    </ul>
+
+    <!-- Not needed so far
+    <ul class="list-unstyled CTAs">
+        <li>
+            <a href=#" class="download">Download source</a>
+        </li>
+        <li>
+            <a href="#" class="article">Back to article</a>
+        </li>
+    </ul>
+    -->
+</nav>
+
+{% endblock %}
