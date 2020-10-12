@@ -44,6 +44,19 @@
         {% endif %}
         -->
 
+        <!-- University Applications -->
+        <li>
+            <a class="sidebar-dropdown-toggle dropdown-toggle" href="#universityApplicationsSubmenu" role="button"
+                data-toggle="collapse">
+                <i class="fa fa-fw fa-briefcase mr-2"></i>Applications
+            </a>
+            <ul class="collapse list-unstyled" id="universityApplicationsSubmenu">
+                <li><a href="{{url_for('checklists.view_checklists')}}">Checklists</a></li>
+                <li><a href="{{url_for('goals.view_goals')}}">Goals</a></li>
+                <li><a href="{{url_for('consultations.view_consultations')}}">Consultations</a></li>
+            </ul>
+        </li>
+
         <!-- Personal Statements -->
         <li class="nav-item statements">
             <a href="{{url_for('statements.view_statements')}}"><i class="fa fa-fw fa-signature mr-2"></i>Statements</a>
@@ -53,6 +66,10 @@
         <li class="nav-item references">
             <a href="{{url_for('references.view_references')}}"><i class="fa fa-fw fa-quote-right mr-2"></i>References</a>
         </li>
+
+    </ul>
+
+    <ul class="list-unstyled components">
 
         <!-- Library-->
         <li class="nav-item files">

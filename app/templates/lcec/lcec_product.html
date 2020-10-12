@@ -11,19 +11,66 @@
         rgba(0, 0, 0, 0.5), 
         rgba(0, 0, 0, 0.5)
       ),
-      url(/static/assets/product/teacher_computer.jpeg);">
+      url(/static/assets/lcec/kcl.jpg);">
     <div class="text-white text-center py-5 ">
         <div>
-            <h1 class="display-4">LCEC</h1>
-            <h4 class="mx-5 mb-5">Education Consultants</h4>
+            <h1 class="display-4">London Culture and Education Committee</h1>
+            <h4 class="mx-5 mb-5">Intellectual development and education consultants</h4>
             <br>
-            <div class="row">
-                <div class="col">
-                    <a href="{{url_for('user.login')}}" class="btn btn-warning btn-lg smooth text-dark"> Login <i class="fas fa-chevron-right"></i></a>
-                </div>
-
-            </div>
         </div>
     </div>
 </div>
+
+<style>
+    .card .card-img-top {max-height: 200px; object-fit: cover;}
+</style>
+
+<div class="container mb-3" id="users">
+    <div class="card-deck">
+        <div class="card">
+            <div class="view overlay">
+                <img class="card-img-top" src="/static/assets/lcec/students.jpg" alt="Card image cap">
+                <a href="{{ url_for('main.product_teachers') }}">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Admissions</h4>
+                <p class="card-text">Our team of trained specialists will help you earn a place in your dream university.</p>
+                <a href="{{ url_for('main.product_teachers') }}" class="btn btn-info">Learn more</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="view overlay">
+                <img class="card-img-top" src="/static/assets/lcec/london.jpeg" alt="Card image cap">
+                <a href="{{ url_for('main.product_consultancies') }}">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+            <div class="card-body">
+                <!-- Title -->
+                <h4 class="card-title">Culture exchange</h4>
+                <p class="card-text">Enrich your knowledge of UK culture by studying abroad.</p>
+                <a href="{{ url_for('main.product_consultancies') }}" class="btn btn-info">Learn more</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="view overlay">
+                <img class="card-img-top" src="/static/assets/lcec/policy.jpg" alt="Card image cap">
+                <a href="{{ url_for('main.product_consultancies') }}">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+            <div class="card-body">
+                <h4 class="card-title">Policy</h4>
+                <p class="card-text">Consult with LCEC to gain our experience of education policy.</p>
+                <a href="{{ url_for('main.product_consultancies') }}" class="btn btn-info">Learn more</a>
+            </div>
+        </div>
+        <!-- Card -->
+    </div> <!-- Card deck-->
+
+</div> <!-- First container -->
 {% endblock %}
