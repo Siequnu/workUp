@@ -61,6 +61,14 @@
             {% endif %}
         </li>
 
+        <!-- Students -->
+        {% if current_user.is_admin %}
+        <li class="nav-item">
+            <a href="{{url_for('user.manage_students')}}"><i class="fa fa-fw fa-users mr-2"></i>Students</a>
+        </li>
+        {% endif %}
+
+
         <!-- Tools-->
         <li class="tools grammar collaboration">
             <a class="sidebar-dropdown-toggle dropdown-toggle" href="#toolsSubmenu" role="button" data-toggle="collapse">
