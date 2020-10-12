@@ -17,11 +17,11 @@
 
         <!-- Load appropriate header for the service -->
         {% if config.APP_NAME == 'workUp' %}
-        {% include "workUp/header_workUp.html" %}
+            {% include "workUp/header_workUp.html" %}
         {% elif config.APP_NAME == 'elmOnline' %}
-        {% include "elmOnline/header_elmOnline.html" %}
+            {% include "elmOnline/header_elmOnline.html" %}
         {% elif config.APP_NAME == 'LCECAcademy' %}
-        {% include "lcec/header_lcec.html" %}
+            {% include "lcec/header_lcec.html" %}
         {% endif %}
     </head>
 
@@ -74,7 +74,22 @@
                     <a class="navbar-brand" href="{{ url_for('main.index') }}">
 
                     <img src="{{ url_for('static', filename='logo_LCECAcademy.png') }}" width="35" height="40"
-                        class="d-inline-block align-middle" alt=""> LCEC ACademy</a>
+                        class="d-inline-block align-middle" alt=""> LCEC Academy</a>
+            </nav>
+            {% endif %}
+
+            {% if config.APP_NAME == 'elmOnline' %}
+            <nav class="navbar mini-nav navbar-expand-lg text-uppercase">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-light">
+                        <i class="fas fa-align-left"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
+
+                    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+
+                    <img src="{{ url_for('static', filename='logo_elmOnline.png') }}" width="40" height="40"
+                        class="d-inline-block align-middle" alt=""> elmOnline</a>
             </nav>
             {% endif %}
 
@@ -109,7 +124,7 @@
         <script src="/static/js/searchable-table.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 
-        {% if config.APP_NAME == 'workUp' or config.APP_NAME == 'LCECAcademy' %}
+        {% if config.APP_NAME == 'workUp' or config.APP_NAME == 'LCECAcademy' or config.APP_NAME =='elmOnline' %}
         <!-- workUp specific scripts -->
         
             <!-- jQuery Custom Scroller CDN -->
