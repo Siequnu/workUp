@@ -51,7 +51,7 @@
             {% if config.APP_NAME == 'workUp' %}
             <nav class="navbar mini-nav navbar-expand-lg navbar-dark bg-primary text-uppercase">
                 <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                    <button type="button" id="sidebarCollapse" class="btn btn-lg btn-info">
                         <i class="fas fa-align-left"></i>
                         <span>Toggle Sidebar</span>
                     </button>
@@ -60,13 +60,14 @@
 
                         <img src="{{ url_for('static', filename='logo_workUp.png') }}" width="40" height="40"
                             class="d-inline-block align-middle" alt=""> workUp</a>
+                </div>
             </nav>
             {% endif %}
 
             {% if config.APP_NAME == 'LCECAcademy' %}
             <nav class="navbar mini-nav navbar-expand-lg text-uppercase">
                 <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-light">
+                    <button type="button" id="sidebarCollapse" class="btn btn-lg btn-light">
                         <i class="fas fa-align-left"></i>
                         <span>Toggle Sidebar</span>
                     </button>
@@ -75,13 +76,14 @@
 
                         <img src="{{ url_for('static', filename='logo_LCECAcademy.png') }}" width="35" height="40"
                             class="d-inline-block align-middle" alt=""> LCEC Academy</a>
+                </div>
             </nav>
             {% endif %}
 
             {% if config.APP_NAME == 'elmOnline' %}
             <nav class="navbar mini-nav navbar-expand-lg text-uppercase">
                 <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-light">
+                    <button type="button" id="sidebarCollapse" class="btn btn-lg btn-light">
                         <i class="fas fa-align-left"></i>
                         <span>Toggle Sidebar</span>
                     </button>
@@ -90,6 +92,7 @@
 
                         <img src="{{ url_for('static', filename='logo_elmOnline.png') }}" width="40" height="40"
                             class="d-inline-block align-middle" alt=""> elmOnline</a>
+                </div>
             </nav>
             {% endif %}
 
