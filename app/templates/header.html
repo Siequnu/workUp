@@ -12,193 +12,194 @@
     <link href="/static/css/library_card.css" rel="stylesheet">
     <link href="https://bootswatch.com/4/flatly/bootstrap.min.css" rel="stylesheet">
 
-    <!-- General wrapper for site-->
-    <div class="wrapper">
-        <!-- Load appropriate header for the service -->
-        {% if config.APP_NAME == 'workUp' %}
-        {% include "workUp/header_workUp.html" %}
-        {% elif config.APP_NAME == 'elmOnline' %}
-        {% include "elmOnline/header_elmOnline.html" %}
-        {% elif config.APP_NAME == 'LCECAcademy' %}
-        {% include "lcec/header_lcec.html" %}
-        {% endif %}
+    <!-- Load appropriate header for the service -->
+    {% if config.APP_NAME == 'workUp' %}
+    {% include "workUp/header_workUp.html" %}
+    {% elif config.APP_NAME == 'elmOnline' %}
+    {% include "elmOnline/header_elmOnline.html" %}
+    {% elif config.APP_NAME == 'LCECAcademy' %}
+    {% include "lcec/header_lcec.html" %}
+    {% endif %}
+
 </head>
 
 <body>
-    <!-- Custom small-screen CSS fixes -->
-    <style>
-        .nav-link {
-            transition: 0.15s;
-        }
-
-        @media screen and (max-width: 500px) {
-            h1 {
-                font-size: 2rem;
+    <div class="wrapper">
+        <!-- Custom small-screen CSS fixes -->
+        <style>
+            .nav-link {
+                transition: 0.15s;
             }
-        }
 
-        @media screen and (max-width: 992px) {
-            a.viewAssignmentChevron {
-                display: none;
+            @media screen and (max-width: 500px) {
+                h1 {
+                    font-size: 2rem;
+                }
             }
-        }
-    </style>
 
-    <!-- Load content block -->
-    <div id="content">
+            @media screen and (max-width: 992px) {
+                a.viewAssignmentChevron {
+                    display: none;
+                }
+            }
+        </style>
 
-        {% if config.APP_NAME == 'workUp' %}
-        <nav class="navbar mini-nav navbar-expand-lg navbar-dark bg-primary text-uppercase">
-            <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="btn btn-info">
-                    <i class="fas fa-align-left"></i>
-                    <span>Toggle Sidebar</span>
-                </button>
+        <!-- Load content block -->
+        <div id="content">
 
-                <a class="navbar-brand" href="{{ url_for('main.index') }}">
+            <!-- Load appropriate nav -->
+            {% if config.APP_NAME == 'workUp' %}
+            <nav class="navbar mini-nav navbar-expand-lg navbar-dark bg-primary text-uppercase">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
 
-                    <img src="{{ url_for('static', filename='logo_workUp.png') }}" width="40" height="40"
-                        class="d-inline-block align-middle" alt=""> workUp</a>
-        </nav>
+                    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+
+                        <img src="{{ url_for('static', filename='logo_workUp.png') }}" width="40" height="40"
+                            class="d-inline-block align-middle" alt=""> workUp</a>
+            </nav>
+            {% endif %}
+
+            {% if config.APP_NAME == 'LCECAcademy' %}
+            <nav class="navbar mini-nav navbar-expand-lg text-uppercase">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-light">
+                        <i class="fas fa-align-left"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
+
+                    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+
+                        <img src="{{ url_for('static', filename='logo_LCECAcademy.png') }}" width="35" height="40"
+                            class="d-inline-block align-middle" alt=""> LCEC Academy</a>
+            </nav>
+            {% endif %}
+
+            {% if config.APP_NAME == 'elmOnline' %}
+            <nav class="navbar mini-nav navbar-expand-lg text-uppercase">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-light">
+                        <i class="fas fa-align-left"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
+
+                    <a class="navbar-brand" href="{{ url_for('main.index') }}">
+
+                        <img src="{{ url_for('static', filename='logo_elmOnline.png') }}" width="40" height="40"
+                            class="d-inline-block align-middle" alt=""> elmOnline</a>
+            </nav>
+            {% endif %}
+
+            <br>
+
+            <!-- Toastr -->
+            {{ toastr.include_jquery() }} {{ toastr.include_toastr_css() }} {{ toastr.message() }}
+
+            {% block app_content %}
+
+            {% endblock %}
+
+
+            {% if config.APP_NAME == 'workUp' %}
+            <div class="container-footer text-center">
+                <footer class="blockquote-footer">
+                    <p>WorkUp is designed and developed by Patrick Johansson © 2020</p>
+                </footer>
+            </div>
+            {% endif %}
+
+        </div> <!-- #content -->
+
+
+        <!-- Scripts -->
+        {% block scripts %}
+        <script src="/static/js/lib/fontawesome-kit-7bd5544b77.js"></script>
+
+        {{ bootstrap.load_js() }}
+        {{ toastr.include_toastr_js() }}
+
+        <script src="/static/js/searchable-table.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
+        <!-- jQuery Custom Scroller CDN -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js">
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                // Enable the side scrollbar
+                $("#sidebar").mCustomScrollbar({
+                    theme: "minimal"
+                });
+
+                // Function to toggle the sidebar
+                var toggleSidebar = function () {
+                    // Open or close navbar
+                    $('#sidebar').toggleClass('active');
+
+                    // Close  dropdowns
+                    $('.collapse.in').toggleClass('in');
+
+                    // and also adjust aria-expanded attributes we use for the open/closed arrows
+                    // in our CSS
+                    $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                }
+
+                // Click handler to open the menu
+                $('body').on('click', '#sidebarCollapse', function () {
+                    toggleSidebar();
+                });
+
+                // Clicking outside the sidebar is an implicit close
+                $('#content').on('click', function () {
+                    if ($('#sidebar').hasClass('active')) {
+                        toggleSidebar();
+                    }
+                })
+
+                // Helper function to add active class to a navbar item
+                var setAsActiveNavItem = function (navClass) {
+                    if (navClass !== '') {
+                        $('#sidebar li').removeClass('active');
+                        $('#sidebar li.' + navClass).addClass('active');
+                    }
+                };
+
+                // Add the appropriate active layer to the sidebar, based on parsing the url
+                setAsActiveNavItem(window.location.pathname.split('/')[1]);
+            });
+        </script>
+
+        {% if current_user.is_admin == True %}
+        <!-- Generate student class view dropdown for teachers-->
+        <script type="text/javascript">
+            // Get the teacher classes
+            $(function () {
+                fetch('{{url_for('classes.get_turmas_list_api')}}').then(res => res.json()).then(data => {
+                    var html;
+                    $.each(data, function (indexInArray, turmaObject) {
+                        html = '<a href="/user/view/' + turmaObject.id +
+                            '">' +
+                            turmaObject.label + '</a>';
+                        $('.view-as-class').append(html);
+                    });
+                });
+            });
+        </script>
         {% endif %}
-
-        {% if config.APP_NAME == 'LCECAcademy' %}
-        <nav class="navbar mini-nav navbar-expand-lg text-uppercase">
-            <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="btn btn-light">
-                    <i class="fas fa-align-left"></i>
-                    <span>Toggle Sidebar</span>
-                </button>
-
-                <a class="navbar-brand" href="{{ url_for('main.index') }}">
-
-                    <img src="{{ url_for('static', filename='logo_LCECAcademy.png') }}" width="35" height="40"
-                        class="d-inline-block align-middle" alt=""> LCEC Academy</a>
-        </nav>
-        {% endif %}
-
-        {% if config.APP_NAME == 'elmOnline' %}
-        <nav class="navbar mini-nav navbar-expand-lg text-uppercase">
-            <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="btn btn-light">
-                    <i class="fas fa-align-left"></i>
-                    <span>Toggle Sidebar</span>
-                </button>
-
-                <a class="navbar-brand" href="{{ url_for('main.index') }}">
-
-                    <img src="{{ url_for('static', filename='logo_elmOnline.png') }}" width="40" height="40"
-                        class="d-inline-block align-middle" alt=""> elmOnline</a>
-        </nav>
-        {% endif %}
-
-        <br>
-
-        <!-- Toastr message-->
-        {{ toastr.include_jquery() }} {{ toastr.include_toastr_css() }} {{ toastr.message() }}
-
-        {% block app_content %}
 
         {% endblock %}
 
+        <!-- Load any scripts that are in the template -->
+        {% block templateScripts %}
 
-        {% if config.APP_NAME == 'workUp' %}
-        <div class="container-footer text-center">
-            <footer class="blockquote-footer">
-                <p>WorkUp is designed and developed by Patrick Johansson © 2020</p>
-            </footer>
-        </div>
-        {% endif %}
+        {% endblock templateScripts %}
 
-    </div> <!-- #content -->
-
-
-    <!-- Scripts -->
-    {% block scripts %}
-    <script src="/static/js/lib/fontawesome-kit-7bd5544b77.js"></script>
-
-    {{ bootstrap.load_js() }}
-    {{ toastr.include_toastr_js() }}
-
-    <script src="/static/js/searchable-table.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-
-    <!-- jQuery Custom Scroller CDN -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js">
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            // Enable the side scrollbar
-            $("#sidebar").mCustomScrollbar({
-                theme: "minimal"
-            });
-
-            // Function to toggle the sidebar
-            var toggleSidebar = function () {
-                // Open or close navbar
-                $('#sidebar').toggleClass('active');
-
-                // Close  dropdowns
-                $('.collapse.in').toggleClass('in');
-
-                // and also adjust aria-expanded attributes we use for the open/closed arrows
-                // in our CSS
-                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-            }
-
-            // Click handler to open the menu
-            $('body').on('click', '#sidebarCollapse', function () {
-                toggleSidebar();
-            });
-
-            // Clicking outside the sidebar is an implicit close
-            $('#content').on('click', function () {
-                if ($('#sidebar').hasClass('active')) {
-                    toggleSidebar();
-                }
-            })
-
-            // Helper function to add active class to a navbar item
-            var setAsActiveNavItem = function (navClass) {
-                if (navClass !== '') {
-                    $('#sidebar li').removeClass('active');
-                    $('#sidebar li.' + navClass).addClass('active');
-                }
-            };
-
-            // Add the appropriate active layer to the sidebar, based on parsing the url
-            setAsActiveNavItem(window.location.pathname.split('/')[1]);
-        });
-    </script>
-
-    {% if current_user.is_admin == True %}
-    <!-- Generate student class view dropdown for teachers-->
-    <script type="text/javascript">
-        // Get the teacher classes
-        $(function () {
-            fetch('{{url_for('classes.get_turmas_list_api')}}').then(res => res.json()).then(data => {
-                var html;
-                $.each(data, function (indexInArray, turmaObject) {
-                    html = '<a href="/user/view/' + turmaObject.id +
-                        '">' +
-                        turmaObject.label + '</a>';
-                    $('.view-as-class').append(html);
-                });
-            });
-        });
-    </script>
-    {% endif %}
-
-    {% endblock %}
-
-    <!-- Load any scripts that are in the template -->
-    {% block templateScripts %}
-
-    {% endblock templateScripts %}
-
+    </div> <!-- #wrapper -->
 </body>
-</div> <!-- #wrapper -->
 
 </html>
