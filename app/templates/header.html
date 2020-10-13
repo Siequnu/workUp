@@ -123,9 +123,6 @@
     <script src="/static/js/searchable-table.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 
-    {% if config.APP_NAME == 'workUp' or config.APP_NAME == 'LCECAcademy' or config.APP_NAME =='elmOnline' %}
-    <!-- workUp specific scripts -->
-
     <!-- jQuery Custom Scroller CDN -->
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js">
@@ -176,14 +173,12 @@
         });
     </script>
 
-
     {% if current_user.is_admin == True %}
     <!-- Generate student class view dropdown for teachers-->
     <script type="text/javascript">
         // Get the teacher classes
         $(function () {
-            fetch('{{url_for('
-                classes.get_turmas_list_api ')}}').then(res => res.json()).then(data => {
+            fetch('{{url_for('classes.get_turmas_list_api')}}').then(res => res.json()).then(data => {
                 var html;
                 $.each(data, function (indexInArray, turmaObject) {
                     html = '<a href="/user/view/' + turmaObject.id +
@@ -194,9 +189,6 @@
             });
         });
     </script>
-    {% endif %}
-
-    <!-- end of workUp scripts -->
     {% endif %}
 
     {% endblock %}
