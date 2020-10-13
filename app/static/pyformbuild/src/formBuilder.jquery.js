@@ -234,8 +234,6 @@
 					items = currentlySelected.children('.choices').children('option');
 				}
 
-				console.log(items);
-
 				items.each(function(i){
 
 					if( currentlySelected.data('type') != 'element-dropdown' ) {
@@ -272,8 +270,6 @@
 				var data = {
 					"choices":choices
 				}
-
-				console.log(data);
 
 				// Render the choices
 
@@ -406,8 +402,6 @@
 					var items = currentlySelected.children('.choices').children('.choice');
 				}
 
-				console.log(items);
-
 				$(items).each(function(i){
 
 					if( currentlySelected.data('type') == 'element-dropdown' ) {
@@ -463,8 +457,6 @@
 						'lastChoice': lastChoice,
 						'elementId': elementId
 					}
-
-					console.log(data);
 
 					dust.render(template, data, function(err, out) {
 						currentlySelected.children('.choices').append(out);
