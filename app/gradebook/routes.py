@@ -24,9 +24,6 @@ def create_gradebook_template():
 	if app.models.is_admin(current_user.username):
 		#¡# Shuld check for turmas, and compile: current a TA won't get any assignments showing
 		all_assignments = Assignment.query.filter_by(created_by_id = current_user.id).all()
-		print (all_assignments)
-		for assignment in all_assignments:
-			print (assignment.turma)
 		return render_template (
 			'create_gradebook_template.html',
 			all_assignments = all_assignments)

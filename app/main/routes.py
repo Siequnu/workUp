@@ -141,13 +141,11 @@ def index():
 			)
 
 	# If user is not authenticated, redirect to these product pages
-	print (index_template)
 	if current_app.config['APP_NAME'] == 'workUp':
 		return render_template('workUp/product.html')
 	elif current_app.config['APP_NAME'] == 'elmOnline':
 		return render_template('elmOnline/elm_product.html')
 	elif current_app.config['APP_NAME'] == 'LCECAcademy':
-		print ('yes')
 		return render_template('lcec/lcec_product.html')
 	else:
 		return render_template(index_template)
