@@ -158,8 +158,10 @@
 
                     // Helper function to add active class to a navbar item
                     var setAsActiveNavItem = function (navClass) {
-                        $('#sidebar li').removeClass ('active');
-                        $('#sidebar li.' + navClass).addClass ('active');
+                        if (navClass !== '') {
+                            $('#sidebar li').removeClass ('active');
+                            $('#sidebar li.' + navClass).addClass ('active');
+                        } 
                     };
                     
                     // Add the appropriate active layer to the sidebar, based on parsing the url
