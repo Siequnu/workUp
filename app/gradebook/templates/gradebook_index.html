@@ -1,0 +1,15 @@
+{% extends "header.html" %} {% block app_content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1><i class="fa fa-star-half-alt"></i> Gradebook</h1>
+    </div>
+  </div>
+  <hr>
+
+  <a href="{{url_for('gradebook.create_gradebook_template')}}"><button class="btn btn-lg btn-outline-success mb-3"><i class="fa fa-plus-circle"></i> Create gradebook template</button></a>
+
+
+</div>
+{% endblock %}

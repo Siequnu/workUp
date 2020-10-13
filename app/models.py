@@ -91,6 +91,7 @@ class Turma(db.Model):
 	turma_year = db.Column(db.Integer)
 	lesson_start_time = db.Column(db.Time)
 	lesson_end_time = db.Column(db.Time)
+	assignments = db.relationship('Assignment', backref='turma', lazy='dynamic')
 	
 	def __repr__(self):
 		return '<Turma {}>'.format(self.turma_number)

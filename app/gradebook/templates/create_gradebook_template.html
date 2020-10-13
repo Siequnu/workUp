@@ -1,0 +1,238 @@
+{% extends "header.html" %}
+{% from 'bootstrap/form.html' import render_form %}
+{% from 'bootstrap/form.html' import render_field %}
+{% block app_content %}
+
+<style>
+      .selected-criteria-bucket {
+            width: 50%;
+            border: 1px solid grey;
+            border-radius: 7.5px;
+            min-height: 100px;
+      }
+
+      .criteria.hidden {
+            display: none;
+      }
+
+      .go-to-add-criteria-button {
+            display: none;
+      }
+
+     
+
+      nav ol.breadcrumb li {
+            color: rgb(107, 108, 114)
+      }
+
+      nav ol.breadcrumb li.current {
+            color: rgb(6, 6, 10)
+      }
+
+      nav ol.breadcrumb li.done {
+            color: rgb(57, 126, 37)
+      }
+
+      nav ol.breadcrumb li i {
+            padding-top: 4px;
+      }
+
+
+      nav ol.breadcrumb li {
+            font-size: 0.86rem
+      }
+
+
+      h5 {
+            padding: 10px 0 5px 0;
+      }
+</style>
+
+
+<div class="container">
+      <br>
+      <!-- Help modal -->
+      <div class="modal fade" id="createGradebookHelpModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                        <div class="modal-body">
+                              <h1 class="display-5"><i class="fa fa-star-half-alt"></i> Create gradebook</h1>
+                              <p class="lead">Create a gradebook template which can be applied to any class.</p>
+                              <hr class="my-4">
+                              <p>First, add the assessment elements to the gradebook. These can be selected from
+                                    assignments you have distributed, or you can create new types, like homework, and
+                                    other punctual assessment.</p>
+                              <p>Next, choose the assessment type and weighting for each assessment element.</p>
+                              <p>Finally, click create to use this gradebook.</p>
+                        </div>
+                        <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                  </div>
+            </div>
+      </div>
+
+
+      <div class="container">
+            <div class="row">
+                  <div class="col-md-2">
+                        <a href="{{ url_for('gradebook.gradebook_index')}}"><button class="btn btn-light mb-2">
+                                    <i class="fa fa-chevron-left">
+                                    </i> Back
+                              </button>
+                        </a>
+                  </div>
+                  <div class="col-md-10">
+                        <button type="button" class="btn btn-lg btn-outline-secondary float-right" data-toggle="modal"
+                              data-target="#createGradebookHelpModal">
+                              <i class="fa fa-info"></i>
+                        </button>
+                        <h3><i class="fa fa-star-half-alt"></i> New gradebook template</h3>
+                  </div>
+            </div>
+            <hr>
+
+
+            <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                        <li class="breadcrumb-item current choose-assessment">Choose assessment</li>
+                        <li class="breadcrumb-item add-criteria">Add criteria</li>
+                        <li class="breadcrumb-item preview">Preview</li>
+                  </ol>
+            </nav>
+
+
+            <div class="choose-criteria-div">
+                  <h5>Please select all assessment types you would like in this gradebook:</h5>
+                  <div class="criteria-bucket">
+                        
+                        {% for assignment in all_assignments %}
+                        <button data-assignmentid="{{assignment.id}}" data-assignmenttitle="{{assignment.title}}"
+                              class="btn btn-outline-info m-2 criteria assignment {{assignment.title}}">{{assignment.title}} - {{assignment.turma.turma_label}}<i
+                                    class="fa ml-2 fa-plus"></i> </button>
+                        {% endfor %}
+
+                        <br>
+
+                        {% set assessmentTypes = ['Homework', 'Class work', 'Quiz', 'Exam', 'Test'] %}
+                        {% for type in assessmentTypes %}
+                        <button
+                              class="btn btn-outline-info m-2 criteria">{{type}} <i
+                                    class="fa ml-2 fa-plus"></i> </button>
+                        {% endfor %}
+
+                  </div>
+                  <div class="selected-criteria-bucket m-2">
+                        <!-- Placeholder for selected assessments, will be placed here-->
+                  </div>
+                  <button class="btn btn-outline-primary btn-lg m-2 go-to-add-criteria-button ">Next <i
+                              class="fa ml-2 fa-chevron-right"></i>
+                  </button>
+            </div>
+
+      </div>
+</div>
+
+<script>
+      $(function () {
+
+            // Handle clicking a an assignment or assessment type to add it to the bucket
+            $('.criteria-bucket .criteria').on('click', function () {
+                  
+                  // Assemble the HTML
+                  var assessmentTitle = $(this).text().trim();
+                  var html = '<button data-assignmentid="' + $(this).data('assignmentid') + '" class="btn btn-outline-success m-2 selected-criteria">' +
+                        assessmentTitle +
+                        '<i class="fa ml-2 fa-times"></i> </button>';
+                  $('.choose-criteria-div .selected-criteria-bucket').append(html);
+
+                  // Hide it from the selection basket
+                  if ($(this).hasClass ('assignment')) {
+                        $(this).addClass('hidden');
+                  }
+
+                  // Display the next button as we have at least one element now
+                  $('.go-to-add-criteria-button').show(200);
+            });
+
+
+            // Clicking a day in the bucket removes it
+            $('body').on('click', '.choose-criteria-div .selected-criteria-bucket .selected-criteria', function () {
+                  
+                  // Show it in the selection basket
+                  var assignmentId = $(this).data('assignmentid');
+                  $("button[data-assignmentid='" + assignmentId +"']").removeClass('hidden');
+
+                  // Hide the choose-times button if there are no days left
+                  if ($('.choose-criteria-div .selected-criteria-bucket .selected-criteria').length < 1) {
+                        $('.go-to-add-criteria-button').hide();
+                  }
+
+                  // Remove the button from this basket
+                  $(this).remove();
+            });
+
+
+            // Handler for next, i.e., go to the choose-times
+            $('.choose-times').click(function () {
+
+                  // Update the breadcrumb
+                  $('li.choose-days').addClass('done').append(
+                        '<i class="fa fa-check ml-2"></div>');
+                  $('li.lesson-times').addClass('current');
+
+                  // Add all the selected days to the bucket in the next page
+                  $.each($('.select-days .selected-days-bucket button'), function (indexInArray,
+                        button) {
+                        $('.choose-times-div .selected-days-bucket').append(button);
+                  });
+
+                  // Hide the previous panel
+                  $('.select-days').hide();
+
+                  // Make the cards with the dates
+                  $.each($('.choose-times-div .selected-days-bucket button'), function (
+                        indexInArray, button) {
+
+                        // Build the HTML
+                        var html = '<div class="col-12 col-md-6 col-lg-4 mb-3">';
+                        html += '<div class="card dateAndTimeCard" data-day="' + $(
+                              button).text().trim() + '">';
+                        html +=
+                              '<div class="card-header"><i class="fa fa-calendar-day mr-2"></i>' +
+                              $(button).text().trim() +
+                              '</div>';
+
+                        // Start time
+                        html += '<div class="row">';
+                        html +=
+                              '<div class="col-6"><p class="m-2">Start time</p></div>';
+                        html +=
+                              '<div class="col-6"><input class="m-2 lesson-time" name="lesson_' +
+                              indexInArray +
+                              '_start_time" required="" type="text" value="" autocomplete="off"></div>';
+                        html += '</div>'; // /row
+
+                        // End time
+                        html += '<div class="row">';
+                        html +=
+                              '<div class="col-6"><p class="m-2">End time</p></div>';
+                        html +=
+                              '<div class="col-6"><input class="m-2 lesson-time" name="lesson_' +
+                              indexInArray +
+                              '_end_time" required="" type="text" value="" autocomplete="off"></div>';
+                        html += '</div>'; // /row
+
+                        html += '</div></div>';
+
+                        // Append the HTML  
+                        $('.choose-times-div .lesson-time-cards .lesson-time-row.row')
+                              .append(html);
+                  });
+            });
+      });
+</script>
+
+
+
+{% endblock %}

@@ -52,23 +52,6 @@
             <a href="{{url_for('files.class_library')}}"><i class="fa fa-fw fa-book-open mr-2"></i>Library</a>
         </li>
 
-        <!-- Attendance-->
-        <li class="nav-item classes">
-            {% if current_user.is_admin %}
-            <a href="{{url_for('classes.enter_attendance_code')}}"><i class="fa fa-fw fa-chalkboard-teacher mr-2"></i>Classes</a>
-            {% else %}
-            <a href="{{url_for('classes.enter_attendance_code')}}"><i class="fa fa-fw fa-user-check mr-2"></i>Attendance</a>
-            {% endif %}
-        </li>
-
-        <!-- Students -->
-        {% if current_user.is_admin %}
-        <li class="nav-item">
-            <a href="{{url_for('user.manage_students')}}"><i class="fa fa-fw fa-users mr-2"></i>Students</a>
-        </li>
-        {% endif %}
-
-
         <!-- Tools-->
         <li class="tools grammar collaboration">
             <a class="sidebar-dropdown-toggle dropdown-toggle" href="#toolsSubmenu" role="button" data-toggle="collapse">
@@ -82,6 +65,24 @@
                 <li><a href="{{url_for('classes.group_generator')}}">Group generator</a></li>
                 {% endif %}
             </ul>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled components">
+        <!-- Students -->
+        {% if current_user.is_admin %}
+        <li class="nav-item user">
+            <a href="{{url_for('user.manage_students')}}"><i class="fa fa-fw fa-users mr-2"></i>Students</a>
+        </li>
+        {% endif %}
+        
+        <!-- Attendance-->
+        <li class="nav-item classes">
+            {% if current_user.is_admin %}
+            <a href="{{url_for('classes.enter_attendance_code')}}"><i class="fa fa-fw fa-chalkboard-teacher mr-2"></i>Classes</a>
+            {% else %}
+            <a href="{{url_for('classes.enter_attendance_code')}}"><i class="fa fa-fw fa-user-check mr-2"></i>Attendance</a>
+            {% endif %}
         </li>
     </ul>
 
