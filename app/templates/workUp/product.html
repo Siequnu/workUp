@@ -10,6 +10,7 @@
 <style>
     .product-screenshot img {display: block; width: 85%; margin: 0 auto; padding-top: -10px;}
     .btn {border-radius: 7.5px;}
+    ul.navbar-nav li {font-size: 13px;}
 </style>
 
 <div class="jumbotron card card-image" id="overview" style="background-repeat: no-repeat; background-size: cover; background-image: linear-gradient(
@@ -24,10 +25,10 @@
             <br>
             <div class="row">
                 <div class="col">
-                    <a href="{{ url_for('main.brochure') }}" class="btn btn-info btn-lg smooth"><i class="fas fa-cloud-download-alt"></i> Download information brochure</a>
+                    <a href="{{ url_for('main.brochure') }}" class="btn btn-info btn-lg smooth"><i class="fas fa-cloud-download-alt"></i> Download info PDF</a>
                 </div>
                 <div class="col">
-                    <a href="#features" class="btn heavy-rain-gradient btn-lg smooth text-dark"> View
+                    <a href="#product-screenshot" class="btn heavy-rain-gradient btn-lg smooth text-dark"> View
                         features <i class="fas fa-chevron-down"></i></a>
                 </div>
 
@@ -36,7 +37,7 @@
     </div>
 </div>
 
-<div class="container product-screenshot">
+<div class="container product-screenshot" id="product-screenshot">
     <img src="/static/assets/product/product_screenshot_home.png" />
     <hr>
     <h2 class="mt-5 mb-5 text-center">Learn how WorkUp can help you:</h2>
