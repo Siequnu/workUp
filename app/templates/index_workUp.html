@@ -215,6 +215,45 @@
     </div>
     <hr>
 
+    {% if current_user.is_superintendant %}
+    <!-- Display active usernames-->
+    <style>
+        .active-user-card {display: none; position: fixed; padding: 5px; border-radius: 5px; z-index: 2; min-width: 100px; background-color: rgb(255, 255, 255);}
+        .active-user-card p {display: block; padding: 0; margin: 0;}
+    </style>
+
+    <div class="active-user-card">
+        <!-- Placeholder for names-->
+    </div>
+    
+    <script type="text/javascript">
+        $(function () {
+            // On active user count hover, show active names
+            $('.pw1').hover(
+                function () {$('.active-user-card').show();}, 
+                function () {$('.active-user-card').hide();}
+            );
+
+            // Update active user names
+            var updateActiveUserCount = function () {
+                fetch('/user/api/users/active').then(res => res.json()).then(data => {
+                    $('.active-user-card').empty();
+                    $.each(data.active_users, function (indexInArray, username) { 
+                        var string = '<p>' + username + '</p>';
+                        $('.active-user-card').prepend (string);
+                    });                 
+                });
+            };
+
+            // Fetch the latest file stats every second
+            window.setInterval(function () {
+                updateActiveUserCount();
+            }, 1000);
+
+        });
+    </script>
+    {% endif %}
+
     <!-- Site stat widgets -->
     <div class="row text-center">
         <div class="col-6 col-lg-2 mb-3">
