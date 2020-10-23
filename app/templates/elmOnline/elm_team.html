@@ -18,7 +18,7 @@
     }
 
     h1 div:first-child {
-        color: #3498db;
+        color: #1f4c2f;
         margin-right: 1rem;
     }
 
@@ -70,12 +70,14 @@
         text-align: center;
         overflow: hidden;
         position: relative;
-        border-bottom: 5px solid #00325a;
+        border-bottom: 5px solid #7ab92d;
     }
 
     .our-team:hover {
         border-bottom: 5px solid #2f2f2f;
     }
+
+    .our-team p.member-info {display: none}
 
     .our-team .pic {
         display: inline-block;
@@ -91,7 +93,7 @@
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        background: #00325a;
+        background: #1f4c2f;
         position: absolute;
         bottom: 135%;
         right: 0;
@@ -219,8 +221,24 @@ background-size: cover; background-image: linear-gradient(
     </div>
 </div>
 
-<div class="container">
+  <!-- Team member detail modal -->
+  <div class="modal fade teamModal" id="teamModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h1 class="display-5 name"><i class="fa fa-user-tie"></i></h1>
+          <hr class="my-4">
+          <p class="lead"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
+
+<div class="container">
 
     <div class="container">
         <div class="row blog">
@@ -239,6 +257,11 @@ background-size: cover; background-image: linear-gradient(
                             <div class="team-content">
                                 <h3 class="title">Jian Wang (James)</h3>
                                 <span class="post">Chairman</span>
+                                <p class="member-info">
+                                    Born and raised in China, but living and working in the UK since the late 1980’s, Jian Wang (James) has developed his understanding of both Chinese and Western business culture during his professional career. Together with Alice Childs, he established his advisory business, Elm Lane International Holdings (E.L.I.Holdings), in 1995 to provide investment, trading and government relations advice in China.
+
+E.L.I.Holdings was the first foreign investment advisory company in south-west China and remains the oldest “western” firm still operating there. Not only has James contributed to the growth of business between China and the UK, he has also contributed greatly to China-UK cultural exchange. In 1999, he established the Sichuan Centre in the UK, which has become a “window” into western China and has received official as well as social recognition. The efforts of the Sichuan Centre have been highly praised by both Mr. Hu Jintao (former Paramount Leader of the People’s Republic of China) and Mr. Tony Blair (former UK Prime Minister). During his career, James has participated in over 250 cross-border M&A projects and has served many reputable organisations, including Lornamead, Scottish & Newcastle, Geely Group, Inver House Distillers, Potterton Myson, Freightliner and Sichuan’s Tongwei Group. In 2010 James was instrumental in assisting the Geely Group in its acquisition of the Volvo Car Group from Ford Motor Company in a US$1.8 billion buyout. James was a founding member of the British Chamber of Commerce of Southwest China and served as its first Vice-Chairman, he also has served as Vice-Chairman of the Sichuan Chamber of Commerce and is a member of the Sichuan People’s Standing Committee. In addition, he is a Chengdu Youth Federation Honorary Advisor.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -251,6 +274,11 @@ background-size: cover; background-image: linear-gradient(
                             <div class="team-content">
                                 <h3 class="title">Alice Childs</h3>
                                 <span class="post">Co chairman</span>
+                                <p class="member-info">
+                                    Alice Childs has been creating businesses in China since 1990. She began her “China” education by studying for an undergraduate degree in Chinese and French at Westminster University, graduating in 1988. Her degree studies took her to Sichuan University in 1985/86 and she was later awarded a research scholarship from the British Council to study at Sichuan University in China in 1987/88.
+
+Upon graduation, Alice worked at the Foreign Language Press in Beijing as a foreign expert and editor, translating famous Chinese works of the writer Zhang Xianling and Wang Meng amongst others. In 1989 she served as a personal assistant to the China Manager of Hopkinson Associates, a company that was at that time trading chemicals with many state-owned Enterprises across China. In 1992, she and her husband, James, started Magpie Enterprises, which was to be a precursor to Elm Lane International Holdings (E.L.I.Holdings) which they officially established in 1995. Alice comes from a long line of educators and has continued that tradition by gaining an MSc in Cross-cultural Studies of Child Development at Brunel University, and an MSc in Applied Linguistics & Second Language Aquisition in the Department of Education at Oxford University. She also leads the ELM Education business which focuses on improving the English language skills of Chinese students as well as preparing them for further education in the UK. She served as a Governor of Kelly College (now Mount Kelly) and is currently a Governor of Notting Hill & Ealing High School.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -262,6 +290,11 @@ background-size: cover; background-image: linear-gradient(
                             <div class="team-content">
                                 <h3 class="title">Dr. Stephen Spurr</h3>
                                 <span class="post">Board advisor</span>
+                                <p class="member-info">
+                                    Dr Stephen Spurr (born 9 October 1953) is an independent consultant and expert in UK and international education. From 2014 to August 2019 he was the Global Education Director of Inspired, an international education network of over 60 premium K-12 schools on 5 continents.[1] A British teacher, classicist, and academic, from 2005 to 2014 he was the Head Master of Westminster School.
+
+Prior to that he was Headmaster of Clifton College (2000-2005) and House Master and Head of Classics at Eton College (1984-2000). Before Eton he was a university academic, lecturing on Greek and Roman literature, history and archaeology.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -283,6 +316,9 @@ background-size: cover; background-image: linear-gradient(
                             <div class="team-content">
                                 <h3 class="title">Weiwei</h3>
                                 <span class="post">Executive manager</span>
+                                <p class="member-info">
+                                    She is a core member of the Elm Education team and a visiting scholar of famous British universities. In more than ten years of overseas study work, I have integrated strategic management experience into education, and I am good at communicating with students and exploring and expanding their potential. Through years of personal visits to universities in The UK and communication with the admissions officers, I have understood the essence of the application of famous British universities, created many application miracles, and successfully helped hundreds of students get offers from top 30 universities in the UK, including some of the world's top universities such as Oxbridge and Cambridge. "There are no students who are not good enough, only teachers who are not good enough to consult" is not only Mrs. Li's attitude at work, but also her career motto.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -294,6 +330,15 @@ background-size: cover; background-image: linear-gradient(
                             <div class="team-content">
                                 <h3 class="title">Nick Martin</h3>
                                 <span class="post">Expert consultant</span>
+                                <p class="member-info">
+                                    Nick Martin has over thirty years of corporate finance investment banking experience including leading positions at Evolution Securities China, Durlacher Corporation plc, Collins Stewart Limited and J P Morgan Cazenove.
+
+At Evolution China he helped establish and lead the leading mid-cap Investment bank in Europe specializing in China, receiving the Queen’s Award for Industry, the country’s highest honor for corporate business success in 2008, for growing the business by a compound growth rate of 123% per annum.
+
+During his career he has executed transactions totaling over US$150 billion, mainly for quoted corporate clients and has been actively involved in start-up venture capital, development capital, private placing’s, privatisations and M&A activities as well as a multitude of IPOs and fundraisings. He has led or co-led transactions for a wide range of companies in Asia, UK, Europe and emerging markets and across a wide range of sectors, including particularly, technology, energy, retail, media, biotech/healthcare, telecoms, leisure/property and resources.
+
+Nick was appointed (by Rt. Hon Margaret Thatcher) as a Cabinet Special Adviser 1988-89 to assist in privatizations and the energy sector. Nick is a Chartered Fellow of the Securities Institute (its highest level) and a qualified barrister and holds an M.A. in Law from Cambridge University. He has served on a number of boards and governing Bodies in both executive and non–executive capacities. He has been appointed by Chinese/Asian companies, including the University of Cambridge, Westminster College and  the UK Government to a number of the UK’s largest NHS Hospital and Primary Care Trusts.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -342,7 +387,18 @@ background-size: cover; background-image: linear-gradient(
 </div>
 
 <script>
-    $('.for-teachers').addClass('active');
+    $('.team').addClass('active');
+
+    $(function () {
+        // When clicking on a profile head, grab the info and populate a modal card with it
+        $('.our-team img').on ('click', function (event) {
+            var name = $(event.target).closest('.our-team').find('.title').first().text();
+            var bio = $(event.target).closest('.our-team').find('.member-info').first().text();
+            $('.teamModal .name').text (name);
+            $('.teamModal .lead').text (bio);
+            $('#teamModal').modal('show');
+        });
+    });
 </script>
 
 {% endblock %}
