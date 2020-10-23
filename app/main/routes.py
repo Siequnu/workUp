@@ -403,6 +403,11 @@ def elm_admissions():
 	if current_app.config['APP_NAME'] == 'elmOnline': return render_template('elmOnline/elm_admissions.html')
 	else: return redirect(url_for('main.index'))
 
+@bp.route('/team')
+def elm_team():
+	if current_app.config['APP_NAME'] == 'elmOnline': return render_template('elmOnline/elm_team.html')
+	else: return redirect(url_for('main.index'))
+
 @bp.route('/elm/inquire', methods=['GET', 'POST'])
 def elm_inquire():
 	if current_app.config['APP_NAME'] == 'elmOnline':

@@ -8,7 +8,52 @@
   </div>
   <hr>
 
-  <a href="{{url_for('gradebook.create_gradebook_template')}}"><button class="btn btn-lg btn-outline-success mb-3"><i class="fa fa-plus-circle"></i> Create gradebook template</button></a>
+  <!--<a href="{{url_for('gradebook.create_gradebook_template')}}"><button class="btn btn-lg btn-outline-success mb-3"><i class="fa fa-plus-circle"></i> Create gradebook template</button></a>-->
+  <div class="dropdown">
+    <button class="btn btn-lg btn-outline-info dropdown-toggle mb-3" type="button" id="dropdownMenuButton"
+      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      View class gradebook
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      {% for turma_id, turma_label in turma_choices %}
+      <a class="dropdown-item"
+        href="{{url_for('gradebook.gradebook_index', turma_id = turma_id)}}">{{turma_label}}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if turma %}
+  <div class="jumbotron">
+    <h1 class="display-4">{{turma.turma_label}}</h1>
+    <p class="lead">{{turma.turma_term}} {{turma.turma_year}}</p>
+    <hr class="my-4">
+
+    <div class="dropdown d-inline">
+      <button class="btn btn-lg btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-link mr-2"></i>Link assignment
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        {% for assignment in assignments %}
+        <a class="dropdown-item"
+          href="{{url_for('gradebook.link_assigment_to_gradebook', turma_id = turma.id, assignment_id = assignment.id)}}">{{assignment.title}}</a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <a href="{{url_for('collaboration.create_new_firepad')}}" <button class="btn btn-lg btn-outline-info">
+      <i class="fa fa-plus-circle">
+      </i> Add assessment
+      </button>
+    </a>
+
+  </div>
+
+  {% for entry in gradebook_entries %}
+    {{entry}}
+  {% endfor %}
+
+  {% endif %}
 
 
 </div>
