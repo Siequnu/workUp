@@ -1,0 +1,348 @@
+{% extends "elmOnline/elm_header_product.html" %}
+
+{% block app_content %}
+
+{% include "elmOnline/elm_nav_product_static_pages.html" %}
+
+<style>
+    /* TITRE */
+    h1 {
+        margin-top: 0;
+        font-size: 3rem;
+        display: inline-block;
+    }
+
+    h1 div {
+        position: relative;
+        float: left;
+    }
+
+    h1 div:first-child {
+        color: #3498db;
+        margin-right: 1rem;
+    }
+
+    /* PROFIL */
+    .blog .carousel-indicators {
+        left: 0;
+        top: auto;
+        bottom: -40px;
+
+    }
+
+    /* The colour of the indicators */
+    .blog .carousel-indicators li {
+        background: #a3a3a3;
+        border-radius: 50%;
+        width: 8px;
+        height: 8px;
+        margin-bottom: 10px;
+
+    }
+
+    .blog .carousel-indicators .active {
+        background: #707070;
+        margin-bottom: 10px;
+    }
+
+    .our-team-section {
+        position: relative;
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    .our-team-section:before {
+        position: absolute;
+        top: -0;
+        left: 0;
+        content: " ";
+        background: url(img/service-section-bottom.png);
+        background-size: 100% 100px;
+        width: 100%;
+        height: 100px;
+        float: left;
+        z-index: 99;
+    }
+
+    .our-team {
+        padding: 0 0 40px;
+        background: #f9f9f9;
+        text-align: center;
+        overflow: hidden;
+        position: relative;
+        border-bottom: 5px solid #00325a;
+    }
+
+    .our-team:hover {
+        border-bottom: 5px solid #2f2f2f;
+    }
+
+    .our-team .pic {
+        display: inline-block;
+        width: 130px;
+        height: 130px;
+        margin-bottom: 50px;
+        z-index: 1;
+        position: relative;
+    }
+
+    .our-team .pic:before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: #00325a;
+        position: absolute;
+        bottom: 135%;
+        right: 0;
+        left: 0;
+        opacity: 1;
+        transform: scale(3);
+        transition: all 0.3s linear 0s;
+    }
+
+    .our-team:hover .pic:before {
+        height: 100%;
+        background: #2f2f2f;
+    }
+
+    .our-team .pic:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: #ffffff00;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        transition: all 0.3s linear 0s;
+    }
+
+    .our-team:hover .pic:after {
+        background: #7ab92d;
+    }
+
+    .our-team .pic img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        transform: scale(1);
+        transition: all 0.9s ease 0s;
+        box-shadow: 0 0 0 14px #f7f5ec;
+        transform: scale(0.7);
+        position: relative;
+        z-index: 2;
+    }
+
+    .our-team:hover .pic img {
+        box-shadow: 0 0 0 14px #f7f5ec;
+        transform: scale(0.7);
+    }
+
+    .our-team .team-content {
+        margin-bottom: 30px;
+    }
+
+    .our-team .title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #4e5052;
+        letter-spacing: 1px;
+        text-transform: capitalize;
+        margin-bottom: 5px;
+    }
+
+    .our-team .post {
+        display: block;
+        font-size: 15px;
+        color: #4e5052;
+        text-transform: capitalize;
+    }
+
+    .our-team .social {
+        width: 100%;
+        padding-top: 10px;
+        margin: 0;
+        background: #2f2f2f;
+        position: absolute;
+        bottom: -100px;
+        left: 0;
+        transition: all 0.5s ease 0s;
+    }
+
+    .our-team:hover .social {
+        bottom: 0;
+    }
+
+    .our-team .social li {
+        display: inline-block;
+    }
+
+    .our-team .social li a {
+        display: block;
+        padding-top: 6px;
+        font-size: 15px;
+        color: #fff;
+        transition: all 0.3s ease 0s;
+    }
+
+    .our-team .social li a:hover {
+        color: #2f2f2f;
+        background: #f7f5ec;
+    }
+
+    @media only screen and (max-width: 990px) {
+        .our-team {
+            margin-bottom: 10px;
+        }
+    }
+</style>
+
+<div class="jumbotron card card-image" id="overview" style="background-repeat: no-repeat;
+background-size: cover; background-image: linear-gradient(
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.5)
+      ),
+      url(/static/assets/elm/team.jpg);">
+    <div class="text-white text-center py-5 px-4" style="text-shadow: 2px 2px #000000;">
+        <div>
+            <br>
+            <br>
+            <br>
+            <h1 class="display-4">Our team</h1>
+            <br>
+            <h4 class="mx-5 mb-5">
+                Elm has a prestigious board of coordinators, with a wide range of educational experience.
+            </h4>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+
+    <div class="container">
+        <div class="row blog">
+            <h1>
+                <div class="animated fadeInLeft">Our team of expert</div>
+                <div class="animated fadeInRight">consultants</div>
+            </h1>
+            <div class="col-md-12">
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="our-team">
+                            <div class="pic">
+                                <img src="/static/assets/elm/james.jpeg">
+                            </div>
+                            <div class="team-content">
+                                <h3 class="title">Jian Wang (James)</h3>
+                                <span class="post">Chairman</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="our-team">
+                            <div class="pic">
+                                <img src="/static/assets/elm/childs.jpeg">
+                            </div>
+                            <div class="team-content">
+                                <h3 class="title">Alice Childs</h3>
+                                <span class="post">Co chairman</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="our-team">
+                            <div class="pic">
+                                <img src="/static/assets/elm/spurr.jpg">
+                            </div>
+                            <div class="team-content">
+                                <h3 class="title">Dr. Stephen Spurr</h3>
+                                <span class="post">Board advisor</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--.row-->
+            </div>
+            <!--.item-->
+            <div class="col-md-12 mt-4">
+
+
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="our-team">
+                            <div class="pic">
+                                <img src="/static/assets/elm/weiwei.jpeg">
+                            </div>
+                            <div class="team-content">
+                                <h3 class="title">Weiwei</h3>
+                                <span class="post">Executive manager</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="our-team">
+                            <div class="pic">
+                                <img src="/static/assets/elm/martin.jpg">
+                            </div>
+                            <div class="team-content">
+                                <h3 class="title">Nick Martin</h3>
+                                <span class="post">Expert consultant</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="our-team">
+                            <div class="pic">
+                                <img src="/static/assets/elm/johansson.jpg">
+                            </div>
+                            <div class="team-content">
+                                <h3 class="title">Patrick Johansson</h3>
+                                <span class="post">Expert Consultant</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--.row-->
+            </div>
+            <!--.item-->
+
+        </div>
+        <!--.carousel-inner-->
+
+    </div> <!-- Container -->
+
+    <br><br>
+
+    <div class="jumbotron card card-image" style="background-image: linear-gradient(
+        rgba(0, 0, 0, 0.4), 
+        rgba(0, 0, 0, 0.4)
+      ),
+      url(/static/assets/product/gradient_background_2.png);">
+        <div class="text-white text-center py-5 px-4">
+            <blockquote class="blockquote">
+                <p class="mb-0">"Elm was friendly, supporting, and helped me through VISA issues. Thank you Elm!!"</p>
+                <footer class="blockquote-footer text-white">Yoyo <cite title="Source Title">UCL, London</cite></footer>
+            </blockquote>
+
+            <a href="{{ url_for('main.elm_inquire') }}" class="btn peach-gradient">
+                Contact us to find out more <i class="fas fa-chevron-right"></i></a>
+        </div>
+    </div>
+
+    <br>
+    <br>
+</div>
+
+<script>
+    $('.for-teachers').addClass('active');
+</script>
+
+{% endblock %}
