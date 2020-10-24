@@ -448,7 +448,7 @@
                             <span>{{upload_progress_percentage}}</span></div>
                         {% if last_upload_humanized_timestamp != False %}
                         <p class="card-text"><small class="text-muted"> {{last_upload_humanized_timestamp}} you
-                                completed {{number_of_uploads}} assignments</small></p>
+                                completed {{number_of_uploads}} {{ 'assignment' if number_of_uploads == 1 else 'assignments'}}</small></p>
                         {% endif %}
                     </div>
             </div></a>
