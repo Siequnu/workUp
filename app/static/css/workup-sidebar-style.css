@@ -64,6 +64,7 @@ a:focus {
 
 .sidebar-header img {display: inline;}
 .sidebar-header h3 {display: inline; vertical-align: middle; padding-left: 7px; text-transform: initial;}
+a.navbar-brand {text-transform: initial;}
 #sidebar.active {
     margin-left: -250px;
 }

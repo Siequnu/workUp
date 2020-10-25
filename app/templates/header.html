@@ -36,12 +36,24 @@
                     font-size: 2rem;
                 }
 
-                h3 {font-size: 1.5rem;}
+                h3 {
+                    font-size: 1.5rem;
+                }
 
 
-                .card-body {padding: 10px 5px;}
-                .card-body h2 {font-size: 1.75rem; text-align: center;}
-                .card-body h3 {text-align: center;}
+                .card-body {
+                    padding: 10px 5px;
+                }
+
+                .card-body h2 {
+                    font-size: 1.75rem;
+                    text-align: center;
+                }
+
+                .card-body h3 {
+                    text-align: center;
+                }
+
                 #myTab {
                     font-size: .8em;
                 }
@@ -50,15 +62,32 @@
                     padding: 10px;
                 }
 
-                .form-control-lg {font-size: 0.9rem;}
+                .form-control-lg {
+                    font-size: 0.9rem;
+                }
 
-                .counter h2.count-number {font-size: 20px; margin-top: 5px;}
-                .counter p.count-text {font-size: 14px; margin-top: 5px;}
-                .counter i {font-size: 1.1em;}
-                .counter {padding: 10px 0;}
+                .counter h2.count-number {
+                    font-size: 20px;
+                    margin-top: 5px;
+                }
 
-                .container-footer {padding: 0 10px;}
-            
+                .counter p.count-text {
+                    font-size: 14px;
+                    margin-top: 5px;
+                }
+
+                .counter i {
+                    font-size: 1.1em;
+                }
+
+                .counter {
+                    padding: 10px 0;
+                }
+
+                .container-footer {
+                    padding: 0 10px;
+                }
+
 
             }
 
@@ -80,11 +109,12 @@
                         <i class="fas fa-align-left"></i>
                         <span>Toggle Sidebar</span>
                     </button>
+                    <h3>
+                        <a class="navbar-brand" href="{{ url_for('main.index') }}">
 
-                    <a class="navbar-brand" href="{{ url_for('main.index') }}">
-
-                        <img src="{{ url_for('static', filename='logo_workUp.png') }}" width="40" height="40"
-                            class="d-inline-block align-middle" alt=""> workUp</a>
+                            <img src="{{ url_for('static', filename='logo_workUp.png') }}" width="40" height="40"
+                                class="d-inline-block align-middle" alt=""> workUp</a>
+                    </h3>
                 </div>
             </nav>
             {% endif %}
