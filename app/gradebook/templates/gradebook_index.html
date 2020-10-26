@@ -1,5 +1,37 @@
-{% extends "header.html" %} {% block app_content %}
+{% extends "header.html" %}
+{% from 'bootstrap/form.html' import render_field %}
+{% block app_content %}
 
+
+<!-- New criteria creation modal -->
+<div class="modal fade" id="newCriteriaModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <h1 class="display-5"><i class="fa fa-star-half-alt"></i> New criteria</h1>
+
+        <h4><i class="fa fa-users mr-2 mb-2"></i>{{turma.turma_label}}</h4>
+        <hr class="my-4">
+        <form method="post"
+          action="{{url_for('gradebook.create_new_assignment_criteria_for_class', turma_id = turma.id)}}"
+          enctype="multipart/form-data">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+          {{ render_field(form.title) }}
+          {{ render_field(form.date) }}
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        {{ render_field(form.submit, button_style="success") }}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Main page content -->
 <div class="container">
   <div class="row">
     <div class="col-12">
@@ -8,7 +40,6 @@
   </div>
   <hr>
 
-  <!--<a href="{{url_for('gradebook.create_gradebook_template')}}"><button class="btn btn-lg btn-outline-success mb-3"><i class="fa fa-plus-circle"></i> Create gradebook template</button></a>-->
   <div class="dropdown">
     <button class="btn btn-lg btn-outline-info dropdown-toggle mb-3" type="button" id="dropdownMenuButton"
       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -16,13 +47,13 @@
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       {% for turma_id, turma_label in turma_choices %}
-      <a class="dropdown-item"
-        href="{{url_for('gradebook.gradebook_index', turma_id = turma_id)}}">{{turma_label}}</a>
+      <a class="dropdown-item" href="{{url_for('gradebook.gradebook_index', turma_id = turma_id)}}">{{turma_label}}</a>
       {% endfor %}
     </div>
   </div>
 
   {% if turma %}
+  <!-- i.e., if we are vieweing class data, rather than the main index page-->
   <div class="jumbotron">
     <h1 class="display-4">{{turma.turma_label}}</h1>
     <p class="lead">{{turma.turma_term}} {{turma.turma_year}}</p>
@@ -41,20 +72,179 @@
       </div>
     </div>
 
-    <a href="{{url_for('collaboration.create_new_firepad')}}" <button class="btn btn-lg btn-outline-info">
-      <i class="fa fa-plus-circle">
-      </i> Add assessment
+    <a href="#"><button class="btn btn-lg btn-outline-info" data-toggle="modal" data-target="#newCriteriaModal">
+        <i class="fa fa-plus-circle">
+        </i> Add assessment
       </button>
     </a>
 
   </div>
 
-  {% for entry in gradebook_entries %}
-    {{entry}}
-  {% endfor %}
+  <table class="tablesorter" id="gradebook-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Username</th>
+        {% for assessment in assessment_criteria %}
+        <th>{{assessment.title}}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in gradebook %}
+      <tr id="student-{{student.id}}" data-studentid="{{student.id}}">
+        <td>{{student.student_number}}</td>
+        <td>{{student.username}}</td>
+        {% for grade in student.grades %}
+        <td data-islinkedassignment="{{grade.is_linked_assignment}}" data-grade="{{grade.grade}}"
+          data-assessmentid="{{grade.assessment_id}}"
+          data-uploadid="{{grade.upload_id}}">
+          {{grade.grade}}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
   {% endif %}
-
+  <!-- End of turma-specific logic -->
 
 </div>
+{% endblock %}
+
+
+<!-- Per-page scripts -->
+{% block templateScripts %}
+<!-- jQuery UI libraries -->
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+<!-- Add events for table sorter -->
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css"
+  integrity="sha512-2C6AmJKgt4B+bQc08/TwUeFKkq8CsBNlTaNcNgUmsDJSU1Fg+R6azDbho+ZzuxEkJnCjLZQMozSq3y97ZmgwjA=="
+  crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.default.min.css"
+  integrity="sha512-wghhOJkjQX0Lh3NSWvNKeZ0ZpNn+SPVXX1Qyc9OCaogADktxrBiBdKGDoqVUOyhStvMBmJQ8ZdMHiR3wuEq8+w=="
+  crossorigin="anonymous" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"
+  integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg=="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/widgets/widget-editable.min.js"
+  integrity="sha512-VHlS7CybF1D+OSYJb/aMXybvLSMP8KYApp0A7gtZe4H6AyeamIdK3qlxgyERiOvO4t4r7Ui0PbhnfdNXtYQCKw=="
+  crossorigin="anonymous"></script>
+
+<style>
+  .tablesorter tbody>tr>td>div[contenteditable=true]:focus {
+    outline: #08f 1px solid;
+    background: #eee;
+    resize: none;
+  }
+
+  td.no-edit,
+  span.no-edit {
+    background-color: rgba(230, 191, 153, 0.5);
+  }
+
+  .focused {
+    color: blue;
+  }
+
+  td.editable_updated {
+    background-color: green;
+    color: white;
+  }
+</style>
+
+<script>
+  $(function () {
+    // Enable the datefield to use UI datepicker
+    $('#date').datepicker({
+      dateFormat: 'yy-mm-dd'
+    });
+
+    // Enable the table sorter and editable plugin
+    $("#gradebook-table").tablesorter({
+      widgets: ['editable'],
+      widgetOptions: {
+        editable_columns: [2, 3,
+          4
+        ], // or "0-2" (v2.14.2); point to the columns to make editable (zero-based index)
+        editable_enterToAccept: true, // press enter to accept content, or click outside if false
+        editable_autoAccept: true, // accepts any changes made to the table cell automatically (v2.17.6)
+        editable_autoResort: false, // auto resort after the content has changed.
+        editable_validate: null, // return a valid string: function(text, original, columnIndex) { return text; }
+        editable_focused: function (txt, columnIndex, $element) {
+          // $element is the div, not the td
+          // to get the td, use $element.closest('td')
+          $element.addClass('focused');
+        },
+        editable_blur: function (txt, columnIndex, $element) {
+          // $element is the div, not the td
+          // to get the td, use $element.closest('td')
+          $element.removeClass('focused');
+        },
+        editable_selectAll: function (txt, columnIndex, $element) {
+          // note $element is the div inside of the table cell, so use $element.closest('td') to get the cell
+          // only select everthing within the element when the content starts with the letter "B"
+          return /^b/i.test(txt) && columnIndex === 0;
+        },
+        editable_wrapContent: '<div>', // wrap all editable cell content... makes this widget work in IE, and with autocomplete
+        editable_trimContent: true, // trim content ( removes outer tabs & carriage returns )
+        editable_noEdit: 'no-edit', // class name of cell that is not editable
+        editable_editComplete: 'editComplete' // event fired after the table content has been edited
+      }
+    }).children('tbody').on('editComplete', 'td', function (event, config) {
+      var $this = $(this),
+        newContent = $this.text(),
+        cellIndex = this.cellIndex, // there shouldn't be any colspans in the tbody
+        rowIndex = $this.closest('tr').attr('id'); // data-row-index stored in row id
+
+      $this.addClass('editable_updated'); // green background + white text
+      setTimeout(function () {
+        $this.removeClass('editable_updated');
+      }, 500);
+
+
+      // Get the grade variables
+      var data = {
+        isLinkedAssignment: $this.data('islinkedassignment'),
+        grade: $this.text(),
+        assessmentId: $this.data('assessmentid'),
+        studentId: $this.closest('tr').data('studentid'),
+        uploadId: $this.data('uploadid')
+      }
+
+      const csrftoken = Cookies.get('_csrf_token');
+
+      // Send the AJAX call to update the grade/assessment
+      if (data.isLinkedAssignment == 'True') {
+        var apiUrl = '/assignments/api/grade/save/' + data.uploadId + '/' + data.grade;
+      } else {
+        var apiUrl = '/gradebook/api/grade/save/' + data.studentId + '/' + data.assessmentId;
+      }
+      
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(data)
+      }).then(res => res.json()).then(data => {
+        if (!data.hasOwnProperty('error')) {
+          // Do nothing on successful data entry
+          console.log(data);
+        } else {
+          // There was an error...
+          console.log(data);
+        }
+      });
+      
+
+    });
+
+  });
+</script>
 {% endblock %}
