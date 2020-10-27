@@ -2,7 +2,7 @@ from flask import render_template, flash, abort, redirect, url_for, jsonify, req
 from flask_login import current_user, login_required
 
 from . import bp
-from .models import GradebookEntry, get_assessment_criteria_from_class_id, save_gradebook_grade
+from .models import GradebookEntry, get_assessment_criteria_from_class_id, save_gradebook_grade, remove_linked_assignment_from_gradebook
 from .forms import AssessmentCriteriaForm
 
 import app.models 
@@ -138,4 +138,19 @@ def link_assigment_to_gradebook(turma_id, assignment_id):
 		# Display a success message and redirect to the class gradebook page
 		flash ('New assignment linked successfully', 'success')
 		return redirect (url_for('gradebook.gradebook_index', turma_id = turma_id))
+		
+
+# Route to de-link an assignment with a gradebook
+@bp.route('/<int:turma_id>/link/assignment/<int:assignment_id>')
+@login_required
+def remove_linked_assignment(turma_id, assignment_id):
+	if app.models.is_admin(current_user.username):
+		turma = Turma.query.get(turma_id)
+		if turma is None: abort (403)
+		
+		if app.classes.models.check_if_turma_id_belongs_to_a_teacher (turma_id, current_user.id) is False:
+			abort (403)
+
+		# Remove the DB entry
+		remove_linked_assignment_from_gradebook (turma_id, assignment_id)
 		

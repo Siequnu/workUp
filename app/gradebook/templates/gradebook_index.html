@@ -31,6 +31,77 @@
 </div>
 
 
+<!-- Edit percentages modal -->
+<style>
+  .mainPercentageCard {
+    border-radius: 10px;
+    border: 1px solid grey;
+    width: 500px;
+  }
+
+  .mainPercentageCard input {
+    width: 50px;
+    display: inline-block;
+  }
+
+  .mainPercentageCard h5 {
+    display: inline-block;
+  }
+
+  .criteriaCard {
+    border-radius: 5px;
+    border: 1px solid grey;
+    margin: 5px;
+    list-style-type: none;
+  }
+
+  .criteriaCard p,
+  .criteriaCard input {
+    display: inline-block;
+    margin-left: 2px;
+  }
+
+  .criteriaCard p {
+    margin-bottom: 0;
+  }
+</style>
+<div class="modal fade" id="editPercentagesModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <h1 class="display-5"><i class="fa fa-percentage"></i> Edit percentages</h1>
+        <h4><i class="fa fa-users mr-2 mb-2"></i>{{turma.turma_label}}</h4>
+        <hr class="my-4">
+
+        <div class="cardsBody">
+          
+          <div class="mainPercentageCard p-2 mb-2">
+            <h5 class="mr-2">Weight</h5>
+            <input type="number" value="100" />
+            <hr>
+            {% for criteria in assessment_criteria %}
+            <li class="criteriaCard">
+              <input type="number" value="100" />
+              <p>{{criteria.assessment.title}}</p>
+            </li>
+            {% endfor %}
+          </div>
+          
+        </div>
+        <button type="button" class="btn btn-sm btn-info mt-2 addMainPercentageCard"> <i
+            class="fa fa-plus-circle"></i></button>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- Main page content -->
 <div class="container">
   <div class="row">
@@ -53,15 +124,20 @@
   </div>
 
   {% if turma %}
-  <!-- i.e., if we are vieweing class data, rather than the main index page-->
+  <!-- i.e., if we are viewing class data, rather than the main index page-->
+  <style>
+    .jumbotron {
+      padding: 20px;
+    }
+  </style>
   <div class="jumbotron">
-    <h1 class="display-4">{{turma.turma_label}}</h1>
+    <h3>{{turma.turma_label}}</h3>
     <p class="lead">{{turma.turma_term}} {{turma.turma_year}}</p>
     <hr class="my-4">
 
     <div class="dropdown d-inline">
-      <button class="btn btn-lg btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton"
-        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-link mr-2"></i>Link assignment
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -72,9 +148,15 @@
       </div>
     </div>
 
-    <a href="#"><button class="btn btn-lg btn-outline-info" data-toggle="modal" data-target="#newCriteriaModal">
+    <a href="#"><button class="btn btn-outline-success" data-toggle="modal" data-target="#newCriteriaModal">
         <i class="fa fa-plus-circle">
         </i> Add assessment
+      </button>
+    </a>
+
+    <a href="#"><button class="btn btn-outline-primary" data-toggle="modal" data-target="#editPercentagesModal">
+        <i class="fa fa-percentage">
+        </i> Edit percentages
       </button>
     </a>
 
@@ -86,7 +168,7 @@
         <th>#</th>
         <th>Username</th>
         {% for assessment in assessment_criteria %}
-        <th>{{assessment.title}}</th>
+        <th>{{assessment.assessment.title}}</th>
         {% endfor %}
       </tr>
     </thead>
@@ -96,10 +178,14 @@
         <td>{{student.student_number}}</td>
         <td>{{student.username}}</td>
         {% for grade in student.grades %}
-        <td data-islinkedassignment="{{grade.is_linked_assignment}}" data-grade="{{grade.grade}}"
-          data-assessmentid="{{grade.assessment_id}}"
-          data-uploadid="{{grade.upload_id}}">
+        <td class="{{'no-grade' if grade.grade == 'N/A' else ''}} {{'no-edit' if grade.upload_id == None else ''}}"
+          data-islinkedassignment="{{grade.is_linked_assignment}}" data-grade="{{grade.grade}}"
+          data-assessmentid="{{grade.assessment_id}}" data-uploadid="{{grade.upload_id}}">
+          {% if grade.upload_id == None %}
+          No upload
+          {% else %}
           {{grade.grade}}
+          {% endif %}
         </td>
         {% endfor %}
       </tr>
@@ -142,6 +228,11 @@
     resize: none;
   }
 
+  td.no-grade,
+  span.no-grade {
+    background-color: rgba(195, 193, 190, 0.5);
+  }
+
   td.no-edit,
   span.no-edit {
     background-color: rgba(230, 191, 153, 0.5);
@@ -159,6 +250,30 @@
 
 <script>
   $(function () {
+    ////////////////////////////
+    // Percentage adjustment scripts ///
+    ////////////////////////////
+    $('.addMainPercentageCard').on('click', function () {
+      var html = '<div class="mainPercentageCard p-2 mb-2">';
+      html += '<h5 class="mr-2">Weight</h5><input type="number" value="100" />';
+      html += '</div>';
+
+      $('.cardsBody').append (html);
+
+      // Retrigger the sorting 
+      $('.mainPercentageCard').sortable({
+        connectWith: '.mainPercentageCard'
+      });
+    });
+
+    // On startup make the assessment types sortable
+    $('.mainPercentageCard').sortable({
+      connectWith: '.mainPercentageCard'
+    });
+
+    ////////////////////////////
+    // Main page scripts ///
+    ////////////////////////////
     // Enable the datefield to use UI datepicker
     $('#date').datepicker({
       dateFormat: 'yy-mm-dd'
@@ -224,7 +339,7 @@
       } else {
         var apiUrl = '/gradebook/api/grade/save/' + data.studentId + '/' + data.assessmentId;
       }
-      
+
       fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -241,7 +356,7 @@
           console.log(data);
         }
       });
-      
+
 
     });
 

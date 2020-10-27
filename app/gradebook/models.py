@@ -33,12 +33,20 @@ class GradebookGrade (db.Model):
 
 # Save a gradebook grade. This will overwrite any existing grade
 def save_gradebook_grade (student_id, gradebook_entry_id, grade):
-	gradebook_grade = GradebookGrade (
-		gradebook_entry_id = gradebook_entry_id,
-		student_id = student_id,
-		grade = grade
-	)
-	gradebook_grade.add ()
+	existing_grade = GradebookGrade.query.filter_by (student_id = student_id, gradebook_entry_id = gradebook_entry_id).first()
+
+	if existing_grade is not None:
+		existing_grade.grade = grade
+		db.session.commit ()
+	
+	else:
+		gradebook_grade = GradebookGrade (
+			gradebook_entry_id = gradebook_entry_id,
+			student_id = student_id,
+			grade = grade
+		)
+		gradebook_grade.add ()
+
 
 # Get a formatted object containing all assessment criteria for a class
 def get_assessment_criteria_from_class_id (turma_id):
@@ -52,11 +60,17 @@ def get_assessment_criteria_from_class_id (turma_id):
 		
 			# Get the assignment information
 			assignment = Assignment.query.get(assessment_type.linked_assignment)
-			assessment_criteria.append (assignment)
+			assessment_criteria.append ({
+				'assessment_type': 'linked_assignment',
+				'assessment': assignment
+			})
 		
 		# Otherwise link the entry
 		else:
-			assessment_criteria.append (assessment_type)
+			assessment_criteria.append ({
+				'assessment_type': 'standalone_assessment',
+				'assessment': assessment_type
+			})
 
 	return assessment_criteria
 
@@ -78,12 +92,12 @@ def get_class_gradebook (turma_id):
 		for assessment in assessment_criteria:
 			
 			# If this type is an assignment
-			if hasattr(assessment, 'assignment_task_file_id'):
+			if hasattr(assessment['assessment'], 'assignment_task_file_id'):
 
 				# Get the grade for each student
 				# Grades are stored by upload_id, grade, user_id. 
 				# So check if a user has submitted an upload for the assignment, then check for grade
-				upload = Upload.query.filter_by(assignment_id = assessment.id).filter_by(user_id = student['id']).first()
+				upload = Upload.query.filter_by(assignment_id = assessment['assessment'].id).filter_by(user_id = student['id']).first()
 
 				# Fill out the grades
 				try:
@@ -94,20 +108,27 @@ def get_class_gradebook (turma_id):
 				student['grades'].append ({
 					'grade': grade.grade if grade is not None else 'N/A',
 					'is_linked_assignment': True, 
-					'assessment_id': assessment.id,
-					'upload_id': upload.id if upload is not None else 'N/A'
+					'assessment_id': assessment['assessment'].id,
+					'upload_id': upload.id if upload is not None else None
 				})
 
 			# If this assignment is a standalone assignment
 			else: 
 				
 				# Get the standalone grade
-				grade = GradebookGrade.query.filter_by(student_id=student['id']).filter_by(gradebook_entry_id=assessment.id).first()
+				grade = GradebookGrade.query.filter_by(student_id=student['id']).filter_by(gradebook_entry_id=assessment['assessment'].id).first()
 				student['grades'].append ({
 					'grade': grade.grade if grade is not None else 'N/A',
 					'is_linked_assignment': False, 
-					'assessment_id': assessment.id
+					'assessment_id': assessment['assessment'].id
 				})
 						
-	
 	return students
+
+# Function to remove a linked assignment from a class gradebook
+def remove_linked_assignment_from_gradebook (turma_id, assignment_id):
+	# Remove the DB entry
+	gradebook_entry = GradebookEntry.query.filter_by(turma_id = turma_id).filter_by(linked_assignment= assignment_id).first()
+	if gradebook_entry is not None:
+		db.session.delete(gradebook_entry)
+		db.session.commit()
