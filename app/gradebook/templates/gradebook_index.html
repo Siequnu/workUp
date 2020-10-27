@@ -2,7 +2,7 @@
 {% from 'bootstrap/form.html' import render_field %}
 {% block app_content %}
 
-
+{% if turma %}
 <!-- New criteria creation modal -->
 <div class="modal fade" id="newCriteriaModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -29,6 +29,7 @@
     </div>
   </div>
 </div>
+
 
 
 <!-- Edit percentages modal -->
@@ -100,7 +101,7 @@
     </div>
   </div>
 </div>
-
+{% endif %}
 
 <!-- Main page content -->
 <div class="container">
