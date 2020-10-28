@@ -2,6 +2,7 @@
 {% from 'bootstrap/form.html' import render_field %}
 {% block app_content %}
 
+{% if current_user.is_admin %}
 {% if turma %}
 <!-- New criteria creation modal -->
 <div class="modal fade" id="newCriteriaModal" tabindex="-1" role="dialog">
@@ -66,7 +67,7 @@
     margin-bottom: 0;
   }
 </style>
-<div class="modal fade" id="editPercentagesModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="editPercentagesModal" data-turmaid="{{turma.id}}" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
 
@@ -76,19 +77,19 @@
         <hr class="my-4">
 
         <div class="cardsBody">
-          
+
           <div class="mainPercentageCard p-2 mb-2">
             <h5 class="mr-2">Weight</h5>
-            <input type="number" value="100" />
+            <input class="mainWeight" type="number" value="100" />
             <hr>
             {% for criteria in assessment_criteria %}
-            <li class="criteriaCard">
-              <input type="number" value="100" />
+            <li class="criteriaCard" data-gradebookentryid="{{criteria.gradebook_entry.id}}">
+              <input class="criteriaWeight" type="number" value="{{criteria.gradebook_entry.combined_weight}}" />
               <p>{{criteria.assessment.title}}</p>
             </li>
             {% endfor %}
           </div>
-          
+
         </div>
         <button type="button" class="btn btn-sm btn-info mt-2 addMainPercentageCard"> <i
             class="fa fa-plus-circle"></i></button>
@@ -96,11 +97,12 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-success savePercentages">Save</button>
       </div>
     </div>
   </div>
 </div>
+{% endif %}
 {% endif %}
 
 <!-- Main page content -->
@@ -136,16 +138,30 @@
     <p class="lead">{{turma.turma_term}} {{turma.turma_year}}</p>
     <hr class="my-4">
 
+    {% if current_user.is_admin %}
+
     <div class="dropdown d-inline">
       <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-link mr-2"></i>Link assignment
+        <i class="fa fa-link mr-2"></i>Link assessment
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+        <h6 class="dropdown-header">Assignments</h6>
         {% for assignment in assignments %}
+        {% if assignment.already_linked == True %}
         <a class="dropdown-item"
-          href="{{url_for('gradebook.link_assigment_to_gradebook', turma_id = turma.id, assignment_id = assignment.id)}}">{{assignment.title}}</a>
+          href="{{url_for('gradebook.remove_linked_assignment', turma_id = turma.id, assignment_id = assignment.id)}}"><i
+            class="fa fa-minus-circle mr-2"></i>{{assignment.title}}</a>
+        {% else %}
+        <a class="dropdown-item"
+          href="{{url_for('gradebook.link_assigment_to_gradebook', turma_id = turma.id, assignment_id = assignment.id)}}"><i
+            class="fa fa-plus-circle mr-2"></i>{{assignment.title}}</a>
+        {% endif %}
         {% endfor %}
+        <div class="dropdown-divider"></div>
+        <h6 class="dropdown-header">Attendance</h6>
+
       </div>
     </div>
 
@@ -161,6 +177,8 @@
       </button>
     </a>
 
+    {% endif %}
+
   </div>
 
   <table class="tablesorter" id="gradebook-table">
@@ -168,20 +186,36 @@
       <tr>
         <th>#</th>
         <th>Username</th>
+        <th>Grade</th>
         {% for assessment in assessment_criteria %}
         <th>{{assessment.assessment.title}}</th>
         {% endfor %}
       </tr>
     </thead>
+
+    <tbody class="tablesorter-no-sort">
+      <tr id="dates">
+        <th></th>
+        <th></th>
+        <th></th>
+        {% for assessment in assessment_criteria %}
+        <th>
+          {{assessment.assessment.due_date if assessment.assessment_type == 'linked_assignment' else assessment.assessment.date}}
+        </th>
+        {% endfor %}
+      </tr>
+    </tbody>
+
     <tbody>
       {% for student in gradebook %}
-      <tr id="student-{{student.id}}" data-studentid="{{student.id}}">
+      <tr id="student-{{student.id}}" data-studentid="{{student.id}}" class="studentDataRow">
         <td>{{student.student_number}}</td>
         <td>{{student.username}}</td>
+        <td></td>
         {% for grade in student.grades %}
         <td class="{{'no-grade' if grade.grade == 'N/A' else ''}} {{'no-edit' if grade.upload_id == None else ''}}"
-          data-islinkedassignment="{{grade.is_linked_assignment}}" data-grade="{{grade.grade}}"
-          data-assessmentid="{{grade.assessment_id}}" data-uploadid="{{grade.upload_id}}">
+          data-islinkedassignment="{{grade.is_linked_assignment}}" data-gradebookentryid="{{grade.gradebook_entry.id}}"
+          data-grade="{{grade.grade}}" data-assessmentid="{{grade.assessment_id}}" data-uploadid="{{grade.upload_id}}">
           {% if grade.upload_id == None %}
           No upload
           {% else %}
@@ -203,9 +237,13 @@
 
 <!-- Per-page scripts -->
 {% block templateScripts %}
+
 <!-- jQuery UI libraries -->
 <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+<!-- Flash messages -->
+<script src="/static/js/lib/flash.min.js"></script>
 
 <!-- Add events for table sorter -->
 <link rel="stylesheet"
@@ -249,39 +287,201 @@
   }
 </style>
 
+
+{% if current_user.is_admin %}
 <script>
   $(function () {
-    ////////////////////////////
+
+    ////////////////////////////////////
     // Percentage adjustment scripts ///
-    ////////////////////////////
+    ////////////////////////////////////
+
     $('.addMainPercentageCard').on('click', function () {
       var html = '<div class="mainPercentageCard p-2 mb-2">';
-      html += '<h5 class="mr-2">Weight</h5><input type="number" value="100" />';
+      html += '<h5 class="mr-2">Weight</h5><input class="mainWeight" type="number" value="100" />';
       html += '</div>';
 
-      $('.cardsBody').append (html);
+      $('.cardsBody').append(html);
 
+      enableSorting ();
+    });
+
+    // Function to enable sorting
+    var enableSorting = function () {
       // Retrigger the sorting 
       $('.mainPercentageCard').sortable({
         connectWith: '.mainPercentageCard'
       });
+    };
+
+    enableSorting ();
+
+  
+    // Function to write a percentage object into the HTML
+    var writePercentageObject = function (percentageObject) {
+      
+      // Remove any existing HTML
+      $('.cardsBody').empty();
+
+      $.each(percentageObject, function (indexInArray, percentageObjectGroup) { 
+        var weight = percentageObjectGroup.grouped_weight;
+         
+        var html = '<div class="mainPercentageCard p-2 mb-2">';
+        html += '<h5 class="mr-2">Weight</h5><input class="mainWeight" type="number" value="' + weight + '" />';
+        html += '<hr>';
+
+        $.each(percentageObjectGroup.gradebook_entries, function (indexInArray, gradebookEntry) { 
+          html += '<li class="criteriaCard" data-gradebookentryid="' + gradebookEntry.gradebook_entry_id + '">';
+          html += '<input class="criteriaWeight" type="number" value="' + gradebookEntry.weight + '" />';
+          html += '<p>' + gradebookEntry.assessment_title + '</p></li>';
+        });
+
+        html += '</div>';
+
+        $('.cardsBody').append (html);
+
+        enableSorting ();
+      });
+    };
+
+
+    // Function to retrieve percentage object
+    var loadPercentageObject = function () {
+      
+      var turmaId = $('#editPercentagesModal').data('turmaid');
+      fetch('/gradebook/api/percentages/load/' + turmaId).then(res => res.json()).then(data => {
+        var percentageObject = data.percentages;
+        console.log (percentageObject);
+
+        // If we returned a full object, load it
+        if (!(data.hasOwnProperty('error'))) {
+          writePercentageObject (percentageObject);
+        }
+      })
+    };
+
+    // On startup, load the percentage object
+    loadPercentageObject();
+
+
+    // Function to build a percentage object
+    var getPercentageObject = function () {
+      // Create object to store data in
+      var mainPercentagesObject = [];
+
+      // For each mainPercentageCard, gather info about the criteria
+      $.each($('.mainPercentageCard'), function (indexInArray, card) {
+        // Initialise variables each loop 
+        // !FIXME is there a better way to reset these?
+        var cardObject = {};
+        var gradebookEntries = [];
+
+        var mainWeight = $(card).find('.mainWeight').first().val();
+
+        // Get the criteria in this card
+        var cardCriteria = $(card).find('.criteriaCard');
+
+        // Loop through each criteria to find ID and weight
+        $.each(cardCriteria, function (indexInArray, criteria) {
+          var gradebookEntryId = $(criteria).data('gradebookentryid');
+          var criteriaWeight = $(criteria).find('.criteriaWeight').first().val();
+
+          // Push an object with these to the gradebook
+          gradebookEntries.push({
+            gradebook_entry_id: gradebookEntryId,
+            weight: criteriaWeight
+          })
+        });
+
+        // Build the data object for this card
+        cardObject = {
+          grouped_weight: mainWeight,
+          gradebook_entries: gradebookEntries
+        }
+
+        // Add this to the main array
+        mainPercentagesObject.push(cardObject);
+      });
+
+      return mainPercentagesObject;
+    };
+
+
+    // Function to check if the percentages are valid
+    var checkIfPercentagesAreValid = function (percentagesObject) {
+      var objectIsValid = true;
+
+      // Check the main card percentages
+      var total = 0;
+      $.each(percentagesObject, function (indexInArray, cardObject) {
+        total = total + parseFloat(cardObject.grouped_weight);
+
+        // Check if the values inside the card add up to 100
+        var cardTotal = 0
+        $.each(cardObject.gradebook_entries, function (indexInArray, gradebookEntryObject) {
+          cardTotal = cardTotal + parseFloat(gradebookEntryObject.weight);
+        });
+        if (cardTotal !== 100) {
+          flash('The individual card weights do not add up to 100!');
+          objectIsValid = false;
+        }
+      });
+
+      if (total !== 100) {
+        flash('The main card weights do not add up to 100!');
+        objectIsValid = false;
+      }
+
+      return objectIsValid;
+    };
+
+
+    // On clicking save, save this percentage table to the database
+    $('.savePercentages').on('click', function (event) {
+      var mainPercentagesObject = getPercentageObject();
+
+      // If all the data is valid, POST AJAX to save
+      if (checkIfPercentagesAreValid(mainPercentagesObject)) {
+
+        const csrftoken = Cookies.get('_csrf_token');
+        var data = {
+          percentagesObject: mainPercentagesObject
+        };
+
+        var turmaId = $('#editPercentagesModal').data('turmaid');
+        var apiUrl = '/gradebook/api/percentages/save/' + turmaId;
+        fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'X-CSRFToken': csrftoken
+          },
+          body: JSON.stringify(data)
+        }).then(res => res.json()).then(data => {
+          if (!data.hasOwnProperty('error')) {
+            // Do nothing on successful data entry
+            console.log(data);
+          } else {
+            // There was an error...
+            console.log(data);
+          }
+        });
+      }
     });
 
-    // On startup make the assessment types sortable
-    $('.mainPercentageCard').sortable({
-      connectWith: '.mainPercentageCard'
-    });
 
-    ////////////////////////////
+    ////////////////////////
     // Main page scripts ///
-    ////////////////////////////
+    ////////////////////////
     // Enable the datefield to use UI datepicker
+
     $('#date').datepicker({
       dateFormat: 'yy-mm-dd'
     });
 
     // Enable the table sorter and editable plugin
     $("#gradebook-table").tablesorter({
+      cssInfoBlock: "tablesorter-no-sort",
       widgets: ['editable'],
       widgetOptions: {
         editable_columns: [2, 3,
@@ -363,4 +563,15 @@
 
   });
 </script>
+
+{% else %}
+
+<script>
+  $(function () {
+    // Enable the table sorter and editable plugin
+    $("#gradebook-table").tablesorter();
+  });
+</script>
+{% endif %}
+
 {% endblock %}
