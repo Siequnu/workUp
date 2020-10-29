@@ -167,6 +167,8 @@ class User(UserMixin, db.Model):
 	profile_text = db.Column(db.String(2000))
 	profile_picture = db.Column(db.String(200))
 
+	peer_review_forms = db.relationship('PeerReviewForm', backref='user', lazy='dynamic')
+
 
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
