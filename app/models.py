@@ -289,6 +289,7 @@ class Assignment(db.Model):
 	target_turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	peer_review_necessary = db.Column(db.Boolean, default=False)
+	open_peer_review = db.Column(db.Boolean, default=False)
 	peer_review_form_id = db.Column(db.Integer, db.ForeignKey('peer_review_form.id'))
 	assignment_task_file_id = db.Column(db.Integer, db.ForeignKey('assignment_task_file.id'))
 	
