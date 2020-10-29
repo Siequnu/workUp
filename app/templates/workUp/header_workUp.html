@@ -107,14 +107,14 @@
         <!-- Superintendant link -->
         {% if current_user.is_superintendant %}
         <li class="nav-item">
-            <a href="{{url_for('main.superintendant')}}">Superintendant</a>
+            <a href="{{url_for('main.superintendant')}}"><i class="fa fa-fw fa-user-shield mr-2"></i>Superintendant</a>
         </li>
         {% endif %}
 
         <!-- Activate student view -->
         {% if current_user.is_admin %}
         <li>
-            <a class="sidebar-dropdown-toggle dropdown-toggle" href="#studentViewSubmenu" role="button" data-toggle="collapse">Student view</a>
+            <a class="sidebar-dropdown-toggle dropdown-toggle" href="#studentViewSubmenu" role="button" data-toggle="collapse"><i class="fa fa-fw fa-user-graduate mr-2"></i>Student view</a>
             <ul class="collapse list-unstyled view-as-class" id="studentViewSubmenu">
                 <!-- Placeholder, will be filled with the classes that we can view-->
             </ul>
@@ -124,14 +124,16 @@
         <!-- Return to teacher view -->
         {% if current_user.can_return_to_admin %}
         <li class="nav-item">
-            <a href="{{url_for('user.view_as_admin')}}">Return to teacher view</a>
+            <a href="{{url_for('user.view_as_admin')}}"><i class="fa fa-fw fa-user-graduate mr-2"></i>Return to teacher view</a>
         </li>
         {% endif %}
 
         <!-- Logout link for all authenticated users -->
         <li class="nav-item">
-            <a class="logout" href="{{url_for('user.logout')}}">Logout</a>
+            <a class="logout" href="{{url_for('user.logout')}}"><i class="fa fa-fw fa-sign-out-alt mr-2"></i>Logout</a>
         </li>
+
+        
         {% endif %}
     </ul>
 

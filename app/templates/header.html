@@ -14,6 +14,7 @@
 
     <!-- Load appropriate header for the service -->
     {% if config.APP_NAME == 'workUp' %}
+    <link href="/static/css/workup-dark-mode.css" rel="stylesheet">
     {% include "workUp/header_workUp.html" %}
     {% elif config.APP_NAME == 'elmOnline' %}
     {% include "elmOnline/header_elmOnline.html" %}
@@ -25,6 +26,8 @@
 
 <body>
     <div class="wrapper">
+
+        
         <!-- Custom small-screen CSS fixes -->
         <style>
             .nav-link {
