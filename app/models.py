@@ -300,7 +300,7 @@ class PeerReviewForm(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(140))
 	description = db.Column(db.String(280))
-	serialised_form_data = db.Column(db.String(1000))
+	serialised_form_data = db.Column(db.String(20000))
 	created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
 	
