@@ -200,6 +200,11 @@
                     theme: "minimal"
                 });
 
+                // Reload the page for iOS PWA
+                $('.reloadPage').on('click', function () {
+                    window.location.reload(true);
+                });
+
                 // Function to toggle the sidebar
                 var toggleSidebar = function () {
                     // Open or close navbar
