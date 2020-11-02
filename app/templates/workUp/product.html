@@ -37,9 +37,15 @@
         </div>
     </div>
 </div>
-
+<style>
+    video {display: block; width: 100%;}
+</style>
 <div class="container product-screenshot" id="product-screenshot">
-    <img src="/static/assets/product/product_screenshot_home.png" />
+    <video controls autoplay preload muted poster="/static/assets/product/product_screenshot_home.png">
+        <source src="/static/assets/product/WorkUp.mp4"
+                type="video/mp4">
+        Sorry, your browser doesn't support embedded videos.
+    </video>
     <hr>
     <h2 class="mt-5 mb-5 text-center">Learn how WorkUp can help you:</h2>
 </div>
@@ -94,7 +100,10 @@
         </div>
         <!-- Card -->
     </div> <!-- Card deck-->
-
+    
+    <div class="product-screenshot">
+        <img class="mt-3" src="/static/assets/product/product_screenshot_home.png" />
+    </div>
 </div> <!-- First container -->
 
 <br>
