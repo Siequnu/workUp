@@ -35,7 +35,9 @@
                 <i class="fa fa-fw fa-briefcase mr-2"></i>Applications
             </a>
             <ul class="collapse list-unstyled" id="universityApplicationsSubmenu">
+                {% if current_user.is_admin %}
                 <li><a href="{{url_for('checklists.view_checklists')}}">Checklists</a></li>
+                {% endif %}
                 <li><a href="{{url_for('goals.view_goals')}}">Goals</a></li>
                 <li><a href="{{url_for('consultations.view_consultations')}}">Consultations</a></li>
                 <!--
