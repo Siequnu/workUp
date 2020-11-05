@@ -187,7 +187,7 @@
     <body>
 
         <!-- Toastr message-->
-        {{ toastr.include_jquery() }} {{ toastr.include_toastr_css() }} {{ toastr.message() }}
+        <script src="/static/js/lib/jquery-2.1.1.min.js"></script> {{ toastr.include_toastr_css() }} {{ toastr.message() }}
 
         {% block app_content %}
         <!-- Template content-->
@@ -197,6 +197,7 @@
     </body>
 
     <!-- Scripts -->
+    <script src="/static/js/lib/jquery-3.5.1.min.js"></script>
     {{ bootstrap.load_js() }}
     <script src="/static/bootstrap/mdb.min.js"></script>
     {{ toastr.include_toastr_js() }}
