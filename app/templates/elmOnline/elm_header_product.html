@@ -197,34 +197,38 @@
     </body>
 
     <!-- Scripts -->
+    <script src="/static/js/lib/jquery-3.5.1.min.js"></script>
     {{ bootstrap.load_js() }}
     <script src="/static/bootstrap/mdb.min.js"></script>
     {{ toastr.include_toastr_js() }}
+    
     <script>
+        $(function () {
+            // Nav click handler
+            $('a.smooth').on('click', function () {
+                // If clicking a link when on mobile (collapsible nav),
+                // collapse the nav after clicking link
+                if ($(".navbar-collapse").hasClass("show")) {
+                    $('.collapse').collapse('toggle');
+                }
 
-        // Nav click handler
-        $('a.smooth').on('click', function () {
-            // If clicking a link when on mobile (collapsible nav),
-            // collapse the nav after clicking link
-            if ($(".navbar-collapse").hasClass("show")) {
-                $('.collapse').collapse('toggle');
-            }
+                // If this is a page anchor, follow it
+                if ($(this).attr('href').charAt(0)) {
+                    $('html,body').animate({
+                        scrollTop: $(this.hash).offset().top - 50
+                    }, 850);
+                    event.preventDefault();
+                }
+                // else, follow link as normal
 
-            // If this is a page anchor, follow it
-            if ($(this).attr('href').charAt(0)) {
-                $('html,body').animate({
-                    scrollTop: $(this.hash).offset().top - 50
-                }, 850);
-                event.preventDefault();
-            }
-            // else, follow link as normal
+            });
 
-        });
-
-        //Scrollspy feature
-        $('body').scrollspy({ target: '#mainNav', offset: 70 });
-
-
+            //Scrollspy feature
+            $('body').scrollspy({
+                target: '#mainNav',
+                offset: 70
+            });
+        })
     </script>
 
     <script src="/static/js/lib/fontawesome-kit-7bd5544b77.js"></script>
