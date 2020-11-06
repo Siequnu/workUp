@@ -88,7 +88,8 @@ def create_app(config_class):
         'connect-src': [
             '\'self\'',
             '*.pusher.com',
-            'wss://ws-ap3.pusher.com'
+            'wss://ws-ap3.pusher.com',
+            'rtg.prowritingaid.com',
         ],
         'font-src': [
             '\'self\'',
@@ -104,6 +105,7 @@ def create_app(config_class):
             'code.jquery.com',
             'cdn.jsdelivr.net',
             'cdnjs.cloudflare.com',
+            'cdn.prowritingaid.com',
         ]
     }
     talisman.init_app(workup_app, content_security_policy=csp, force_https=False)
