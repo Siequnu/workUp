@@ -168,6 +168,7 @@ class User(UserMixin, db.Model):
 	profile_picture = db.Column(db.String(200))
 
 	peer_review_forms = db.relationship('PeerReviewForm', backref='user', lazy='dynamic')
+	assessment_forms = db.relationship('AssessmentForm', backref='user', lazy='dynamic')
 
 
 	def __repr__(self):
