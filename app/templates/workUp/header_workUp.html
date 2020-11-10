@@ -74,16 +74,12 @@
                 <li><a href="{{url_for('classes.random_student_generator')}}">Random student generator</a></li>
                 <li><a href="{{url_for('classes.group_generator')}}">Group generator</a></li>
                 {% endif %}
+                <li><a href="{{url_for('live-assessment.live_assessment_index')}}">Live assessment</a></li>
             </ul>
         </li>
     </ul>
 
     <ul class="list-unstyled components">
-        <!-- Live assessment
-        <li class="nav-item classes">
-            <a href="{{url_for('live-assessment.live_assessment_index')}}"><i class="fa fa-fw fa-tasks mr-2"></i>Live Assessment</a>
-        </li>-->
-
         <!-- Students and grades -->
         {% if current_user.is_admin %}
         <li class="nav-item user">
