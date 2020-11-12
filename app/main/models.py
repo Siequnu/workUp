@@ -10,10 +10,3 @@ def get_greeting ():
 		return 'Good afternoon'
 	else:
 		return 'Good evening'
-
-# Checks if a service is enabled and returns true or false
-def is_active_service (service_name):
-	for service in current_app.config['CUSTOM_SERVICES']:
-		if str(service_name) in service.values():
-			return True
-	return False

@@ -3,6 +3,7 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
+from flask import current_app
 
 @login.user_loader
 def load_user(id):
@@ -14,6 +15,16 @@ def is_admin (username):
 		return User.query.filter(User.username==username).one_or_none().is_admin
 	except:
 		return False
+
+
+def custom_service_is_enabled (service_name):
+	is_enabled = False
+	for service in current_app.config['CUSTOM_SERVICES']:
+		enabled_name = service['path'].split('.')[1]
+		if enabled_name == service_name:
+			is_enabled = True
+
+	return is_enabled
 
 class StatementProject (db.Model):
 	__table_args__ = {'sqlite_autoincrement': True}
