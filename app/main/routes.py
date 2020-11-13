@@ -75,9 +75,9 @@ def index():
 
 				# Statements
 				statement_projects=StatementProject.query.all(
-				) if app.models.custom_service_is_enabled('app.statements') else False,
+				) if app.models.custom_service_is_enabled('statements') else False,
 				statement_projects_needing_review=app.statements.models.get_projects_needing_review(
-				) if app.models.custom_service_is_enabled('app.statements') else False,
+				) if app.models.custom_service_is_enabled('statements') else False,
 
 			)
 		# Student views
@@ -129,15 +129,15 @@ def index():
 
 				# Consultations
 				consultations=app.consultations.models.get_consultation_info_array(
-					current_user.id) if app.models.custom_service_is_enabled('app.consultations') else False,
+					current_user.id) if app.models.custom_service_is_enabled('consultations') else False,
 
 				# Goals
 				goals=app.goals.models.get_student_goals_from_user_id(
-						current_user.id) if app.models.custom_service_is_enabled('app.goals') else False,
+						current_user.id) if app.models.custom_service_is_enabled('goals') else False,
 
 				# Mentors
 				mentors=app.mentors.models.get_mentors_from_student_id(
-						current_user.id) if app.models.custom_service_is_enabled('app.mentors') else False
+						current_user.id) if app.models.custom_service_is_enabled('mentors') else False
 			)
 
 	# If user is not authenticated, redirect to these product pages
@@ -173,9 +173,9 @@ def superintendant ():
 
 			# Statements
 			statement_projects=StatementProject.query.all(
-			) if app.models.custom_service_is_enabled('app.statements') else False,
+			) if app.models.custom_service_is_enabled('statements') else False,
 			statement_projects_needing_review=app.statements.models.get_projects_needing_review(
-			) if app.models.custom_service_is_enabled('app.statements') else False,
+			) if app.models.custom_service_is_enabled('statements') else False,
 
 			# Sign-up codes
 			sign_up_code = current_app.config['SIGNUP_CODES']
@@ -206,9 +206,9 @@ def superintendant_stats ():
 
 			# Statements
 			statement_projects=StatementProject.query.all(
-			) if app.models.custom_service_is_enabled('app.statements') else False,
+			) if app.models.custom_service_is_enabled('statements') else False,
 			statement_projects_needing_review=app.statements.models.get_projects_needing_review(
-			) if app.models.custom_service_is_enabled('app.statements') else False,
+			) if app.models.custom_service_is_enabled('statements') else False,
 
 		)
 	return redirect (url_for ('main.index'))
