@@ -22,8 +22,10 @@ from xpinyin import Pinyin
 
 class SQLAlchemy(_BaseSQLAlchemy):
     def apply_pool_defaults(self, app, options):
-        super(SQLAlchemy, self).apply_pool_defaults(app, options)
         options['pool_pre_ping'] = True
+        options['pool_size'] = 10
+        options['pool_recycle'] = 28000
+        super(SQLAlchemy, self).apply_pool_defaults(app, options)
 db = SQLAlchemy()
 
 migrate = Migrate()
