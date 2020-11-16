@@ -22,4 +22,7 @@
  .progress-circle span {background-color: #303030 !important;}
  .active-user-card {background-color: inherit !important;}
  input, select, textarea {color: #ffffff !important;}
+ .breadcrumbs {color: #ffffff98 !important;}
+ .btn-outline-secondary {color: #ffffff98 !important;}
+ .btn-outline-primary {color: #ffffff98 !important;}
 }
