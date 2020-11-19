@@ -102,6 +102,7 @@ def create_app(config_class):
         'script-src': [
             '\'self\'',
             '\'unsafe-inline\'',
+            'pagead2.googlesyndication.com',
             '*.pusher.com',
             'ajax.googleapis.com',
             'code.jquery.com',
