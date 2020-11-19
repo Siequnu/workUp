@@ -74,7 +74,8 @@ def create_app(config_class):
             'fonts.gstatic.com',
             '*.pusher.com',
             '*.w3.org',
-            'kit-free.fontawesome.com'
+            'kit-free.fontawesome.com',
+            'googleads.g.doubleclick.net',
         ],
         'img-src': [
             '*',
@@ -92,6 +93,7 @@ def create_app(config_class):
             '*.pusher.com',
             'wss://ws-ap3.pusher.com',
             'rtg.prowritingaid.com',
+            'pagead2.googlesyndication.com',
         ],
         'font-src': [
             '\'self\'',
