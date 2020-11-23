@@ -45,7 +45,7 @@ class StatementUpload (db.Model):
 	original_filename = db.Column(db.String(140))
 	filename = db.Column(db.String(140))
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.now())
-	description = db.Column(db.String(250))
+	description = db.Column(db.String(1000))
 	
 	def __repr__(self):
 		return '<Statement Upload {}>'.format(self.id)
