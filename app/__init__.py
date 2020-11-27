@@ -4,7 +4,7 @@ from config import *
 import importlib, logging, os
 from logging.handlers import RotatingFileHandler
 
-from flask_sqlalchemy import SQLAlchemy as _BaseSQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap  # This loads bootstrap-flask
@@ -20,12 +20,6 @@ from flask_talisman import Talisman
 from flask_seasurf import SeaSurf
 from xpinyin import Pinyin
 
-class SQLAlchemy(_BaseSQLAlchemy):
-    def apply_pool_defaults(self, app, options):
-        options['pool_pre_ping'] = True
-        options['pool_size'] = 10
-        options['pool_recycle'] = 28000
-        super(SQLAlchemy, self).apply_pool_defaults(app, options)
 db = SQLAlchemy()
 
 migrate = Migrate()
@@ -41,6 +35,11 @@ dropzone = Dropzone ()
 csrf = SeaSurf()
 talisman = Talisman()
 pinyin = Pinyin()
+
+class SQLAlchemy(SQLAlchemy):
+    def apply_pool_defaults(self, app, options):
+        super(SQLAlchemy, self).apply_pool_defaults(app, options)
+        options['pool_pre_ping'] = True
 
 def create_app(config_class):
     workup_app = Flask(__name__)
