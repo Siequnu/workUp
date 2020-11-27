@@ -20,6 +20,11 @@ from flask_talisman import Talisman
 from flask_seasurf import SeaSurf
 from xpinyin import Pinyin
 
+class SQLAlchemy(SQLAlchemy):
+    def apply_pool_defaults(self, app, options):
+        super(SQLAlchemy, self).apply_pool_defaults(app, options)
+        options['pool_pre_ping'] = True
+
 db = SQLAlchemy()
 
 migrate = Migrate()
@@ -35,11 +40,6 @@ dropzone = Dropzone ()
 csrf = SeaSurf()
 talisman = Talisman()
 pinyin = Pinyin()
-
-class SQLAlchemy(SQLAlchemy):
-    def apply_pool_defaults(self, app, options):
-        super(SQLAlchemy, self).apply_pool_defaults(app, options)
-        options['pool_pre_ping'] = True
 
 def create_app(config_class):
     workup_app = Flask(__name__)
