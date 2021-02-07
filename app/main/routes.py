@@ -37,6 +37,12 @@ def before_request():
 		current_user.last_seen = datetime.datetime.now()
 		db.session.commit()
 
+@current_app.after_request
+def close_request_session(response):
+	# 解决mysql server gone away
+	db.session.remove()
+	return response
+
 # Main entrance to the app
 
 
