@@ -20,7 +20,7 @@
  img:hover {opacity: 1;}
  .progress-circle {background-color: #222222 !important; color: #222222 !important;}
  .progress-circle span {background-color: #303030 !important;}
- .active-user-card {background-color: inherit !important;}
+ .active-user-card {background-color: #343434 !important;}
  input, select, textarea {color: #ffffff !important;}
  .breadcrumbs {color: #ffffff98 !important;}
  .btn-outline-secondary {color: #ffffff98 !important;}
