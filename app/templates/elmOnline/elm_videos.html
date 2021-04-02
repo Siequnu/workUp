@@ -39,7 +39,7 @@
                 </video>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary closeVideo" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -121,7 +121,11 @@
         $('.videoSource').prop('src', $(this).data('videosrc'));
         $('.tutorialVideo').get(0).load();
         $('#myModal').modal();
-    })
+    });
+
+    $('.closeVideo').on ('click', function () {
+        $('.tutorialVideo').get(0).pause();
+    });
 </script>
 
 <script>
