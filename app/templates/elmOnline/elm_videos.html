@@ -1,0 +1,131 @@
+{% extends "elmOnline/elm_header_product.html" %}
+
+{% block app_content %}
+
+{% include "elmOnline/elm_nav_product_static_pages.html" %}
+
+<div class="jumbotron card card-image" id="overview" style="background-image: linear-gradient(
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.5)
+      ),
+      url(/static/assets/elm/teacher.jpeg);background-size: cover;">
+    <div class="text-white text-center py-5 px-4" style="text-shadow: 2px 2px #000000;">
+        <div>
+            <br>
+            <br>
+            <br>
+            <h1 class="display-4">Tutorial videos</h1>
+            <br>
+            <h4 class="mx-5 mb-5">
+                Need some help with your statement? Try exploring our useful catalog of videos!
+            </h4>
+        </div>
+    </div>
+</div>
+
+<style>
+    video {
+        max-width: 100%;
+        object-fit: cover;
+    }
+</style>
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-body">
+                <video class="tutorialVideo" controls>
+                    <source class="videoSource" src="#" type="video/mp4">
+                    Sorry, your browser doesn't support embedded videos.
+                </video>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<style>
+    .card {box-shadow: none; transition: 0.3s; border: 1px solid transparent;}
+    .card:hover {border: 1px solid green;}
+</style>
+
+<div class="container">
+    <ul class="nav nav-tabs nav-fill">
+        <li class="nav-item">
+            <a href="#public" class="nav-link active" data-toggle="tab">Help videos</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="public">
+            <br>
+            <!-- Public videos-->
+            <h3 class="display-6 text-left">Elm Videos</h3>
+            <p>Our useful videos help you navigate the admissions process</p>
+            <hr>
+
+            <div class="card-columns mb-3" style="width: 100%;">
+                {% for video in videos %}
+                {% if video.private == True %}
+                    {% if current_user.is_authenticated %}    
+                        {% set privateVideo = 'False' %}
+                    {% else %}
+                        {% set privateVideo = 'True' %}
+                    {% endif %}
+                {% endif %}
+                <div class="card" data-private="{{privateVideo}}" data-videosrc="static/elm/videos/{{video.filename}}{{video.extension}}">
+                    <img src="static/elm/videos/{{video.filename}}.jpg"
+                        style="width: 100%; {% if privateVideo == 'True' %}filter: blur(8px);{% endif %}" />
+                    <div class="card-body">
+                        <p class="card-text">{{video.title}}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+</div> <!-- Container -->
+
+<br><br>
+
+<div class="jumbotron card card-image" style="background-image: linear-gradient(
+        rgba(0, 0, 0, 0.4), 
+        rgba(0, 0, 0, 0.4)
+      ),
+      url(/static/assets/product/gradient_background_2.png);">
+    <div class="text-white text-center py-5 px-4">
+        <blockquote class="blockquote">
+            <p class="mb-0">"Elm helped me reach the university of my dreams. Their guidance helped me to enter into
+                KCL."</p>
+            <footer class="blockquote-footer text-white">Alex <cite title="Source Title">KCL, London</cite></footer>
+        </blockquote>
+
+        <a href="{{ url_for('main.elm_inquire') }}" class="btn peach-gradient">
+            Contact us to find out more <i class="fas fa-chevron-right"></i></a>
+    </div>
+</div>
+
+<br>
+<br>
+</div>
+
+<script>
+    $('.card').on ('click', function () {
+        if ($(this).data('private') == 'True'){ // Compare with Python dictionary True
+            alert ('Please register an account with Elm to view this video');
+            return;
+        }
+        
+        $('.videoSource').prop('src', $(this).data('videosrc'));
+        $('.tutorialVideo').get(0).load();
+        $('#myModal').modal();
+    })
+</script>
+
+<script>
+    $('.for-teachers').addClass('active');
+</script>
+
+{% endblock %}
