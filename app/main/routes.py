@@ -441,39 +441,35 @@ def elm_inquire():
 
 @bp.route('/videos', methods=['GET', 'POST'])
 def elm_videos():
-	
-	# Dictionary of videos
-	videos = [
-		{
-			'title': '5 tips for improving your UCAS statement',
-			'filename': 'Elm Education - 5 tips for UCAS',
-			'extension': '.m4v',
-			'private': False
-		},
-		{
-			'title': '5 mistakes not to make with your UCAS!',
-			'filename': 'Elm Education - 5 mistakes with UCAS',
-			'extension': '.m4v',
-			'private': True
-		},
-	]
-
-	# Calculate the path to the videos
-	path_to_workup = pathlib.Path().absolute()
-	path_to_videos = str(path_to_workup) + '/app/static/elm/videos/'
-	
-	for video in videos:
-		video_input_path = path_to_videos + video['filename'] + video['extension']
-		img_output_path = path_to_videos + video['filename'] + '.jpg'
-		
-		# If thumbnail missing, generate it
-		if os.path.isfile (img_output_path) is False:
-			subprocess.call(['ffmpeg', '-i', video_input_path, '-ss', '00:00:10.000', '-vframes', '1', img_output_path])
-
-	
-	return render_template('elmOnline/elm_videos.html', videos = videos)
-
 	if current_app.config['APP_NAME'] == 'elmOnline':
-		return render_template('elmOnline/elm_videos.html')
+		# Dictionary of videos
+		videos = [
+			{
+				'title': '5 tips for improving your UCAS statement',
+				'filename': 'Elm Education - 5 tips for UCAS',
+				'extension': '.m4v',
+				'private': False
+			},
+			{
+				'title': '5 mistakes not to make with your UCAS!',
+				'filename': 'Elm Education - 5 mistakes with UCAS',
+				'extension': '.m4v',
+				'private': True
+			}
+		]
+
+		# Calculate the path to the videos
+		path_to_workup = pathlib.Path().absolute()
+		path_to_videos = str(path_to_workup) + '/app/static/elm/videos/'
+		
+		for video in videos:
+			video_input_path = path_to_videos + video['filename'] + video['extension']
+			img_output_path = path_to_videos + video['filename'] + '.jpg'
+			
+			# If thumbnail missing, generate it
+			if os.path.isfile (img_output_path) is False:
+				subprocess.call(['ffmpeg', '-i', video_input_path, '-ss', '00:00:10.000', '-vframes', '1', img_output_path])
+		
+		return render_template('elmOnline/elm_videos.html', videos = videos)
 	else:
 		return redirect(url_for('main.index'))
