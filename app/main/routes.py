@@ -14,6 +14,7 @@ import app.user
 import pathlib
 import subprocess
 import os.path
+import json
 
 # Statements
 try:
@@ -442,76 +443,15 @@ def elm_inquire():
 @bp.route('/videos', methods=['GET', 'POST'])
 def elm_videos():
 	if current_app.config['APP_NAME'] == 'elmOnline':
-		# Dictionary of videos
-		videos = [
-			{
-				'title': '5 tips for improving your UCAS statement',
-				'filename': 'Elm Education - 5 tips for UCAS',
-				'extension': '.m4v',
-				'private': False
-			},
-			{
-				'title': '5 mistakes not to make with your UCAS!',
-				'filename': 'Elm Education - 5 mistakes with UCAS',
-				'extension': '.m4v',
-				'private': False
-			},
-			{
-				'title': 'How to choose A-level subjects!',
-				'filename': 'Elm Education - choosing A-level subjects',
-				'extension': '.m4v',
-				'private': False
-			},
-			{
-				'title': 'How to choose a university',
-				'filename': 'Elm Education - choosing a university',
-				'extension': '.m4v',
-				'private': False
-			},
-			{
-				'title': 'All you need to know about references',
-				'filename': 'Elm Education - References Help',
-				'extension': '.m4v',
-				'private': False
-			},
-			{
-				'title': 'How to use UCAS',
-				'filename': 'Elm Education - UCAS',
-				'extension': '.m4v',
-				'private': False
-			},
-			{
-				'title': 'How can Elm Education help you?',
-				'filename': 'Elm Education - Ad',
-				'extension': '.m4v',
-				'private': False
-			},
-			{
-				'title': 'About Elm Education',
-				'filename': 'Elm Education - Our success',
-				'extension': '.m4v',
-				'private': False
-			},
-			{
-				'title': 'Elm Online - an introduction',
-				'filename': 'Elm Education - Elm Online introduction',
-				'extension': '.m4v',
-				'private': False
-			},
-			{
-				'title': 'G5 training programme introduction',
-				'filename': 'Elm Education - G5 introduction new',
-				'extension': '.m4v',
-				'private': False
-			},
-
-			
-		]
-
 		# Calculate the path to the videos
 		path_to_workup = pathlib.Path().absolute()
 		path_to_videos = str(path_to_workup) + '/app/static/elm/videos/'
 		
+		# Dictionary of videos
+		videos_file = open('app/static/elm/videos/videos.json')
+		videos = json.load(videos_file)
+
+		# Generate thumbnails if necessary for any of the videos
 		for video in videos:
 			video_input_path = path_to_videos + video['filename'] + video['extension']
 			img_output_path = path_to_videos + video['filename'] + '.jpg'
