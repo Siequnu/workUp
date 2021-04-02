@@ -454,8 +454,58 @@ def elm_videos():
 				'title': '5 mistakes not to make with your UCAS!',
 				'filename': 'Elm Education - 5 mistakes with UCAS',
 				'extension': '.m4v',
-				'private': True
-			}
+				'private': False
+			},
+			{
+				'title': 'How to choose A-level subjects!',
+				'filename': 'Elm Education - choosing A-level subjects',
+				'extension': '.m4v',
+				'private': False
+			},
+			{
+				'title': 'How to choose a university',
+				'filename': 'Elm Education - choosing a university',
+				'extension': '.m4v',
+				'private': False
+			},
+			{
+				'title': 'All you need to know about references',
+				'filename': 'Elm Education - References Help',
+				'extension': '.m4v',
+				'private': False
+			},
+			{
+				'title': 'How to use UCAS',
+				'filename': 'Elm Education - UCAS',
+				'extension': '.m4v',
+				'private': False
+			},
+			{
+				'title': 'How can Elm Education help you?',
+				'filename': 'Elm Education - Ad',
+				'extension': '.m4v',
+				'private': False
+			},
+			{
+				'title': 'About Elm Education',
+				'filename': 'Elm Education - Our success',
+				'extension': '.m4v',
+				'private': False
+			},
+			{
+				'title': 'Elm Online - an introduction',
+				'filename': 'Elm Education - Elm Online introduction',
+				'extension': '.m4v',
+				'private': False
+			},
+			{
+				'title': 'G5 training programme introduction',
+				'filename': 'Elm Education - G5 introduction new',
+				'extension': '.m4v',
+				'private': False
+			},
+
+			
 		]
 
 		# Calculate the path to the videos
