@@ -5,7 +5,7 @@ description = "Learning Management Software"
 authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "3.7.3"
 prowritingaidsdk = {git = "https://github.com/prowriting/prowritingaid.python.git", develop = true, rev = "99b7dccd73575f806ff28e3e515d3e782ef4d9ca"}
 alembic = "==1.0.10"
 aniso8601 = "==8.0.0"
