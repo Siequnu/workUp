@@ -473,8 +473,8 @@
     ////////////////////////
     // Main page scripts ///
     ////////////////////////
+    
     // Enable the datefield to use UI datepicker
-
     $('#date').datepicker({
       dateFormat: 'yy-mm-dd'
     });
@@ -484,9 +484,7 @@
       cssInfoBlock: "tablesorter-no-sort",
       widgets: ['editable'],
       widgetOptions: {
-        editable_columns: [2, 3,
-          4
-        ], // or "0-2" (v2.14.2); point to the columns to make editable (zero-based index)
+        editable_columns: "2-100", // or "0-2" (v2.14.2); point to the columns to make editable (zero-based index)
         editable_enterToAccept: true, // press enter to accept content, or click outside if false
         editable_autoAccept: true, // accepts any changes made to the table cell automatically (v2.17.6)
         editable_autoResort: false, // auto resort after the content has changed.
