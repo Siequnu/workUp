@@ -81,6 +81,7 @@ def save_gradebook_grade (student_id, gradebook_entry_id, grade):
 			grade = grade
 		)
 		gradebook_grade.add ()
+		db.session.commit()
 
 
 # Save a gradebook percentage object. This will overwrite any existing object
@@ -97,6 +98,7 @@ def save_gradebook_percentage_object (turma_id, percentage_object):
 			percentages = json.dumps (percentage_object)
 		)
 		percentage_object.add()
+		db.session.commit()
 
 
 # Get a formatted object containing all assessment criteria for a class
@@ -191,8 +193,7 @@ def get_class_gradebook (turma_id, student_id = False):
 					'is_linked_assignment': False, 
 					'gradebook_entry': assessment['gradebook_entry'],
 					'assessment_id': assessment['assessment'].id
-				})
-						
+				})	
 	return students
 
 # Function to remove a linked assignment from a class gradebook

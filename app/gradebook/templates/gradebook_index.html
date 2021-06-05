@@ -106,6 +106,14 @@
 {% endif %}
 
 <!-- Main page content -->
+{% if turma is defined %}
+  <span id="turma-label" data-filename="{{turma.turma_label}}"></span>
+{% else %}
+  <span id="turma-label" data-filename="Grades.csv"></span>
+{% endif %}
+
+
+
 <div class="container">
   <div class="row">
     <div class="col-12">
@@ -193,7 +201,6 @@
       <tr>
         <th>#</th>
         <th>Username</th>
-        <th>Grade</th>
         {% for assessment in assessment_criteria %}
         <th>{{assessment.assessment.title}}</th>
         {% endfor %}
@@ -202,7 +209,6 @@
 
     <tbody class="tablesorter-no-sort">
       <tr id="dates">
-        <th></th>
         <th></th>
         <th></th>
         {% for assessment in assessment_criteria %}
@@ -218,7 +224,6 @@
       <tr id="student-{{student.id}}" data-studentid="{{student.id}}" class="studentDataRow">
         <td>{{student.student_number}}</td>
         <td>{{student.username}}</td>
-        <td></td>
         {% for grade in student.grades %}
         <td class="{{'no-grade' if grade.grade == 'N/A' else ''}} {{'no-edit' if grade.upload_id == None else ''}}"
           data-islinkedassignment="{{grade.is_linked_assignment}}" data-gradebookentryid="{{grade.gradebook_entry.id}}"
@@ -546,10 +551,11 @@
         // return true to continue download/output
         // return false to stop delivery & do something else with the data
         output_callback: function (config, data) {
-          const fileName = '{{turma.turma_label}}.csv';
           var blob = new Blob([decodeURIComponent(encodeURI(data))], {
             type: "text/csv;charset=utf-8;"
           });
+
+          var fileName = $('#turma-label').data('filename');
 
           if (navigator.msSaveBlob) { // IE11 and Edge 17-
               navigator.msSaveBlob(blob, fileName)
@@ -623,7 +629,7 @@
     
     // Enable downloads
     $('.download-excel').on('click', function(){
-        $table.trigger('outputTable');
+      $table.trigger('outputTable');
     });
 
   });

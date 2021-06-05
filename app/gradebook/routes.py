@@ -127,7 +127,7 @@ def gradebook_index(turma_id = False):
 			
 			
 			gradebook = app.gradebook.models.get_class_gradebook (turma.id) # i.e. students and each assignment
-
+			
 			# Get the Assessment Criteria form, which will be used in a modal
 			form = AssessmentCriteriaForm ()
 
