@@ -6,10 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    {% if config.APP_NAME == 'workUp' %}
-        <meta property="og:image" content="/static/workup-og.jpeg" />
-    {% endif %}
-
     <!-- Load CSS -->
     <link href="/static/css/lib/bootstrap-4.4.1.min.css" rel="stylesheet">
     <link href="/static/css/library_card.css" rel="stylesheet">
@@ -17,12 +13,13 @@
 
     <!-- Load appropriate header for the service -->
     {% if config.APP_NAME == 'workUp' %}
-    <link href="/static/css/workup-dark-mode.css?id=123" rel="stylesheet">
-    {% include "workUp/header_workUp.html" %}
+        <meta property="og:image" content="/static/workup-og.jpeg" />
+        <link href="/static/css/workup-dark-mode.css?id=123" rel="stylesheet">
+        {% include "workUp/header_workUp.html" %}
     {% elif config.APP_NAME == 'elmOnline' %}
-    {% include "elmOnline/header_elmOnline.html" %}
+        {% include "elmOnline/header_elmOnline.html" %}
     {% elif config.APP_NAME == 'LCECAcademy' %}
-    {% include "lcec/header_lcec.html" %}
+        {% include "lcec/header_lcec.html" %}
     {% endif %}
 
     <!-- Show ads if appropriate -->
