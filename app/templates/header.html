@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
+    {% if config.APP_NAME == 'workUp' %}
+        <meta property="og:image" content="/static/workup-og.jpeg" />
+    {% endif %}
+
     <!-- Load CSS -->
     <link href="/static/css/lib/bootstrap-4.4.1.min.css" rel="stylesheet">
     <link href="/static/css/library_card.css" rel="stylesheet">
