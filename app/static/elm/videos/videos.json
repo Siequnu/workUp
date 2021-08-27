@@ -3,13 +3,13 @@
       "title": "Career focus - Commerce",
       "filename": "Elm Education - Account manager",
       "extension": ".m4v",
-      "private": false
+      "private": true
    },
    {
       "title": "Career focus - Business, Administratiom and Management",
       "filename": "Elm Education - Administration career",
       "extension": ".m4v",
-      "private": false
+      "private": true
    },
    {
       "title": "Career focus - Music",
