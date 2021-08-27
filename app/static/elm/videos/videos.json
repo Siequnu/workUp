@@ -1,9 +1,15 @@
 [
    {
+      "title": "Career focus - Commerce",
+      "filename": "Elm Education - Account manager",
+      "extension": ".m4v",
+      "private": false
+   },
+   {
       "title": "Career focus - Business, Administratiom and Management",
       "filename": "Elm Education - Administration career",
       "extension": ".m4v",
-      "private": true
+      "private": false
    },
    {
       "title": "Career focus - Music",
