@@ -3,192 +3,224 @@
       "title": "Welcome to Elm Education",
       "filename": "Elm Education Ad 2021",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "About Elm"
    },
    {
       "title": "Preparing psychologically to move country",
       "filename": "Elm Education - Preparing yourself mentally",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "University studies"
    },
    {
       "title": "Oxbridge Interview Secrets",
       "filename": "Elm Education - Oxbridge interview secrets",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "Applications"
    },
    {
       "title": "Career focus - Commerce",
       "filename": "Elm Education - Account manager",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "Career focus"
    },
    {
       "title": "Career focus - Business, Administratiom and Management",
       "filename": "Elm Education - Administration career",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "Career focus"
    },
    {
       "title": "Career focus - Music",
       "filename": "Elm Education - Music career",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "Career focus"
    },
    {
       "title": "Thinking about a career",
       "filename": "Elm Education - Careers",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "Career focus"
    },
    {
       "title": "An overview of research in the EPQ essay",
       "filename": "Elm Education - Research Methodology",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "A-levels"
    },
    {
       "title": "EPQ essays",
       "filename": "Elm Education - EPQ",
       "extension": ".m4v",
-      "private": false
+      "private": false,
+      "category": "A-levels"
    },
    {
       "title": "COVID-19 studies - what to know",
       "filename": "Elm Education - covid-19 university studies",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "University studies"
    },
    {
       "title": "How to read better",
       "filename": "Elm Education - Reading",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "A-levels"
    },
    {
       "title": "How to improve your Oxbridge application",
       "filename": "Elm Education - Oxbridge applications",
       "extension": ".m4v",
-      "private": false
+      "private": false,
+      "category": "Applications"
    },
    {
       "title": "The UK Population",
       "filename": "Elm Education - The UK Population",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "British Culture & Society"
    },
    {
       "title": "What you should know before going to an Arts University",
       "filename": "Elm Education - Studying at an Arts university",
       "extension": ".m4v",
-      "private": false
+      "private": false,
+      "category": "University studies"
    },
    {
       "title": "Education through Art - Industrial Revolution",
       "filename": "Elm Education - Education through Art - The Industrial Revolution",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "British Culture & Society"
    },
    {
       "title": "UCAS 2022 - step by step",
       "filename": "Elm Education - UCAS 2022 step by step",
       "extension": ".m4v",
-      "private": false
+      "private": false,
+      "category": "Applications"
    },
    {
       "title": "History of British Universities",
       "filename": "Elm Education - History of British Universities",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "University studies"
    },
    {
       "title": "How British Students study at University",
       "filename": "Elm Education - Studying at a British University",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "University studies"
    },
    {
       "title": "Understanding the UK grading system",
       "filename": "Elm Education - UK University grading system",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "University studies"
    },
    {
       "title": "UCAS 2022 timeline",
       "filename": "Elm Education - UCAS 2022 timeline",
       "extension": ".m4v",
-      "private": false
+      "private": false,
+      "category": "Applications"
    },
    {
       "title": "Some differences between UK and US Universities",
       "filename": "Elm Education - UK vs US Universities",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "University studies"
    },
    {
       "title": "Preparing for your A-level exams",
       "filename": "Elm Education - Preparing for your A-levels",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "A-levels"
    },
    {
       "title": "5 tips for improving your UCAS statement",
       "filename": "Elm Education - 5 tips for UCAS",
       "extension": ".m4v",
-      "private": false
+      "private": false,
+      "category": "Applications"
    },
    {
       "title": "5 mistakes not to make with your UCAS!",
       "filename": "Elm Education - 5 mistakes with UCAS",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "Applications"
    },
    {
       "title": "How to choose A-level subjects!",
       "filename": "Elm Education - choosing A-level subjects",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "A-levels"
    },
    {
       "title": "How to choose a university",
       "filename": "Elm Education - choosing a university",
       "extension": ".m4v",
-      "private": false
+      "private": false,
+      "category": "University studies"
    },
    {
       "title": "All you need to know about references",
       "filename": "Elm Education - References Help",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "Applications"
    },
    {
       "title": "How to use UCAS",
       "filename": "Elm Education - UCAS",
       "extension": ".m4v",
-      "private": true
+      "private": true,
+      "category": "Applications"
    },
    {
       "title": "How can Elm Education help you?",
       "filename": "Elm Education - Ad",
       "extension": ".m4v",
-      "private": false
+      "private": false,
+      "category": "About Elm"
    },
    {
       "title": "About Elm Education",
       "filename": "Elm Education - Our success",
       "extension": ".m4v",
-      "private": false
+      "private": false,
+      "category": "About Elm"
    },
    {
       "title": "Elm Online - an introduction",
       "filename": "Elm Education - Elm Online introduction",
       "extension": ".m4v",
-      "private": false
+      "private": false,
+      "category": "About Elm"
    },
    {
       "title": "G5 training programme introduction",
       "filename": "Elm Education - G5 introduction new",
       "extension": ".m4v",
-      "private": false
+      "private": false,
+      "category": "About Elm"
    }
 ]
