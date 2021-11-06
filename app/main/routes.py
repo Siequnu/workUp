@@ -478,18 +478,10 @@ def elm_videos():
             if os.path.isfile (img_output_path) is False:
                 subprocess.call(['ffmpeg', '-i', video_input_path, '-ss', '00:00:10.000', '-vframes', '1', img_output_path])
 
-        # Sort the videos into categories
-        sorted_videos = {}
-        for video in videos:
-            if video['category'] in sorted_videos:
-                sorted_videos[video['category']].append(video)
-            else:
-                sorted_videos[video['category']] = [video]
-
         # Video categories
         categories_file = open('app/static/elm/videos/categories.json')
         categories = json.load(categories_file)
 
-        return render_template('elmOnline/elm_videos.html', videos = videos, sorted_videos = sorted_videos, categories = categories)
+        return render_template('elmOnline/elm_videos.html', videos = videos, categories = categories)
     else:
         return redirect(url_for('main.index'))
