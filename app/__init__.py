@@ -114,7 +114,7 @@ def create_app(config_class):
             'cdn.prowritingaid.com',
         ]
     }
-    talisman.init_app(workup_app, content_security_policy=csp, force_https=False)
+    #talisman.init_app(workup_app, content_security_policy=csp, force_https=False)
 
     # Compile registry of blueprints
     basic_services = [
