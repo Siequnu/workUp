@@ -101,6 +101,7 @@ def create_app(config_class):
             'fonts.gstatic.com',
         ],
         'script-src': [
+            'paypal.com',
             '\'self\'',
             '\'unsafe-inline\'',
             'pagead2.googlesyndication.com',
