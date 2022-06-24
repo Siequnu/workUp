@@ -66,6 +66,7 @@ def create_app(config_class):
     # Set a talisman policy
     csp = {
         'default-src': [
+            'paypal.com',
             '\'self\'',
             '\'unsafe-inline\'',
             'cdnjs.cloudflare.com',
