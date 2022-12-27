@@ -43,24 +43,28 @@ given to students.
 
 - The student home page allows for quick access to vital information.
 
-![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/student_home.png)
+![View assignments](screenshots/home.png)
 
 - Teachers can create assignments targeted at one or more classes. All the uploads for this assignment will be distributed randomly among colleagues for peer-review.
 
-![Create assignment](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/create_assignment.png)
+![Create assignment](screenshots/create_assignment.png)
 
 - Students can quickly check their assignments. Peer reviews can only be uploaded once the student has completed their own assignment.
 
-![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/view_assignments.png)
-
-- Students can check how many of their colleagues have downloaded their work and submitted peer reviews.
-
-![File Stats](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/file_stats.png)
+![View assignments](screenshots/view_assignments.png)
 
 - Teachers can create forms to guide the students through a peer review process. As the students get more comfortable with the peer review process, the teacher can edit the form
   to allow the students more freedom with the structure of their peer review.
 
-![Submit peer review](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/submit_peerreview.png)
+![Submit peer review](screenshots/submit_peerreview.png)
+
+- Students and teachers can collaborate live on documents.
+
+![View assignments](screenshots/tools_collaboration.png)
+
+- Students can check grammar and spelling on documents.
+
+![View assignments](screenshots/tools_grammarcheck.png)
 
 ## Deployment
 
