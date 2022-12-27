@@ -1,9 +1,12 @@
 # workUp
+
 workUp is web app designed to help teachers manage their classes.
 
 Managing student work for peer distribution is time consuming and can be a large impediment to
 teachers implementing this otherwise very beneficial study method. It is hoped that this app can
 assist lecturers in implementing peer-review in their classes.
+
+![WorkUp home page](screenshots/home.png)
 
 ## Literature Review
 
@@ -16,11 +19,11 @@ been made, most software for this purpose is expensive, and suitable only for la
 
 workUp is an attempt to make a software that:
 
-* provides simple deployment that can be achieved by any university lecturer,
+- provides simple deployment that can be achieved by any university lecturer,
 
-* provides a clear and easy to use student- and admin-facing interface.
+- provides a clear and easy to use student- and admin-facing interface.
 
-![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/view_assignments.png)
+![View assignments](screenshots/assignments.png)
 
 ## How It Works
 
@@ -34,53 +37,57 @@ Students can log-in to view their assignments, and once an assignment has been u
 can submit peer reviews for two other assignments. These peer reviews are guided through a feedback form,
 although as students get more comfortable in providing feedback, progressively less guided forms can be
 given to students.
-![Submit peer review](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/submit_peerreview.png)
+![Submit peer review](screenshots/peer-review.png)
 
 ## Usage screenshots
-* The student home page allows for quick access to vital information.
+
+- The student home page allows for quick access to vital information.
 
 ![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/student_home.png)
 
-* Teachers can create assignments targeted at one or more classes. All the uploads for this assignment will be distributed randomly among colleagues for peer-review.
+- Teachers can create assignments targeted at one or more classes. All the uploads for this assignment will be distributed randomly among colleagues for peer-review.
 
 ![Create assignment](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/create_assignment.png)
 
-* Students can quickly check their assignments. Peer reviews can only be uploaded once the student has completed their own assignment.
+- Students can quickly check their assignments. Peer reviews can only be uploaded once the student has completed their own assignment.
 
 ![View assignments](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/view_assignments.png)
 
-* Students can check how many of their colleagues have downloaded their work and submitted peer reviews.
+- Students can check how many of their colleagues have downloaded their work and submitted peer reviews.
 
 ![File Stats](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/file_stats.png)
 
-* Teachers can create forms to guide the students through a peer review process. As the students get more comfortable with the peer review process, the teacher can edit the form
-to allow the students more freedom with the structure of their peer review.
+- Teachers can create forms to guide the students through a peer review process. As the students get more comfortable with the peer review process, the teacher can edit the form
+  to allow the students more freedom with the structure of their peer review.
 
 ![Submit peer review](https://raw.githubusercontent.com/Siequnu/workUp/master/assets/submit_peerreview.png)
 
 ## Deployment
 
-* Update the server
+- Update the server
 
 ```sh
 sudo apt-get update && sudo apt-get upgrade
 sudo apt install screen
 ```
 
-* Change from root user to newly created ubuntu account
+- Change from root user to newly created ubuntu account
+
 ```sh
 $ adduser --gecos "" ubuntu
 $ usermod -aG sudo ubuntu
 $ su ubuntu
 ```
 
-* Passwordless login.
+- Passwordless login.
 
 On local machine check contents of directory ~.ssh as follows:
+
 ```sh
 $ ls ~/.ssh
 id_rsa  id_rsa.pub
 ```
+
 The directory should show id_rsa and ir_rsa.pub. If not, you can create the files by running $ ssh-keygen.
 You now need to configure your public key as an authorized host in your server.
 On the terminal that you opened on your own computer, print your public key to the screen:
@@ -99,11 +106,13 @@ $ chmod 600 ~/.ssh/authorized_keys
 ```
 
 Check this is working with the following command. No password should be needed.
+
 ```sh
 $ ssh ubuntu@<server-ip-address>
 ```
 
-* Securing the server. Edit `/etc/ssh/sshd_config` and change
+- Securing the server. Edit `/etc/ssh/sshd_config` and change
+
 ```
 PermitRootLogin no
 PasswordAuthentication no
@@ -111,7 +120,8 @@ PasswordAuthentication no
 
 Then restart ssh with `sudo service ssh restart`
 
-* Installing a firewall
+- Installing a firewall
+
 ```sh
 $ sudo apt-get install -y ufw
 $ sudo ufw allow ssh
@@ -121,18 +131,21 @@ $ sudo ufw --force enable
 $ sudo ufw status
 ```
 
-* Install base dependencies
+- Install base dependencies
+
 ```sh
 $ sudo apt-get -y update
-$ sudo apt-get -y install python3 python3-venv python3-dev supervisor nginx git 
+$ sudo apt-get -y install python3 python3-venv python3-dev supervisor nginx git
 ```
 
-* Install extra dependencies. Gunicorn is used to run flask, libmagickwand-dev is used to process thumbnails.
+- Install extra dependencies. Gunicorn is used to run flask, libmagickwand-dev is used to process thumbnails.
+
 ```sh
 $ sudo apt-get -y install gunicorn libmagickwand-dev
 ```
 
-* Installing the source code
+- Installing the source code
+
 ```sh
 $ cd ~
 $ git clone https://github.com/Siequnu/workUp.git
@@ -144,7 +157,8 @@ $ pip install -r requirements.txt
 $ pip install gunicorn
 ```
 
-* Create a .env file with environmental variables. Generate a UUID with `python3 -c "import uuid; print(uuid.uuid4().hex)"`
+- Create a .env file with environmental variables. Generate a UUID with `python3 -c "import uuid; print(uuid.uuid4().hex)"`
+
 ```
 SECRET_KEY=52cb883e323b48d78a0a36e8e951ba4a
 ```
@@ -153,9 +167,10 @@ SECRET_KEY=52cb883e323b48d78a0a36e8e951ba4a
 $ echo "export FLASK_APP=workup.py" >> ~/.profile
 ```
 
-* Setup local config by copying the sample file and renaming it to `config.py`
+- Setup local config by copying the sample file and renaming it to `config.py`
 
-* Setup database with
+- Setup database with
+
 ```sh
 $ flask db init
 $ flask db migrate
@@ -163,19 +178,22 @@ $ flask db upgrade
 ```
 
 This should run without any errors. Create an admin in the new database
+
 ```sh
 $ python create_admin
 ```
 
-* The program should now be able to run via the following command.
-The last two variables are the name of the .py script
-that runs the program, and the name of the app folder.
+- The program should now be able to run via the following command.
+  The last two variables are the name of the .py script
+  that runs the program, and the name of the app folder.
+
 ```
 $ /home/ubuntu/workUp/venv/bin/gunicorn -b localhost:8000 -w 1 workup:app
 ```
 
-* The supervisor utility uses configuration files that tell it what programs to monitor and how to restart them when necessary. Configuration files must be stored in /etc/supervisor/conf.d. Here is a configuration file for Microblog, which I'm going to call microblog.conf:
-Create and edit a file at /etc/supervisor/conf.d/workup.conf with the configuration details
+- The supervisor utility uses configuration files that tell it what programs to monitor and how to restart them when necessary. Configuration files must be stored in /etc/supervisor/conf.d. Here is a configuration file for Microblog, which I'm going to call microblog.conf:
+  Create and edit a file at /etc/supervisor/conf.d/workup.conf with the configuration details
+
 ```
 [program:workup]
 command=/home/ubuntu/workUp/venv/bin/gunicorn -b localhost:8000 -w 3 -t 30 --preload workup:app
@@ -191,25 +209,27 @@ killasgroup=true
 $ sudo supervisorctl reload
 ```
 
-* Get the status of the app via `sudo supervisorctl status workup`
+- Get the status of the app via `sudo supervisorctl status workup`
 
-* Setup nginx. The workup application server powered by gunicorn is now running privately port 8000.
-We now need to expose ports 80 and 443.
+- Setup nginx. The workup application server powered by gunicorn is now running privately port 8000.
+  We now need to expose ports 80 and 443.
 
-* Create a self-signed ssl cert
+- Create a self-signed ssl cert
+
 ```sh
 $ mkdir certs
 $ openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
   -keyout certs/key.pem -out certs/cert.pem
- ```
+```
 
-* Nginx installs a test site in this location that I don't really need, so I'm going to start by removing it:
+- Nginx installs a test site in this location that I don't really need, so I'm going to start by removing it:
 
 ```sh
 $ sudo rm /etc/nginx/sites-enabled/default
 ```
 
-* Add the following config in `/etc/nginx/sites-enabled/workup:
+- Add the following config in `/etc/nginx/sites-enabled/workup:
+
 ```
 server {
     # listen on port 80 (http)
@@ -250,37 +270,42 @@ server {
 }
 ```
 
-* Reload the config with ```sudo service nginx reload``` to enable it.
+- Reload the config with `sudo service nginx reload` to enable it.
 
-* SSL certification can be obtained for free using the [Certbot ACME client](https://certbot.eff.org)
+- SSL certification can be obtained for free using the [Certbot ACME client](https://certbot.eff.org)
 
-* Edit `/etc/ImageMagick-6/policy.xml` and change the rights for the pdf line to "read":
+- Edit `/etc/ImageMagick-6/policy.xml` and change the rights for the pdf line to "read":
+
 ```sh
 <policy domain="coder" rights="read" pattern="PDF" />
 ```
 
-* To avoid Nginx: 413 – Request Entity Too Large Error, edit /etc/nginx/nginx.conf and add, under http {
+- To avoid Nginx: 413 – Request Entity Too Large Error, edit /etc/nginx/nginx.conf and add, under http {
+
 ```sh
 client_max_body_size 200M;
 
 ```
-Finally, restart nginx ```sudo service nginx restart```
 
-* To avoid nonaggregated column SQL error, add the following to my.cnf 
+Finally, restart nginx `sudo service nginx restart`
+
+- To avoid nonaggregated column SQL error, add the following to my.cnf
+
 ```sh
 sql_mode = STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
 ```
 
-* To avoid SQL Server has gone away, leading to server error 500 when accessing database for the first time, set in app settings
+- To avoid SQL Server has gone away, leading to server error 500 when accessing database for the first time, set in app settings
 
 ```sh
 SQLALCHEMY_POOL_PRE_PING = True
 ```
 
-Experimental fix: 
+Experimental fix:
 SQLALCHEMY_ENGINE_OPTIONS = {'pool_size': 100, 'pool_recycle': 30}
 
 Add the following to my.cnf
+
 ```sh
 max_allowed_packet=16M
 # 8 hours
@@ -288,8 +313,3 @@ wait_timeout = 28800
 interactive_timeout = 28800
 max_allowed_packet = 256M
 ```
-
-
-
-
-
